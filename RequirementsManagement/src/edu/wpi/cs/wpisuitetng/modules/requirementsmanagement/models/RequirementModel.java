@@ -5,9 +5,6 @@ import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
-import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Defect;
-import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.DefectEvent;
-import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Tag;
 
 public class RequirementModel extends AbstractModel {
 
