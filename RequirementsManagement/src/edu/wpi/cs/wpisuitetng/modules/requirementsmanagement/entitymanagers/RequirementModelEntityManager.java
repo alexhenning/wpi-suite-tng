@@ -91,7 +91,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 
 	@Override
 	public int Count() throws WPISuiteException {
-		return db.retrieveAll(new RequirementModel(), s.getProjet());
+		return db.retrieveAll(new RequirementModel()).size();
 	}
 	
 	@Override
