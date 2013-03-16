@@ -1,11 +1,18 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
+import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Defect;
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.DefectEvent;
+import edu.wpi.cs.wpisuitetng.modules.defecttracker.models.Tag;
 
 public class RequirementModel extends AbstractModel {
 
+	int id;
 	int releaseNumber;
-	int requirementNumber;
 	RequirementStatus status;
 	RequirementPriority priority;
 	String name;
@@ -22,12 +29,12 @@ public class RequirementModel extends AbstractModel {
 		this.releaseNumber = releaseNumber;
 	}
 
-	public int getRequirementNumber() {
-		return requirementNumber;
+	public int getId() {
+		return id;
 	}
 
-	public void setRequirementNumber(int requirementNumber) {
-		this.requirementNumber = requirementNumber;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public RequirementStatus getStatus() {
@@ -90,16 +97,63 @@ public class RequirementModel extends AbstractModel {
 
 	}
 
+	/**
+	 * Converts this Requiremnet to a JSON string
+	 * @return a string in JSON representing this Defect
+	 */
 	@Override
 	public String toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+		String json;
+		Gson gson = new Gson();
+		json = gson.toJson(this, RequirementModel.class);
+		return json;
+	}
+
+//	/**
+//	 * @param json Json string to parse containing Defect
+//	 * @return The Defect given by json
+//	 */
+//	public static Defect fromJSON(String json) {
+//		GsonBuilder builder = new GsonBuilder();
+//		addGsonDependencies(builder);
+//		return builder.create().fromJson(json, Defect.class);
+//	}
+//	
+//	/**
+//	 * @param json Json string to parse containing Defect array
+//	 * @return The Defect array given by json
+//	 */
+//	public static RequirementModel[] fromJSONArray(String json) {
+//		GsonBuilder builder = new GsonBuilder();
+//		addGsonDependencies(builder);
+//		return builder.create().fromJson(json, Defect[].class);
+//	}
+	
+//	/**
+//	 * Add dependencies necessary for Gson to interact with this class
+//	 * @param builder Builder to modify
+//	 */
+//	public static void addGsonDependencies(GsonBuilder builder) {
+//		DefectEvent.addGsonDependencies(builder);
+//	}
+//	
+	// interface documentation says this is necessary for the mock database
+	// not sure if this is still needed otherwise
+	@Override
+	public Boolean identify(Object o) {
+		Boolean returnValue = false;
+		if(o instanceof RequirementModel && id == ((RequirementModel) o).getId()) {
+			returnValue = true;
+		}
+		if(o instanceof String && Integer.toString(id).equals(o)) {
+			returnValue = true;
+		}
+		return returnValue;
 	}
 
 	@Override
-	public Boolean identify(Object o) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toString() {
+		return toJSON();
 	}
 
 }
