@@ -107,34 +107,36 @@ public class RequirementModel extends AbstractModel {
 	}
 
 	//TODO finish this code...
-//	/**
-//	 * @param json Json string to parse containing Defect
-//	 * @return The Defect given by json
-//	 */
-//	public static Defect fromJSON(String json) {
-//		GsonBuilder builder = new GsonBuilder();
+	/**
+	 * @param json Json string to parse containing Defect
+	 * @return The Defect given by json
+	 */
+	public static RequirementModel fromJSON(String json) {
+		GsonBuilder builder = new GsonBuilder();
 //		addGsonDependencies(builder);
-//		return builder.create().fromJson(json, Defect.class);
-//	}
-//	
-//	/**
-//	 * @param json Json string to parse containing Defect array
-//	 * @return The Defect array given by json
-//	 */
-//	public static RequirementModel[] fromJSONArray(String json) {
-//		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
-//		return builder.create().fromJson(json, Defect[].class);
-//	}
+		return builder.create().fromJson(json, RequirementModel.class);
+	}
 	
-//	/**
-//	 * Add dependencies necessary for Gson to interact with this class
-//	 * @param builder Builder to modify
-//	 */
-//	public static void addGsonDependencies(GsonBuilder builder) {
+	/**
+	 * @param json Json string to parse containing Defect array
+	 * @return The Defect array given by json
+	 */
+	public static RequirementModel[] fromJSONArray(String json) {
+		GsonBuilder builder = new GsonBuilder();
+		addGsonDependencies(builder);
+		return builder.create().fromJson(json, RequirementModel[].class);
+	}
+	
+	/**
+	 * Add dependencies necessary for Gson to interact with this class
+	 * @param builder Builder to modify
+	 */
+	public static void addGsonDependencies(GsonBuilder builder) {
+		//TODO add dependencies for future class associations.
+
 //		DefectEvent.addGsonDependencies(builder);
-//	}
-//	
+	}
+	
 	// interface documentation says this is necessary for the mock database
 	// not sure if this is still needed otherwise
 	@Override
