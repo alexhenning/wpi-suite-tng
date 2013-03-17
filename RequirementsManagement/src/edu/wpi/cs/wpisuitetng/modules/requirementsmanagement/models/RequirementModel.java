@@ -1,10 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 
-//import java.util.ArrayList;
-//import java.util.Date;
-//import java.util.HashSet;
-
 import java.util.Date;
 
 import com.google.gson.Gson;
@@ -28,6 +24,11 @@ public class RequirementModel extends AbstractModel {
 	private User assignee;
 	private Date creationDate, lastModifiedDate;
 	
+	//TODO associate with other requirements
+	//TODO add attachments
+	//TODO add tasks
+	//TODO add notes
+	//TODO add acceptance tests
 	
 	/**
 	 * Constructs a new RequirementModel with default properties.
@@ -43,7 +44,6 @@ public class RequirementModel extends AbstractModel {
 		actualEffort = "";
 		creationDate = new Date();
 		lastModifiedDate = new Date();
-//		events = new ArrayList<DefectEvent>();
 	}
 	
 	//TODO finish the documentation of this constructor
@@ -103,17 +103,17 @@ public class RequirementModel extends AbstractModel {
 		this.assignee = assignee;
 	}
 	
-	public void setAssigneeWithAutoStatusUpdate(User assignee) {
-		this.assignee = assignee;
-		
-		//TODO consider improving this
-		//this will auto-set the status when assigning a user
-		if (assignee != null && assignee.getIdNum() != -1 ) { //make sure it is assigned to a real user
-			this.status = RequirementStatus.IN_PROGRESS;
-		} else { 
-			status = RequirementStatus.OPEN;//if not a real user then it is currently open.
-		}
-	}
+//	public void setAssigneeWithAutoStatusUpdate(User assignee) {
+//		this.assignee = assignee;
+//		
+//		//TODO consider improving this
+//		//this will auto-set the status when assigning a user
+//		if (assignee != null && assignee.getIdNum() != -1 ) { //make sure it is assigned to a real user
+//			this.status = RequirementStatus.IN_PROGRESS;
+//		} else { 
+//			status = RequirementStatus.OPEN;//if not a real user then it is currently open.
+//		}
+//	}
 	
 	public User getAssignee() {
 		return assignee;
