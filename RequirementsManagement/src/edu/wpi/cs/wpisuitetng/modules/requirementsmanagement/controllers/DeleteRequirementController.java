@@ -25,7 +25,7 @@ public class DeleteRequirementController implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// this is still missing a lot of info, but it can't be filled in until we have some GUI info
 		
-		final Request request = Network.getInstance().makeRequest("requirementsmanager/requirementmodel",  HttpMethod.PUT);
+		final Request request = Network.getInstance().makeRequest("requirementsmanager/requirementmodel",  HttpMethod.DELETE);
 		request.setBody(new RequirementModel().toJSON());
 		request.addObserver(new DeleteRequirementRequestObserver(this));
 		request.send();
