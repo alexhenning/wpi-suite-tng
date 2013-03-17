@@ -201,7 +201,15 @@ public class RequirementModel extends AbstractModel {
 	@Override
 	public String toJSON() {
 		String json;
+
+		//the following method works but if wee need special serializers then the second method is needed
 		Gson gson = new Gson();
+
+		//this is used is special serializers are needed
+//		GsonBuilder builder = new GsonBuilder();
+//		addGsonDependencies(builder);
+//		Gson gson = builder.create();
+		
 		json = gson.toJson(this, RequirementModel.class);
 		return json;
 	}
@@ -232,9 +240,10 @@ public class RequirementModel extends AbstractModel {
 	 * @param builder Builder to modify
 	 */
 	public static void addGsonDependencies(GsonBuilder builder) {
-		//TODO add dependencies for future class associations.
-
-//		DefectEvent.addGsonDependencies(builder);
+		//TODO add dependencies for future class associations. Only needed if normal (de)serializer does not work
+//		Task.addGsonDependencies(builder);
+//		Note.addGsonDependencies(builder);
+//		AbstractAttachment.addGsonDependencies(builder);
 	}
 	
 	// interface documentation says this is necessary for the mock database
