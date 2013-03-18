@@ -17,6 +17,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *
  */
 public class DeleteRequirementController implements ActionListener {
+	
+	public DeleteRequirementController() {
+		
+	}
 
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
@@ -27,7 +31,7 @@ public class DeleteRequirementController implements ActionListener {
 		
 		final Request request = Network.getInstance().makeRequest("requirementsmanager/requirementmodel",  HttpMethod.DELETE);
 		request.setBody(new RequirementModel().toJSON());
-		request.addObserver(new DeleteRequirementRequestObserver(this));
+		request.addObserver(new DeleteRequirementModelRequestObserver(this));
 		request.send();
 	}
 

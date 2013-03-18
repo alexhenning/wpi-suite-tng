@@ -32,7 +32,7 @@ public class AddRequirementController implements ActionListener {
 		
 		final Request request = Network.getInstance().makeRequest("requirementsmanager/requirementmodel",  HttpMethod.PUT);
 		request.setBody(new RequirementModel().toJSON());
-		request.addObserver(new AddRequirementRequestObserver(this));
+		request.addObserver(new CreateRequirementModelRequestObserver(this));
 		request.send();
 	}
 

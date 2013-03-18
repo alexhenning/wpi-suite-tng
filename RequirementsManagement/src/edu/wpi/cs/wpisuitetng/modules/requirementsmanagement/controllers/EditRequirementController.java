@@ -17,6 +17,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *
  */
 public class EditRequirementController implements ActionListener {
+	
+	public EditRequirementController() {
+		
+	}
 
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
@@ -27,7 +31,7 @@ public class EditRequirementController implements ActionListener {
 		
 		final Request request = Network.getInstance().makeRequest("requirementsmanager/requirementmodel",  HttpMethod.POST);
 		request.setBody(new RequirementModel().toJSON());
-		request.addObserver(new EditRequirementRequestObserver(this));
+		request.addObserver(new EditRequirementModelRequestObserver(this));
 		request.send();
 	}
 
