@@ -6,7 +6,14 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
@@ -18,9 +25,11 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *
  */
 public class AddRequirementController implements ActionListener {
+	
+	private final JanewayModule mainBoard;
 
-	public AddRequirementController() {
-		
+	public AddRequirementController(JanewayModule mB) {
+		this.mainBoard = mB;
 	}
 	/* 
 	 * This will be called when the user clicks an add button
