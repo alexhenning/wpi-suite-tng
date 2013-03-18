@@ -12,7 +12,7 @@ import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- * responds to a click even to delete a requirement
+ * Responds to a click even to delete a requirement
  * @author Tim
  *
  */
@@ -23,7 +23,7 @@ public class DeleteRequirementController implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// this is still missing a lot of info, but it can't be filled in until we have some GUI info
+		// TODO this is still missing a lot of info, but it can't be filled in until we have some GUI info
 		
 		final Request request = Network.getInstance().makeRequest("requirementsmanager/requirementmodel",  HttpMethod.DELETE);
 		request.setBody(new RequirementModel().toJSON());

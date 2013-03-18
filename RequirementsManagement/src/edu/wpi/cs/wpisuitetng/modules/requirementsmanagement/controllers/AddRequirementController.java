@@ -28,7 +28,7 @@ public class AddRequirementController implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// this is still missing a lot of info, but it can't be filled in until we have some GUI info
+		// TODO this is still missing a lot of info, but it can't be filled in until we have some GUI info
 		
 		final Request request = Network.getInstance().makeRequest("requirementsmanager/requirementmodel",  HttpMethod.PUT);
 		request.setBody(new RequirementModel().toJSON());
