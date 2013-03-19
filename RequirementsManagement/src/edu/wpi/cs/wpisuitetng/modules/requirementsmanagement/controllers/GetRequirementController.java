@@ -5,6 +5,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -40,6 +41,10 @@ public class GetRequirementController implements ActionListener {
 		// no need for a body
 		request.addObserver(new RetrieveRequirementModelRequestObserver(this));
 		request.send();
+	}
+	
+	public List<RequirementModel> receivedGetConfirmation(List<RequirementModel> reqs) {
+		return mainBoard.getRequirements();
 	}
 
 }

@@ -58,5 +58,9 @@ public class AddRequirementController implements ActionListener {
 		request.addObserver(new CreateRequirementModelRequestObserver(this));
 		request.send();
 	}
+	
+	public void receivedAddConfirmation(RequirementModel req) {
+		JanewayModule.addRequirement(req);
+	}
 
 }

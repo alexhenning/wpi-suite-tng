@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -17,6 +18,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.view.RequirementPanel; unworking atm
 
@@ -24,6 +26,9 @@ public class JanewayModule implements IJanewayModule {
 	
 	/** The tabs used by this module */
 	private ArrayList<JanewayTabModel> tabs;
+	
+	/** Local model of requirements */
+	private static List<RequirementModel> requirements;
 	
 	public JPanel mainPanel = new JPanel();
 	public JPanel buttonPanel = new JPanel();
@@ -92,6 +97,34 @@ public class JanewayModule implements IJanewayModule {
 	@Override
 	public List<JanewayTabModel> getTabs() {
 		return tabs;
+	}
+	
+	public static boolean addRequirement(RequirementModel req) {
+		return requirements.add(req);
+	}
+	
+	public void updateAllRequirementList(List<RequirementModel> reqs) {
+		requirements.clear();
+		for(RequirementModel req : reqs) {
+			requirements.add(req);
+		}
+	}
+	
+	public void deleteRequirement(int Id) {
+		for(RequirementModel req : requirements) {
+			if(req.getId() == Id) {
+				requirements.remove(req);
+			}
+		}
+	}
+	
+	public void updateSingleRequirement(RequirementModel req) {
+		for(int i = 0; i < requirements.size(); i++) {
+			if(requirements.get(i).getId() == req.getId()) {
+				requirements.remove(i);
+				requirements.add(i, req);
+			}
+		}
 	}
 
 }

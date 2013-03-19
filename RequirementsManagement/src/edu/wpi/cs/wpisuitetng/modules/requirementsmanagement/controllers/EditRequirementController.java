@@ -51,5 +51,9 @@ public class EditRequirementController implements ActionListener {
 		request.addObserver(new EditRequirementModelRequestObserver(this));
 		request.send();
 	}
+	
+	public void receivedUpdateConfirmation(RequirementModel req) {
+		
+	}
 
 }

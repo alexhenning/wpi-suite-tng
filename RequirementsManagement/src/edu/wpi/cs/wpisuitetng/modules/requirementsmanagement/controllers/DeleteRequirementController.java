@@ -53,5 +53,9 @@ public class DeleteRequirementController implements ActionListener {
 		request.addObserver(new DeleteRequirementModelRequestObserver(this));
 		request.send();
 	}
+	
+	public void receivedDeleteConfirmation(int Id) {
+		mainBoard.deleteRequirement(Id);
+	}
 
 }
