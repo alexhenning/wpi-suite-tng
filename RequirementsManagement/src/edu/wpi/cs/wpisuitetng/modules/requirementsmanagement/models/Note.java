@@ -1,10 +1,15 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
+
 public class Note extends AbstractModel {
+	
+	//TODO add fields to Note
+	//Who posted, message, etc...
 
 	/**
 	 * Add dependencies necessary for Gson to interact with this class
@@ -28,8 +33,10 @@ public class Note extends AbstractModel {
 
 	@Override
 	public String toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+		String json;
+		Gson gson = new Gson();
+		json = gson.toJson(this, Note.class);
+		return json;
 	}
 
 	@Override
