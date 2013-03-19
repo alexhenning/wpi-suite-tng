@@ -15,8 +15,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import java.util.Arrays;
-import java.util.List;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;

@@ -6,18 +6,12 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule.*;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
@@ -54,14 +48,14 @@ public class AddRequirementController implements ActionListener {
 		final String reqEffort               = "Unknown"; // so just some default stuff
 		
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.PUT);
-		request.setBody(new RequirementModel(reqReleaseNumber, reqStatus, reqPriority,
+		request.setBody(new RequirementModel(reqReleaseNumber.intValue(), reqStatus, reqPriority,
 				reqName, reqDescription, reqEstimate, reqEffort).toJSON());
 		request.addObserver(new CreateRequirementModelRequestObserver(this));
 		request.send();
 	}
 	
 	public void receivedAddConfirmation(RequirementModel req) {
-		JanewayModule.addRequirement(req);
+		mainBoard.addRequirement(req);
 	}
 
 }

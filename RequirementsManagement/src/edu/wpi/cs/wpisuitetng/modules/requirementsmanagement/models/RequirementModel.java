@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 
 public class RequirementModel extends AbstractModel {
 

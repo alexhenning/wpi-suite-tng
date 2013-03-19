@@ -49,7 +49,7 @@ public class DeleteRequirementController implements ActionListener {
 		final String reqEffort                = "Unknown"; // so just some default stuff
 		
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.DELETE);
-		request.setBody(new RequirementModel(reqReleaseNumber, reqStatus, reqPriority,
+		request.setBody(new RequirementModel(reqReleaseNumber.intValue(), reqStatus, reqPriority,
 				reqName, reqDescription, reqEstimate, reqEffort).toJSON());
 		request.addObserver(new DeleteRequirementModelRequestObserver(this));
 		request.send();

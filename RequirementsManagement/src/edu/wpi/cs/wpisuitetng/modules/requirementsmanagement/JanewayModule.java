@@ -1,15 +1,12 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;

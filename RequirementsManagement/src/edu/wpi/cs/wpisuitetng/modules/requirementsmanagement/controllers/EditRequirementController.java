@@ -47,14 +47,14 @@ public class EditRequirementController implements ActionListener {
 		final String reqEffort                = "Unknown"; // so just some default stuff
 		
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.POST);
-		request.setBody(new RequirementModel(reqReleaseNumber, reqStatus, reqPriority,
+		request.setBody(new RequirementModel(reqReleaseNumber.intValue(), reqStatus, reqPriority,
 				reqName, reqDescription, reqEstimate, reqEffort).toJSON());
 		request.addObserver(new EditRequirementModelRequestObserver(this));
 		request.send();
 	}
 	
 	public void receivedUpdateConfirmation(RequirementModel req) {
-		
+		mainBoard.updateSingleRequirement(req);
 	}
 
 }
