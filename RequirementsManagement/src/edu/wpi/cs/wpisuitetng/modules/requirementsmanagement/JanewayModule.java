@@ -15,6 +15,8 @@ import javax.swing.JTextArea;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditRequirementController;
 
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.view.RequirementPanel; unworking atm
 
@@ -23,24 +25,24 @@ public class JanewayModule implements IJanewayModule {
 	/** The tabs used by this module */
 	private ArrayList<JanewayTabModel> tabs;
 	
-	JPanel mainPanel = new JPanel();
-	JPanel buttonPanel = new JPanel();
+	public JPanel mainPanel = new JPanel();
+	public JPanel buttonPanel = new JPanel();
 	
-	JTextField namefield = new JTextField(30);
-	JTextField descriptionfield = new JTextField(30);
-	JTextField statusfield = new JTextField(30);
-	JTextField releasefield = new JTextField(30);
+	public JTextField namefield = new JTextField(30);
+	public JTextField descriptionfield = new JTextField(30);
+	public JTextField statusfield = new JTextField(30);
+	public JTextField releasefield = new JTextField(30);
 	
-	JButton submit = new JButton("Submit");
+	public JButton submit = new JButton("Submit");
 	
 	public JanewayModule() {
 		
 		// Setup button panel
 		buttonPanel.setLayout(new FlowLayout());
 		JButton Crtreq = new JButton("Create Requirement");
-		//Crtreq.addActionListener(new Controller(buttonPanel, this)); //add controllers
+		Crtreq.addActionListener(new AddRequirementController(buttonPanel, this)); //add controllers
 		JButton Edtreq = new JButton("Edit Requirement");
-		//Edtreq.addActionListener(new Controller(buttonPanel, this)); //add controllers
+		Edtreq.addActionListener(new EditRequirementController(buttonPanel, this)); //add controllers
 		buttonPanel.add(Crtreq);
 		buttonPanel.add(Edtreq);
 		

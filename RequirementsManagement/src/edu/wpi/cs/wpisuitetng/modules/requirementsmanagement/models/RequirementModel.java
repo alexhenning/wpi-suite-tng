@@ -17,6 +17,33 @@ public class RequirementModel extends AbstractModel {
 	String estimate;
 	String actualEffort;
 	
+	public RequirementModel() {
+	  // default constructor
+	}
+	
+	/**
+	 * Constructor for complete data. ** ID is not necessary when creating
+	 *  an object (yet) **
+	 * @param releaseNumber
+	 * @param status
+	 * @param priority
+	 * @param name
+	 * @param description
+	 * @param estimate
+	 * @param actualEffort
+	 */
+	public RequirementModel(int releaseNumber, RequirementStatus status,
+			RequirementPriority priority, String name, String description,
+			String estimate, String actualEffort) {
+		this.releaseNumber = releaseNumber;
+		this.status        = status;
+		this.priority      = priority;
+		this.name          = name;
+		this.description   = description;
+		this.estimate      = estimate;
+		this.actualEffort  = actualEffort;
+	}
+	
 	
 	public int getReleaseNumber() {
 		return releaseNumber;
