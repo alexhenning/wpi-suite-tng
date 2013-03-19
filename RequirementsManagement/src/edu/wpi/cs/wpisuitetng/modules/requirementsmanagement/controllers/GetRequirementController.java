@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
@@ -43,8 +44,8 @@ public class GetRequirementController implements ActionListener {
 		request.send();
 	}
 	
-	public List<RequirementModel> receivedGetConfirmation(List<RequirementModel> reqs) {
-		return mainBoard.getRequirements();
+	public void receivedGetConfirmation(List<RequirementModel> reqs) {
+		mainBoard.updateAllRequirementList(reqs);
 	}
 
 }
