@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JTabbedPane;
+import javax.swing.JComboBox;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
@@ -35,7 +36,8 @@ public class JanewayModule implements IJanewayModule {
 	
 	public JTextField namefield = new JTextField(30);
 	public JTextField descriptionfield = new JTextField(30);
-	public JTextField statusfield = new JTextField(30);
+	String[] statusStrings = { "New" };
+	public JComboBox statusfield = new JComboBox(statusStrings);
 	public JTextField releasefield = new JTextField(30);
 	public JTextField results = new JTextField(50);
 	
