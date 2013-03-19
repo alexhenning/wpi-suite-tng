@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +23,19 @@ public class JanewayModule implements IJanewayModule {
 	/** The tabs used by this module */
 	private ArrayList<JanewayTabModel> tabs;
 	
+	JPanel mainPanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
+	
+	JTextField namefield = new JTextField(30);
+	JTextField descriptionfield = new JTextField(30);
+	JTextField statusfield = new JTextField(30);
+	JTextField releasefield = new JTextField(30);
+	
+	JButton submit = new JButton("Submit");
+	
 	public JanewayModule() {
 		
 		// Setup button panel
-		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 		JButton Crtreq = new JButton("Create Requirement");
 		//Crtreq.addActionListener(new Controller(buttonPanel, this)); //add controllers
@@ -34,51 +44,37 @@ public class JanewayModule implements IJanewayModule {
 		buttonPanel.add(Crtreq);
 		buttonPanel.add(Edtreq);
 		
-		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(0,2));
 		
 		//name field
-		JPanel namePanel = new JPanel();
-		namePanel.setLayout(new FlowLayout());
 		JTextArea nameArea = new JTextArea(1, 10);
 		nameArea.setEditable(false);
 		nameArea.append("name");
 		mainPanel.add(nameArea);
-		JTextField namefield = new JTextField(30);
 		mainPanel.add(namefield);
 		
 		//description field
-		JPanel descriptionPanel = new JPanel();
-		descriptionPanel.setLayout(new FlowLayout());
 		JTextArea descriptionArea = new JTextArea(1, 10);
 		descriptionArea.setEditable(false);
 		descriptionArea.append("Description");
 		mainPanel.add(descriptionArea);
-		JTextField descriptionfield = new JTextField(30);
 		mainPanel.add(descriptionfield);
 		
 		//status field
-		JPanel statusPanel = new JPanel();
-		statusPanel.setLayout(new FlowLayout());
 		JTextArea statusArea = new JTextArea(1, 10);
 		statusArea.setEditable(false);
 		statusArea.append("Status");
 		mainPanel.add(statusArea);
-		JTextField statusfield = new JTextField(30);
 		mainPanel.add(statusfield);
 		
 		//release field
-		JPanel releasePanel = new JPanel();
-		releasePanel.setLayout(new FlowLayout());
 		JTextArea releaseArea = new JTextArea(1, 10);
 		releaseArea.setEditable(false);
 		releaseArea.append("Release");
 		mainPanel.add(releaseArea);
-		JTextField releasefield = new JTextField(30);
 		mainPanel.add(releasefield);
 
 		//submit button
-		JPanel submitPanel = new JPanel();
-		JButton submit = new JButton("Submit");
 		mainPanel.add(submit);
 		
 		tabs = new ArrayList<JanewayTabModel>();
