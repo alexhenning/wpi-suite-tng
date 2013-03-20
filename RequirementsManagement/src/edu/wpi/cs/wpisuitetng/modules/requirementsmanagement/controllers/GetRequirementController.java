@@ -11,6 +11,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
@@ -26,10 +27,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 public class GetRequirementController extends AbstractAction implements ActionListener {
 	// TODO This current gets all requirements (despite the name). We'll need a new one for all, and convert this one to a single requirement.
 
-	private final RequirementsPanel panel;
+	private final ListRequirementsPanel panel;
 	//private final JPanel buttonPanel;
 
-	public GetRequirementController(RequirementsPanel panel) {
+	public GetRequirementController(ListRequirementsPanel panel) {
 		//this.buttonPanel = buttonPanel;  /* not needed at the moment */
 		this.panel = panel;
 	}
@@ -47,7 +48,7 @@ public class GetRequirementController extends AbstractAction implements ActionLi
 	}
 	
 	public void receivedGetConfirmation(List<RequirementModel> reqs) {
-		// TODO: mainBoard.updateAllRequirementList(reqs);
+		panel.updateAllRequirementList(reqs);
 	}
 
 }
