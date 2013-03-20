@@ -1,6 +1,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -92,6 +94,9 @@ public class RequirementsPanel extends JPanel {
 	 * @param layout the layout manager
 	 */
 	protected void addComponents() {
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
 		//name field
 		JPanel namePanel = new JPanel();
 		namePanel.setLayout(new FlowLayout());
@@ -138,11 +143,18 @@ public class RequirementsPanel extends JPanel {
 		submitPanel.add(results);
 		
 		//add subpanels to main panel
-		add(namePanel);
-		add(descPanel);
-		add(statPanel);
-		add(relPanel);
-		add(submitPanel);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(namePanel, c);
+		c.gridy = 1;
+		add(descPanel, c);
+		c.gridy = 2;
+		add(statPanel, c);
+		c.gridy = 3;
+		add(relPanel, c);
+		c.gridy = 4;
+		add(submitPanel, c);
 	}
 
 	/**
