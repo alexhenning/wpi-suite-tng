@@ -25,25 +25,17 @@ public class RequirementModel extends AbstractModel {
 	private String description;
 	private String estimate;
 	private String actualEffort;
-	private int creatorId;
-	private int assigneeId;
 	private Date creationDate;
 	private Date lastModifiedDate;
 	private List<RequirementEvent> events;
-
-	@ExcludeField private User creator;
-	@ExcludeField private User assignee;
+	private User creator;
+	private User assignee;
 
 	//TODO associate with other requirements
 	//TODO add attachments
 	//TODO add tasks
 	//TODO add notes
 	//TODO add acceptance tests
-	
-	private static User getUserForId(int id) {
-		//TODO finish this method
-		return null;
-	}
 	
 	/**
 	 * Constructs a new RequirementModel with default properties.
@@ -53,10 +45,8 @@ public class RequirementModel extends AbstractModel {
 		name = "";
 		description = "";
 		status = RequirementStatus.NEW;
-		creatorId = -1;//new User("", "", "", -1);
-		assigneeId = -1;//new User("", "", "", -1);
-		creator = null;
-		assignee = null;
+		creator = new User("", "", "", -1);
+		assignee = new User("", "", "", -1);
 		estimate = "";
 		actualEffort = "";
 		creationDate = new Date();
@@ -76,29 +66,6 @@ public class RequirementModel extends AbstractModel {
 	 */
 	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
-			String estimate, String actualEffort, int creatorId, int assigneeId,
-			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events) {
-		super();
-		this.id = id;
-		this.releaseNumber = releaseNumber;
-		this.status = status;
-		this.priority = priority;
-		this.name = name;
-		this.description = description;
-		this.estimate = estimate;
-		this.actualEffort = actualEffort;
-		this.creatorId = creatorId;
-		this.assigneeId = assigneeId;
-		this.creationDate = creationDate;
-		this.lastModifiedDate = lastModifiedDate;
-		this.events = events;
-		
-		//TODO find out how to get the user object from the database
-		this.creator = getUserForId(creatorId);
-		this.assignee = getUserForId(assigneeId);
-	}
-	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
-			RequirementPriority priority, String name, String description,
 			String estimate, String actualEffort, User creator, User assignee,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events) {
 		super();
@@ -112,16 +79,6 @@ public class RequirementModel extends AbstractModel {
 		this.actualEffort = actualEffort;
 		this.creator = creator;
 		this.assignee = assignee;
-		if(creator != null) {
-			this.creatorId = creator.getIdNum();
-		} else {
-			this.creatorId = -1;
-		}
-		if(assignee != null) {
-			this.assigneeId = assignee.getIdNum();
-		} else {
-			this.assigneeId = -1;
-		}
 		this.creationDate = creationDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.events = events;
@@ -151,74 +108,16 @@ public class RequirementModel extends AbstractModel {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	
-	public void setCreatorId(int creatorId) {
-		this.creatorId = creatorId;
-		if(creatorId != -1) {
-			this.creator = getUserForId(creatorId);
-		} else {
-			this.creator = null;
-		}
-	}
-	
-	public int getCreatorId() {
-//		if (this.creator != null) {
-//			return this.creator.getIdNum();
-//		} else {
-			return creatorId;
-//		}
-	}
-	
 	public void setCreator(User creator) {
 		this.creator = creator;
-		if (creator != null) {
-			this.creatorId = creator.getIdNum();
-		} else {
-			this.creatorId = -1;
-		}
 	}
 	
 	public User getCreator() {
-		if(creator == null && creatorId != -1){
-			creator = getUserForId(creatorId);
-			return creator;
-		} else {
-			return creator;//TODO should we request the user object from the database?
-		}
+		return creator;
 	}
 	
-	public void setAssigneeId(int assigneeId) {
-		this.assigneeId = assigneeId;
-		if(assigneeId != -1) {
-			this.assignee = getUserForId(assigneeId);
-		} else {
-			this.assignee = null;
-		}
-	}
-		
-	public int getAssigneeId() {
-//		if (this.assignee != null) {
-//			return assignee.getIdNum();
-//		} else 
-			return assigneeId;
-//		}
-	}
-
-	public void setAssignee(User assignee) {
-		this.assignee = assignee;
-		if (assignee != null) {
-			this.assigneeId = assignee.getIdNum();
-		} else {
-			this.assigneeId = -1;
-		}
-	}
-		
 	public User getAssignee() {
-		if(assignee == null && creatorId != -1) {
-			assignee = getUserForId(assigneeId);
-			return assignee;
-		} else {
-			return assignee;//TODO should we request the user object from the database?
-		}
+		return assignee;
 	}
 		
 	public int getReleaseNumber() {
