@@ -7,10 +7,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 
+import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -24,14 +26,14 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * @author Tim Calvert
  *
  */
-public class EditRequirementController implements ActionListener {
+public class EditRequirementController extends AbstractAction implements ActionListener {
 	
-	private final JanewayModule mainBoard;
+	private final RequirementsPanel panel;
 	//private final JPanel buttonPanel;
 
-	public EditRequirementController(JPanel buttonPanel, JanewayModule mB) {
+	public EditRequirementController(RequirementsPanel panel) {
 		//this.buttonPanel = buttonPanel;  /* not needed at the moment */
-		this.mainBoard = mB;
+		this.panel = panel;
 	}
 
 	/* (non-Javadoc)
@@ -39,28 +41,14 @@ public class EditRequirementController implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO need to get the ID somehow, but that's not possible under our current set up
-		final Integer reqReleaseNumber        = Integer.parseInt(mainBoard.releasefield.getText());
-		final RequirementStatus reqStatus     = RequirementStatus.valueOf(mainBoard.statusfield.getSelectedItem().toString().toUpperCase());  // might not work, we'll need a better system
-		final RequirementPriority reqPriority = RequirementPriority.LOW;  // default
-		final String reqName                  = mainBoard.namefield.getText();
-		final String reqDescription           = mainBoard.descriptionfield.getText();
-		final String reqEstimate              = "Unknown"; // aren't retrievable with our current GUI
-		final String reqEffort                = "Unknown"; // so just some default stuff
-		final User reqCreator                 = null;
-		final User reqAssignee                = null;
-		final Date reqCreationDate            = new Date();
-		final Date reqLastModifiedDate        = reqCreationDate;
-		
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.POST);
-		request.setBody(new RequirementModel(-1, reqReleaseNumber.intValue(), reqStatus, reqPriority,
-				reqName, reqDescription, reqEstimate, reqEffort, reqCreator, reqAssignee, reqCreationDate, reqLastModifiedDate).toJSON());
+		request.setBody(panel.getModel().toJSON());
 		request.addObserver(new EditRequirementModelRequestObserver(this));
 		request.send();
 	}
 	
 	public void receivedUpdateConfirmation(RequirementModel req) {
-		mainBoard.updateSingleRequirement(req);
+		// TODO: mainBoard.updateSingleRequirement(req);
 	}
 
 }

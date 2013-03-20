@@ -11,6 +11,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 public class RequirementModel extends AbstractModel {
+	private static int NEXT_ID = 1;
 
 	private int id;
 	private int releaseNumber;
@@ -34,7 +35,7 @@ public class RequirementModel extends AbstractModel {
 	 * Constructs a new RequirementModel with default properties.
 	 */
 	public RequirementModel() {
-		id = -1;
+		id = NEXT_ID++; // TODO: Fix to be legitimate and deal 
 		name = "";
 		description = "";
 		status = RequirementStatus.NEW;

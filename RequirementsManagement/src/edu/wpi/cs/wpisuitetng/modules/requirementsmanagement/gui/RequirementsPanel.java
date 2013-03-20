@@ -17,7 +17,9 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JPanel {
@@ -37,7 +39,7 @@ public class RequirementsPanel extends JPanel {
 	 */
 	public JTextField namefield = new JTextField(30);
 	public JTextField descriptionfield = new JTextField(30);
-	String[] statusStrings = { "New" };
+	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
 	public JTextField releasefield = new JTextField(30);
 	public JTextField results = new JTextField(50);
@@ -100,42 +102,36 @@ public class RequirementsPanel extends JPanel {
 		//name field
 		JPanel namePanel = new JPanel();
 		namePanel.setLayout(new FlowLayout());
-		JTextArea nameArea = new JTextArea(1, 10);
-		nameArea.setEditable(false);
-		nameArea.append("name");
+		JLabel nameArea = new JLabel("Name");
 		namePanel.add(nameArea);
 		namePanel.add(namefield);
 		
 		//description field
 		JPanel descPanel = new JPanel();
 		descPanel.setLayout(new FlowLayout());
-		JTextArea descriptionArea = new JTextArea(1, 10);
-		descriptionArea.setEditable(false);
-		descriptionArea.append("Description");
+		JLabel descriptionArea = new JLabel("Description");
 		descPanel.add(descriptionArea);
 		descPanel.add(descriptionfield);
 		
 		//status field
 		JPanel statPanel = new JPanel();
 		statPanel.setLayout(new FlowLayout());
-		JTextArea statusArea = new JTextArea(1, 10);
-		statusArea.setEditable(false);
-		statusArea.append("Status");
+		JLabel statusArea = new JLabel("Status");
 		statPanel.add(statusArea);
 		statPanel.add(statusfield);
 		
 		//release field
 		JPanel relPanel = new JPanel();
 		relPanel.setLayout(new FlowLayout());
-		JTextArea releaseArea = new JTextArea(1, 10);
-		releaseArea.setEditable(false);
-		releaseArea.append("Release");
+		JLabel releaseArea = new JLabel("Release");
 		relPanel.add(releaseArea);
 		relPanel.add(releasefield);
 	
 		//submit panel
 		JPanel submitPanel = new JPanel();
 		submitPanel.setLayout(new FlowLayout());
+		submit.setAction(new AddRequirementController(this));
+		submit.setText("Save");
 		
 		//submit button
 		submitPanel.add(submit);
@@ -203,6 +199,10 @@ public class RequirementsPanel extends JPanel {
 	 * @return
 	 */
 	public RequirementModel getModel() {
+		model.setName(namefield.getText());
+		model.setDescription(descriptionfield.getText());
+		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
+		model.setReleaseNumber(Integer.parseInt(releasefield.getText())); // TODO: Should be an integer
 		return model;
 	}
 	
