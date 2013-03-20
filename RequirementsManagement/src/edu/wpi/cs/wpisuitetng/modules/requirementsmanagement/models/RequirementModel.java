@@ -2,6 +2,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 
 import java.util.Date;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,6 +24,7 @@ public class RequirementModel extends AbstractModel {
 	private User creator;
 	private User assignee;
 	private Date creationDate, lastModifiedDate;
+	private List<RequirementEvent> events;
 	
 	//TODO associate with other requirements
 	//TODO add attachments
