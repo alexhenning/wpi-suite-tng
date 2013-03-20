@@ -223,4 +223,8 @@ public class RequirementsPanel extends JPanel {
 	public Mode getEditMode() {
 		return editMode;
 	}
+
+	public void setStatus(String string) {
+		results.setText(string);
+	}
 }
