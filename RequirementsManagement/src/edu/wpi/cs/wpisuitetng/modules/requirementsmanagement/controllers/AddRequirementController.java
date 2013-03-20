@@ -49,7 +49,7 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 	}
 	
 	public void receivedAddConfirmation(RequirementModel req) {
-		System.out.println("Requirement added.");
+		panel.setStatus("Requirement saved!");
 		// TODO: mainBoard.addRequirement(req);
 	}
 

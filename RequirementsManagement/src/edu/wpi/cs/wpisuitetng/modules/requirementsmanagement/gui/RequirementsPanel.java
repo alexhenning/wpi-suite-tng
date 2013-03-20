@@ -19,6 +19,7 @@ import javax.swing.SpringLayout;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 @SuppressWarnings("serial")
@@ -39,9 +40,11 @@ public class RequirementsPanel extends JPanel {
 	 */
 	public JTextField namefield = new JTextField(30);
 	public JTextField descriptionfield = new JTextField(30);
+	RequirementPriority[] priorityStrings = RequirementPriority.values();
+	public JComboBox priority = new JComboBox(priorityStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
-	public JTextField releasefield = new JTextField(30);
+	public JTextField estimateField = new JTextField(30);
 	public JTextField results = new JTextField(50);
 	JButton submit = new JButton("Submit");
 	
@@ -106,6 +109,13 @@ public class RequirementsPanel extends JPanel {
 		namePanel.add(nameArea);
 		namePanel.add(namefield);
 		
+		//priority field
+		JPanel priorityPanel = new JPanel();
+		priorityPanel.setLayout(new FlowLayout());
+		JLabel priorityArea = new JLabel("Priority");
+		priorityPanel.add(priorityArea);
+		priorityPanel.add(priority);
+		
 		//description field
 		JPanel descPanel = new JPanel();
 		descPanel.setLayout(new FlowLayout());
@@ -120,12 +130,12 @@ public class RequirementsPanel extends JPanel {
 		statPanel.add(statusArea);
 		statPanel.add(statusfield);
 		
-		//release field
-		JPanel relPanel = new JPanel();
-		relPanel.setLayout(new FlowLayout());
-		JLabel releaseArea = new JLabel("Release");
-		relPanel.add(releaseArea);
-		relPanel.add(releasefield);
+		//estimate field
+		JPanel estPanel = new JPanel();
+		estPanel.setLayout(new FlowLayout());
+		JLabel estimateArea = new JLabel("Estimate");
+		estPanel.add(estimateArea);
+		estPanel.add(estimateField);
 	
 		//submit panel
 		JPanel submitPanel = new JPanel();
@@ -144,12 +154,14 @@ public class RequirementsPanel extends JPanel {
 		c.gridy = 0;
 		add(namePanel, c);
 		c.gridy = 1;
-		add(descPanel, c);
+		add(priorityPanel, c);
 		c.gridy = 2;
-		add(statPanel, c);
+		add(descPanel, c);
 		c.gridy = 3;
-		add(relPanel, c);
+		add(statPanel, c);
 		c.gridy = 4;
+		add(estPanel, c);
+		c.gridy = 5;
 		add(submitPanel, c);
 	}
 
@@ -200,9 +212,10 @@ public class RequirementsPanel extends JPanel {
 	 */
 	public RequirementModel getModel() {
 		model.setName(namefield.getText());
+		model.setPriority((RequirementPriority) priority.getSelectedItem());
 		model.setDescription(descriptionfield.getText());
 		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
-		model.setReleaseNumber(Integer.parseInt(releasefield.getText())); // TODO: Should be an integer
+		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
 		return model;
 	}
 	
@@ -222,5 +235,9 @@ public class RequirementsPanel extends JPanel {
 	 */
 	public Mode getEditMode() {
 		return editMode;
+	}
+
+	public void setStatus(String string) {
+		results.setText(string);
 	}
 }
