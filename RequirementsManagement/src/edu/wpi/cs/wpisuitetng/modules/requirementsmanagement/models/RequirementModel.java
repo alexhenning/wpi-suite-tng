@@ -115,19 +115,7 @@ public class RequirementModel extends AbstractModel {
 	public void setAssignee(User assignee) {
 		this.assignee = assignee;
 	}
-	
-//	public void setAssigneeWithAutoStatusUpdate(User assignee) {
-//		this.assignee = assignee;
-//		
-//		//TODO consider improving this
-//		//this will auto-set the status when assigning a user
-//		if (assignee != null && assignee.getIdNum() != -1 ) { //make sure it is assigned to a real user
-//			this.status = RequirementStatus.IN_PROGRESS;
-//		} else { 
-//			status = RequirementStatus.OPEN;//if not a real user then it is currently open.
-//		}
-//	}
-	
+		
 	public User getAssignee() {
 		return assignee;
 	}
