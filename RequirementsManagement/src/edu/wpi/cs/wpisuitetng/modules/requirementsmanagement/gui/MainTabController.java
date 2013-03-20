@@ -27,6 +27,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.Icon;
 import javax.swing.event.ChangeListener;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+
 /**
  * Controls the behavior of a given MainTabView.
  * Provides convenient public methods for controlling the MainTabView.
@@ -72,35 +75,35 @@ public class MainTabController {
 		return addTab(null, null, null, null);
 	}
 	
-//	/**
-//	 * Adds a tab that displays the given defect in the given mode
-//	 * @param defect The defect to display
-//	 * @param mode The Mode to use
-//	 */
-//	private Tab addDefectTab(Defect defect, Mode mode) {
-//		Tab tab = addTab();
-//		DefectView view = new DefectView(defect, mode, tab);
-//		tab.setComponent(view);
-//		view.requestFocus();
-//		return tab;
-//	}
-//	
-//	/**
-//	 * Adds a tab that displays the given defect
-//	 * @param defect the defect to display
-//	 * @return The created Tab 
-//	 */
-//	public Tab addEditDefectTab(Defect defect) {
-//		return addDefectTab(defect, Mode.EDIT);
-//	}
-//	
-//	/**
-//	 * Adds a tab that allows the user to create a new Defect
-//	 * @return The created Tab
-//	 */
-//	public Tab addCreateDefectTab() {
-//		return addDefectTab(new Defect(), Mode.CREATE);
-//	}
+	/**
+	 * Adds a tab that displays the given defect in the given mode
+	 * @param defect The defect to display
+	 * @param mode The Mode to use
+	 */
+	private Tab addRequirementTab(RequirementModel requirement, Mode mode) {
+		Tab tab = addTab();
+		RequirementsTab view = new RequirementsTab(requirement, mode, tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
+	/**
+	 * Adds a tab that displays the given defect
+	 * @param defect the defect to display
+	 * @return The created Tab 
+	 */
+	public Tab addEditRequirementTab(RequirementModel requirement) {
+		return addRequirementTab(requirement, Mode.EDIT);
+	}
+	
+	/**
+	 * Adds a tab that allows the user to create a new Defect
+	 * @return The created Tab
+	 */
+	public Tab addCreateRequirementTab() {
+		return addRequirementTab(new RequirementModel(), Mode.CREATE);
+	}
 	
 	/**
 	 * Add a change listener to the view this is controlling.

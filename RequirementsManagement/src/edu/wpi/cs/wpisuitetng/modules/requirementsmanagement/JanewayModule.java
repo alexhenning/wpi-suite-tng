@@ -26,6 +26,7 @@ import javax.swing.JComboBox;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
@@ -37,18 +38,9 @@ public class JanewayModule implements IJanewayModule {
 	
 	public JPanel buttonPanel = new JPanel();
 	
-	public JTextField namefield = new JTextField(30);
-	public JTextField descriptionfield = new JTextField(30);
-	String[] statusStrings = { "New" };
-	public JComboBox statusfield = new JComboBox(statusStrings);
-	public JTextField releasefield = new JTextField(30);
-	public JTextField results = new JTextField(50);
-	
 	private MainTabController mainTabController;
 	
 	JTabbedPane tabPane = new JTabbedPane();
-	
-	JButton submit = new JButton("Submit");
 	
 	public JanewayModule() {
 		MainTabView mainTabView = new MainTabView();
@@ -58,6 +50,7 @@ public class JanewayModule implements IJanewayModule {
 		buttonPanel.setLayout(new FlowLayout());
 		JButton Crtreq = new JButton("Create Requirement");
 		JButton Edtreq = new JButton("Edit Requirement");
+		Crtreq.setAction(new CreateRequirementAction(mainTabController));
 		buttonPanel.add(Crtreq);
 		buttonPanel.add(Edtreq);
 
