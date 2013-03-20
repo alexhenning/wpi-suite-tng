@@ -21,12 +21,15 @@ public class RequirementModel extends AbstractModel {
 	private String description;
 	private String estimate;
 	private String actualEffort;
-	private User creator;
-	private User assignee;
+	private int creatorId;
+	private int assigneeId;
 	private Date creationDate;
 	private Date lastModifiedDate;
 	private List<RequirementEvent> events;
-	
+
+	private User creator;
+	private User assignee;
+
 	//TODO associate with other requirements
 	//TODO add attachments
 	//TODO add tasks
@@ -41,8 +44,10 @@ public class RequirementModel extends AbstractModel {
 		name = "";
 		description = "";
 		status = RequirementStatus.NEW;
-		creator = new User("", "", "", -1);
-		assignee = new User("", "", "", -1);
+		creatorId = -1;//new User("", "", "", -1);
+		assigneeId = -1;//new User("", "", "", -1);
+		creator = null;
+		assignee = null;
 		estimate = "";
 		actualEffort = "";
 		creationDate = new Date();
@@ -62,6 +67,29 @@ public class RequirementModel extends AbstractModel {
 	 */
 	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
+			String estimate, String actualEffort, int creatorId, int assigneeId,
+			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events) {
+		super();
+		this.id = id;
+		this.releaseNumber = releaseNumber;
+		this.status = status;
+		this.priority = priority;
+		this.name = name;
+		this.description = description;
+		this.estimate = estimate;
+		this.actualEffort = actualEffort;
+		this.creatorId = creatorId;
+		this.assigneeId = assigneeId;
+		this.creationDate = creationDate;
+		this.lastModifiedDate = lastModifiedDate;
+		this.events = events;
+		
+		//TODO find out how to get the user object from the database
+//		this.creator = 
+//		this.assignee = 
+	}
+	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
+			RequirementPriority priority, String name, String description,
 			String estimate, String actualEffort, User creator, User assignee,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events) {
 		super();
@@ -75,6 +103,16 @@ public class RequirementModel extends AbstractModel {
 		this.actualEffort = actualEffort;
 		this.creator = creator;
 		this.assignee = assignee;
+		if(creator != null) {
+			this.creatorId = creator.getIdNum();
+		} else {
+			this.creatorId = -1;
+		}
+		if(assignee != null) {
+			this.assigneeId = assignee.getIdNum();
+		} else {
+			this.assigneeId = -1;
+		}
 		this.creationDate = creationDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.events = events;
@@ -104,22 +142,38 @@ public class RequirementModel extends AbstractModel {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	
+	public void setCreatorId(int creatorId) {
+		this.creatorId = creatorId;
+	}
+	
+	public int getCreatorId() {
+		 return creatorId;
+	}
+	
 	public void setCreator(User creator) {
 		this.creator = creator;
 	}
 	
 	public User getCreator() {
-		 return creator;
+		 return creator;//TODO should we request the user object from the database?
 	}
 	
+	public void setAssigneeId(int assigneeId) {
+		this.assigneeId = assigneeId;
+	}
+		
+	public int getAssigneeId() {
+		return assigneeId;
+	}
+
 	public void setAssignee(User assignee) {
 		this.assignee = assignee;
 	}
 		
 	public User getAssignee() {
-		return assignee;
+		return assignee;//TODO should we request the user object from the database?
 	}
-
+		
 	public int getReleaseNumber() {
 		return releaseNumber;
 	}
