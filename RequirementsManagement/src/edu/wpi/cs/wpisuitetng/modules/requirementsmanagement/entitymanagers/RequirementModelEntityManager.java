@@ -5,9 +5,11 @@
  */
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.PriorityQueue;
+import java.util.Queue;
+
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
@@ -26,12 +28,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  *
  */
 public class RequirementModelEntityManager implements EntityManager<RequirementModel> {
-	PriorityQueue<Integer> availableIds;
+	Queue<Integer> availableIds;  // A queue of any Ids that are available for recycling
 	Data db;
 	
 	public RequirementModelEntityManager(Data db) {
 		this.db = db;
-		availableIds = new PriorityQueue<Integer>();
+		availableIds = new LinkedList<Integer>();
 	}
 
 	/* (non-Javadoc)
