@@ -1,10 +1,14 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -27,14 +31,19 @@ public class RequirementModel extends AbstractModel {
 	private Date lastModifiedDate;
 	private List<RequirementEvent> events;
 
-	private User creator;
-	private User assignee;
+	@ExcludeField private User creator;
+	@ExcludeField private User assignee;
 
 	//TODO associate with other requirements
 	//TODO add attachments
 	//TODO add tasks
 	//TODO add notes
 	//TODO add acceptance tests
+	
+	private static User getUserForId(int id) {
+		//TODO finish this method
+		return null;
+	}
 	
 	/**
 	 * Constructs a new RequirementModel with default properties.
@@ -85,8 +94,8 @@ public class RequirementModel extends AbstractModel {
 		this.events = events;
 		
 		//TODO find out how to get the user object from the database
-//		this.creator = 
-//		this.assignee = 
+		this.creator = getUserForId(creatorId);
+		this.assignee = getUserForId(assigneeId);
 	}
 	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
@@ -144,34 +153,72 @@ public class RequirementModel extends AbstractModel {
 	
 	public void setCreatorId(int creatorId) {
 		this.creatorId = creatorId;
+		if(creatorId != -1) {
+			this.creator = getUserForId(creatorId);
+		} else {
+			this.creator = null;
+		}
 	}
 	
 	public int getCreatorId() {
-		 return creatorId;
+//		if (this.creator != null) {
+//			return this.creator.getIdNum();
+//		} else {
+			return creatorId;
+//		}
 	}
 	
 	public void setCreator(User creator) {
 		this.creator = creator;
+		if (creator != null) {
+			this.creatorId = creator.getIdNum();
+		} else {
+			this.creatorId = -1;
+		}
 	}
 	
 	public User getCreator() {
-		 return creator;//TODO should we request the user object from the database?
+		if(creator == null && creatorId != -1){
+			creator = getUserForId(creatorId);
+			return creator;
+		} else {
+			return creator;//TODO should we request the user object from the database?
+		}
 	}
 	
 	public void setAssigneeId(int assigneeId) {
 		this.assigneeId = assigneeId;
+		if(assigneeId != -1) {
+			this.assignee = getUserForId(assigneeId);
+		} else {
+			this.assignee = null;
+		}
 	}
 		
 	public int getAssigneeId() {
-		return assigneeId;
+//		if (this.assignee != null) {
+//			return assignee.getIdNum();
+//		} else 
+			return assigneeId;
+//		}
 	}
 
 	public void setAssignee(User assignee) {
 		this.assignee = assignee;
+		if (assignee != null) {
+			this.assigneeId = assignee.getIdNum();
+		} else {
+			this.assigneeId = -1;
+		}
 	}
 		
 	public User getAssignee() {
-		return assignee;//TODO should we request the user object from the database?
+		if(assignee == null && creatorId != -1) {
+			assignee = getUserForId(assigneeId);
+			return assignee;
+		} else {
+			return assignee;//TODO should we request the user object from the database?
+		}
 	}
 		
 	public int getReleaseNumber() {
@@ -320,5 +367,7 @@ public class RequirementModel extends AbstractModel {
 	public String toString() {
 		return toJSON();
 	}
-
+	
 }
+
+
