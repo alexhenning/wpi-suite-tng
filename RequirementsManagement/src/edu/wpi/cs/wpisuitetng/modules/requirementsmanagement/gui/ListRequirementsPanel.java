@@ -71,6 +71,11 @@ public class ListRequirementsPanel extends JPanel {
 	}
 
 	public void updateAllRequirementList(List<RequirementModel> reqs) {
-		ta.setText(reqs.toString());
+		String output = "";
+		for(RequirementModel req : reqs) {
+			output = output + "Name: " + req.getName() + " (Status: " + req.getStatus() + ", ID: " + 
+					req.getId()  + ") " + "   Description: " + req.getDescription() + "\n";
+		}
+		ta.setText(output);
 	}
 }
