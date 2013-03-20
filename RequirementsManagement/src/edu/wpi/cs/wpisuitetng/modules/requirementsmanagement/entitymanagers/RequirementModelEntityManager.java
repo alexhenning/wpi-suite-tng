@@ -6,6 +6,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.PriorityQueue;
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
@@ -24,10 +26,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  *
  */
 public class RequirementModelEntityManager implements EntityManager<RequirementModel> {
+	PriorityQueue<Integer> availableIds;
 	Data db;
 	
 	public RequirementModelEntityManager(Data db) {
 		this.db = db;
+		availableIds = new PriorityQueue<Integer>();
 	}
 
 	/* (non-Javadoc)
@@ -39,8 +43,15 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		
 		final RequirementModel newRequirementModel = RequirementModel.fromJSON(content);
 		
-		newRequirementModel.setId(Count() + 1); // same as in DefectTracker
-		                                        // should be changed
+		if(availableIds.isEmpty()) {
+			newRequirementModel.setId(Count() + 1);
+		} else {
+			try {
+			newRequirementModel.setId(availableIds.remove().intValue());
+			} catch (NoSuchElementException e) {
+				newRequirementModel.setId(Count() + 1);
+			}
+		}
 		
 		if(!db.save(newRequirementModel, s.getProject())) {
 			throw new WPISuiteException();
@@ -133,6 +144,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
+		availableIds.add(new Integer(id));
 		return (db.delete(getEntity(s, id)[0]) != null);
 	}
 
@@ -142,6 +154,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
 		db.deleteAll(new RequirementModel(), s.getProject());
+		availableIds.clear();
 	}
 
 	@Override
