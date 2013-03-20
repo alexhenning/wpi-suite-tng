@@ -1,6 +1,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-//import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 public class RequirementModel extends AbstractModel {
@@ -23,7 +23,8 @@ public class RequirementModel extends AbstractModel {
 	private String actualEffort;
 	private User creator;
 	private User assignee;
-	private Date creationDate, lastModifiedDate;
+	private Date creationDate;
+	private Date lastModifiedDate;
 	private List<RequirementEvent> events;
 	
 	//TODO associate with other requirements
@@ -46,6 +47,7 @@ public class RequirementModel extends AbstractModel {
 		actualEffort = "";
 		creationDate = new Date();
 		lastModifiedDate = new Date();
+		events = new ArrayList<RequirementEvent>();
 	}
 	
 	//TODO finish the documentation of this constructor
@@ -61,7 +63,7 @@ public class RequirementModel extends AbstractModel {
 	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
 			String estimate, String actualEffort, User creator, User assignee,
-			Date creationDate, Date lastModifiedDate) {
+			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
@@ -75,6 +77,15 @@ public class RequirementModel extends AbstractModel {
 		this.assignee = assignee;
 		this.creationDate = creationDate;
 		this.lastModifiedDate = lastModifiedDate;
+		this.events = events;
+	}
+
+	public List<RequirementEvent> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<RequirementEvent> events) {
+		this.events = events;
 	}
 
 	public Date getCreationDate() {
@@ -242,6 +253,7 @@ public class RequirementModel extends AbstractModel {
 	 * @param builder Builder to modify
 	 */
 	public static void addGsonDependencies(GsonBuilder builder) {
+		RequirementEvent.addGsonDependencies(builder);
 		//TODO add dependencies for future class associations. Only needed if normal (de)serializer does not work
 //		Task.addGsonDependencies(builder);
 //		Note.addGsonDependencies(builder);
