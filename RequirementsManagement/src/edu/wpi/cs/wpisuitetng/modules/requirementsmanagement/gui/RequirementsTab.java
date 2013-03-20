@@ -64,11 +64,11 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		}
 		
 		// Instantiate the button panel
-		buttonGroup = new ToolbarGroupView("Create Defect");
+		buttonGroup = new ToolbarGroupView("Create Requirement");
 		
 		containingTab.setIcon(new ImageIcon());
 		if(editMode == Mode.CREATE) {
-			containingTab.setTitle("Create Defect");
+			containingTab.setTitle("Create Requirement");
 			containingTab.setToolTipText("Create a new defect");
 		} else {
 			setEditModeDescriptors(requirement);
