@@ -1,41 +1,63 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Joshua Morse
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JTabbedPane;
+import javax.swing.JComboBox;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 
 public class JanewayModule implements IJanewayModule {
 	
 	/** The tabs used by this module */
 	private ArrayList<JanewayTabModel> tabs;
 	
+	public JPanel buttonPanel = new JPanel();
+	
+	private MainTabController mainTabController;
+	
+	JTabbedPane tabPane = new JTabbedPane();
+	
 	public JanewayModule() {
+		MainTabView mainTabView = new MainTabView();
+		mainTabController = new MainTabController(mainTabView);
 		
 		// Setup button panel
-		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
-		buttonPanel.add(new JButton("Func A"));
-		buttonPanel.add(new JButton("Func B"));
-		
-		// Setup the main panel
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BorderLayout());
-		mainPanel.add(new JLabel("Dummy Module"), BorderLayout.PAGE_START);
-		mainPanel.add(new JTextField(), BorderLayout.CENTER);
-		mainPanel.add(new JTextField(), BorderLayout.CENTER);
-		
+		JButton Crtreq = new JButton("Create Requirement");
+		JButton listReq = new JButton("List Requirements");
+		Crtreq.setAction(new CreateRequirementAction(mainTabController));
+		listReq.setAction(new ListRequirementsAction(mainTabController));
+		buttonPanel.add(Crtreq);
+		buttonPanel.add(listReq);
+
 		tabs = new ArrayList<JanewayTabModel>();
-		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), buttonPanel, mainPanel);
+		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), buttonPanel, mainTabView);
 		tabs.add(tab);
 	}
 
