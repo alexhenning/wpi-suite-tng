@@ -19,6 +19,7 @@ import javax.swing.SpringLayout;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 @SuppressWarnings("serial")
@@ -39,6 +40,8 @@ public class RequirementsPanel extends JPanel {
 	 */
 	public JTextField namefield = new JTextField(30);
 	public JTextField descriptionfield = new JTextField(30);
+	RequirementPriority[] priorityStrings = RequirementPriority.values();
+	public JComboBox priority = new JComboBox(priorityStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
 	public JTextField estimateField = new JTextField(30);
@@ -106,6 +109,13 @@ public class RequirementsPanel extends JPanel {
 		namePanel.add(nameArea);
 		namePanel.add(namefield);
 		
+		//priority field
+		JPanel priorityPanel = new JPanel();
+		priorityPanel.setLayout(new FlowLayout());
+		JLabel priorityArea = new JLabel("Priority");
+		priorityPanel.add(priorityArea);
+		priorityPanel.add(priority);
+		
 		//description field
 		JPanel descPanel = new JPanel();
 		descPanel.setLayout(new FlowLayout());
@@ -144,12 +154,14 @@ public class RequirementsPanel extends JPanel {
 		c.gridy = 0;
 		add(namePanel, c);
 		c.gridy = 1;
-		add(descPanel, c);
+		add(priorityPanel, c);
 		c.gridy = 2;
-		add(statPanel, c);
+		add(descPanel, c);
 		c.gridy = 3;
-		add(estPanel, c);
+		add(statPanel, c);
 		c.gridy = 4;
+		add(estPanel, c);
+		c.gridy = 5;
 		add(submitPanel, c);
 	}
 
@@ -200,6 +212,7 @@ public class RequirementsPanel extends JPanel {
 	 */
 	public RequirementModel getModel() {
 		model.setName(namefield.getText());
+		model.setPriority((RequirementPriority) priority.getSelectedItem());
 		model.setDescription(descriptionfield.getText());
 		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
 		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
