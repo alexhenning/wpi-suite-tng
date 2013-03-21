@@ -93,6 +93,8 @@ public class RequirementModelValidator {
 		}
 	}
 	
+	//TODO modifiy the defect validation code to work with the RequirementModel
+	
 //	/**
 //	 * Validate the given model such that any nested models point to appropriate existing models
 //	 * from the Data given in the constructor.
@@ -160,38 +162,6 @@ public class RequirementModelValidator {
 //			}
 //		}
 //		
-//		
-//		if(defect.getTags() == null) {
-//			defect.setTags(new HashSet<Tag>());
-//		}
-//		final Set<Tag> tags = defect.getTags();
-//		if(tags.size() > 100) {
-//			issues.add(new ValidationIssue("Cannot have more than 100 tags", "tags"));
-//		} else {
-//			// need to make a new set because we can't modify existing set as we iterate over it
-//			final Set<Tag> newTags = new HashSet<Tag>();
-//			// validate each tag
-//			for(Tag tag : tags) {
-//				if(tag == null) {
-//					issues.add(new ValidationIssue("Cannot be null", "tags"));
-//					break;
-//				}
-//				List<Model> existingModels = data.retrieve(Tag.class, "name", tag.getName(),
-//						session.getProject());
-//				if(existingModels.size() > 0 && existingModels.get(0) != null) {
-//					// make sure we don't insert duplicate tags
-//					newTags.add((Tag) existingModels.get(0));
-//				} else if(tag.getName() == null || tag.getName().length() < 1) {
-//					// tags with empty names aren't allowed
-//					// TODO: this validation should probably happen in Tag's EntityManager
-//					issues.add(new ValidationIssue("Names can't be empty", "tags"));
-//					break;
-//				} else { //doesn't already exist, is valid
-//					newTags.add(tag);
-//				}
-//			}
-//			defect.setTags(newTags);
-//		}
 //		
 //		// make sure we're not being spoofed with some weird date
 //		final Date now = new Date();
