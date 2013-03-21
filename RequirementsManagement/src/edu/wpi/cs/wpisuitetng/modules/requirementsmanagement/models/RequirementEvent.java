@@ -74,7 +74,7 @@ public abstract class RequirementEvent extends AbstractModel {
 		// TODO Auto-generated method stub
 	}
 	
-	// this model will only be created server side and then retrieved as part of a Defect in the future
+	// this model will only be created server side and then retrieved as part of a RequirementEvent in the future
 	// so I'm not sure if this is necessary
 	@Override
 	public Boolean identify(Object o) {
