@@ -30,7 +30,9 @@ public class Task extends AbstractModel {
 		// TODO Auto-generated method stub
 
 	}
-
+	/**
+	 * @return String representation of this task
+	 */
 	@Override
 	public String toJSON() {
 		String json;
