@@ -15,8 +15,11 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 /**
  * Validates RequirementModel so that they fit in with the given Data implementation.
@@ -95,92 +98,101 @@ public class RequirementModelValidator {
 	
 	//TODO modifiy the defect validation code to work with the RequirementModel
 	
-//	/**
-//	 * Validate the given model such that any nested models point to appropriate existing models
-//	 * from the Data given in the constructor.
-//	 * 
-//	 * @param session The session to validate against
-//	 * @param defect The defect model to validate
-//	 * @param mode The mode to validate for
-//	 * @return A list of ValidationIssues (possibly empty)
-//	 * @throws WPISuiteException 
-//	 */
-//	public List<ValidationIssue> validate(Session session, RequirementModel requirement, Mode mode) throws WPISuiteException {
-//		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
-//		if(defect == null) {
-//			issues.add(new ValidationIssue("Defect cannot be null"));
-//			return issues;
-//		}
-//		
-//		Defect oldDefect = null;
-//		if(mode == Mode.EDIT) {
-//			oldDefect = getExistingDefect(defect.getId(), session.getProject(), issues, "id");
-//		}
-//		lastExistingDefect = oldDefect;
-//		
-//		if(mode == Mode.CREATE) {
-//			// new defects should always have new status
-//			defect.setStatus(DefectStatus.NEW);
-//		} else if(defect.getStatus() == null) {
-//			issues.add(new ValidationIssue("Cannot be null", "status"));
-//		}
-//		
-//		// make sure title and description size are within constraints
-//		if(defect.getTitle() == null || defect.getTitle().length() > 150
-//				|| defect.getTitle().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "title"));
-//		}
-//		if(defect.getDescription() == null) {
-//			// empty descriptions are okay
-//			defect.setDescription("");
-//		} else if(defect.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
-//		
-//		// make sure the creator and assignee exist and aren't duplicated
-//		if(mode == Mode.EDIT) {
-//			if(oldDefect != null) {
-//				defect.setCreator(oldDefect.getCreator());
-//			}
-//		} else if(defect.getCreator() == null) {
-//			issues.add(new ValidationIssue("Required", "creator"));
-//		} else {
-//			User creator = getExistingUser(defect.getCreator().getUsername(), issues, "creator");
-//			if(creator != null) {
-//				if(!creator.getUsername().equals(session.getUsername())) {
-//					issues.add(new ValidationIssue("Must match currently logged in user", "creator"));
-//				} else {
-//					defect.setCreator(creator);
-//				}
-//			}
-//		}
-//		
-//		if(defect.getAssignee() != null) { // defects can be missing an assignee
-//			User assignee = getExistingUser(defect.getAssignee().getUsername(), issues, "assignee");
-//			if(assignee != null) {
-//				defect.setAssignee(assignee);
-//			}
-//		}
-//		
-//		
-//		// make sure we're not being spoofed with some weird date
-//		final Date now = new Date();
-//		if(oldDefect != null) {
-//			defect.setCreationDate(oldDefect.getCreationDate());
-//		} else {
-//			defect.setCreationDate(now);
-//		}
-//		defect.setLastModifiedDate((Date)now.clone());
-//		
-//		if(oldDefect != null) {
-//			defect.setEvents(oldDefect.getEvents());
-//		} else {
-//			// new defects should never have any events
-//			defect.setEvents(new ArrayList<RequirementEvent>());
-//		}
-//		
-//		return issues;
-//	}
+	/**
+	 * Validate the given model such that any nested models point to appropriate existing models
+	 * from the Data given in the constructor.
+	 * 
+	 * @param session The session to validate against
+	 * @param defect The defect model to validate
+	 * @param mode The mode to validate for
+	 * @return A list of ValidationIssues (possibly empty)
+	 * @throws WPISuiteException 
+	 */
+	public List<ValidationIssue> validate(Session session, RequirementModel requirement, Mode mode) throws WPISuiteException {
+		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
+		if(requirement == null) {
+			issues.add(new ValidationIssue("Requirement cannot be null"));
+			return issues;
+		}
+
+		/* possible fields that might still need validation.
+	private int releaseNumber;
+	private RequirementPriority priority;
+	private String estimate;
+	private String actualEffort;
+	private Date lastModifiedDate;
+	private List<RequirementEvent> events;
+	private List<RequirementModel> subRequirements;
+		 */
+		
+		RequirementModel oldRequirement = null;
+		if(mode == Mode.EDIT) {
+			oldRequirement = getExistingRequirement(requirement.getId(), session.getProject(), issues, "id");
+		}
+		lastExistingRequirement = oldRequirement;
+		
+		if(mode == Mode.CREATE) {
+			requirement.setStatus(RequirementStatus.NEW); // new requirements should always have new status
+		} else if(requirement.getStatus() == null) {
+			issues.add(new ValidationIssue("Cannot be null", "status"));
+		}
+
+		// make sure Name and description size are within constraints
+		if(requirement.getName() == null || requirement.getName().length() > 150
+				|| requirement.getName().length() < 5) {
+			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
+		}
+		if(requirement.getDescription() == null) {
+			// empty descriptions are okay
+			requirement.setDescription("");
+		} else if(requirement.getDescription().length() > 5000) {
+			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
+		}
+		
+		// make sure the creator and assignee exist and aren't duplicated
+		if(mode == Mode.EDIT) {
+			if(oldRequirement != null) {
+				requirement.setCreator(oldRequirement.getCreator());
+			}
+		} else if(requirement.getCreator() == null) {
+			issues.add(new ValidationIssue("Required", "creator"));
+		} else {
+			User creator = getExistingUser(requirement.getCreator().getUsername(), issues, "creator");
+			if(creator != null) {
+				if(!creator.getUsername().equals(session.getUsername())) {
+					issues.add(new ValidationIssue("Must match currently logged in user", "creator"));
+				} else {
+					requirement.setCreator(creator);
+				}
+			}
+		}
+		
+		if(requirement.getAssignee() != null) { // requirements can be missing an assignee
+			User assignee = getExistingUser(requirement.getAssignee().getUsername(), issues, "assignee");
+			if(assignee != null) {
+				requirement.setAssignee(assignee);
+			}
+		}
+		
+		
+		// make sure we're not being spoofed with some weird date
+		final Date now = new Date();
+		if(oldRequirement != null) {
+			requirement.setCreationDate(oldRequirement.getCreationDate());
+		} else {
+			requirement.setCreationDate(now);
+		}
+		requirement.setLastModifiedDate((Date)now.clone());
+		
+		if(oldRequirement != null) {
+			requirement.setEvents(oldRequirement.getEvents());
+		} else {
+			// new defects should never have any events
+			requirement.setEvents(new ArrayList<RequirementEvent>());
+		}
+		
+		return issues;
+	}
 
 	/**
 	 * @return The last existing defect the validator fetched if in edit mode
