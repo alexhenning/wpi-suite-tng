@@ -30,7 +30,9 @@ public class Note extends AbstractModel {
 		// TODO Auto-generated method stub
 
 	}
-
+	/**
+	 * @return String representation of this Note
+	 */
 	@Override
 	public String toJSON() {
 		String json;

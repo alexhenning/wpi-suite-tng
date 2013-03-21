@@ -31,7 +31,8 @@ public class RequirementModel extends AbstractModel {
 	private User creator;
 	private User assignee;
 
-	//TODO associate with other requirements
+	//Each Requirement is associated with others via ID
+	private List<Integer> subRequirementIDs;
 	//TODO add attachments
 	//TODO add tasks
 	//TODO add notes
@@ -52,9 +53,9 @@ public class RequirementModel extends AbstractModel {
 		creationDate = new Date();
 		lastModifiedDate = new Date();
 		events = new ArrayList<RequirementEvent>();
+		subRequirementIDs = new ArrayList<Integer>();
 	}
 	
-	//TODO finish the documentation of this constructor
 	/**
 	 * Constructs a new RequirementModel with the given properties
 	 * Other properties are the same as the default constructor
@@ -63,11 +64,22 @@ public class RequirementModel extends AbstractModel {
 	 * @param releaseNumber the release number for the requirement
 	 * @param status the status of the RequirementModel
 	 * @param priority the priority of the requirement
+	 * @param name the name of the requirement
+	 * @param description a description of the requirement
+	 * @param estimate an estimate of the time needed to complete
+	 * @param actualEffort  how much effort the requirement takes in practice
+	 * @param creator the user who created the requirement
+	 * @param assignee the user who is assigning the requirement
+	 * @param creationDate the date the requirement was created
+	 * @param lastModifiedDate the date the requirement was last changed (should default to the creation date)
+	 * @param events List of events for this requirement model
+	 * @param subRequirementIDs a list of id numbers for associated sub-requirements
 	 */
 	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
 			String estimate, String actualEffort, User creator, User assignee,
-			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events) {
+			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
+			List<Integer> subRequirementIDs) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
@@ -82,6 +94,8 @@ public class RequirementModel extends AbstractModel {
 		this.creationDate = creationDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.events = events;
+
+		this.subRequirementIDs = subRequirementIDs;
 	}
 
 	public List<RequirementEvent> getEvents() {
@@ -266,7 +280,34 @@ public class RequirementModel extends AbstractModel {
 	public String toString() {
 		return toJSON();
 	}
-	
+	/**
+	 * 
+	 * @return ArrayList of the IDs of the sub-requirements associated with this requirement
+	 */
+	public List<Integer> getSubRequirementIDs() {
+		return subRequirementIDs;
+	}
+	/**
+	 * Changes the list of sub-requirement IDs
+	 * @param subRequirementIDs new list of requirement IDs
+	 */
+	public void setSubRequirementIDs(ArrayList<Integer> subRequirementIDs) {
+		this.subRequirementIDs = subRequirementIDs;
+	}
+	/**
+	 * Adds a requirement ID to the list of sub-requirements
+	 * @param subreqID
+	 */
+	public void addSubRequirementID(int subreqID){
+		this.subRequirementIDs.add(subreqID);
+	}
+	/**
+	 * Removes a sub requirement from this requirement
+	 * @param subreqID The ID of the requirement to be removed
+	 */
+	public void removeSubRequirementID(int subreqID){
+		this.subRequirementIDs.remove(this.subRequirementIDs.indexOf(subreqID));
+	}
 }
 
 

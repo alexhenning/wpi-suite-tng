@@ -11,6 +11,8 @@ public class FieldChange<T> {
 	private final T newValue;
 	
 	/**
+	 * Constructor
+	 * 
 	 * @param oldValue the old value of a field before it was changed
 	 * @param newValue the new value of a field after it was changed
 	 */
