@@ -1,14 +1,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
