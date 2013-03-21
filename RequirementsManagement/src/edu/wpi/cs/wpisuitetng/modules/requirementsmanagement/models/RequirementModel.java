@@ -31,8 +31,8 @@ public class RequirementModel extends AbstractModel {
 	private User creator;
 	private User assignee;
 
-	//Each Requirement is associated with others via ID
-	private List<Integer> subRequirementIDs;
+	//TODO Validation Classes for Database retrieval
+	private List<RequirementModel> subRequirements;
 	//TODO add attachments
 	//TODO add tasks
 	//TODO add notes
@@ -53,7 +53,7 @@ public class RequirementModel extends AbstractModel {
 		creationDate = new Date();
 		lastModifiedDate = new Date();
 		events = new ArrayList<RequirementEvent>();
-		subRequirementIDs = new ArrayList<Integer>();
+		subRequirements = new ArrayList<RequirementModel>();
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public class RequirementModel extends AbstractModel {
 			RequirementPriority priority, String name, String description,
 			String estimate, String actualEffort, User creator, User assignee,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
-			List<Integer> subRequirementIDs) {
+			List<RequirementModel> subRequirements) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
@@ -95,7 +95,7 @@ public class RequirementModel extends AbstractModel {
 		this.lastModifiedDate = lastModifiedDate;
 		this.events = events;
 
-		this.subRequirementIDs = subRequirementIDs;
+		this.subRequirements = subRequirements;
 	}
 
 	public List<RequirementEvent> getEvents() {
@@ -282,31 +282,31 @@ public class RequirementModel extends AbstractModel {
 	}
 	/**
 	 * 
-	 * @return ArrayList of the IDs of the sub-requirements associated with this requirement
+	 * @return ArrayList of the sub-requirements
 	 */
-	public List<Integer> getSubRequirementIDs() {
-		return subRequirementIDs;
+	public List<RequirementModel> getSubRequirements() {
+		return subRequirements;
 	}
 	/**
 	 * Changes the list of sub-requirement IDs
-	 * @param subRequirementIDs new list of requirement IDs
+	 * @param subRequirements new list of requirements
 	 */
-	public void setSubRequirementIDs(ArrayList<Integer> subRequirementIDs) {
-		this.subRequirementIDs = subRequirementIDs;
+	public void setSubRequirementIDs(ArrayList<RequirementModel> subRequirements) {
+		this.subRequirements = subRequirements;
 	}
 	/**
 	 * Adds a requirement ID to the list of sub-requirements
-	 * @param subreqID
+	 * @param subreq Requirement to add to list of sub-requirements
 	 */
-	public void addSubRequirementID(int subreqID){
-		this.subRequirementIDs.add(subreqID);
+	public void addSubRequirementID(RequirementModel subreq){
+		this.subRequirements.add(subreq);
 	}
 	/**
 	 * Removes a sub requirement from this requirement
 	 * @param subreqID The ID of the requirement to be removed
 	 */
 	public void removeSubRequirementID(int subreqID){
-		this.subRequirementIDs.remove(this.subRequirementIDs.indexOf(subreqID));
+		this.subRequirements.remove(this.subRequirements.indexOf(subreqID));
 	}
 }
 
