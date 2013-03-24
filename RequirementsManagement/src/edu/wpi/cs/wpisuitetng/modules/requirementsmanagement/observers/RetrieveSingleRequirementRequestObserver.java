@@ -43,8 +43,8 @@ public class RetrieveSingleRequirementRequestObserver implements RequestObserver
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
-		final RequirementModel req = RequirementModel.fromJSON(response.getBody());
-		controller.receivedGetSingleConfirmation(req);
+		final RequirementModel[] reqs = RequirementModel.fromJSONArray(response.getBody());
+		controller.receivedGetSingleConfirmation(reqs[0]);
 	}
 
 	/**
