@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -48,7 +49,8 @@ public class GetRequirementController extends AbstractAction implements ActionLi
 	}
 	
 	public void receivedGetConfirmation(List<RequirementModel> reqs) {
-		panel.updateAllRequirementList(reqs);
+		LocalRequirementModels.instance.addRequirements(reqs);
+		panel.updateAllRequirementList();
 	}
 
 }
