@@ -33,6 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListSingleR
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 
 public class JanewayModule implements IJanewayModule {
 	
@@ -48,6 +49,7 @@ public class JanewayModule implements IJanewayModule {
 	public JanewayModule() {
 		MainTabView mainTabView = new MainTabView();
 		mainTabController = new MainTabController(mainTabView);
+		LocalRequirementModels.initModel();
 		
 		// Setup button panel
 		buttonPanel.setLayout(new FlowLayout());
