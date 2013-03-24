@@ -5,17 +5,22 @@ import java.awt.GridBagLayout;
 import java.awt.TextArea;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetSingleRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
-public class ListRequirementsPanel extends JPanel {
+@SuppressWarnings("serial")
+public class ListSingleRequirementPanel extends JPanel {
 	
-	ListRequirementsTab parent;
+	ListSingleRequirementTab parent;
 	boolean inputEnabled;
 	TextArea ta;
+	public TextArea idArea;
+	JButton search;
 
 	/**
 	 * Constructs a DefectPanel for creating or editing a given Defect.
@@ -25,7 +30,7 @@ public class ListRequirementsPanel extends JPanel {
 	 * @param mode		Whether or not the given Defect should be treated as if it already exists 
 	 * 					on the server ({@link Mode#EDIT}) or not ({@link Mode#CREATE}).
 	 */
-	public ListRequirementsPanel(ListRequirementsTab parent) {
+	public ListSingleRequirementPanel(ListSingleRequirementTab parent) {
 		this.parent = parent;
 		
 		// Indicate that input is enabled
@@ -33,7 +38,6 @@ public class ListRequirementsPanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
-		new GetRequirementController(this).actionPerformed(null);
 		
 		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
 		// TODO: updateFields();
@@ -49,13 +53,20 @@ public class ListRequirementsPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		ta = new TextArea();
-		ta.setText("Testing");
+		idArea = new TextArea();
+		search = new JButton("Lookup By ID");
+		search.addActionListener(new GetSingleRequirementController(this));
+		
 		
 		//add subpanels to main panel
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
 		add(ta, c);
+		c.gridy = 1;
+		add(idArea, c);
+		c.gridy = 2;
+		add(search, c);
 	}
 	
 	/**

@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListSingleRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
@@ -51,10 +52,13 @@ public class JanewayModule implements IJanewayModule {
 		buttonPanel.setLayout(new FlowLayout());
 		JButton Crtreq = new JButton("Create Requirement");
 		JButton listReq = new JButton("List Requirements");
+		JButton listSReq = new JButton("Search Requirements");
 		Crtreq.setAction(new CreateRequirementAction(mainTabController));
 		listReq.setAction(new ListRequirementsAction(mainTabController));
+		listSReq.setAction(new ListSingleRequirementAction(mainTabController));
 		buttonPanel.add(Crtreq);
 		buttonPanel.add(listReq);
+		buttonPanel.add(listSReq);
 
 		tabs = new ArrayList<JanewayTabModel>();
 		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), buttonPanel, mainTabView);
