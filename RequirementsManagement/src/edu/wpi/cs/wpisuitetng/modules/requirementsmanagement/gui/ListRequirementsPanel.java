@@ -78,4 +78,11 @@ public class ListRequirementsPanel extends JPanel {
 		}
 		ta.setText(output);
 	}
+	
+	public void addSingleRequirementToList(RequirementModel req) {
+		String output = "";
+		output = output + "Name: " + req.getName() + " (Status: " + req.getStatus() + ", ID: " + 
+				req.getId()  + ") " + "   Description: " + req.getDescription() + "\n";
+		ta.setText(output);
+	}
 }
