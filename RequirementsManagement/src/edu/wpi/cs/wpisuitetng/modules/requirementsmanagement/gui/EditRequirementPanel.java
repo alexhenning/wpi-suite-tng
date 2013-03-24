@@ -225,7 +225,7 @@ public class EditRequirementPanel extends JPanel {
 	 * 
 	 * @return the parent DefectView.
 	 */
-	public RequirementsTab getParent() {
+	public EditRequirementTab getParent() {
 		return parent;
 	}
 
