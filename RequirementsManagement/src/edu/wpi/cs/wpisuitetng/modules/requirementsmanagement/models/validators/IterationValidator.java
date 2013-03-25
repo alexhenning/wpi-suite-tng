@@ -109,6 +109,22 @@ public class IterationValidator {
 			return issues;
 		}
 		
+		//check if the id is unique
+		if(mode == Mode.CREATE) {
+			if(getExistingIteration(iteration.getId(), session.getProject(), issues, "id") != null) {
+				issues.add(new ValidationIssue("Unable to create an Iteration with the provided id ("+iteration.getId()+") since there is already an iteration with that id"));
+//				return issues;
+			}
+		}
+
+		//check if the iterationNumber is unique for the project
+		if(mode == Mode.CREATE) {
+			if(getExistingIteration(iteration.getIterationNumber(), session.getProject(), issues, "iterationNumber") != null) {
+				issues.add(new ValidationIssue("Unable to create an Iteration with the provided iterationNumber ("+iteration.getIterationNumber()+") since there is already an iteration with that iterationNumber"));
+//				return issues;
+			}
+		}
+
 		Iteration oldIteration = null;
 		if(mode == Mode.EDIT) {
 			oldIteration = getExistingIteration(iteration.getId(), session.getProject(), issues, "id");
@@ -187,9 +203,7 @@ public class IterationValidator {
 			issues.add(new ValidationIssue("startDate must be before endDate", "endDate"));
 		}
 		
-		//TODO check if the id is unique
-		//TODO check that the specified project actually exists
-		//TODO check if the iterationNumber is unique for the project
+		//TODO check if dates overlap with other iterations
 
 //		// make sure we're not being spoofed with some weird date
 //		final Date now = new Date();
