@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent.EventType;
 
 public class RequirementModel extends AbstractModel {
 
@@ -103,6 +104,31 @@ public class RequirementModel extends AbstractModel {
 		
 		this.subRequirements = subRequirements;
 		
+	}
+	
+	public void addComment(User user, String body, Date date) {
+		RequirementComment comment = new RequirementComment(id, user, body);
+		comment.setDate(date);
+		this.events.add(comment);
+		this.lastModifiedDate = date;
+	}
+
+	public void addComment(User user, String body) {
+		RequirementComment comment = new RequirementComment(id, user, body);
+		comment.setDate(new Date());
+		this.events.add(comment);
+		this.lastModifiedDate = new Date();
+	}
+	
+	public RequirementComment[] getComments() {
+		ArrayList<RequirementEvent> commentList = new ArrayList<RequirementEvent>();
+		for (RequirementEvent event : events) {
+			if (event.getEventType() == EventType.COMMENT) {
+				commentList.add(event);
+			}
+		}
+		RequirementComment[] comments = new RequirementComment[1];
+		return commentList.toArray(comments);
 	}
 
 	/**

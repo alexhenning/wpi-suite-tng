@@ -54,6 +54,10 @@ public abstract class RequirementEvent extends AbstractModel {
 		this.user = user;
 	}
 	
+	public EventType getEventType() {
+		return type;
+	}
+	
 	/**
 	 * Given a builder, add anything to it that's necessary for Gson to interact with this class.
 	 * 
