@@ -14,6 +14,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.EditRequirementPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -27,9 +28,11 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * @author Tim Calvert
  *
  */
+@SuppressWarnings("serial")
 public class EditRequirementController extends AbstractAction implements ActionListener {
 	
 	private final EditRequirementPanel panel;
+	private final LocalRequirementModels localRequirements = LocalRequirementModels.instance;
 	//private final JPanel buttonPanel;
 
 	public EditRequirementController(EditRequirementPanel panel) {
@@ -52,7 +55,8 @@ public class EditRequirementController extends AbstractAction implements ActionL
 	}
 
 	public void receivedUpdateConfirmation(RequirementModel req) {
-		// TODO: mainBoard.updateSingleRequirement(req);
+		localRequirements.updateRequirement(req);  // not implemented yet
+		panel.setStatus("Requirement Updated");
 	}
 
 }
