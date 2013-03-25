@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
@@ -26,10 +27,15 @@ public abstract class AbstractAttachment extends AbstractModel {
 
 	}
 
+	/**
+	 * @return String representation of this attachment
+	 */
 	@Override
 	public String toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+		String json;
+		Gson gson = new Gson();
+		json = gson.toJson(this, AbstractAttachment.class);
+		return json;
 	}
 
 	@Override
