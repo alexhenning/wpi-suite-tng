@@ -76,7 +76,7 @@ public class RequirementModelValidator {
 	 * Return the RequirementModel with the given id if it already exists in the database.
 	 * 
 	 * @param id the id of the Requirement
-	 * @param project the project this defect belongs to
+	 * @param project the project this requirement belongs to
 	 * @param issues list of errors to add to if defect doesn't exist
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The Requirement with the given id, or null if it doesn't exist
@@ -100,7 +100,7 @@ public class RequirementModelValidator {
 	 * from the Data given in the constructor.
 	 * 
 	 * @param session The session to validate against
-	 * @param defect The defect model to validate
+	 * @param requirement The requirement model to validate
 	 * @param mode The mode to validate for
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException 
@@ -192,7 +192,7 @@ public class RequirementModelValidator {
 	}
 
 	/**
-	 * @return The last existing defect the validator fetched if in edit mode
+	 * @return The last existing Requirement the validator fetched if in edit mode
 	 */
 	public RequirementModel getLastExistingRequirement() {
 		return lastExistingRequirement;
