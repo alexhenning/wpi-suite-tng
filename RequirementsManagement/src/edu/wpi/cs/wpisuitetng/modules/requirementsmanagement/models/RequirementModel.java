@@ -25,8 +25,9 @@ public class RequirementModel extends AbstractModel {
 	private Date lastModifiedDate;
 	private List<RequirementEvent> events;
 	private User creator;
-	private User assignee;
+	private List<User> assignees;
 	private Iteration iteration;
+	private RequirementType type;
 
 	//TODO Validation Classes for Database retrieval
 	private List<RequirementModel> subRequirements;
@@ -44,7 +45,8 @@ public class RequirementModel extends AbstractModel {
 		description = "";
 		status = RequirementStatus.NEW;
 		creator = new User("", "", "", -1);
-		assignee = new User("", "", "", -1);
+		assignees = new ArrayList<User>();
+		assignees.add(new User("", "", "", -1));
 		estimate = "";
 		actualEffort = "";
 		creationDate = new Date();
@@ -52,6 +54,8 @@ public class RequirementModel extends AbstractModel {
 		events = new ArrayList<RequirementEvent>();
 		subRequirements = new ArrayList<RequirementModel>();
 		iteration = new Iteration();
+		type = null;
+		priority = null;
 	}
 	
 	/**
@@ -73,12 +77,13 @@ public class RequirementModel extends AbstractModel {
 	 * @param events List of events for this requirement model
 	 * @param subRequirementIDs a list of id numbers for associated sub-requirements
 	 * @param iteration the iteration the requirement is assigned to
+	 * @param type the type of the requirement
 	 */
 	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
-			String estimate, String actualEffort, User creator, User assignee,
+			String estimate, String actualEffort, User creator, List<User> assignees,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
-			List<RequirementModel> subRequirements, Iteration iteration) {
+			List<RequirementModel> subRequirements, Iteration iteration, RequirementType type) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
@@ -89,11 +94,12 @@ public class RequirementModel extends AbstractModel {
 		this.estimate = estimate;
 		this.actualEffort = actualEffort;
 		this.creator = creator;
-		this.assignee = assignee;
+		this.assignees = assignees;
 		this.creationDate = creationDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.events = events;
 		this.iteration = iteration;
+		this.type = type;
 		
 		this.subRequirements = subRequirements;
 		
@@ -145,12 +151,12 @@ public class RequirementModel extends AbstractModel {
 		return creator;
 	}
 	
-	public void setAssignee(User assignee) {
-		this.assignee = assignee;
+	public void setAssignee(List<User> assignees) {
+		this.assignees = assignees;
 	}
 	
-	public User getAssignee() {
-		return assignee;
+	public List<User> getAssignee() {
+		return assignees;
 	}
 		
 	public int getReleaseNumber() {

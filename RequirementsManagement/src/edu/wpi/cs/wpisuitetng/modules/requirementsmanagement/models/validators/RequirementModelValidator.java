@@ -135,9 +135,9 @@ public class RequirementModelValidator {
 		}
 
 		// make sure Name and description size are within constraints
-		if(requirement.getName() == null || requirement.getName().length() > 150
-				|| requirement.getName().length() < 5) {
-			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
+		if(requirement.getName() == null || requirement.getName().length() > 0
+				|| requirement.getName().length() < 100) {
+			issues.add(new ValidationIssue("Required, must be 1-100 characters", "name"));
 		}
 		if(requirement.getDescription() == null) {
 			// empty descriptions are okay
