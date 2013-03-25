@@ -20,7 +20,12 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.Model;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementChangeset;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementModelValidator;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 /**
  * Provides database interaction for the RequirementModel class
@@ -31,9 +36,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 public class RequirementModelEntityManager implements EntityManager<RequirementModel> {
 	Queue<Integer> availableIds;  // A queue of any Ids that are available for recycling
 	Data db;
+	RequirementModelValidator validator;
+	ModelMapper updateMapper;
 	
 	public RequirementModelEntityManager(Data db) {
 		this.db = db;
+		validator = new RequirementModelValidator(db);
+		updateMapper = new ModelMapper();
+		updateMapper.getBlacklist().add("project"); // don't allow project changing
 		availableIds = new LinkedList<Integer>();
 	}
 
@@ -54,6 +64,14 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 			} catch (NoSuchElementException e) {
 				newRequirementModel.setId(Count() + 1);
 			}
+		}
+		
+		List<ValidationIssue> issues = validator.validate(s, newRequirementModel, Mode.CREATE);
+		if(issues.size() > 0) {
+			for (ValidationIssue issue : issues) {
+				System.out.println("Validation issue: " + issue.getMessage());
+			}
+			throw new BadRequestException();
 		}
 		
 		if(!db.save(newRequirementModel, s.getProject())) {
@@ -99,8 +117,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	 */
 	@Override
 	public RequirementModel update(Session s, String content)
-			throws WPISuiteException, NotFoundException {
-		// TODO This must be fixed up. It's pretty shoddy, but should serve our purposes for now.
+			throws WPISuiteException, NotFoundException {		
 		
 		/* [This comment is from DefectManager.  The problem still applies, so it must be worked around]
 		 * Because of the disconnected objects problem in db4o, we can't just save updatedDefect.
@@ -110,28 +127,31 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		
 		RequirementModel updatedRequirement = RequirementModel.fromJSON(content);
 		
-		List<Model> oldRequirements = db.retrieve(RequirementModel.class, "id", updatedRequirement.getId(), s.getProject());
-		if(oldRequirements.size() < 1 || oldRequirements.get(0) == null) {
-			throw new NotFoundException();
+		List<ValidationIssue> issues = validator.validate(s, updatedRequirement, Mode.EDIT);
+		if(issues.size() > 0) {
+			throw new BadRequestException();
 		}
 		
-		RequirementModel existingRequirement = (RequirementModel) oldRequirements.get(0);
+		RequirementModel existingRequirement = validator.getLastExistingRequirement();
+		Date originalLastModified = existingRequirement.getLastModifiedDate();
 		
-		existingRequirement.setId(updatedRequirement.getId());
-		existingRequirement.setReleaseNumber(updatedRequirement.getReleaseNumber());
-		existingRequirement.setStatus(updatedRequirement.getStatus());
-		existingRequirement.setPriority(updatedRequirement.getPriority());
-		existingRequirement.setName(updatedRequirement.getName());
-		existingRequirement.setDescription(updatedRequirement.getDescription());
-		existingRequirement.setEstimate(updatedRequirement.getEstimate());
-		existingRequirement.setActualEffort(updatedRequirement.getActualEffort());
-		existingRequirement.setCreator(updatedRequirement.getCreator());
-		existingRequirement.setAssignees(updatedRequirement.getAssignees());
-		existingRequirement.setCreationDate(updatedRequirement.getCreationDate());
-		existingRequirement.setLastModifiedDate(new Date());
+		RequirementChangeset changeset = new RequirementChangeset();
+		// make sure the user exists
+		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
+		RequirementChangesetCallback callback = new RequirementChangesetCallback(changeset);
 		
-		if(!db.save(existingRequirement, s.getProject())) {
-			throw new WPISuiteException();
+		// copy over values
+		updateMapper.map(updatedRequirement, existingRequirement, callback);
+		
+		if(changeset.getChanges().size() == 0) {
+			// nothing changes, don't bother saving it
+			existingRequirement.setLastModifiedDate(originalLastModified);
+		} else {
+			// add changeset to events
+			existingRequirement.getEvents().add(changeset);
+			if(!db.save(existingRequirement, s.getProject()) || !db.save(existingRequirement.getEvents())) {
+				throw new WPISuiteException();
+			}
 		}
 		
 		return existingRequirement;
