@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 import java.util.LinkedList;
 import java.util.List;
 
+
 /**
  *
  * Singleton model for requirements to be stored and accessed locally
@@ -108,11 +109,11 @@ public class LocalRequirementModels {
 	 * @param req Requirement with updated values to add
 	 */
 	public void updateRequirement(RequirementModel req) {
-		for(RequirementModel r : localRequirements) {
+		/*for(RequirementModel r : localRequirements) {
 			if(r.getId() == req.getId()) {
 				// TODO copy over values using validator
 			}
-		}
+		}*/
 	}
 	
 	/**
@@ -139,4 +140,5 @@ public class LocalRequirementModels {
 			}
 		}
 	}
+
 }
