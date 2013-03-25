@@ -26,6 +26,7 @@ public class RequirementModel extends AbstractModel {
 	private List<RequirementEvent> events;
 	private User creator;
 	private User assignee;
+	private Iteration iteration;
 
 	//TODO Validation Classes for Database retrieval
 	private List<RequirementModel> subRequirements;
@@ -50,6 +51,7 @@ public class RequirementModel extends AbstractModel {
 		lastModifiedDate = new Date();
 		events = new ArrayList<RequirementEvent>();
 		subRequirements = new ArrayList<RequirementModel>();
+		iteration = new Iteration();
 	}
 	
 	/**
@@ -70,12 +72,13 @@ public class RequirementModel extends AbstractModel {
 	 * @param lastModifiedDate the date the requirement was last changed (should default to the creation date)
 	 * @param events List of events for this requirement model
 	 * @param subRequirementIDs a list of id numbers for associated sub-requirements
+	 * @param iteration the iteration the requirement is assigned to
 	 */
 	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
 			String estimate, String actualEffort, User creator, User assignee,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
-			List<RequirementModel> subRequirements) {
+			List<RequirementModel> subRequirements, Iteration iteration) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
@@ -90,8 +93,24 @@ public class RequirementModel extends AbstractModel {
 		this.creationDate = creationDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.events = events;
-
+		this.iteration = iteration;
+		
 		this.subRequirements = subRequirements;
+		
+	}
+
+	/**
+	 * @return the iteration
+	 */
+	public Iteration getIteration() {
+		return iteration;
+	}
+
+	/**
+	 * @param iteration the iteration to set
+	 */
+	public void setIteration(Iteration iteration) {
+		this.iteration = iteration;
 	}
 
 	public List<RequirementEvent> getEvents() {
