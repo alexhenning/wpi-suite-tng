@@ -101,20 +101,7 @@ public class Iteration extends AbstractModel {
 		this.iterationNumber = iterationNumber;
 	}
 
-	/**
-	 * @return the projectNumber
-	 */
-	public int getProjectNumber() {
-		return projectNumber;
-	}
-
-	/**
-	 * @param projectNumber the projectNumber to set
-	 */
-	public void setProjectNumber(int projectNumber) {
-		this.projectNumber = projectNumber;
-	}
-
+	
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
 	 */
