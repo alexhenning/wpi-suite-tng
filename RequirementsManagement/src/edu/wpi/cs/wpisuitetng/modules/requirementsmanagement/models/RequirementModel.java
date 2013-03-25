@@ -177,11 +177,11 @@ public class RequirementModel extends AbstractModel {
 		return creator;
 	}
 	
-	public void setAssignee(List<User> assignees) {
+	public void setAssignees(List<User> assignees) {
 		this.assignees = assignees;
 	}
 	
-	public List<User> getAssignee() {
+	public List<User> getAssignees() {
 		return assignees;
 	}
 		

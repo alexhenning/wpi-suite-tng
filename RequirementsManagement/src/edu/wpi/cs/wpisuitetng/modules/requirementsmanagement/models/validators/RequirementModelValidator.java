@@ -164,11 +164,16 @@ public class RequirementModelValidator {
 			}
 		}
 		
-		if(requirement.getAssignee() != null) { // requirements can be missing an assignee
-			User assignee = getExistingUser(requirement.getAssignee().getUsername(), issues, "assignee");
-			if(assignee != null) {
-				requirement.setAssignee(assignee);
+		if(requirement.getAssignees() != null) { // requirements can be missing an assignee
+			List<User> assignees = requirement.getAssignees();
+			ArrayList<User> assignees2 = new ArrayList<User>();
+			for (User assigneeSrc : assignees) {
+				User assignee = getExistingUser(assigneeSrc.getUsername(), issues, "assignee");
+				if(assignee != null) {
+					assignees2.add(assignee);
+				}
 			}
+			requirement.setAssignees(assignees2);
 		}
 		
 		
