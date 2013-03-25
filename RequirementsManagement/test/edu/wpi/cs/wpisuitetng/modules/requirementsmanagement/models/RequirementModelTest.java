@@ -78,18 +78,20 @@ public class RequirementModelTest {
 	
 	@Test
 	public void testAssigningPriority() {
-		rm.setPriority(CRITICAL);
-		assertEquals(CRITICAL, rm.getPriority());
+//		rm.setPriority(CRITICAL);
+//		assertEquals(CRITICAL, rm.getPriority());
 		rm.setPriority(HIGH);
 		assertEquals(HIGH, rm.getPriority());
+		rm.setPriority(MEDIUM);
+		assertEquals(MEDIUM, rm.getPriority());
 		rm.setPriority(LOW);
 		assertEquals(LOW, rm.getPriority());
-		rm.setPriority(WOULD_BE_NICE);
-		assertEquals(WOULD_BE_NICE, rm.getPriority());
+//		rm.setPriority(WOULD_BE_NICE);
+//		assertEquals(WOULD_BE_NICE, rm.getPriority());
 		
 		// Test if reassigning the same priority does not cause an error
-		rm.setPriority(WOULD_BE_NICE);
-		assertEquals(WOULD_BE_NICE, rm.getPriority());
+		rm.setPriority(LOW);
+		assertEquals(LOW, rm.getPriority());
 	}
 	
 	@Test
