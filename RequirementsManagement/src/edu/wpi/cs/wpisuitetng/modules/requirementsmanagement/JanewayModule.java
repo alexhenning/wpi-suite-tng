@@ -27,10 +27,13 @@ import javax.swing.JComboBox;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.EditRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListSingleRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 
 public class JanewayModule implements IJanewayModule {
 	
@@ -46,15 +49,22 @@ public class JanewayModule implements IJanewayModule {
 	public JanewayModule() {
 		MainTabView mainTabView = new MainTabView();
 		mainTabController = new MainTabController(mainTabView);
+		LocalRequirementModels.initModel();
 		
 		// Setup button panel
 		buttonPanel.setLayout(new FlowLayout());
 		JButton Crtreq = new JButton("Create Requirement");
 		JButton listReq = new JButton("List Requirements");
+		JButton listSReq = new JButton("Search Requirements");
+		JButton editReq = new JButton("Edit REquirement");
 		Crtreq.setAction(new CreateRequirementAction(mainTabController));
 		listReq.setAction(new ListRequirementsAction(mainTabController));
+		listSReq.setAction(new ListSingleRequirementAction(mainTabController));
+		editReq.setAction(new EditRequirementAction(mainTabController));
 		buttonPanel.add(Crtreq);
 		buttonPanel.add(listReq);
+		buttonPanel.add(listSReq);
+		buttonPanel.add(editReq);
 
 		tabs = new ArrayList<JanewayTabModel>();
 		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), buttonPanel, mainTabView);

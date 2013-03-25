@@ -175,4 +175,12 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
+	
+	public Tab addListSingleRequirementTab() {
+		Tab tab = addTab();
+		ListSingleRequirementTab view = new ListSingleRequirementTab(tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
 }

@@ -3,7 +3,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -16,23 +15,23 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 @SuppressWarnings("serial")
-public class RequirementsPanel extends JPanel {
+public class EditRequirementPanel extends JPanel {
 	public enum Mode {
 		CREATE,
 		EDIT;
 	}
 
 	/** The parent view **/
-	protected RequirementsTab parent;
+	protected EditRequirementTab parent;
 	
 	/** The Defect displayed in this panel */
 	protected RequirementModel model;
@@ -41,7 +40,7 @@ public class RequirementsPanel extends JPanel {
 	 * Form elements
 	 */
 	public JTextField namefield = new JTextField(30);
-	public JTextArea descriptionfield = new JTextArea(6, 0);
+	public JTextField descriptionfield = new JTextField(30);
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	public JComboBox priority = new JComboBox(priorityStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
@@ -74,7 +73,7 @@ public class RequirementsPanel extends JPanel {
 	 * @param mode		Whether or not the given Defect should be treated as if it already exists 
 	 * 					on the server ({@link Mode#EDIT}) or not ({@link Mode#CREATE}).
 	 */
-	public RequirementsPanel(RequirementsTab parent, RequirementModel requirement, Mode mode) {
+	public EditRequirementPanel(EditRequirementTab parent, RequirementModel requirement, Mode mode) {
 		this.parent = parent;
 		this.model = requirement;
 		editMode = mode;
@@ -107,100 +106,64 @@ public class RequirementsPanel extends JPanel {
 		//name field
 		JPanel namePanel = new JPanel();
 		namePanel.setLayout(new FlowLayout());
-		JLabel nameArea = new JLabel("Name:");
+		JLabel nameArea = new JLabel("Name");
 		namePanel.add(nameArea);
 		namePanel.add(namefield);
 		
 		//priority field
 		JPanel priorityPanel = new JPanel();
 		priorityPanel.setLayout(new FlowLayout());
-		JLabel priorityArea = new JLabel("Priority:");
+		JLabel priorityArea = new JLabel("Priority");
 		priorityPanel.add(priorityArea);
 		priorityPanel.add(priority);
 		
 		//description field
 		JPanel descPanel = new JPanel();
 		descPanel.setLayout(new FlowLayout());
-		JLabel descriptionArea = new JLabel("Description:");
+		JLabel descriptionArea = new JLabel("Description");
 		descPanel.add(descriptionArea);
-		
-		descriptionfield.setLineWrap(true);
-		JScrollPane descScrollPane = new JScrollPane(descriptionfield);
-		descScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		descPanel.add(descScrollPane);
-		//descPanel.add(descriptionfield);
+		descPanel.add(descriptionfield);
 		
 		//status field
 		JPanel statPanel = new JPanel();
 		statPanel.setLayout(new FlowLayout());
-		JLabel statusArea = new JLabel("Status:");
+		JLabel statusArea = new JLabel("Status");
 		statPanel.add(statusArea);
-		// TODO: For now, it's disabled for creation view. Need to change when
-		// updating is available.
-		statusfield.setEnabled(false);
 		statPanel.add(statusfield);
 		
 		//estimate field
 		JPanel estPanel = new JPanel();
 		estPanel.setLayout(new FlowLayout());
-		JLabel estimateArea = new JLabel("Estimate:");
+		JLabel estimateArea = new JLabel("Estimate");
 		estPanel.add(estimateArea);
-		estimateField.setEditable(false);
 		estPanel.add(estimateField);
 	
 		//submit panel
 		JPanel submitPanel = new JPanel();
 		submitPanel.setLayout(new FlowLayout());
-		submit.setAction(new AddRequirementController(this));
-		submit.setText("Save");
+		submit.setAction(new EditRequirementController(this));
+		submit.setText("Update");
 		
 		//submit button
 		submitPanel.add(submit);
 		//results field
 		submitPanel.add(results);
 		
-		// Add subpanels to main panel
-		// Left side (gridx = 0) and aligned right (east)
-		c.insets = new Insets(5, 5, 5, 5);
-		c.anchor = GridBagConstraints.EAST;
-		c.fill = GridBagConstraints.NONE;
+		//add subpanels to main panel
+		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		add(nameArea, c);
+		add(namePanel, c);
 		c.gridy = 1;
-		add(priorityArea, c);
+		add(priorityPanel, c);
 		c.gridy = 2;
-		add(descriptionArea, c);
+		add(descPanel, c);
 		c.gridy = 3;
-		add(statusArea, c);
+		add(statPanel, c);
 		c.gridy = 4;
-		add(estimateArea, c);
+		add(estPanel, c);
 		c.gridy = 5;
-		// Make the save button taller
-		c.ipady = 20;
-		add(submit, c);
-		c.ipady = 0;
-		
-		// Right side (gridx = 1)
-		c.anchor = GridBagConstraints.CENTER;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 0;
-		add(namefield, c);
-		c.gridy = 2;
-		add(descScrollPane, c);
-		c.gridy = 4;
-		add(estimateField, c);
-		c.gridy = 5;
-		add(results, c);
-
-		// Right side but aligned left (west) for dropdowns
-		c.anchor = GridBagConstraints.WEST;
-		c.fill = GridBagConstraints.NONE;
-		c.gridy = 1;
-		add(priority, c);
-		c.gridy = 3;
-		add(statusfield, c);
+		add(submitPanel, c);
 	}
 
 	/**
@@ -262,7 +225,7 @@ public class RequirementsPanel extends JPanel {
 	 * 
 	 * @return the parent DefectView.
 	 */
-	public RequirementsTab getParent() {
+	public EditRequirementTab getParent() {
 		return parent;
 	}
 

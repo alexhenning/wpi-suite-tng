@@ -12,7 +12,9 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.EditRequirementPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -26,12 +28,14 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * @author Tim Calvert
  *
  */
+@SuppressWarnings("serial")
 public class EditRequirementController extends AbstractAction implements ActionListener {
 	
-	private final RequirementsPanel panel;
+	private final EditRequirementPanel panel;
+	private final LocalRequirementModels localRequirements = LocalRequirementModels.instance;
 	//private final JPanel buttonPanel;
 
-	public EditRequirementController(RequirementsPanel panel) {
+	public EditRequirementController(EditRequirementPanel panel) {
 		//this.buttonPanel = buttonPanel;  /* not needed at the moment */
 		this.panel = panel;
 	}
@@ -41,14 +45,18 @@ public class EditRequirementController extends AbstractAction implements ActionL
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.POST);
-		request.setBody(panel.getModel().toJSON());
+		final String idToEdit = "";
+		final RequirementModel newReq = panel.getModel();
+		newReq.setId(Integer.getInteger(idToEdit).intValue());
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + idToEdit,  HttpMethod.POST);
+		request.setBody(newReq.toJSON());
 		request.addObserver(new EditRequirementModelRequestObserver(this));
 		request.send();
 	}
-	
+
 	public void receivedUpdateConfirmation(RequirementModel req) {
-		// TODO: mainBoard.updateSingleRequirement(req);
+		localRequirements.updateRequirement(req);  // not implemented yet
+		panel.setStatus("Requirement Updated");
 	}
 
 }
