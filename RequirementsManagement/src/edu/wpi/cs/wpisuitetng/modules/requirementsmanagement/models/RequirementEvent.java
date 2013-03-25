@@ -14,7 +14,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 public abstract class RequirementEvent extends AbstractModel {
 	
 	public enum EventType {
-		COMMENT,
+		NOTE,
 		CHANGESET
 	};
 	

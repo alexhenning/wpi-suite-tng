@@ -7,7 +7,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 /**
  * Persistent Model that represents a Comment on a Requirement 
  */
-public class RequirementComment extends RequirementEvent {
+public class RequirementNote extends RequirementEvent {
 
 	private int requirementId;
 	private String body;
@@ -15,8 +15,8 @@ public class RequirementComment extends RequirementEvent {
 	/**
 	 * Create a RequirementComment with default properties.
 	 */
-	public RequirementComment() {
-		type = EventType.COMMENT;
+	public RequirementNote() {
+		type = EventType.NOTE;
 		requirementId = -1;
 		body = "";
 	}
@@ -29,7 +29,7 @@ public class RequirementComment extends RequirementEvent {
 	 * @param user the User who created the RequirementComment
 	 * @param body the message body of the RequirementComment
 	 */
-	public RequirementComment(int requirementId, User user, String body) {
+	public RequirementNote(int requirementId, User user, String body) {
 		this();
 		this.requirementId = requirementId;
 		this.user = user;
@@ -68,7 +68,7 @@ public class RequirementComment extends RequirementEvent {
 	public String toJSON() {
 		String json;
 		Gson gson = new Gson();
-		json = gson.toJson(this, RequirementComment.class);
+		json = gson.toJson(this, RequirementNote.class);
 		return json;
 	}
 
@@ -77,8 +77,8 @@ public class RequirementComment extends RequirementEvent {
 	 * @param json JSON string containing a serialized RequirementComment
 	 * @return a Comment deserialized from the given JSON string
 	 */
-	public static RequirementComment fromJson(String json) {
+	public static RequirementNote fromJson(String json) {
 		Gson parser = new Gson();
-		return parser.fromJson(json, RequirementComment.class);
+		return parser.fromJson(json, RequirementNote.class);
 	}
 }

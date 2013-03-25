@@ -27,8 +27,8 @@ class RequirementEventDeserializer implements JsonDeserializer<RequirementEvent>
 			switch(eType) {
 			case CHANGESET:
 				return context.deserialize(element, RequirementChangeset.class);
-			case COMMENT:
-				return context.deserialize(element, RequirementComment.class);
+			case NOTE:
+				return context.deserialize(element, RequirementNote.class);
 			}
 		}
 		throw new JsonParseException("RequirementEvent type is unrecognized");

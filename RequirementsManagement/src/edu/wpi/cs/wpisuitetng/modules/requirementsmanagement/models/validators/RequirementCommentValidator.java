@@ -11,7 +11,7 @@ import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementComment;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -40,7 +40,7 @@ public class RequirementCommentValidator {
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException 
 	 */
-	public List<ValidationIssue> validate(Session session, RequirementComment comment) throws WPISuiteException {
+	public List<ValidationIssue> validate(Session session, RequirementNote comment) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
 		if(comment == null) {
 			issues.add(new ValidationIssue("RequirementComment cannot be null"));

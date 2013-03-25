@@ -106,29 +106,29 @@ public class RequirementModel extends AbstractModel {
 		
 	}
 	
-	public void addComment(User user, String body, Date date) {
-		RequirementComment comment = new RequirementComment(id, user, body);
-		comment.setDate(date);
-		this.events.add(comment);
+	public void addNote(User user, String body, Date date) {
+		RequirementNote note = new RequirementNote(id, user, body);
+		note.setDate(date);
+		this.events.add(note);
 		this.lastModifiedDate = date;
 	}
 
-	public void addComment(User user, String body) {
-		RequirementComment comment = new RequirementComment(id, user, body);
-		comment.setDate(new Date());
-		this.events.add(comment);
+	public void addNote(User user, String body) {
+		RequirementNote note = new RequirementNote(id, user, body);
+		note.setDate(new Date());
+		this.events.add(note);
 		this.lastModifiedDate = new Date();
 	}
 	
-	public RequirementComment[] getComments() {
-		ArrayList<RequirementEvent> commentList = new ArrayList<RequirementEvent>();
+	public RequirementNote[] getNotes() {
+		ArrayList<RequirementEvent> noteList = new ArrayList<RequirementEvent>();
 		for (RequirementEvent event : events) {
-			if (event.getEventType() == EventType.COMMENT) {
-				commentList.add(event);
+			if (event.getEventType() == EventType.NOTE) {
+				noteList.add(event);
 			}
 		}
-		RequirementComment[] comments = new RequirementComment[1];
-		return commentList.toArray(comments);
+		RequirementNote[] comments = new RequirementNote[1];
+		return noteList.toArray(comments);
 	}
 
 	/**
