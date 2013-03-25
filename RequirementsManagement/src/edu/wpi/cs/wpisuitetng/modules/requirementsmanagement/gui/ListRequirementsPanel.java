@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 public class ListRequirementsPanel extends JPanel {
@@ -70,7 +71,8 @@ public class ListRequirementsPanel extends JPanel {
 		// TODO: implement
 	}
 
-	public void updateAllRequirementList(List<RequirementModel> reqs) {
+	public void updateAllRequirementList() {
+		List<RequirementModel> reqs = LocalRequirementModels.instance.getAllRequirements();
 		String output = "";
 		for(RequirementModel req : reqs) {
 			output = output + "Name: " + req.getName() + " (Status: " + req.getStatus() + ", ID: " + 
