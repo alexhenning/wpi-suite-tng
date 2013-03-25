@@ -15,9 +15,6 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 /**
  * @author jpalnick
@@ -71,6 +68,21 @@ public class IterationValidator {
 		}
 	}
 	
+	/**
+	 * Return all Iterations of the specified project.
+	 * 
+	 * @param project the project this Iteration belongs to
+	 * @param issues list of errors to add to if defect doesn't exist
+	 * @return all Iterations in the project
+	 * @throws WPISuiteException 
+	 */
+	Iteration[] getAllExistingIterations(Project project, List<ValidationIssue> issues)
+			throws WPISuiteException {
+		Iteration sample = new Iteration();
+		Iteration[] iterations = (data.retrieveAll(sample, project)).toArray(new Iteration[0]);
+		return iterations;
+	}
+		
 	/**
 	 * Return the Iteration with the given id if it already exists in the database.
 	 * 
@@ -203,7 +215,19 @@ public class IterationValidator {
 			issues.add(new ValidationIssue("startDate must be before endDate", "endDate"));
 		}
 		
-		//TODO check if dates overlap with other iterations
+		//TODO make sure this works. I think it should but I've been wrong before....
+		//check if dates overlap with other iterations
+		Iteration[] allIterations = getAllExistingIterations(session.getProject(), issues);
+		for (Iteration i : allIterations) {
+			if(i.getId() != iteration.getId()) {
+				if(iteration.getStartDate().before(i.getEndDate())) {
+					issues.add(new ValidationIssue("startDate is before the endDate of Iteration "+i.getIterationNumber(), "startDate"));
+				}
+				if(iteration.getEndDate().after(i.getStartDate())) {
+					issues.add(new ValidationIssue("endDate is before the startDate of Iteration "+i.getIterationNumber(), "endDate"));
+				}
+			}
+		}
 
 //		// make sure we're not being spoofed with some weird date
 //		final Date now = new Date();
