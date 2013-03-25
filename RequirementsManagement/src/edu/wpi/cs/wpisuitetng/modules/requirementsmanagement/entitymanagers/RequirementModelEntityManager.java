@@ -6,6 +6,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
 import java.util.LinkedList;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
@@ -124,6 +125,10 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		existingRequirement.setDescription(updatedRequirement.getDescription());
 		existingRequirement.setEstimate(updatedRequirement.getEstimate());
 		existingRequirement.setActualEffort(updatedRequirement.getActualEffort());
+		existingRequirement.setCreator(updatedRequirement.getCreator());
+		existingRequirement.setAssignee(updatedRequirement.getAssignee());
+		existingRequirement.setCreationDate(updatedRequirement.getCreationDate());
+		existingRequirement.setLastModifiedDate(new Date());
 		
 		if(!db.save(existingRequirement, s.getProject())) {
 			throw new WPISuiteException();
