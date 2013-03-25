@@ -53,17 +53,6 @@ public class ListRequirementsPanel extends JPanel {
 		table.setPreferredScrollableViewportSize(new Dimension(1, 1));
 		table.setFillsViewportHeight(true);
 		
-		table.addMouseListener(new MouseAdapter() {
-			   public void mouseClicked(MouseEvent e) {
-			      if (e.getClickCount() == 2) {
-			         JTable target = (JTable)e.getSource();
-			         int row = target.getSelectedRow();
-			         int column = target.getSelectedColumn();
-			         // do some action
-			         }
-			   }
-			});
-		
 		JScrollPane scrollPane = new JScrollPane(table);
 		
 		ta = new TextArea();
