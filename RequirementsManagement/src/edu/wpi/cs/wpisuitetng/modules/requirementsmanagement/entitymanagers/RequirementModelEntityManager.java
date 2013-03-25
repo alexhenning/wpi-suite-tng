@@ -126,7 +126,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		existingRequirement.setEstimate(updatedRequirement.getEstimate());
 		existingRequirement.setActualEffort(updatedRequirement.getActualEffort());
 		existingRequirement.setCreator(updatedRequirement.getCreator());
-		existingRequirement.setAssignee(updatedRequirement.getAssignee());
+		existingRequirement.setAssignees(updatedRequirement.getAssignees());
 		existingRequirement.setCreationDate(updatedRequirement.getCreationDate());
 		existingRequirement.setLastModifiedDate(new Date());
 		
