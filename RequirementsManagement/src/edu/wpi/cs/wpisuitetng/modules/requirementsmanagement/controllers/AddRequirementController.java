@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -31,7 +30,6 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 public class AddRequirementController extends AbstractAction implements ActionListener {
 	
 	private final RequirementsPanel panel;
-	private final LocalRequirementModels localRequirements = LocalRequirementModels.instance;
 	//private final JPanel buttonPanel;
 
 	public AddRequirementController(RequirementsPanel panel) {
@@ -51,7 +49,6 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 	}
 	
 	public void receivedAddConfirmation(RequirementModel req) {
-		localRequirements.addRequirement(req);
 		panel.setStatus("Requirement saved!");
 	}
 

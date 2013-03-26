@@ -17,7 +17,6 @@ import java.awt.event.ActionListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListSingleRequirementPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -34,7 +33,6 @@ public class GetSingleRequirementController implements ActionListener {
 
 
 	private final ListSingleRequirementPanel panel;
-	private final LocalRequirementModels localRequirements = LocalRequirementModels.instance;
 	
 	/**
 	 * Default constructor
@@ -60,7 +58,6 @@ public class GetSingleRequirementController implements ActionListener {
 	}
 	
 	public void receivedGetSingleConfirmation(RequirementModel req) {
-		localRequirements.addRequirement(req);
 		panel.addSingleRequirementToList(req);
 	}
 
