@@ -1,6 +1,16 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    David Modica
+ *    Tim Calvert
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import java.awt.event.ActionEvent;
@@ -43,6 +53,7 @@ public class EditRequirementController extends AbstractAction implements ActionL
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO actually get Id. this will all break with out it
 		final String idToEdit = "";
 		final RequirementModel newReq = panel.getModel();
 		newReq.setId(Integer.getInteger(idToEdit).intValue());
@@ -52,6 +63,11 @@ public class EditRequirementController extends AbstractAction implements ActionL
 		request.send();
 	}
 
+	/**
+	 * Called by Observer when it receives a success confirmation
+	 *
+	 * @param req Requirement received by Observer
+	 */
 	public void receivedUpdateConfirmation(RequirementModel req) {
 		panel.setStatus("Requirement Updated");
 	}
