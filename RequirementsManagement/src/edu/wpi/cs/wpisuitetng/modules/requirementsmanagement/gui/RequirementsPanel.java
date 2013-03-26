@@ -94,7 +94,7 @@ public class RequirementsPanel extends JPanel {
 		// TODO: prevent tab key from inserting tab characters into the description field
 		
 		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
-		// TODO: updateFields();
+		updateFields();
 	}
 
 	/**
@@ -248,6 +248,26 @@ public class RequirementsPanel extends JPanel {
 	 */
 	protected void updateModel(RequirementModel requirement, Mode mode) {
 		// TODO: 
+	}
+	
+	/**
+	 * Updates the RequirementsPanel's fields to match those in the current model
+	 *
+	 */
+	private void updateFields() {
+		namefield.setText(model.getName());
+		descriptionfield.setText(model.getDescription());
+		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
+			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
+				statusfield.setSelectedIndex(i);
+			}
+		}
+		for(int i = 0; i < priority.getItemCount(); i++) {  // Same as above
+			if(model.getPriority() == RequirementPriority.valueOf(priority.getItemAt(i).toString())) {
+				priority.setSelectedIndex(i);
+			}
+		}
+		estimateField.setText(model.getEstimate());
 	}
 
 	/**
