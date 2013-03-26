@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -15,9 +16,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JPanel {
@@ -36,10 +41,12 @@ public class RequirementsPanel extends JPanel {
 	 * Form elements
 	 */
 	public JTextField namefield = new JTextField(30);
-	public JTextField descriptionfield = new JTextField(30);
-	String[] statusStrings = { "New" };
+	public JTextArea descriptionfield = new JTextArea(6, 0);
+	RequirementPriority[] priorityStrings = RequirementPriority.values();
+	public JComboBox priority = new JComboBox(priorityStrings);
+	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
-	public JTextField releasefield = new JTextField(30);
+	public JTextField estimateField = new JTextField(30);
 	public JTextField results = new JTextField(50);
 	JButton submit = new JButton("Submit");
 	
@@ -100,61 +107,100 @@ public class RequirementsPanel extends JPanel {
 		//name field
 		JPanel namePanel = new JPanel();
 		namePanel.setLayout(new FlowLayout());
-		JTextArea nameArea = new JTextArea(1, 10);
-		nameArea.setEditable(false);
-		nameArea.append("name");
+		JLabel nameArea = new JLabel("Name:");
 		namePanel.add(nameArea);
 		namePanel.add(namefield);
+		
+		//priority field
+		JPanel priorityPanel = new JPanel();
+		priorityPanel.setLayout(new FlowLayout());
+		JLabel priorityArea = new JLabel("Priority:");
+		priorityPanel.add(priorityArea);
+		priorityPanel.add(priority);
 		
 		//description field
 		JPanel descPanel = new JPanel();
 		descPanel.setLayout(new FlowLayout());
-		JTextArea descriptionArea = new JTextArea(1, 10);
-		descriptionArea.setEditable(false);
-		descriptionArea.append("Description");
+		JLabel descriptionArea = new JLabel("Description:");
 		descPanel.add(descriptionArea);
-		descPanel.add(descriptionfield);
+		
+		descriptionfield.setLineWrap(true);
+		JScrollPane descScrollPane = new JScrollPane(descriptionfield);
+		descScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		descPanel.add(descScrollPane);
+		//descPanel.add(descriptionfield);
 		
 		//status field
 		JPanel statPanel = new JPanel();
 		statPanel.setLayout(new FlowLayout());
-		JTextArea statusArea = new JTextArea(1, 10);
-		statusArea.setEditable(false);
-		statusArea.append("Status");
+		JLabel statusArea = new JLabel("Status:");
 		statPanel.add(statusArea);
+		// TODO: For now, it's disabled for creation view. Need to change when
+		// updating is available.
+		statusfield.setEnabled(false);
 		statPanel.add(statusfield);
 		
-		//release field
-		JPanel relPanel = new JPanel();
-		relPanel.setLayout(new FlowLayout());
-		JTextArea releaseArea = new JTextArea(1, 10);
-		releaseArea.setEditable(false);
-		releaseArea.append("Release");
-		relPanel.add(releaseArea);
-		relPanel.add(releasefield);
+		//estimate field
+		JPanel estPanel = new JPanel();
+		estPanel.setLayout(new FlowLayout());
+		JLabel estimateArea = new JLabel("Estimate:");
+		estPanel.add(estimateArea);
+		estimateField.setEditable(false);
+		estPanel.add(estimateField);
 	
 		//submit panel
 		JPanel submitPanel = new JPanel();
 		submitPanel.setLayout(new FlowLayout());
+		submit.setAction(new AddRequirementController(this));
+		submit.setText("Save");
 		
 		//submit button
 		submitPanel.add(submit);
 		//results field
 		submitPanel.add(results);
 		
-		//add subpanels to main panel
-		c.fill = GridBagConstraints.HORIZONTAL;
+		// Add subpanels to main panel
+		// Left side (gridx = 0) and aligned right (east)
+		c.insets = new Insets(5, 5, 5, 5);
+		c.anchor = GridBagConstraints.EAST;
+		c.fill = GridBagConstraints.NONE;
 		c.gridx = 0;
 		c.gridy = 0;
-		add(namePanel, c);
+		add(nameArea, c);
 		c.gridy = 1;
-		add(descPanel, c);
+		add(priorityArea, c);
 		c.gridy = 2;
-		add(statPanel, c);
+		add(descriptionArea, c);
 		c.gridy = 3;
-		add(relPanel, c);
+		add(statusArea, c);
 		c.gridy = 4;
-		add(submitPanel, c);
+		add(estimateArea, c);
+		c.gridy = 5;
+		// Make the save button taller
+		c.ipady = 20;
+		add(submit, c);
+		c.ipady = 0;
+		
+		// Right side (gridx = 1)
+		c.anchor = GridBagConstraints.CENTER;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 0;
+		add(namefield, c);
+		c.gridy = 2;
+		add(descScrollPane, c);
+		c.gridy = 4;
+		add(estimateField, c);
+		c.gridy = 5;
+		add(results, c);
+
+		// Right side but aligned left (west) for dropdowns
+		c.anchor = GridBagConstraints.WEST;
+		c.fill = GridBagConstraints.NONE;
+		c.gridy = 1;
+		add(priority, c);
+		c.gridy = 3;
+		add(statusfield, c);
 	}
 
 	/**
@@ -203,6 +249,11 @@ public class RequirementsPanel extends JPanel {
 	 * @return
 	 */
 	public RequirementModel getModel() {
+		model.setName(namefield.getText());
+		model.setPriority((RequirementPriority) priority.getSelectedItem());
+		model.setDescription(descriptionfield.getText());
+		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
+		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
 		return model;
 	}
 	
@@ -222,5 +273,9 @@ public class RequirementsPanel extends JPanel {
 	 */
 	public Mode getEditMode() {
 		return editMode;
+	}
+
+	public void setStatus(String string) {
+		results.setText(string);
 	}
 }

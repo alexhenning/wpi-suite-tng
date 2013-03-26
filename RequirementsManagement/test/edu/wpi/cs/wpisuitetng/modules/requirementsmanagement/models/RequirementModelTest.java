@@ -78,18 +78,20 @@ public class RequirementModelTest {
 	
 	@Test
 	public void testAssigningPriority() {
-		rm.setPriority(CRITICAL);
-		assertEquals(CRITICAL, rm.getPriority());
+//		rm.setPriority(CRITICAL);
+//		assertEquals(CRITICAL, rm.getPriority());
 		rm.setPriority(HIGH);
 		assertEquals(HIGH, rm.getPriority());
+		rm.setPriority(MEDIUM);
+		assertEquals(MEDIUM, rm.getPriority());
 		rm.setPriority(LOW);
 		assertEquals(LOW, rm.getPriority());
-		rm.setPriority(WOULD_BE_NICE);
-		assertEquals(WOULD_BE_NICE, rm.getPriority());
+		rm.setPriority(NONE);
+		assertEquals(NONE, rm.getPriority());
 		
 		// Test if reassigning the same priority does not cause an error
-		rm.setPriority(WOULD_BE_NICE);
-		assertEquals(WOULD_BE_NICE, rm.getPriority());
+		rm.setPriority(NONE);
+		assertEquals(NONE, rm.getPriority());
 	}
 	
 	@Test
@@ -101,6 +103,7 @@ public class RequirementModelTest {
 		assertEquals("Add this test case", rm.getDescription());
 	}
 	
+	// TODO: Need to change if estimates are numbers (integers)
 	@Test
 	public void testAssigningEstimate() {
 		String s = "2 hours";
@@ -109,7 +112,8 @@ public class RequirementModelTest {
 		rm.setEstimate("5 minutes");
 		assertEquals("5 minutes", rm.getEstimate());
 	}
-	
+
+	// TODO: Need to change if efforts are numbers (integers)
 	@Test
 	public void testAssigningActualEffort() {
 		String s = "3 hours";

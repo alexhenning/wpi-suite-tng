@@ -167,4 +167,20 @@ public class MainTabController {
 			}
 		}
 	}
+
+	public Tab addListRequirementsTab() {
+		Tab tab = addTab();
+		ListRequirementsTab view = new ListRequirementsTab(tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
+	public Tab addListSingleRequirementTab() {
+		Tab tab = addTab();
+		ListSingleRequirementTab view = new ListSingleRequirementTab(tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
 }

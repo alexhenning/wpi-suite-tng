@@ -1,6 +1,5 @@
 /*******************************************************************************
  * Copyright (c) 2013 -- WPI Suite
-
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,53 +7,65 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   David Modica
- *    Tim Calvert
+ *    
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetSingleRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
+
 /**
- * This observer is called when a response is received from a request 
- * to the server to create a requirement.
- * 
- * @author David
+ *
+ * Description goes here
+ * @author Tim
  *
  */
-public class CreateRequirementModelRequestObserver implements RequestObserver {
-
-	private AddRequirementController controller;
+public class RetrieveSingleRequirementRequestObserver implements RequestObserver {
 	
-	public CreateRequirementModelRequestObserver(AddRequirementController controller){
+	private GetSingleRequirementController controller;
+	
+	/**
+	 * Default constructor
+	 * @param controller Controller this Observer handles requests from
+	 */
+	public RetrieveSingleRequirementRequestObserver(GetSingleRequirementController controller) {
 		this.controller = controller;
 	}
 
+	/**
+	 * Successful request
+	 *
+	 * @param iReq Request returned from db
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		// Get the response to the given request
 		final ResponseModel response = iReq.getResponse();
-		
-		// Parse the message out of the response body
-		final RequirementModel requirement = RequirementModel.fromJSON(response.getBody());
-		
-		// Pass the messages back to the controller
-		controller.receivedAddConfirmation(requirement);
+		final RequirementModel[] reqs = RequirementModel.fromJSONArray(response.getBody());
+		controller.receivedGetSingleConfirmation(reqs[0]);
 	}
 
+	/**
+	 * Error on return
+	 *
+	 * @param iReq
+	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to add a message had an error.");
-		System.err.println("\tResponse: "+iReq.getResponse().getStatusCode()+" --- "
-							+iReq.getResponse().getBody());
+		System.err.println("The request to get a requirement failed.");
 	}
 
+	/**
+	 * Failure on return
+	 *
+	 * @param iReq
+	 * @param exception
+	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("The request to add a message has failed.");
+		System.err.println("The request to get a requirement failed.\nError: " + exception.getMessage());
 	}
-	
+
 }
