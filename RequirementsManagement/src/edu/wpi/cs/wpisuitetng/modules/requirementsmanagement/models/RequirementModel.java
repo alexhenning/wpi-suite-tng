@@ -55,7 +55,7 @@ public class RequirementModel extends AbstractModel {
 		events = new ArrayList<RequirementEvent>();
 		subRequirements = new ArrayList<RequirementModel>();
 		iteration = new Iteration();
-		type = null;
+		setType(null);
 		priority = null;
 	}
 	
@@ -100,7 +100,7 @@ public class RequirementModel extends AbstractModel {
 		this.lastModifiedDate = lastModifiedDate;
 		this.events = events;
 		this.iteration = iteration;
-		this.type = type;
+		this.setType(type);
 		
 		this.subRequirements = subRequirements;
 		
@@ -358,6 +358,20 @@ public class RequirementModel extends AbstractModel {
 	 */
 	public void removeSubRequirementID(int subreqID){
 		this.subRequirements.remove(this.subRequirements.indexOf(subreqID));
+	}
+
+	/**
+	 * @return the type
+	 */
+	public RequirementType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(RequirementType type) {
+		this.type = type;
 	}
 }
 
