@@ -15,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
@@ -54,6 +55,7 @@ public class RequirementsPanel extends JPanel {
 	public JTextField estimateField = new JTextField("0", 30);
 	public JTextField results = new JTextField(50);
 	JButton submit = new JButton("Submit");
+	public JTabbedPane supplementPane = new JTabbedPane();
 	
 	/** The layout manager for this panel */
 	protected SpringLayout layout;
@@ -175,6 +177,12 @@ public class RequirementsPanel extends JPanel {
 		//results field
 		submitPanel.add(results);
 		
+		// Supplement Pane (i.e., notes, history, attachments)
+		NoteMainTab nt = new NoteMainTab(null);
+		NoteMainTab nt2 = new NoteMainTab(null);
+		supplementPane.add("Notes", nt);
+		supplementPane.add("Notes 2", nt2);
+		
 		// Add subpanels to main panel
 		// Left side (gridx = 0) and aligned right (east)
 		c.insets = new Insets(5, 5, 5, 5);
@@ -217,6 +225,12 @@ public class RequirementsPanel extends JPanel {
 		add(priority, c);
 		c.gridy = 3;
 		add(statusfield, c);
+
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 2;
+		c.gridy = 0;
+		c.gridheight = 5;
+		add(supplementPane, c);
 	}
 
 	/**
