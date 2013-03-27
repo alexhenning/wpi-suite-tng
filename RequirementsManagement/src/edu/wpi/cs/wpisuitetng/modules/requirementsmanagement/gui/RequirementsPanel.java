@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -40,14 +41,14 @@ public class RequirementsPanel extends JSplitPane {
 	/*
 	 * Form elements
 	 */
-	public JTextField namefield = new JTextField(30);
+	public JTextField namefield = new JTextField(25);
 	public JTextArea descriptionfield = new JTextArea(6, 0);
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	public JComboBox priority = new JComboBox(priorityStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
-	public JTextField estimateField = new JTextField("0", 30);
-	public JTextField results = new JTextField(50);
+	public JTextField estimateField = new JTextField("0", 25);
+	public JTextField results = new JTextField(25);
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
 	private JPanel leftside = new JPanel();
@@ -174,6 +175,7 @@ public class RequirementsPanel extends JSplitPane {
 		c.gridy = 5;
 		leftside.add(results, c);
 		results.setEditable(false);
+		leftside.setMinimumSize(new Dimension(380,600));
 
 		// Right side but aligned left (west) for dropdowns
 		c.anchor = GridBagConstraints.WEST;
