@@ -4,7 +4,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;

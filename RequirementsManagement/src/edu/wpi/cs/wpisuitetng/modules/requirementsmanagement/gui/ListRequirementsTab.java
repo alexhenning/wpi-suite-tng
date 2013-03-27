@@ -12,6 +12,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 public class ListRequirementsTab extends JPanel implements IToolbarGroupProvider {
 	
 	Tab containingTab;
+	MainTabController tabController;
 	ListRequirementsPanel mainPanel;
 	JScrollPane mainPanelScrollPane;
 
@@ -19,12 +20,14 @@ public class ListRequirementsTab extends JPanel implements IToolbarGroupProvider
 	 * Constructs a new DefectView where the user can view (and edit) a defect.
 	 * 
 	 */
-	public ListRequirementsTab(Tab tab) {
+	public ListRequirementsTab(Tab tab, MainTabController tabController) {
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
 		containingTab.setTitle("All Requirements");
+		
+		this.tabController = tabController; 
 		
 		// Instantiate the main create defect panel
 		mainPanel = new ListRequirementsPanel(this);

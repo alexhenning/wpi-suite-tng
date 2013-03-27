@@ -25,6 +25,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.Icon;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.IterationTab;
@@ -84,7 +85,7 @@ public class MainTabController {
 	 */
 	private Tab addRequirementTab(RequirementModel requirement, Mode mode) {
 		Tab tab = addTab();
-		RequirementsTab view = new RequirementsTab(requirement, mode, tab);
+		RequirementsTab view = new RequirementsTab(this, requirement, mode, tab);
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
@@ -178,19 +179,26 @@ public class MainTabController {
 		}
 	}
 
+	private int listIndex = -1;
+	ListRequirementsTab listReqsView;
 	public Tab addListRequirementsTab() {
-		Tab tab = addTab();
-		ListRequirementsTab view = new ListRequirementsTab(tab);
-		tab.setComponent(view);
-		view.requestFocus();
-		return tab;
-	}
-	
-	public Tab addListSingleRequirementTab() {
-		Tab tab = addTab();
-		ListSingleRequirementTab view = new ListSingleRequirementTab(tab);
-		tab.setComponent(view);
-		view.requestFocus();
-		return tab;
+		if (listIndex == -1) {
+			Tab tab = addTab();
+			listReqsView = new ListRequirementsTab(tab, this);
+			tab.setComponent(listReqsView);
+			listReqsView.requestFocus();
+			listIndex = view.getTabCount() - 1;
+			view.addChangeListener(new ChangeListener() {				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					listReqsView.mainPanel.updateAllRequirementList();
+				}
+			});
+			return tab;
+		} else {
+			view.setSelectedIndex(listIndex);
+			view.requestFocus();
+			return null;
+		}
 	}
 }

@@ -22,12 +22,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
-import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.RequirementToolbarView;
 
 /**
  * This view is responsible for showing the form for creating or viewing a new requirements.
@@ -35,7 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 @SuppressWarnings("serial")
 public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 
-	private ToolbarGroupView buttonGroup;
+	RequirementToolbarView buttonGroup;
 	private JButton saveButton;
 	private RequirementsPanel mainPanel;
 	//private SaveDefectController controller;
@@ -46,8 +45,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	/**
 	 * Constructs a new CreateDefectView where the user can enter the data for a new defect.
 	 */
-	public RequirementsTab() {
-		this(new RequirementModel(), Mode.CREATE, null);
+	public RequirementsTab(MainTabController tabController) {
+		this(tabController, new RequirementModel(), Mode.CREATE, null);
 	}
 
 	/**
@@ -57,19 +56,18 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	 * @param editMode	The editMode for editing the Defect
 	 * @param tab		The Tab holding this DefectView (can be null)
 	 */
-	public RequirementsTab(RequirementModel requirement, Mode editMode, Tab tab) {
+	public RequirementsTab(MainTabController tabController, RequirementModel requirement, Mode editMode, Tab tab) {
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
 		
-		// Instantiate the button panel
-		buttonGroup = new ToolbarGroupView("Create Requirement");
+		buttonGroup = new RequirementToolbarView(tabController, this);
 		
 		containingTab.setIcon(new ImageIcon());
 		if(editMode == Mode.CREATE) {
 			containingTab.setTitle("Create Requirement");
-			containingTab.setToolTipText("Create a new defect");
+			containingTab.setToolTipText("Create a new Requirement");
 		} else {
 			setEditModeDescriptors(requirement);
 		}
@@ -88,11 +86,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		// Prevent content of scroll pane from smearing (credit: https://gist.github.com/303464)
 		mainPanelScrollPane.getVerticalScrollBar().addAdjustmentListener(new java.awt.event.AdjustmentListener(){
 			public void adjustmentValueChanged(java.awt.event.AdjustmentEvent ae){
-				//SwingUtilities.invokeLater(new Runnable(){
-				//	public void run(){
 						mainPanelScrollPane.repaint();
-				//	}
-				//});
 			}
 		});
 		
@@ -102,6 +96,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		// Instantiate the save button and add it to the button panel
 		saveButton = new JButton();
 		// TODO: saveButton.setAction(new SaveChangesAction(controller));
+		
+		// Instantiate the button panel
 		buttonGroup.getContent().add(saveButton);
 		buttonGroup.setPreferredWidth(150);
 	}
@@ -133,7 +129,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	 * 
 	 * @return the main panel with the data fields
 	 */
-	public JPanel getRequirementPanel() {
+	public RequirementsPanel getRequirementPanel() {
 		return mainPanel;
 	}
 	
@@ -145,10 +141,10 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	/**
 	 * @param defect Set the tab title, tooltip, and group name according to this Defect
 	 */
-	protected void setEditModeDescriptors(RequirementModel requirement) {
-		containingTab.setTitle("Defect #" + requirement.getId());
+	public void setEditModeDescriptors(RequirementModel requirement) {
+		containingTab.setTitle("Requirement #" + requirement.getId());
 		// TODO: containingTab.setToolTipText("View defect " + requirement.getTitle());
-		buttonGroup.setName("Edit Defect");
+		buttonGroup.setName("Edit Requirement");
 	}
 	
 	/**

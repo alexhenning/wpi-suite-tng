@@ -12,27 +12,20 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement;
 
-import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
 import javax.swing.JTabbedPane;
-import javax.swing.JComboBox;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateIterationAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListSingleRequirementAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.DevToolbarView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarView;
 
 public class JanewayModule implements IJanewayModule {
 	
@@ -42,6 +35,7 @@ public class JanewayModule implements IJanewayModule {
 	public JPanel buttonPanel = new JPanel();
 	
 	private MainTabController mainTabController;
+	private ToolbarController toolbarController;
 	
 	JTabbedPane tabPane = new JTabbedPane();
 	
@@ -49,23 +43,12 @@ public class JanewayModule implements IJanewayModule {
 		MainTabView mainTabView = new MainTabView();
 		mainTabController = new MainTabController(mainTabView);
 		
-		// Setup button panel
-		buttonPanel.setLayout(new FlowLayout());
-		JButton Crtreq = new JButton("Create Requirement");
-		JButton CrtIteration = new JButton("Create Iteration");
-		JButton listReq = new JButton("List Requirements");
-		JButton listSReq = new JButton("Search Requirements");
-		CrtIteration.setAction(new CreateIterationAction(mainTabController));
-		Crtreq.setAction(new CreateRequirementAction(mainTabController));
-		listReq.setAction(new ListRequirementsAction(mainTabController));
-		buttonPanel.add(CrtIteration);
-		listSReq.setAction(new ListSingleRequirementAction(mainTabController));
-		buttonPanel.add(Crtreq);
-		buttonPanel.add(listReq);
-		buttonPanel.add(listSReq);
+		ToolbarView toolbarView = new ToolbarView(mainTabController);
+		toolbarController = new ToolbarController(toolbarView, mainTabController);
+		toolbarController.setRelevant(new DevToolbarView(mainTabController), true);
 
 		tabs = new ArrayList<JanewayTabModel>();
-		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), buttonPanel, mainTabView);
+		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), toolbarView, mainTabView);
 		tabs.add(tab);
 	}
 

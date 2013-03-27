@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Queue;
-
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
@@ -20,84 +19,114 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.IterationValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
+
+/**
+ *
+ * Entity manager for Iterations
+ * @author Tim
+ *
+ */
 public class IterationEntityManager implements EntityManager<Iteration> {
-	Queue<Integer> availableIds;  // A queue of any Ids that are available for recycling
-	Data db;
-	IterationValidator validator;
-	ModelMapper updateMapper;
+	private final Data db;
+	private final IterationValidator validator;
+	private final ModelMapper updateMapper;
 	
-	public IterationEntityManager(Data db) {
-		this.db = db;
+	/**
+	 * Default constructor
+	 * @param data database
+	 */
+	public IterationEntityManager(Data data) {
+		db = data;
 		validator = new IterationValidator(db);
 		updateMapper = new ModelMapper();
-		updateMapper.getBlacklist().add("project"); // don't allow project changing
-		availableIds = new LinkedList<Integer>();
+		updateMapper.getBlacklist().add("project");
 	}
 
+	/**
+	 * Makes an Iteration to add to the database
+	 *
+	 * @param s
+	 * @param content
+	 * @return
+	 * @throws BadRequestException
+	 * @throws ConflictException
+	 * @throws WPISuiteException
+	 */
 	@Override
-	public Iteration makeEntity(Session s, String content)
-			throws BadRequestException, ConflictException, WPISuiteException {
-		final Iteration newIteration = Iteration.fromJSON(content);
-
-		if(availableIds.isEmpty()) {
-			newIteration.setId(Count() + 1);
-		} else {
-			try {
-				newIteration.setId(availableIds.remove().intValue());
-			} catch (NoSuchElementException e) {
-				newIteration.setId(Count() + 1);
-			}
-		}
-
+	public Iteration makeEntity(Session s, String content) throws BadRequestException,
+			ConflictException, WPISuiteException {
+		Iteration newIteration = Iteration.fromJSON(content);
+		
+		newIteration.setId(Count() + 1);
+		
 		List<ValidationIssue> issues = validator.validate(s, newIteration, Mode.CREATE);
 		if(issues.size() > 0) {
-			for (ValidationIssue issue : issues) {
+			for(ValidationIssue issue : issues) {
 				System.out.println("Validation issue: " + issue.getMessage());
 			}
 			throw new BadRequestException();
 		}
-
+		
 		if(!db.save(newIteration, s.getProject())) {
 			throw new WPISuiteException();
 		}
-
+		
 		return newIteration;
 	}
 
+	/**
+	 * Retrieves an iteration by id
+	 *
+	 * @param s
+	 * @param id
+	 * @return
+	 * @throws NotFoundException
+	 * @throws WPISuiteException
+	 */
 	@Override
-	public Iteration[] getEntity(Session s, String id)
-			throws NotFoundException, WPISuiteException {
+	public Iteration[] getEntity(Session s, String id) throws NotFoundException,
+			WPISuiteException {
+
 		final int intId = Integer.parseInt(id);
 		if(intId < 1) {
 			throw new NotFoundException();
 		}
-		Iteration[] iteration = null;
+
+		Iteration[] iterations = null;
 		try {
-			iteration = db.retrieve(Iteration.class, "id", intId, s.getProject()).toArray(new Iteration[0]);
+			iterations = db.retrieve(Iteration.class, "id", intId, s.getProject()).toArray(new Iteration[0]);
 		} catch (WPISuiteException e) {
 			e.printStackTrace();
 		}
-		if(iteration.length < 1 || iteration[0] == null) {
+		
+		if(iterations.length < 1 || iterations[0] == null) {
 			throw new NotFoundException();
 		}
-		return iteration;
+		return iterations;
 	}
 
+	/**
+	 * Retrieves all iterations in the database
+	 *
+	 * @param s
+	 * @return
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public Iteration[] getAll(Session s) throws WPISuiteException {
 		return db.retrieveAll(new Iteration(), s.getProject()).toArray(new Iteration[0]);
-
 	}
 
+	/**
+	 * Updates an iteration in the database
+	 *
+	 * @param s
+	 * @param content
+	 * @return
+	 * @throws WPISuiteException
+	 */
 	@Override
-	public Iteration update(Session s, String content) throws WPISuiteException, NotFoundException {		
-		
-		/* [This comment is from DefectManager.  The problem still applies, so it must be worked around]
-		 * Because of the disconnected objects problem in db4o, we can't just save updatedDefect.
-		 * We have to get the original defect from db4o, copy properties from updatedDefect,
-		 * then save the original defect again.
-		 */
-		
+	public Iteration update(Session s, String content) throws WPISuiteException {
 		Iteration updatedIteration = Iteration.fromJSON(content);
 		
 		List<ValidationIssue> issues = validator.validate(s, updatedIteration, Mode.EDIT);
@@ -106,69 +135,78 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		}
 		
 		Iteration existingIteration = validator.getLastExistingIteration();
-		/*Date originalLastModified = existingIteration.getLastModifiedDate();
 		
-		IterationChangeset changeset = new IterationChangeset();
-		// make sure the user exists
-		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
-		IterationChangesetCallback callback = new IterationChangesetCallback(changeset);
+		updateMapper.map(updatedIteration, existingIteration);
 		
-		// copy over values
-		updateMapper.map(updatedIteration, existingIteration, callback);
-		
-		if(changeset.getChanges().size() == 0) {
-			// nothing changes, don't bother saving it
-			existingIteration.setLastModifiedDate(originalLastModified);
-		} else {
-			// add changeset to events
-			existingIteration.getEvents().add(changeset);
-			if(!db.save(existingIteration, s.getProject()) || !db.save(existingIteration.getEvents())) {
-				throw new WPISuiteException();
-			}
-		}*/
+		if(!db.save(existingIteration, s.getProject())) {
+			throw new WPISuiteException();
+		}
 		
 		return existingIteration;
 	}
 
+	/**
+	 * Saves an iteration
+	 *
+	 * @param s
+	 * @param model
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public void save(Session s, Iteration model) throws WPISuiteException {
-		db.save(model, s.getProject());	
-		
+		db.save(model, s.getProject());
 	}
 
+	/**
+	 * Deletes an iteration by id
+	 *
+	 * @param s
+	 * @param id
+	 * @return
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
-		availableIds.add(new Integer(id));
 		return (db.delete(getEntity(s, id)[0]) != null);
 	}
-
-	@Override
-	public String advancedGet(Session s, String[] args)
-			throws WPISuiteException {
-		throw new NotImplementedException();
-	}
-
+	
+	/**
+	 * Deletes all iterations in the db
+	 *
+	 * @param s
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
 		db.deleteAll(new Iteration(), s.getProject());
-		availableIds.clear();
-		
 	}
-
+	
+	/**
+	 * Returns the number of iterations in the db
+	 *
+	 * @return
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public int Count() throws WPISuiteException {
 		return db.retrieveAll(new Iteration()).size();
 	}
 
 	@Override
+	public String advancedGet(Session s, String[] args)
+			throws NotImplementedException {
+		throw new NotImplementedException();
+	}
+
+	@Override
 	public String advancedPut(Session s, String[] args, String content)
-			throws WPISuiteException {
+			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
 	@Override
 	public String advancedPost(Session s, String string, String content)
-			throws WPISuiteException {
+			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 }
