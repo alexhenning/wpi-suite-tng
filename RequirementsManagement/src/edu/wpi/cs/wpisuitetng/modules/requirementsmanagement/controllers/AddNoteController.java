@@ -30,7 +30,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class AddNoteController {
 	
-	private final NewNotePanel view;
+	private final NoteMainPanel view;
 	private final RequirementModel model;
 	private final RequirementsPanel parentView;
 	
@@ -41,7 +41,7 @@ public class AddNoteController {
 	 * @param model The Requirement model being commented on
 	 * @param parentView The RequirementPanel displaying the defect
 	 */
-	public void AddNoteController(NewNotePanel view, RequirementModel model, RequirementsPanel parentView) {
+	public void AddNoteController(NoteMainPanel view, RequirementModel model, RequirementsPanel parentView) {
 		this.view = view;
 		this.model = model;
 		this.parentView = parentView;
