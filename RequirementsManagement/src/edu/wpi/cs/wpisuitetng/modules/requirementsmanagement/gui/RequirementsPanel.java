@@ -264,6 +264,19 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		parent.buttonGroup.update(editMode, model);
 		
+		if (editMode.equals(Mode.EDIT) && (model.getStatus().equals(RequirementStatus.COMPLETE)
+				|| model.getStatus().equals(RequirementStatus.COMPLETE))) {
+			namefield.setEnabled(false);
+			priority.setEnabled(false);
+			descriptionfield.setEnabled(false);
+			estimateField.setEnabled(false);
+		} else {
+			namefield.setEnabled(true);
+			priority.setEnabled(true);
+			descriptionfield.setEnabled(true);
+			estimateField.setEnabled(true);
+		}
+		
 		nt.setNotes(Arrays.asList(model.getNotes()));
 	}
 
