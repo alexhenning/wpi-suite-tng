@@ -24,6 +24,8 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementCommentValidator;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementModelValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 /**
@@ -37,12 +39,12 @@ public class RequirementNoteEntityManager implements
 	
 	private final Data db;
 	private final Gson gson;
-	//private final RequirementNoteValidator validator;
+	private final RequirementCommentValidator validator;
 	
 	public RequirementNoteEntityManager(Data data) {
 		db = data;
 		gson = new Gson();
-		//validator = new RequirementNoteValidator(data);
+		validator = new RequirementCommentValidator(data);
 	}
 
 	@Override
@@ -50,12 +52,12 @@ public class RequirementNoteEntityManager implements
 			throws BadRequestException, ConflictException, WPISuiteException {
 		RequirementNote newNote = gson.fromJson(content, RequirementNote.class);
 		
-		List<ValidationIssue> issues = null; //validator.validate(s, newNote);
+		List<ValidationIssue> issues = validator.validate(s, newNote);
 		if(issues.size() > 0) {
 			throw new BadRequestException();
 		}
 		
-		RequirementModel requirement = null; //validator.getLastExistingRequirement();
+		RequirementModel requirement = validator.getLastExistingRequirement();
 		requirement.getEvents().add(newNote);
 		db.save(requirement, s.getProject());
 		db.save(requirement.getEvents());
