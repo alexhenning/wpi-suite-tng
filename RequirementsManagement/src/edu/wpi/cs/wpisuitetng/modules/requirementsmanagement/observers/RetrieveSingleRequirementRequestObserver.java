@@ -12,6 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetSingleRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -25,14 +26,14 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrieveSingleRequirementRequestObserver implements RequestObserver {
 	
-	private GetSingleRequirementController controller;
+	private SingleRequirementCallback callback;
 	
 	/**
 	 * Default constructor
-	 * @param controller Controller this Observer handles requests from
+	 * @param callback Controller this Observer handles requests from
 	 */
-	public RetrieveSingleRequirementRequestObserver(GetSingleRequirementController controller) {
-		this.controller = controller;
+	public RetrieveSingleRequirementRequestObserver(SingleRequirementCallback callback) {
+		this.callback = callback;
 	}
 
 	/**
@@ -44,7 +45,7 @@ public class RetrieveSingleRequirementRequestObserver implements RequestObserver
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
 		final RequirementModel[] reqs = RequirementModel.fromJSONArray(response.getBody());
-		controller.receivedGetSingleConfirmation(reqs[0]);
+		callback.callback(reqs[0]);
 	}
 
 	/**

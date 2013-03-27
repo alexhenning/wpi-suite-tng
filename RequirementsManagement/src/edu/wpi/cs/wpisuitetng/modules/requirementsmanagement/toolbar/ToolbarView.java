@@ -16,7 +16,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -28,7 +30,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.EditRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListSingleRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * The Defect tab's toolbar panel.
@@ -45,7 +50,7 @@ public class ToolbarView extends DefaultToolbarView {
 	 * Create a ToolbarView.
 	 * @param tabController The MainTabController this view should open tabs with
 	 */
-	public ToolbarView(MainTabController tabController) {
+	public ToolbarView(final MainTabController tabController) {
 
 		// Construct the content panel
 		JPanel content = new JPanel();
@@ -76,7 +81,15 @@ public class ToolbarView extends DefaultToolbarView {
 		// Construct the search field
 		searchField = new JPlaceholderTextField("Lookup by ID", 15);
 		
-		searchDefects.setAction(new GetSingleRequirementController(tabController, searchField));
+		searchDefects.setAction(new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent event) {
+				DB.getSingleRequirement(searchField.getText(), new SingleRequirementCallback() {
+					@Override public void callback(RequirementModel req) {
+						tabController.addEditRequirementTab(req);
+					}
+				});
+			}
+		});
 		//searchField.addActionListener(new LookupDefectController(tabController, searchField, this));
 		
 		// Configure the layout of the buttons on the content panel

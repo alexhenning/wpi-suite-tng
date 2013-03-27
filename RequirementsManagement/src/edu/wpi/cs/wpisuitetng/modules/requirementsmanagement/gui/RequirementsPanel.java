@@ -247,7 +247,7 @@ public class RequirementsPanel extends JPanel {
 	 * @param	mode	The new editMode.
 	 */
 	protected void updateModel(RequirementModel requirement, Mode mode) {
-		// TODO: 
+		editMode = mode;
 	}
 	
 	/**
