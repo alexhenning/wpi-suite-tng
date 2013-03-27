@@ -23,7 +23,6 @@ public class ViewReqTable extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
-    	System.out.println("Row is " + row + " and Column is " + col);
         return data[row][col];
     }
 
