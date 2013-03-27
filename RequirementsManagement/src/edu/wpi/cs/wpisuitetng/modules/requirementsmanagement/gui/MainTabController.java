@@ -27,7 +27,9 @@ import java.awt.event.MouseEvent;
 import javax.swing.Icon;
 import javax.swing.event.ChangeListener;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.IterationTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -87,9 +89,11 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
-	private Tab addIterationTab(IterationModel iteration, Mode mode) {
+	
+	public Tab addCreateIterationTab() {
+		Iteration iteration = new Iteration();
 		Tab tab = addTab();
-		IterationTab view = new IterationTab(iteration, mode, tab);
+		IterationTab view = new IterationTab(iteration, tab);
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
