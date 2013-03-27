@@ -30,9 +30,9 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class AddNoteController {
 	
-	private final NoteMainPanel view;
-	private final RequirementModel model;
-	private final RequirementsPanel parentView;
+	// TODO: private final NoteMainPanel view;
+	// TODO: private final RequirementModel model;
+	// TODO: private final RequirementsPanel parentView;
 	
 	/**
 	 * Default constructor for Notes
@@ -41,25 +41,26 @@ public class AddNoteController {
 	 * @param model The Requirement model being commented on
 	 * @param parentView The RequirementPanel displaying the defect
 	 */
-	public void AddNoteController(NoteMainPanel view, RequirementModel model, RequirementsPanel parentView) {
-		this.view = view;
-		this.model = model;
-		this.parentView = parentView;
-	}
+	// TODO: fix
+//	public void AddNoteController(NoteMainPanel view, RequirementModel model, RequirementsPanel parentView) {
+//		this.view = view;
+//		this.model = model;
+//		this.parentView = parentView;
+//	}
 	
 	/**
 	 * Save the new note to the server
 	 *
 	 */
 	public void saveNote() {
-		final String commentText = view.getCommentField().getText();
+		final String commentText = "";//TODO:view.getCommentField().getText();
 		if(commentText.length() > 0) {
 			final AddNoteObserver saveNoteObserver = new AddNoteObserver(this);
 			final Request request = Network.getInstance().makeRequest(
 					"requirementsmanagement/requirementnote", HttpMethod.PUT);
-			final RequirementNote note = new RequirementNote(model.getId(), model.getCreator(), commentText);
-			view.getCommentField.setText("");
-			request.setBody(note.toJSON());
+			// TODO: final RequirementNote note = new RequirementNote(model.getId(), model.getCreator(), commentText);
+			// TODO: view.getCommentField.setText("");
+			// TODO: request.setBody(note.toJSON());
 			request.addObserver(saveNoteObserver);
 			request.send();
 		}
