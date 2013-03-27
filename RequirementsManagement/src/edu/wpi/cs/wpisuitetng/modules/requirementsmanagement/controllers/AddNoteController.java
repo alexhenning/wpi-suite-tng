@@ -13,6 +13,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.NoteMainPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
@@ -30,9 +31,9 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class AddNoteController {
 	
-	// TODO: private final NoteMainPanel view;
-	// TODO: private final RequirementModel model;
-	// TODO: private final RequirementsPanel parentView;
+	private NoteMainPanel view;
+	private RequirementModel model;
+	private RequirementsPanel parentView;
 	
 	/**
 	 * Default constructor for Notes
@@ -41,29 +42,28 @@ public class AddNoteController {
 	 * @param model The Requirement model being commented on
 	 * @param parentView The RequirementPanel displaying the defect
 	 */
-	// TODO: fix
-//	public void AddNoteController(NoteMainPanel view, RequirementModel model, RequirementsPanel parentView) {
-//		this.view = view;
-//		this.model = model;
-//		this.parentView = parentView;
-//	}
+	public AddNoteController(final NoteMainPanel view, final RequirementModel model, final RequirementsPanel parentView) {
+		this.view = view;
+		this.model = model;
+		this.parentView = parentView;
+	}
 	
 	/**
 	 * Save the new note to the server
 	 *
 	 */
 	public void saveNote() {
-		final String commentText = "";//TODO:view.getCommentField().getText();
-		if(commentText.length() > 0) {
+		//final String commentText = view.getCommentField().getText();
+		//if(commentText.length() > 0) {
 			final AddNoteObserver saveNoteObserver = new AddNoteObserver(this);
 			final Request request = Network.getInstance().makeRequest(
 					"requirementsmanagement/requirementnote", HttpMethod.PUT);
-			// TODO: final RequirementNote note = new RequirementNote(model.getId(), model.getCreator(), commentText);
-			// TODO: view.getCommentField.setText("");
-			// TODO: request.setBody(note.toJSON());
+			//final RequirementNote note = new RequirementNote(model.getId(), model.getCreator(), commentText);
+			//view.getCommentField.setText("");
+			//request.setBody(note.toJSON());
 			request.addObserver(saveNoteObserver);
 			request.send();
-		}
+		//}
 	}
 	
 	

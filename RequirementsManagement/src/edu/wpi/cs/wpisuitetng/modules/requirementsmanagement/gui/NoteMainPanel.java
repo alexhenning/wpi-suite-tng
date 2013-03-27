@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
 
 /**
  * Main panel for notes viewing and editing
@@ -39,7 +40,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  */
 @SuppressWarnings("serial")
 public class NoteMainPanel extends JPanel {
-	NoteMainTab parent;
+	RequirementsPanel parent;
 	boolean inputEnabled;
 	JTextArea ta;
 	JPanel noteViewer;
@@ -51,7 +52,7 @@ public class NoteMainPanel extends JPanel {
 	 * 
 	 * @param parent NoteTab that contains this object
 	 */
-	public NoteMainPanel(NoteMainTab parent) {
+	public NoteMainPanel(RequirementsPanel parent) {
 		this.parent = parent;
 		
 		// Indicate that input is enabled
@@ -59,6 +60,7 @@ public class NoteMainPanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
+		setTestNotes();
 //		new GetRequirementController(this).actionPerformed(null);
 		
 		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
@@ -81,30 +83,6 @@ public class NoteMainPanel extends JPanel {
 		noteViewer.setMinimumSize(new Dimension(1000, 10));
 //		noteViewer = new JPanel(new BorderLayout());
 
-		GridBagConstraints innerGridCons = new GridBagConstraints();
-		innerGridCons.fill = GridBagConstraints.HORIZONTAL;
-		innerGridCons.insets = new Insets(5, 2, 5, 2);
-		innerGridCons.gridx = 0;
-		innerGridCons.gridy = 0;
-//		noteViewer.add(new NotePanel("1", "a1", new Date()), BorderLayout.LINE_START);
-		noteViewer.add(new NotePanel("1afsdasdfasdf", "a1longgggggggggggg", new Date()), innerGridCons);
-		
-		innerGridCons.gridy = 1;
-//		noteViewer.add(new NotePanel("2", "a2", new Date()), BorderLayout.LINE_START);
-		noteViewer.add(new NotePanel("2", "a2", new Date()), innerGridCons);
-		
-		innerGridCons.gridy = 2;
-//		noteViewer.add(new NotePanel("3 sdfkjlsjld fkjl sdklfdskjl fskjl dfkjl sdkjl fkjl sdj fklskjl dfj sldkjl fskjl dfkjl sdkjl fkjl sdfkjl skjl dfkjl skjl df sjldfsdjl fskjl dfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdffkjl s", "a3", new Date()), BorderLayout.LINE_START);
-		noteViewer.add(new NotePanel("3 sdfkjlsjld fkjl sdklfdskjl fskjl dfkjl sdkjl fkjl sdj fklskjl dfj sldkjl fskjl dfkjl sdkjl fkjl sdfkjl skjl dfkjl skjl df sjldfsdjl fskjl dfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdffkjl s", "a3", new Date()), innerGridCons);
-		
-		innerGridCons.gridy = 3;
-//		noteViewer.add(new NotePanel("4", "a4", new Date()), BorderLayout.LINE_START);
-		noteViewer.add(new NotePanel("4", "a4", new Date()), innerGridCons);
-		
-		innerGridCons.gridy = 4;
-//		noteViewer.add(new NotePanel("5poasidfpoi asdf[pioa sd[fp ioasdf[pio asdf[p ioasdf[po iasdf[ipo asdf[ipo asd[fpioa sd[pfoi as[dfipoa s[dfpio as[dfio", "a5", new Date()), BorderLayout.LINE_START);
-		noteViewer.add(new NotePanel("5poasidfpoi asdf[pioa sd[fp ioasdf[pio asdf[p ioasdf[po iasdf[ipo asdf[ipo asd[fpioa sd[pfoi as[dfipoa s[dfpio as[dfio", "a5", new Date()), innerGridCons);
-		
 		noteScrollPane = new JScrollPane(noteViewer);
 		noteScrollPane.setPreferredSize(new Dimension(300, 300));
 		noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -124,6 +102,42 @@ public class NoteMainPanel extends JPanel {
 		c.fill = GridBagConstraints.NONE;
 		c.gridy = 2;
 		add(addButton, c);
+	}
+	
+	public void setNotes(List<RequirementNote> notes) {
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(5, 2, 5, 2);
+		c.gridx = 0;
+		c.gridy = 0;
+		
+		for (RequirementNote note : notes) {
+			if (note != null) {
+				noteViewer.add(new NotePanel(note), c);
+				c.gridy += 1;
+			}
+		}
+	}
+	
+	public void setTestNotes() {
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(5, 2, 5, 2);
+		c.gridx = 0;
+		c.gridy = 0;
+		noteViewer.add(new NotePanel("1afsdasdfasdf", "a1longgggggggggggg", new Date()), c);
+		
+		c.gridy = 1;
+		noteViewer.add(new NotePanel("2", "a2", new Date()), c);
+		
+		c.gridy = 2;
+		noteViewer.add(new NotePanel("3 sdfkjlsjld fkjl sdklfdskjl fskjl dfkjl sdkjl fkjl sdj fklskjl dfj sldkjl fskjl dfkjl sdkjl fkjl sdfkjl skjl dfkjl skjl df sjldfsdjl fskjl dfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdffkjl s", "a3", new Date()), c);
+		
+		c.gridy = 3;
+		noteViewer.add(new NotePanel("4", "a4", new Date()), c);
+		
+		c.gridy = 4;
+		noteViewer.add(new NotePanel("5poasidfpoi asdf[pioa sd[fp ioasdf[pio asdf[p ioasdf[po iasdf[ipo asdf[ipo asd[fpioa sd[pfoi as[dfipoa s[dfpio as[dfio", "a5", new Date()), c);
 	}
 	
 	/**

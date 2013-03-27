@@ -26,6 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
+
 /**
  * Displays a single posted note
  * 
@@ -57,6 +59,10 @@ public class NotePanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
+	}
+
+	public NotePanel(RequirementNote note) {
+		this(note.getBody(), note.getUser().getName(), note.getDate());
 	}
 
 	/**

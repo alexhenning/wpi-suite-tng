@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import javax.swing.AbstractAction;
@@ -56,7 +57,8 @@ public class RequirementsPanel extends JSplitPane {
 	public JTextField estimateField = new JTextField("0", 30);
 	public JTextField results = new JTextField(50);
 	JButton submit = new JButton("Submit");
-	public JPanel leftside = new JPanel();
+	private NoteMainPanel nt;
+	private JPanel leftside = new JPanel();
 	public JTabbedPane supplementPane = new JTabbedPane();
 
 	/** A flag indicating if input is enabled on the form */
@@ -141,7 +143,7 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		
 		// Supplement Pane (i.e., notes, history, attachments)
-		NoteMainTab nt = new NoteMainTab(null);
+		nt = new NoteMainPanel(this);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("History", new JPanel());
 		
@@ -268,6 +270,8 @@ public class RequirementsPanel extends JSplitPane {
 			parent.setEditModeDescriptors(model);
 		}
 		parent.buttonGroup.setMode(editMode);
+		
+		nt.setNotes(Arrays.asList(model.getNotes()));
 	}
 
 	/**
