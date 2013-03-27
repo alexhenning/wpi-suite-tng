@@ -112,22 +112,19 @@ public class RequirementModelValidator {
 			return issues;
 		}
 
-		/* possible fields that might still need validation.
-	private int releaseNumber;
-	private RequirementPriority priority;
-	private String estimate;
-	private String actualEffort;
-	private Date lastModifiedDate;
-	private List<RequirementEvent> events;
-	private List<RequirementModel> subRequirements;
-		 */
-		
 		RequirementModel oldRequirement = null;
 		if(mode == Mode.EDIT) {
 			oldRequirement = getExistingRequirement(requirement.getId(), session.getProject(), issues, "id");
 		}
 		lastExistingRequirement = oldRequirement;
 		
+		if(mode == Mode.CREATE && requirement.getCreator().getIdNum() == -1) {
+			System.out.println("Validator is doing things it should not have to do....setting the creating user for the requirement");
+			requirement.setCreator(session.getUser());
+			System.out.println("sesion user: "+session.getUser().toString());
+			System.out.println("new creator user: "+requirement.getCreator().toString());
+		}
+
 		if(mode == Mode.CREATE) {
 			requirement.setStatus(RequirementStatus.NEW); // new requirements should always have new status
 		} else if(requirement.getStatus() == null) {
@@ -135,15 +132,15 @@ public class RequirementModelValidator {
 		}
 
 		// make sure Name and description size are within constraints
-		if(requirement.getName() == null || requirement.getName().length() > 0
-				|| requirement.getName().length() < 100) {
-			issues.add(new ValidationIssue("Required, must be 1-100 characters", "name"));
+		if(requirement.getName() == null || requirement.getName().length() <= 0
+				|| requirement.getName().length() > 100) {
+			issues.add(new ValidationIssue("Required, name must be 1-100 characters", "name"));
 		}
 		if(requirement.getDescription() == null) {
 			// empty descriptions are okay
 			requirement.setDescription("");
 		} else if(requirement.getDescription().length() > 5000) {
-			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
+			issues.add(new ValidationIssue("description Cannot be greater than 5000 characters", "description"));
 		}
 		
 		// make sure the creator and assignee exist and aren't duplicated
@@ -152,12 +149,12 @@ public class RequirementModelValidator {
 				requirement.setCreator(oldRequirement.getCreator());
 			}
 		} else if(requirement.getCreator() == null) {
-			issues.add(new ValidationIssue("Required", "creator"));
+			issues.add(new ValidationIssue("Required creator", "creator"));
 		} else {
 			User creator = getExistingUser(requirement.getCreator().getUsername(), issues, "creator");
 			if(creator != null) {
 				if(!creator.getUsername().equals(session.getUsername())) {
-					issues.add(new ValidationIssue("Must match currently logged in user", "creator"));
+					issues.add(new ValidationIssue("creator Must match currently logged in user", "creator"));
 				} else {
 					requirement.setCreator(creator);
 				}

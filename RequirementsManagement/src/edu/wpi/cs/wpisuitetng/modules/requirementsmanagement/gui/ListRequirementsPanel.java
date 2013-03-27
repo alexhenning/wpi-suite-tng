@@ -1,31 +1,32 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.TextArea;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequirementController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
+@SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel {
 	
 	ListRequirementsTab parent;
 	boolean inputEnabled;
-	TextArea ta;
+	JTable table;
+	ViewReqTable tableModel;
+	
+	String[] columnNames = {"Name", "Status", "ID", "Description"};
 
-	/**
-	 * Constructs a DefectPanel for creating or editing a given Defect.
-	 * 
-	 * @param parent	The parent DefectView.
-	 * @param defect	The Defect to edit.
-	 * @param mode		Whether or not the given Defect should be treated as if it already exists 
-	 * 					on the server ({@link Mode#EDIT}) or not ({@link Mode#CREATE}).
-	 */
-	public ListRequirementsPanel(ListRequirementsTab parent) {
+
+	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
 		
 		// Indicate that input is enabled
@@ -33,29 +34,45 @@ public class ListRequirementsPanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
-		new GetRequirementController(this).actionPerformed(null);
+		updateAllRequirementList();
 		
-		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
-		// TODO: updateFields();
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                	DB.getSingleRequirement((String) table.getModel().getValueAt(table.getSelectedRow(), 0),
+                			new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							parent.tabController.addEditRequirementTab(req);
+						}
+                	});
+                }
+			}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent arg0) {}
+		});
 	}
 
 	/**
-	 * Adds the components to the panel and places constraints on them
+	 * adds the components to the panel and places constraints on them
 	 * for the SpringLayout manager.
 	 * @param layout the layout manager
 	 */
 	protected void addComponents() {
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		setLayout(new GridLayout());
 		
-		ta = new TextArea();
-		ta.setText("Testing");
+		tableModel = new ViewReqTable();
+		table = new JTable(tableModel);
+		table.setPreferredScrollableViewportSize(new Dimension(1, 1));
+		table.setFillsViewportHeight(true);
 		
-		//add subpanels to main panel
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(ta, c);
+		JScrollPane scrollPane = new JScrollPane(table);
+		
+		add(scrollPane);
+		
 	}
 	
 	/**
@@ -70,19 +87,46 @@ public class ListRequirementsPanel extends JPanel {
 		// TODO: implement
 	}
 
-	public void updateAllRequirementList(List<RequirementModel> reqs) {
-		String output = "";
-		for(RequirementModel req : reqs) {
-			output = output + "Name: " + req.getName() + " (Status: " + req.getStatus() + ", ID: " + 
-					req.getId()  + ") " + "   Description: " + req.getDescription() + "\n";
-		}
-		ta.setText(output);
+	public void updateAllRequirementList() {
+		DB.getAllRequirements(new UpdateTableCallback());
 	}
 	
-	public void addSingleRequirementToList(RequirementModel req) {
-		String output = "";
-		output = output + "Name: " + req.getName() + " (Status: " + req.getStatus() + ", ID: " + 
-				req.getId()  + ") " + "   Description: " + req.getDescription() + "\n";
-		ta.setText(output);
+	public ViewReqTable getTable(){
+		return this.tableModel;
+	}
+	
+	class UpdateTableCallback implements RequirementsCallback {
+		@Override
+		public void callback(List<RequirementModel> reqs) {
+			if (reqs.size() > 0) {
+				// put the data in the table
+				Object[][] entries = new Object[reqs.size()][5];
+				int i = 0;
+				for(RequirementModel req : reqs) {
+					entries[i][0] = String.valueOf(req.getId());
+					entries[i][1] = req.getName();
+					if (req.getStatus() != null) {
+						entries[i][2] = req.getStatus().toString();
+					}
+					else {
+						entries[i][2] = "Error: Status set to null";
+					}
+					if (req.getPriority() != null) {
+						entries[i][3] = req.getPriority().toString();
+					}
+					else {
+						entries[i][3] = "";
+					}
+					entries[i][4] = req.getEstimate();
+					i++;
+					}
+				getTable().setData(entries);
+				getTable().fireTableStructureChanged();
+			}
+			else {
+				// do nothing, there are no requirements
+			}
+		}
+		
 	}
 }

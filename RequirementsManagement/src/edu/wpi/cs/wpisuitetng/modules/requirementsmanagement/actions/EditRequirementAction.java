@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  *
@@ -25,7 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
  *
  */
 @SuppressWarnings("serial")
-public class ListSingleRequirementAction extends AbstractAction {
+public class EditRequirementAction extends AbstractAction {
 
 	private final MainTabController controller;
 	
@@ -33,15 +34,15 @@ public class ListSingleRequirementAction extends AbstractAction {
 	 * Create a GetSiAction
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
-	public ListSingleRequirementAction(MainTabController controller) {
-		super("List Single Requirement");
+	public EditRequirementAction(MainTabController controller) {
+		super("Edit Requirement");
 		this.controller = controller;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_L);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		controller.addListSingleRequirementTab();
+		controller.addEditRequirementTab(new RequirementModel());
 	}
 
 }

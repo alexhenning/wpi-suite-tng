@@ -14,6 +14,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -28,12 +29,21 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class EditRequirementModelRequestObserver implements RequestObserver {
 
-	private EditRequirementController controller;
+	private SingleRequirementCallback callback;
 	
-	public EditRequirementModelRequestObserver(EditRequirementController controller){
-		this.controller = controller;
+	/**
+	 * Default constructor
+	 * @param callback Controller paired with this observer
+	 */
+	public EditRequirementModelRequestObserver(SingleRequirementCallback callback){
+		this.callback = callback;
 	}
 	
+	/**
+	 * Server reported a successful request
+	 *
+	 * @param iReq Request returned from server
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		// Get the response to the given request
@@ -43,14 +53,25 @@ public class EditRequirementModelRequestObserver implements RequestObserver {
 		final RequirementModel requirement = RequirementModel.fromJSON(response.getBody());
 		
 		// Pass the messages back to the controller
-		controller.receivedUpdateConfirmation(requirement);
+		callback.callback(requirement);
 	}
 
+	/**
+	 * Server reported an error in the request
+	 *
+	 * @param iReq Request returned from the server
+	 */
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to add a message failed.");
 	}
 
+	/**
+	 * Server reported an failure in the request
+	 *
+	 * @param iReq Request returned from the server
+	 * @param exception Exception thrown on the server
+	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to add a message failed.");
