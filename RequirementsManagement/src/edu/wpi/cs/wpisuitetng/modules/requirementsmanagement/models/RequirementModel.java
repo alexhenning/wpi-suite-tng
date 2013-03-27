@@ -15,7 +15,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementE
 public class RequirementModel extends AbstractModel {
 
 	private int id;
-	private int releaseNumber;
+	private ReleaseNumber releaseNumber;
 	private RequirementStatus status;
 	private RequirementPriority priority;
 	private String name;
@@ -57,6 +57,7 @@ public class RequirementModel extends AbstractModel {
 		iteration = new Iteration();
 		setType(null);
 		priority = null;
+		releaseNumber = null;
 	}
 	
 	/**
@@ -80,7 +81,7 @@ public class RequirementModel extends AbstractModel {
 	 * @param iteration the iteration the requirement is assigned to
 	 * @param type the type of the requirement
 	 */
-	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
+	public RequirementModel(int id, ReleaseNumber releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
 			String estimate, String actualEffort, User creator, List<User> assignees,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
@@ -185,11 +186,11 @@ public class RequirementModel extends AbstractModel {
 		return assignees;
 	}
 		
-	public int getReleaseNumber() {
+	public ReleaseNumber getReleaseNumber() {
 		return releaseNumber;
 	}
 
-	public void setReleaseNumber(int releaseNumber) {
+	public void setReleaseNumber(ReleaseNumber releaseNumber) {
 		this.releaseNumber = releaseNumber;
 	}
 
