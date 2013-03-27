@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
@@ -57,9 +58,28 @@ public class ToolbarView extends DefaultToolbarView {
 		
 		JButton Crtreq = new JButton("Create Requirement");
 		Crtreq.setAction(new CreateRequirementAction(tabController));
+<<<<<<< HEAD
 		
 		JButton CrtIteration = new JButton("Create Iteration");
 		CrtIteration.setAction(new CreateIterationAction(tabController));
+=======
+
+		JButton CrtIteration = new JButton("Create Iteration");
+		
+		CrtIteration.setAction(new CreateIterationAction(tabController));
+		
+		
+
+//		JButton listReq = new JButton("List Requirements");
+//		JButton listSReq = new JButton("Search Requirements");
+//		JButton editReq = new JButton("Edit REquirement");
+//		listReq.setAction(new ListRequirementsAction(mainTabController));
+//		listSReq.setAction(new ListSingleRequirementAction(mainTabController));
+//		editReq.setAction(new EditRequirementAction(mainTabController));
+//		buttonPanel.add(listReq);
+//		buttonPanel.add(listSReq);
+//		buttonPanel.add(editReq);
+>>>>>>> a730702538f4d89cf1640f9a994e3c68698245d0
 				
 		// Construct the create defect button
 		createDefect = new JButton();
@@ -100,7 +120,10 @@ public class ToolbarView extends DefaultToolbarView {
 		content.add(searchField, c);
 		c.gridx = 1;
 		content.add(searchDefects, c);
-		
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		content.add(CrtIteration, c);
 		// Construct a new toolbar group to be added to the end of the toolbar
 		ToolbarGroupView toolbarGroup = new ToolbarGroupView("Home", content);
 		

@@ -43,6 +43,7 @@ public class JanewayModule implements IJanewayModule {
 		MainTabView mainTabView = new MainTabView();
 		mainTabController = new MainTabController(mainTabView);
 		
+		// Setup toolbar view
 		ToolbarView toolbarView = new ToolbarView(mainTabController);
 		toolbarController = new ToolbarController(toolbarView, mainTabController);
 		toolbarController.setRelevant(new DevToolbarView(mainTabController), true);

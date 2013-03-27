@@ -86,7 +86,6 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	@Override
 	public Iteration[] getEntity(Session s, String id) throws NotFoundException,
 			WPISuiteException {
-
 		final int intId = Integer.parseInt(id);
 		if(intId < 1) {
 			throw new NotFoundException();
@@ -193,6 +192,7 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	}
 
 	@Override
+
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
 		throw new NotImplementedException();
