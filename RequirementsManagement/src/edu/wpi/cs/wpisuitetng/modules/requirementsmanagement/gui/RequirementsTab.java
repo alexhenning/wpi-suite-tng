@@ -139,7 +139,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	
 	@Override
 	public ToolbarGroupView getGroup() {
-		return buttonGroup;
+		return null;
 	}
 	
 	/**

@@ -34,6 +34,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.DevToolbarView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarView;
 
 public class JanewayModule implements IJanewayModule {
 	
@@ -43,6 +46,7 @@ public class JanewayModule implements IJanewayModule {
 	public JPanel buttonPanel = new JPanel();
 	
 	private MainTabController mainTabController;
+	private ToolbarController toolbarController;
 	
 	JTabbedPane tabPane = new JTabbedPane();
 	
@@ -50,23 +54,12 @@ public class JanewayModule implements IJanewayModule {
 		MainTabView mainTabView = new MainTabView();
 		mainTabController = new MainTabController(mainTabView);
 		
-		// Setup button panel
-		buttonPanel.setLayout(new FlowLayout());
-		JButton Crtreq = new JButton("Create Requirement");
-		JButton listReq = new JButton("List Requirements");
-		JButton listSReq = new JButton("Search Requirements");
-		JButton editReq = new JButton("Edit REquirement");
-		Crtreq.setAction(new CreateRequirementAction(mainTabController));
-		listReq.setAction(new ListRequirementsAction(mainTabController));
-		listSReq.setAction(new ListSingleRequirementAction(mainTabController));
-		editReq.setAction(new EditRequirementAction(mainTabController));
-		buttonPanel.add(Crtreq);
-		buttonPanel.add(listReq);
-		buttonPanel.add(listSReq);
-		buttonPanel.add(editReq);
+		ToolbarView toolbarView = new ToolbarView(mainTabController);
+		toolbarController = new ToolbarController(toolbarView, mainTabController);
+		toolbarController.setRelevant(new DevToolbarView(mainTabController), true);
 
 		tabs = new ArrayList<JanewayTabModel>();
-		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), buttonPanel, mainTabView);
+		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), toolbarView, mainTabView);
 		tabs.add(tab);
 	}
 
