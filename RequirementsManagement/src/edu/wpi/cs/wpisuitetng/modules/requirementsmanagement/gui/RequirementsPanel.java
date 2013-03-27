@@ -173,6 +173,7 @@ public class RequirementsPanel extends JSplitPane {
 		leftside.add(estimateField, c);
 		c.gridy = 5;
 		leftside.add(results, c);
+		results.setEditable(false);
 
 		// Right side but aligned left (west) for dropdowns
 		c.anchor = GridBagConstraints.WEST;
