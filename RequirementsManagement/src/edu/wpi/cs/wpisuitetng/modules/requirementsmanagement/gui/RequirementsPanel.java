@@ -51,7 +51,7 @@ public class RequirementsPanel extends JPanel {
 	public JComboBox priority = new JComboBox(priorityStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
-	public JTextField estimateField = new JTextField(30);
+	public JTextField estimateField = new JTextField("0", 30);
 	public JTextField results = new JTextField(50);
 	JButton submit = new JButton("Submit");
 	
@@ -152,7 +152,6 @@ public class RequirementsPanel extends JPanel {
 		estPanel.setLayout(new FlowLayout());
 		JLabel estimateArea = new JLabel("Estimate:");
 		estPanel.add(estimateArea);
-		estimateField.setText("0");
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
 		} else {
