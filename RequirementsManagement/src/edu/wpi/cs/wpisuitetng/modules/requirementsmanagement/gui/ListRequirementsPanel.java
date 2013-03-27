@@ -11,7 +11,9 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -35,10 +37,7 @@ public class ListRequirementsPanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
-		new GetRequirementController(this).actionPerformed(null);
-		
-		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
-		// TODO: updateFields();
+		DB.getAllRequirements(new UpdateTableCallback());
 	}
 
 	/**
@@ -82,5 +81,40 @@ public class ListRequirementsPanel extends JPanel {
 	
 	public ViewReqTable getTable(){
 		return this.tableModel;
+	}
+	
+	class UpdateTableCallback implements RequirementsCallback {
+		@Override
+		public void callback(List<RequirementModel> reqs) {
+			if (reqs.size() > 0) {
+				// put the data in the table
+				Object[][] entries = new Object[reqs.size()][5];
+				int i = 0;
+				for(RequirementModel req : reqs) {
+					entries[i][0] = String.valueOf(req.getId());
+					entries[i][1] = req.getName();
+					if (req.getStatus() != null) {
+						entries[i][2] = req.getStatus().toString();
+					}
+					else {
+						entries[i][2] = "Error: Status set to null";
+					}
+					if (req.getPriority() != null) {
+						entries[i][3] = req.getPriority().toString();
+					}
+					else {
+						entries[i][3] = "";
+					}
+					entries[i][4] = req.getEstimate();
+					i++;
+					}
+				getTable().setData(entries);
+				getTable().fireTableStructureChanged();
+			}
+			else {
+				// do nothing, there are no requirements
+			}
+		}
+		
 	}
 }

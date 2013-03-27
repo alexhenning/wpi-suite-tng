@@ -16,6 +16,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import java.util.Arrays;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -29,10 +30,10 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrieveRequirementModelRequestObserver implements RequestObserver {
 
-	private GetRequirementController controller;
+	private RequirementsCallback callback;
 	
-	public RetrieveRequirementModelRequestObserver(GetRequirementController controller){
-		this.controller = controller;
+	public RetrieveRequirementModelRequestObserver(RequirementsCallback callback){
+		this.callback = callback;
 	}
 	
 	@Override
@@ -44,7 +45,7 @@ public class RetrieveRequirementModelRequestObserver implements RequestObserver 
 		final RequirementModel[] requirements = RequirementModel.fromJSONArray(response.getBody());
 		
 		// Pass the messages back to the controller
-		controller.receivedGetConfirmation(Arrays.asList(requirements));
+		callback.callback(Arrays.asList(requirements));
 	}
 
 	@Override
