@@ -18,7 +18,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequ
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
 

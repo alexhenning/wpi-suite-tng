@@ -5,7 +5,6 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 public class ViewReqTable extends AbstractTableModel {

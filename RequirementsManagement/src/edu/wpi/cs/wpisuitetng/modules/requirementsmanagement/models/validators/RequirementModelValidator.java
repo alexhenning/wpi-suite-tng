@@ -131,6 +131,11 @@ public class RequirementModelValidator {
 		}
 		lastExistingRequirement = oldRequirement;
 		
+		if(mode == mode.CREATE && requirement.getCreator().getIdNum() == -1) {
+			System.out.println("Validator is doing things it should not have to do....setting the creating user for the requirement");
+			requirement.setCreator(session.getUser());
+		}
+
 		if(mode == Mode.CREATE) {
 			requirement.setCreator(session.getUser());
 			requirement.setStatus(RequirementStatus.NEW); // new requirements should always have new status

@@ -33,7 +33,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListSingleR
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.DevToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarView;
