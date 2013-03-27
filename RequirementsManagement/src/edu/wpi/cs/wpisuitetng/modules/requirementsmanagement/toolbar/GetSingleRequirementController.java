@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
 import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel;
@@ -31,7 +32,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * @author Tim Calvert
  *
  */
-public class GetSingleRequirementController implements ActionListener {
+public class GetSingleRequirementController extends AbstractAction implements ActionListener {
 
 
 	private final JTextField field;
@@ -42,6 +43,7 @@ public class GetSingleRequirementController implements ActionListener {
 	 * @param panel The panel containing all the GUI elements necessary for creation
 	 */
 	public GetSingleRequirementController(MainTabController tabController, JTextField field) {
+		super("Search");
 		this.tabController = tabController;
 		this.field = field;
 	}
@@ -62,6 +64,8 @@ public class GetSingleRequirementController implements ActionListener {
 	}
 	
 	public void receivedGetSingleConfirmation(RequirementModel req) {
+		System.out.println(req);
+		System.out.println(req.getName());
 		tabController.addEditRequirementTab(req);
 	}
 
