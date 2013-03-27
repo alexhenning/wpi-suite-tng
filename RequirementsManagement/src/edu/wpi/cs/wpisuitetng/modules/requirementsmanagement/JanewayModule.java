@@ -49,7 +49,6 @@ public class JanewayModule implements IJanewayModule {
 	public JanewayModule() {
 		MainTabView mainTabView = new MainTabView();
 		mainTabController = new MainTabController(mainTabView);
-		LocalRequirementModels.initModel();
 		
 		// Setup button panel
 		buttonPanel.setLayout(new FlowLayout());

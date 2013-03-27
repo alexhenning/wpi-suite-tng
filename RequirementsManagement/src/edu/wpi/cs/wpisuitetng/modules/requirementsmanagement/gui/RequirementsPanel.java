@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -86,13 +87,14 @@ public class RequirementsPanel extends JPanel {
 		layout = new SpringLayout();
 		this.setLayout(layout);
 
+
 		// Add all components to this panel
 		addComponents();
 		
 		// TODO: prevent tab key from inserting tab characters into the description field
 		
 		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
-		// TODO: updateFields();
+		updateFields();
 	}
 
 	/**
@@ -137,7 +139,11 @@ public class RequirementsPanel extends JPanel {
 		statPanel.add(statusArea);
 		// TODO: For now, it's disabled for creation view. Need to change when
 		// updating is available.
-		statusfield.setEnabled(false);
+		if(this.editMode == Mode.CREATE) {
+			statusfield.setEnabled(false);
+		} else {
+			statusfield.setEnabled(true);
+		}
 		statPanel.add(statusfield);
 		
 		//estimate field
@@ -145,14 +151,23 @@ public class RequirementsPanel extends JPanel {
 		estPanel.setLayout(new FlowLayout());
 		JLabel estimateArea = new JLabel("Estimate:");
 		estPanel.add(estimateArea);
-		estimateField.setEditable(false);
+		if(this.editMode == Mode.CREATE) {
+			estimateField.setEditable(false);
+		} else {
+			estimateField.setEditable(true);
+		}
 		estPanel.add(estimateField);
 	
 		//submit panel
 		JPanel submitPanel = new JPanel();
 		submitPanel.setLayout(new FlowLayout());
-		submit.setAction(new AddRequirementController(this));
-		submit.setText("Save");
+		if(this.editMode == Mode.CREATE) { 
+			submit.setAction(new AddRequirementController(this));
+			submit.setText("Save");
+		} else {
+			submit.setAction(new EditRequirementController(this));
+			submit.setText("Update");
+		}
 		
 		//submit button
 		submitPanel.add(submit);
@@ -233,6 +248,26 @@ public class RequirementsPanel extends JPanel {
 	 */
 	protected void updateModel(RequirementModel requirement, Mode mode) {
 		// TODO: 
+	}
+	
+	/**
+	 * Updates the RequirementsPanel's fields to match those in the current model
+	 *
+	 */
+	private void updateFields() {
+		namefield.setText(model.getName());
+		descriptionfield.setText(model.getDescription());
+		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
+			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
+				statusfield.setSelectedIndex(i);
+			}
+		}
+		for(int i = 0; i < priority.getItemCount(); i++) {  // Same as above
+			if(model.getPriority() == RequirementPriority.valueOf(priority.getItemAt(i).toString())) {
+				priority.setSelectedIndex(i);
+			}
+		}
+		estimateField.setText(model.getEstimate());
 	}
 
 	/**

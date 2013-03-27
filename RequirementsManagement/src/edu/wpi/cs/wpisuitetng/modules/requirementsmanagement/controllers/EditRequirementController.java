@@ -1,6 +1,16 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    David Modica
+ *    Tim Calvert
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import java.awt.event.ActionEvent;
@@ -14,7 +24,6 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.EditRequirementPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -31,11 +40,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 @SuppressWarnings("serial")
 public class EditRequirementController extends AbstractAction implements ActionListener {
 	
-	private final EditRequirementPanel panel;
-	private final LocalRequirementModels localRequirements = LocalRequirementModels.instance;
+	private final RequirementsPanel panel;
 	//private final JPanel buttonPanel;
 
-	public EditRequirementController(EditRequirementPanel panel) {
+	public EditRequirementController(RequirementsPanel panel) {
 		//this.buttonPanel = buttonPanel;  /* not needed at the moment */
 		this.panel = panel;
 	}
@@ -45,17 +53,21 @@ public class EditRequirementController extends AbstractAction implements ActionL
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final String idToEdit = "";
+		// TODO actually get Id. This only updates Requirement #1
 		final RequirementModel newReq = panel.getModel();
-		newReq.setId(Integer.getInteger(idToEdit).intValue());
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + idToEdit,  HttpMethod.POST);
+		newReq.setId(1);
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + newReq.getId(),  HttpMethod.POST);
 		request.setBody(newReq.toJSON());
 		request.addObserver(new EditRequirementModelRequestObserver(this));
 		request.send();
 	}
 
+	/**
+	 * Called by Observer when it receives a success confirmation
+	 *
+	 * @param req Requirement received by Observer
+	 */
 	public void receivedUpdateConfirmation(RequirementModel req) {
-		localRequirements.updateRequirement(req);  // not implemented yet
 		panel.setStatus("Requirement Updated");
 	}
 

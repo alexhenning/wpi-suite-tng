@@ -30,10 +30,19 @@ public class EditRequirementModelRequestObserver implements RequestObserver {
 
 	private EditRequirementController controller;
 	
+	/**
+	 * Default constructor
+	 * @param controller Controller paired with this observer
+	 */
 	public EditRequirementModelRequestObserver(EditRequirementController controller){
 		this.controller = controller;
 	}
 	
+	/**
+	 * Server reported a successful request
+	 *
+	 * @param iReq Request returned from server
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		// Get the response to the given request
@@ -46,11 +55,22 @@ public class EditRequirementModelRequestObserver implements RequestObserver {
 		controller.receivedUpdateConfirmation(requirement);
 	}
 
+	/**
+	 * Server reported an error in the request
+	 *
+	 * @param iReq Request returned from the server
+	 */
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to add a message failed.");
 	}
 
+	/**
+	 * Server reported an failure in the request
+	 *
+	 * @param iReq Request returned from the server
+	 * @param exception Exception thrown on the server
+	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to add a message failed.");

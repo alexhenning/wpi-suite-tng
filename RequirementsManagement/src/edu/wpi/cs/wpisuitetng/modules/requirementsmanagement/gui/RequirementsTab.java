@@ -69,7 +69,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		containingTab.setIcon(new ImageIcon());
 		if(editMode == Mode.CREATE) {
 			containingTab.setTitle("Create Requirement");
-			containingTab.setToolTipText("Create a new defect");
+			containingTab.setToolTipText("Create a new Requirement");
 		} else {
 			setEditModeDescriptors(requirement);
 		}
@@ -146,9 +146,9 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	 * @param defect Set the tab title, tooltip, and group name according to this Defect
 	 */
 	protected void setEditModeDescriptors(RequirementModel requirement) {
-		containingTab.setTitle("Defect #" + requirement.getId());
+		containingTab.setTitle("Requirement #" + requirement.getId());
 		// TODO: containingTab.setToolTipText("View defect " + requirement.getTitle());
-		buttonGroup.setName("Edit Defect");
+		buttonGroup.setName("Edit Requirement");
 	}
 	
 	/**

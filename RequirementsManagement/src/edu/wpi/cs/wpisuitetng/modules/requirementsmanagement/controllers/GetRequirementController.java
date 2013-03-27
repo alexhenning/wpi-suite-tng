@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -29,7 +28,6 @@ public class GetRequirementController extends AbstractAction implements ActionLi
 	// TODO This current gets all requirements (despite the name). We'll need a new one for all, and convert this one to a single requirement.
 
 	private final ListRequirementsPanel panel;
-	private final LocalRequirementModels localRequirements = LocalRequirementModels.instance;
 	//private final JPanel buttonPanel;
 
 	public GetRequirementController(ListRequirementsPanel panel) {
@@ -50,7 +48,6 @@ public class GetRequirementController extends AbstractAction implements ActionLi
 	}
 	
 	public void receivedGetConfirmation(List<RequirementModel> reqs) {
-		localRequirements.resetRequirements(reqs);
 		panel.updateAllRequirementList();
 	}
 
