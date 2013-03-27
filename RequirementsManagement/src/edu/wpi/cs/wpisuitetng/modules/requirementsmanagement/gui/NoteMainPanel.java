@@ -58,8 +58,6 @@ public class NoteMainPanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
-		//setTestNotes();
-//		new GetRequirementController(this).actionPerformed(null);
 		
 		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
 		// TODO: updateFields();
