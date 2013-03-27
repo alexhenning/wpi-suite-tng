@@ -1,14 +1,16 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
-//import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent.EventType;
 
 public class RequirementModel extends AbstractModel {
 
@@ -20,11 +22,16 @@ public class RequirementModel extends AbstractModel {
 	private String description;
 	private String estimate;
 	private String actualEffort;
+	private Date creationDate;
+	private Date lastModifiedDate;
+	private List<RequirementEvent> events;
 	private User creator;
-	private User assignee;
-	private Date creationDate, lastModifiedDate;
-	
-	//TODO associate with other requirements
+	private List<User> assignees;
+	private Iteration iteration;
+	private RequirementType type;
+
+	//TODO Validation Classes for Database retrieval
+	private List<RequirementModel> subRequirements;
 	//TODO add attachments
 	//TODO add tasks
 	//TODO add notes
@@ -39,14 +46,19 @@ public class RequirementModel extends AbstractModel {
 		description = "";
 		status = RequirementStatus.NEW;
 		creator = new User("", "", "", -1);
-		assignee = new User("", "", "", -1);
+		assignees = new ArrayList<User>();
+		assignees.add(new User("", "", "", -1));
 		estimate = "";
 		actualEffort = "";
 		creationDate = new Date();
 		lastModifiedDate = new Date();
+		events = new ArrayList<RequirementEvent>();
+		subRequirements = new ArrayList<RequirementModel>();
+		iteration = new Iteration();
+		type = null;
+		priority = null;
 	}
 	
-	//TODO finish the documentation of this constructor
 	/**
 	 * Constructs a new RequirementModel with the given properties
 	 * Other properties are the same as the default constructor
@@ -55,11 +67,24 @@ public class RequirementModel extends AbstractModel {
 	 * @param releaseNumber the release number for the requirement
 	 * @param status the status of the RequirementModel
 	 * @param priority the priority of the requirement
+	 * @param name the name of the requirement
+	 * @param description a description of the requirement
+	 * @param estimate an estimate of the time needed to complete
+	 * @param actualEffort  how much effort the requirement takes in practice
+	 * @param creator the user who created the requirement
+	 * @param assignee the user who is assigning the requirement
+	 * @param creationDate the date the requirement was created
+	 * @param lastModifiedDate the date the requirement was last changed (should default to the creation date)
+	 * @param events List of events for this requirement model
+	 * @param subRequirementIDs a list of id numbers for associated sub-requirements
+	 * @param iteration the iteration the requirement is assigned to
+	 * @param type the type of the requirement
 	 */
 	public RequirementModel(int id, int releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
-			String estimate, String actualEffort, User creator, User assignee,
-			Date creationDate, Date lastModifiedDate) {
+			String estimate, String actualEffort, User creator, List<User> assignees,
+			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
+			List<RequirementModel> subRequirements, Iteration iteration, RequirementType type) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
@@ -70,9 +95,62 @@ public class RequirementModel extends AbstractModel {
 		this.estimate = estimate;
 		this.actualEffort = actualEffort;
 		this.creator = creator;
-		this.assignee = assignee;
+		this.assignees = assignees;
 		this.creationDate = creationDate;
 		this.lastModifiedDate = lastModifiedDate;
+		this.events = events;
+		this.iteration = iteration;
+		this.type = type;
+		
+		this.subRequirements = subRequirements;
+		
+	}
+	
+	public void addNote(User user, String body, Date date) {
+		RequirementNote note = new RequirementNote(id, user, body);
+		note.setDate(date);
+		this.events.add(note);
+		this.lastModifiedDate = date;
+	}
+
+	public void addNote(User user, String body) {
+		RequirementNote note = new RequirementNote(id, user, body);
+		note.setDate(new Date());
+		this.events.add(note);
+		this.lastModifiedDate = new Date();
+	}
+	
+	public RequirementNote[] getNotes() {
+		ArrayList<RequirementEvent> noteList = new ArrayList<RequirementEvent>();
+		for (RequirementEvent event : events) {
+			if (event.getEventType() == EventType.NOTE) {
+				noteList.add(event);
+			}
+		}
+		RequirementNote[] comments = new RequirementNote[1];
+		return noteList.toArray(comments);
+	}
+
+	/**
+	 * @return the iteration
+	 */
+	public Iteration getIteration() {
+		return iteration;
+	}
+
+	/**
+	 * @param iteration the iteration to set
+	 */
+	public void setIteration(Iteration iteration) {
+		this.iteration = iteration;
+	}
+
+	public List<RequirementEvent> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<RequirementEvent> events) {
+		this.events = events;
 	}
 
 	public Date getCreationDate() {
@@ -96,29 +174,17 @@ public class RequirementModel extends AbstractModel {
 	}
 	
 	public User getCreator() {
-		 return creator;
+		return creator;
 	}
 	
-	public void setAssignee(User assignee) {
-		this.assignee = assignee;
+	public void setAssignees(List<User> assignees) {
+		this.assignees = assignees;
 	}
 	
-//	public void setAssigneeWithAutoStatusUpdate(User assignee) {
-//		this.assignee = assignee;
-//		
-//		//TODO consider improving this
-//		//this will auto-set the status when assigning a user
-//		if (assignee != null && assignee.getIdNum() != -1 ) { //make sure it is assigned to a real user
-//			this.status = RequirementStatus.IN_PROGRESS;
-//		} else { 
-//			status = RequirementStatus.OPEN;//if not a real user then it is currently open.
-//		}
-//	}
-	
-	public User getAssignee() {
-		return assignee;
+	public List<User> getAssignees() {
+		return assignees;
 	}
-
+		
 	public int getReleaseNumber() {
 		return releaseNumber;
 	}
@@ -240,6 +306,7 @@ public class RequirementModel extends AbstractModel {
 	 * @param builder Builder to modify
 	 */
 	public static void addGsonDependencies(GsonBuilder builder) {
+		RequirementEvent.addGsonDependencies(builder);
 		//TODO add dependencies for future class associations. Only needed if normal (de)serializer does not work
 //		Task.addGsonDependencies(builder);
 //		Note.addGsonDependencies(builder);
@@ -264,5 +331,34 @@ public class RequirementModel extends AbstractModel {
 	public String toString() {
 		return toJSON();
 	}
-
+	/**
+	 * 
+	 * @return ArrayList of the sub-requirements
+	 */
+	public List<RequirementModel> getSubRequirements() {
+		return subRequirements;
+	}
+	/**
+	 * Changes the list of sub-requirement IDs
+	 * @param subRequirements new list of requirements
+	 */
+	public void setSubRequirementIDs(ArrayList<RequirementModel> subRequirements) {
+		this.subRequirements = subRequirements;
+	}
+	/**
+	 * Adds a requirement ID to the list of sub-requirements
+	 * @param subreq Requirement to add to list of sub-requirements
+	 */
+	public void addSubRequirementID(RequirementModel subreq){
+		this.subRequirements.add(subreq);
+	}
+	/**
+	 * Removes a sub requirement from this requirement
+	 * @param subreqID The ID of the requirement to be removed
+	 */
+	public void removeSubRequirementID(int subreqID){
+		this.subRequirements.remove(this.subRequirements.indexOf(subreqID));
+	}
 }
+
+
