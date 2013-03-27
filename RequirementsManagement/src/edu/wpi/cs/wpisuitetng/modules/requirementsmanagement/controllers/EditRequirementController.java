@@ -53,11 +53,10 @@ public class EditRequirementController extends AbstractAction implements ActionL
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO actually get Id. this will all break with out it
-		final String idToEdit = "";
+		// TODO actually get Id. This only updates Requirement #1
 		final RequirementModel newReq = panel.getModel();
-		newReq.setId(Integer.getInteger(idToEdit).intValue());
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + idToEdit,  HttpMethod.POST);
+		newReq.setId(1);
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + newReq.getId(),  HttpMethod.POST);
 		request.setBody(newReq.toJSON());
 		request.addObserver(new EditRequirementModelRequestObserver(this));
 		request.send();
