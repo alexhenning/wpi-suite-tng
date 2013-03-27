@@ -88,8 +88,15 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	public void receivedAddConfirmation(ResponseModel response) {
 		Gson gson = new Gson();
 		RequirementNote note = gson.fromJson(response.getBody(), RequirementNote.class);
-		view.addNote(note);
+		
+		DB.getSingleRequirement((new Integer(note.getRequirementId()).toString()), new SingleRequirementCallback() {
+			@Override
+			public void callback(RequirementModel req) {
+				parentView.updateModel(req);
+			}
+		});
 	}
+	
 	
 	/**
 	 * Alert the user that an error occurred sending the note to the server

@@ -118,11 +118,6 @@ public class NoteMainPanel extends JPanel {
 		}
 	}
 	
-	public void addNote(RequirementNote note) {
-		notes.add(note);
-		setNotes(this.notes);
-	}
-	
 	public void setTestNotes() {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
