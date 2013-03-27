@@ -39,7 +39,8 @@ public class MainTabView extends JTabbedPane {
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		super.insertTab(title, icon, component, tip, index);
 		// the Dashboard tab cannot be closed
-		if(!(component instanceof DashboardView)) {
+		if(!(component instanceof DashboardView)
+				&& !(component instanceof ListRequirementsTab)) {
 			setTabComponentAt(index, new ClosableTabComponent(this));
 		}
 	}

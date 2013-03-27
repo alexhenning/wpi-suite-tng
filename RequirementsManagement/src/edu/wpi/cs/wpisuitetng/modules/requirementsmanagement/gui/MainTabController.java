@@ -25,6 +25,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -182,8 +183,9 @@ public class MainTabController {
 	ListRequirementsTab listReqsView;
 	public Tab addListRequirementsTab() {
 		if (listIndex == -1) {
-			Tab tab = addTab();
-			listReqsView = new ListRequirementsTab(tab, this);
+			listReqsView = new ListRequirementsTab(null, this);
+			Tab tab = addTab("All Requirements", new ImageIcon(), listReqsView,
+								"List of requirements");
 			tab.setComponent(listReqsView);
 			listReqsView.requestFocus();
 			listIndex = view.getTabCount() - 1;
