@@ -88,7 +88,7 @@ public class RequirementsPanel extends JSplitPane {
 
 		// Add all components to this panel
 		addComponents();
-		parent.buttonGroup.setMode(mode);
+		parent.buttonGroup.update(mode, model);
 		
 		// TODO: prevent tab key from inserting tab characters into the description field
 		
@@ -258,10 +258,11 @@ public class RequirementsPanel extends JSplitPane {
 			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
 		}
+		
 		if (editMode.equals(Mode.EDIT)) {
 			parent.setEditModeDescriptors(model);
 		}
-		parent.buttonGroup.setMode(editMode);
+		parent.buttonGroup.update(editMode, model);
 		
 		nt.setNotes(Arrays.asList(model.getNotes()));
 	}

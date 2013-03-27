@@ -40,6 +40,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 	private JButton cancelButton;
 	private JButton closeButton;
 	private JButton deleteButton;
+	private RequirementsTab tab;
 	
 	/**
 	 * Create a ToolbarView.
@@ -47,6 +48,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 	 */
 	public RequirementToolbarView(final MainTabController tabController, final RequirementsTab tab) {
 		super("Requirements");
+		this.tab = tab;
 
 		// Construct the content panel
 		JPanel content = new JPanel();
@@ -79,12 +81,20 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				RequirementModel model = tab.getRequirementPanel().getModel();
-				model.setStatus(RequirementStatus.COMPLETE);
+				if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
+					model.setStatus(RequirementStatus.OPEN);
+				} else {
+					model.setStatus(RequirementStatus.COMPLETE);
+				}
 				DB.updateRequirements(model, new SingleRequirementCallback() {
 					@Override
 					public void callback(RequirementModel req) {
-						tabController.closeCurrentTab();
-						tabController.addListRequirementsTab();
+						if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
+							tabController.closeCurrentTab();
+							tabController.addListRequirementsTab();
+						} else {
+							tab.getRequirementPanel().updateModel(req);
+						}
 					}
 				});
 			}
@@ -104,6 +114,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 					@Override
 					public void callback(RequirementModel req) {
 						tabController.closeCurrentTab();
+						tabController.addListRequirementsTab();
 					}
 				});
 			}
@@ -120,13 +131,18 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
 	
-	public void setMode(Mode mode) {
+	public void update(Mode mode, RequirementModel req) {
 		if (mode.equals(Mode.EDIT)) {
 			closeButton.setEnabled(true);
 			deleteButton.setEnabled(true);
 		} else {
 			closeButton.setEnabled(false);
 			deleteButton.setEnabled(false);
+		}
+		if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
+			closeButton.setText("Reopen");
+		} else {
+			closeButton.setText("Complete!");
 		}
 	}
 
