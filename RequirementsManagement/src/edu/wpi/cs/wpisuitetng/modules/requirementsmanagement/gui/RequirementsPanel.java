@@ -15,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -31,7 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementP
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 @SuppressWarnings("serial")
-public class RequirementsPanel extends JPanel {
+public class RequirementsPanel extends JSplitPane {
 	public enum Mode {
 		CREATE,
 		EDIT;
@@ -55,10 +56,8 @@ public class RequirementsPanel extends JPanel {
 	public JTextField estimateField = new JTextField("0", 30);
 	public JTextField results = new JTextField(50);
 	JButton submit = new JButton("Submit");
+	public JPanel leftside = new JPanel();
 	public JTabbedPane supplementPane = new JTabbedPane();
-	
-	/** The layout manager for this panel */
-	protected SpringLayout layout;
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -82,17 +81,16 @@ public class RequirementsPanel extends JPanel {
 	 * 					on the server ({@link Mode#EDIT}) or not ({@link Mode#CREATE}).
 	 */
 	public RequirementsPanel(RequirementsTab parent, RequirementModel requirement, Mode mode) {
+		super(JSplitPane.HORIZONTAL_SPLIT);
+		setLeftComponent(leftside);
+		setRightComponent(supplementPane);
+		
 		this.parent = parent;
 		this.model = requirement;
 		editMode = mode;
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
-
-		// Use a SpringLayout manager
-		layout = new SpringLayout();
-		this.setLayout(layout);
-
 
 		// Add all components to this panel
 		addComponents();
@@ -110,60 +108,30 @@ public class RequirementsPanel extends JPanel {
 	 * @param layout the layout manager
 	 */
 	protected void addComponents() {
-		setLayout(new GridBagLayout());
+		leftside.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
 		//name field
-		JPanel namePanel = new JPanel();
-		namePanel.setLayout(new FlowLayout());
 		JLabel nameArea = new JLabel("Name:");
-		namePanel.add(nameArea);
-		namePanel.add(namefield);
-		
-		//priority field
-		JPanel priorityPanel = new JPanel();
-		priorityPanel.setLayout(new FlowLayout());
 		JLabel priorityArea = new JLabel("Priority:");
-		priorityPanel.add(priorityArea);
-		priorityPanel.add(priority);
-		
-		//description field
-		JPanel descPanel = new JPanel();
-		descPanel.setLayout(new FlowLayout());
 		JLabel descriptionArea = new JLabel("Description:");
-		descPanel.add(descriptionArea);
-		
 		descriptionfield.setLineWrap(true);
 		JScrollPane descScrollPane = new JScrollPane(descriptionfield);
 		descScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		descPanel.add(descScrollPane);
-		//descPanel.add(descriptionfield);
-		
-		//status field
-		JPanel statPanel = new JPanel();
-		statPanel.setLayout(new FlowLayout());
 		JLabel statusArea = new JLabel("Status:");
-		statPanel.add(statusArea);
 		// TODO: For now, it's disabled for creation view. Need to change when
 		// updating is available.
 		statusfield.setEnabled(false);
-		statPanel.add(statusfield);
 		
 		//estimate field
-		JPanel estPanel = new JPanel();
-		estPanel.setLayout(new FlowLayout());
 		JLabel estimateArea = new JLabel("Estimate:");
-		estPanel.add(estimateArea);
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
 		} else {
 			estimateField.setEditable(true);
 		}
-		estPanel.add(estimateField);
 	
 		//submit panel
-		JPanel submitPanel = new JPanel();
-		submitPanel.setLayout(new FlowLayout());
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
@@ -172,16 +140,10 @@ public class RequirementsPanel extends JPanel {
 			submit.setText("Update");
 		}
 		
-		//submit button
-		submitPanel.add(submit);
-		//results field
-		submitPanel.add(results);
-		
 		// Supplement Pane (i.e., notes, history, attachments)
 		NoteMainTab nt = new NoteMainTab(null);
-		NoteMainTab nt2 = new NoteMainTab(null);
 		supplementPane.add("Notes", nt);
-		supplementPane.add("Notes 2", nt2);
+		supplementPane.add("History", new JPanel());
 		
 		// Add subpanels to main panel
 		// Left side (gridx = 0) and aligned right (east)
@@ -190,19 +152,19 @@ public class RequirementsPanel extends JPanel {
 		c.fill = GridBagConstraints.NONE;
 		c.gridx = 0;
 		c.gridy = 0;
-		add(nameArea, c);
+		leftside.add(nameArea, c);
 		c.gridy = 1;
-		add(priorityArea, c);
+		leftside.add(priorityArea, c);
 		c.gridy = 2;
-		add(descriptionArea, c);
+		leftside.add(descriptionArea, c);
 		c.gridy = 3;
-		add(statusArea, c);
+		leftside.add(statusArea, c);
 		c.gridy = 4;
-		add(estimateArea, c);
+		leftside.add(estimateArea, c);
 		c.gridy = 5;
 		// Make the save button taller
 		c.ipady = 20;
-		add(submit, c);
+		leftside.add(submit, c);
 		c.ipady = 0;
 		
 		// Right side (gridx = 1)
@@ -210,27 +172,22 @@ public class RequirementsPanel extends JPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 0;
-		add(namefield, c);
+		leftside.add(namefield, c);
 		c.gridy = 2;
-		add(descScrollPane, c);
+		leftside.add(descScrollPane, c);
 		c.gridy = 4;
-		add(estimateField, c);
+		leftside.add(estimateField, c);
 		c.gridy = 5;
-		add(results, c);
+		leftside.add(results, c);
 
 		// Right side but aligned left (west) for dropdowns
 		c.anchor = GridBagConstraints.WEST;
-		c.fill = GridBagConstraints.NONE;
+		//c.fill = GridBagConstraints.NONE;
 		c.gridy = 1;
-		add(priority, c);
+		leftside.add(priority, c);
 		c.gridy = 3;
-		add(statusfield, c);
-
-		c.fill = GridBagConstraints.BOTH;
-		c.gridx = 2;
-		c.gridy = 0;
-		c.gridheight = 5;
-		add(supplementPane, c);
+		leftside.add(statusfield, c);
+		
 	}
 
 	/**
