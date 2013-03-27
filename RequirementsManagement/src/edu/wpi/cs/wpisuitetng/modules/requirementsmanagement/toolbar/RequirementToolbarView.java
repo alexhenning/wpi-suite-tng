@@ -63,11 +63,11 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		cancelButton.setAction(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (tab.getRequirementPanel().getEditMode() == Mode.CREATE) {
+				//if (tab.getRequirementPanel().getEditMode() == Mode.CREATE) {
 					tabController.closeCurrentTab();
-				} else {
-					tab.getRequirementPanel().refreshModel();
-				}
+				//} else {
+				//	tab.getRequirementPanel().refreshModel();
+				//}
 			}
 		});
 		cancelButton.setText("Cancel");
