@@ -109,7 +109,7 @@ public class NoteMainPanel extends JPanel {
 	public void setNotes(List<RequirementNote> notes) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 2, 5, 2);
+		c.insets = new Insets(5, 0, 5, 0);
 		c.gridx = 0;
 		c.gridy = notes.size();
 		
