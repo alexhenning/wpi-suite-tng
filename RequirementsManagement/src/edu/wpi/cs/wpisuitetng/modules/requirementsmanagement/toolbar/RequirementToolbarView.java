@@ -14,6 +14,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar;
 
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
@@ -29,10 +30,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.EditRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListSingleRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 /**
  * The Defect tab's toolbar panel.
@@ -42,6 +47,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsTab
 public class RequirementToolbarView extends ToolbarGroupView {
 
 	private JButton cancelButton;
+	private JButton closeButton;
+	private JButton deleteButton;
 	
 	/**
 	 * Create a ToolbarView.
@@ -52,13 +59,12 @@ public class RequirementToolbarView extends ToolbarGroupView {
 
 		// Construct the content panel
 		JPanel content = new JPanel();
-		GridBagLayout
-		
-		layout  = new GridBagLayout();
+		GridBagLayout layout  = new GridBagLayout();
+		GridBagConstraints c = new GridBagConstraints();
 		content.setLayout(layout);
 		content.setOpaque(false);
 		
-		// Setup button panel
+		// Add cancel button
 		cancelButton = new JButton("Cancel");
 		cancelButton.setAction(new AbstractAction() {
 			@Override
@@ -71,13 +77,55 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			}
 		});
 		cancelButton.setText("Cancel");
-		content.add(cancelButton);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		content.add(cancelButton, c);
+		
+		// Add close button
+		closeButton = new JButton("Complete!");
+		closeButton.setAction(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RequirementModel model = tab.getRequirementPanel().getModel();
+				model.setStatus(RequirementStatus.COMPLETE);
+				DB.updateRequirements(model, new SingleRequirementCallback() {
+					@Override
+					public void callback(RequirementModel req) {
+						tabController.closeCurrentTab();
+						tabController.addListRequirementsTab();
+					}
+				});
+			}
+		});
+		closeButton.setText("Complete!");
+		c.gridy = 1;
+		content.add(closeButton, c);
+		
+		// Add delete button
+		deleteButton = new JButton("Delete");
+		deleteButton.setAction(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RequirementModel model = tab.getRequirementPanel().getModel();
+				model.setStatus(RequirementStatus.DELETED);
+				DB.updateRequirements(model, new SingleRequirementCallback() {
+					@Override
+					public void callback(RequirementModel req) {
+						tabController.closeCurrentTab();
+					}
+				});
+			}
+		});
+		c.gridy = 2;
+		deleteButton.setText("Delete");
+		content.add(deleteButton, c);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
 		
 		// Calculate the width of the toolbar
-		Double toolbarGroupWidth = cancelButton.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
+		Double toolbarGroupWidth = closeButton.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
 

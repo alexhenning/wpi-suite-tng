@@ -4,10 +4,12 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -164,7 +166,7 @@ public class RequirementsPanel extends JPanel {
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
 		} else {
-			submit.setAction(new EditRequirementController(this));
+			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
 		}
 		
@@ -288,7 +290,7 @@ public class RequirementsPanel extends JPanel {
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
 		} else {
-			submit.setAction(new EditRequirementController(this));
+			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
 		}
 		if (editMode.equals(Mode.EDIT)) {
@@ -338,5 +340,17 @@ public class RequirementsPanel extends JPanel {
 
 	public void setStatus(String string) {
 		results.setText(string);
+	}
+	
+	class EditRequirementAction extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			DB.updateRequirements(model, new SingleRequirementCallback() {
+				@Override
+				public void callback(RequirementModel req) {
+					setStatus("Requirement Updated");
+				}
+			});
+		}
 	}
 }
