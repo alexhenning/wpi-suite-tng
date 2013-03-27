@@ -18,6 +18,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 
+import com.google.gson.Gson;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.NoteMainPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -84,7 +86,9 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	 * @param response The response from the server
 	 */
 	public void receivedAddConfirmation(ResponseModel response) {
-		// TODO Implement success
+		Gson gson = new Gson();
+		RequirementNote note = gson.fromJson(response.getBody(), RequirementNote.class);
+		view.addNote(note);
 	}
 	
 	/**
@@ -93,6 +97,6 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	 * @param response The response from the server
 	 */
 	public void receivedAddFailure(ResponseModel response) {
-		// TODO Implement failure
+		System.err.println("Received note failure");
 	}
 }

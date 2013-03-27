@@ -17,6 +17,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -41,6 +42,7 @@ public class NoteMainPanel extends JPanel {
 	JPanel noteViewer;
 	JScrollPane noteScrollPane;
 	JButton addButton;
+	List<RequirementNote> notes;
 
 	/**
 	 * Constructs a panel for notes
@@ -49,13 +51,14 @@ public class NoteMainPanel extends JPanel {
 	 */
 	public NoteMainPanel(RequirementsPanel parent) {
 		this.parent = parent;
+		notes = new LinkedList<RequirementNote>();
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
 
 		// Add all components to this panel
 		addComponents();
-		setTestNotes();
+		//setTestNotes();
 //		new GetRequirementController(this).actionPerformed(null);
 		
 		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
@@ -113,6 +116,11 @@ public class NoteMainPanel extends JPanel {
 				c.gridy += 1;
 			}
 		}
+	}
+	
+	public void addNote(RequirementNote note) {
+		notes.add(note);
+		setNotes(this.notes);
 	}
 	
 	public void setTestNotes() {
