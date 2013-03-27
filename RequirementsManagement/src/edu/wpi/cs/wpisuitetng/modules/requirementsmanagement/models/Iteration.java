@@ -164,5 +164,6 @@ public class Iteration extends AbstractModel {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	//TODO add new equals method
 
 }

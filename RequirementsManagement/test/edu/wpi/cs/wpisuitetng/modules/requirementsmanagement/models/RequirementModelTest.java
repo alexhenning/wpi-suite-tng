@@ -3,6 +3,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 import static org.junit.Assert.*;
 
 import org.junit.*;
+
+import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import static edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus.*;
 import static edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority.*;
 
@@ -29,10 +31,12 @@ public class RequirementModelTest {
 	
 	@Test
 	public void testAssigningReleaseNumber() {
-		rm.setReleaseNumber(1);
-		assertEquals(1, rm.getReleaseNumber());
-		rm.setReleaseNumber(123456789);
-		assertEquals(123456789, rm.getReleaseNumber());
+		rm.setReleaseNumber(null);
+		assertEquals(null, rm.getReleaseNumber());
+		ReleaseNumber tmp = new ReleaseNumber(1, 1, new Project("", "2"));
+		rm.setReleaseNumber(tmp);
+		assertEquals(tmp.getId(), rm.getReleaseNumber().getId());
+		assertEquals(tmp.getReleaseNumber(), rm.getReleaseNumber().getReleaseNumber());
 	}
 	
 	@Test

@@ -14,6 +14,7 @@ import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -72,6 +73,21 @@ public class RequirementModelValidator {
 		}
 	}
 	
+	/**
+	 * Return all ReleaseNumbers of the specified project.
+	 * 
+	 * @param project the project this ReleaseNumber belongs to
+	 * @param issues list of errors to add to if defect doesn't exist
+	 * @return all ReleaseNumbers in the project
+	 * @throws WPISuiteException 
+	 */
+	ReleaseNumber[] getAllExistingReleaseNumbers(Project project, List<ValidationIssue> issues)
+			throws WPISuiteException {
+		ReleaseNumber sample = new ReleaseNumber();
+		ReleaseNumber[] releaseNumbers = (data.retrieveAll(sample, project)).toArray(new ReleaseNumber[0]);
+		return releaseNumbers;
+	}
+		
 	/**
 	 * Return the RequirementModel with the given id if it already exists in the database.
 	 * 
@@ -171,6 +187,20 @@ public class RequirementModelValidator {
 				}
 			}
 			requirement.setAssignees(assignees2);
+		}
+		
+		//check if releaseNumber is null or has a matching Releasenumber in the project
+		if(requirement.getReleaseNumber() != null) {
+			ReleaseNumber[] existingReleaseNumbers = getAllExistingReleaseNumbers(session.getProject(), issues);
+			boolean isExistingReleaseNumber = false;
+			for(ReleaseNumber existingReleaseNumber : existingReleaseNumbers) {
+				if(requirement.getReleaseNumber().getReleaseNumber() == existingReleaseNumber.getReleaseNumber()) {
+					isExistingReleaseNumber = true;
+				}
+			}
+			if (!isExistingReleaseNumber) {
+				issues.add(new ValidationIssue("releaseNumber must match an existing ReleaseNumber or be null", "releaseNumber"));
+			}
 		}
 		
 		
