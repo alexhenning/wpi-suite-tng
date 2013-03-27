@@ -112,19 +112,6 @@ public class RequirementModelValidator {
 			return issues;
 		}
 
-		/* possible fields that might still need validation.
-	private int releaseNumber;
-	private RequirementPriority priority;
-	private String estimate;
-	private String actualEffort;
-	private Date lastModifiedDate;
-	private List<RequirementEvent> events;
-	private List<RequirementModel> subRequirements;
-		 */
-		
-		//System.out.println("name: "+requirement.getName());
-		
-		
 		RequirementModel oldRequirement = null;
 		if(mode == Mode.EDIT) {
 			oldRequirement = getExistingRequirement(requirement.getId(), session.getProject(), issues, "id");
@@ -134,10 +121,11 @@ public class RequirementModelValidator {
 		if(mode == mode.CREATE && requirement.getCreator().getIdNum() == -1) {
 			System.out.println("Validator is doing things it should not have to do....setting the creating user for the requirement");
 			requirement.setCreator(session.getUser());
+			System.out.println("sesion user: "+session.getUser().toString());
+			System.out.println("new creator user: "+requirement.getCreator().toString());
 		}
 
 		if(mode == Mode.CREATE) {
-			requirement.setCreator(session.getUser());
 			requirement.setStatus(RequirementStatus.NEW); // new requirements should always have new status
 		} else if(requirement.getStatus() == null) {
 			issues.add(new ValidationIssue("Cannot be null", "status"));
