@@ -1,4 +1,4 @@
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -8,9 +8,6 @@ import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.CreateIterationPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 
 @SuppressWarnings("serial")
@@ -28,7 +25,7 @@ public class IterationTab extends JPanel implements IToolbarGroupProvider{
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
-		containingTab.setTitle("Search Requirements");
+		containingTab.setTitle("Add Iteration");
 		
 		// Instantiate the main create iteration panel
 		mainPanel = new CreateIterationPanel(this);

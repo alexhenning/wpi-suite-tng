@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.IterationTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CreateIterationController;
 
 @SuppressWarnings("serial")
