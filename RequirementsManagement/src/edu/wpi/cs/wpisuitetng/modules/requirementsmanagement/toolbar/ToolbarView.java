@@ -76,7 +76,7 @@ public class ToolbarView extends DefaultToolbarView {
 		//createDefect.setAction(new CreateDefectAction(tabController));
 		
 		// Construct the search button
-		searchDefects = new JButton("Search Defects");
+		searchDefects = new JButton("Lookup by ID");
 		
 		// Construct the search field
 		searchField = new JPlaceholderTextField("Lookup by ID", 15);
@@ -90,6 +90,7 @@ public class ToolbarView extends DefaultToolbarView {
 				});
 			}
 		});
+		searchDefects.setText("Search");
 		//searchField.addActionListener(new LookupDefectController(tabController, searchField, this));
 		
 		// Configure the layout of the buttons on the content panel

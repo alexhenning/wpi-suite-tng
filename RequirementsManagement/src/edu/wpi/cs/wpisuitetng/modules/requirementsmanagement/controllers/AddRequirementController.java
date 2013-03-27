@@ -49,6 +49,11 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 	}
 	
 	public void receivedAddConfirmation(RequirementModel req) {
+		DB.getSingleRequirement(""+req.getId(), new SingleRequirementCallback() {
+			@Override public void callback(RequirementModel req) {
+				panel.updateModel(req);
+			}
+		});
 		panel.setStatus("Requirement saved!");
 	}
 

@@ -20,7 +20,9 @@ import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -139,11 +141,7 @@ public class RequirementsPanel extends JPanel {
 		statPanel.add(statusArea);
 		// TODO: For now, it's disabled for creation view. Need to change when
 		// updating is available.
-		if(this.editMode == Mode.CREATE) {
-			statusfield.setEnabled(false);
-		} else {
-			statusfield.setEnabled(true);
-		}
+		statusfield.setEnabled(false);
 		statPanel.add(statusfield);
 		
 		//estimate field
@@ -151,6 +149,7 @@ public class RequirementsPanel extends JPanel {
 		estPanel.setLayout(new FlowLayout());
 		JLabel estimateArea = new JLabel("Estimate:");
 		estPanel.add(estimateArea);
+		estimateField.setText("0");
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
 		} else {
@@ -236,7 +235,7 @@ public class RequirementsPanel extends JPanel {
 	 * 
 	 * @param defect	The Defect which contains the new values for the model.
 	 */
-	protected void updateModel(RequirementModel requirement) {
+	public void updateModel(RequirementModel requirement) {
 		updateModel(requirement, Mode.EDIT);
 	}
 
@@ -248,6 +247,8 @@ public class RequirementsPanel extends JPanel {
 	 */
 	protected void updateModel(RequirementModel requirement, Mode mode) {
 		editMode = mode;
+		model = requirement;
+		updateFields();	
 	}
 	
 	/**
@@ -268,6 +269,21 @@ public class RequirementsPanel extends JPanel {
 			}
 		}
 		estimateField.setText(model.getEstimate());
+		if(this.editMode == Mode.CREATE) {
+			estimateField.setEditable(false);
+		} else {
+			estimateField.setEditable(true);
+		}
+		if(this.editMode == Mode.CREATE) { 
+			submit.setAction(new AddRequirementController(this));
+			submit.setText("Save");
+		} else {
+			submit.setAction(new EditRequirementController(this));
+			submit.setText("Update");
+		}
+		if (editMode.equals(Mode.EDIT)) {
+			parent.setEditModeDescriptors(model);
+		}
 	}
 
 	/**
