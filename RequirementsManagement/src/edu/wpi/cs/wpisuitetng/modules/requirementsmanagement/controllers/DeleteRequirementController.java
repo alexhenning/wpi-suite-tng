@@ -5,17 +5,10 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 
 import javax.swing.AbstractAction;
-import javax.swing.JPanel;
 
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.DeleteRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -26,6 +19,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * @author Tim Calvert
  *
  */
+@SuppressWarnings("serial")
 public class DeleteRequirementController extends AbstractAction implements ActionListener {
 	// TODO This system currently does not have enough information to function properly
 	//      I'd suggest that we don't try and demonstrate this yet

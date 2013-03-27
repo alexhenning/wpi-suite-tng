@@ -16,7 +16,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.NoteMainPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.AddNoteObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;

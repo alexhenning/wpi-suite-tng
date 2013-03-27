@@ -1,12 +1,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
-import java.util.List;
-
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-
+@SuppressWarnings("serial")
 public class ViewReqTable extends AbstractTableModel {
 
     private String[] columnNames = { "ID", "Name", "Status", "Priority", "Estimate"};

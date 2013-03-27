@@ -118,7 +118,7 @@ public class RequirementModelValidator {
 		}
 		lastExistingRequirement = oldRequirement;
 		
-		if(mode == mode.CREATE && requirement.getCreator().getIdNum() == -1) {
+		if(mode == Mode.CREATE && requirement.getCreator().getIdNum() == -1) {
 			System.out.println("Validator is doing things it should not have to do....setting the creating user for the requirement");
 			requirement.setCreator(session.getUser());
 			System.out.println("sesion user: "+session.getUser().toString());

@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * @author Tim
  *
  */
+@SuppressWarnings("serial")
 public class EditRequirementAction extends AbstractAction {
 
 	private final MainTabController controller;

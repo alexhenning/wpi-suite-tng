@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
  * @author Tim
  *
  */
+@SuppressWarnings("serial")
 public class ListSingleRequirementAction extends AbstractAction {
 
 	private final MainTabController controller;
