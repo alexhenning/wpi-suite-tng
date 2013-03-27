@@ -78,6 +78,8 @@ public class RequirementModelTest {
 	
 	@Test
 	public void testAssigningPriority() {
+//		rm.setPriority(CRITICAL);
+//		assertEquals(CRITICAL, rm.getPriority());
 		rm.setPriority(HIGH);
 		assertEquals(HIGH, rm.getPriority());
 		rm.setPriority(MEDIUM);
