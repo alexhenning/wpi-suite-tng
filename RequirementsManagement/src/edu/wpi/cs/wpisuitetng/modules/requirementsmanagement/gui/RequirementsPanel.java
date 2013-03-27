@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleR
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JSplitPane {
@@ -44,7 +45,9 @@ public class RequirementsPanel extends JSplitPane {
 	public JTextField namefield = new JTextField(25);
 	public JTextArea descriptionfield = new JTextArea(6, 0);
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
+	RequirementType[] typeStrings = RequirementType.values();
 	public JComboBox priority = new JComboBox(priorityStrings);
+	public JComboBox type = new JComboBox(typeStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
 	public JTextField estimateField = new JTextField("0", 25);
@@ -108,6 +111,7 @@ public class RequirementsPanel extends JSplitPane {
 		
 		//name field
 		JLabel nameArea = new JLabel("Name:");
+		JLabel typeArea = new JLabel("Type:");
 		JLabel priorityArea = new JLabel("Priority:");
 		JLabel descriptionArea = new JLabel("Description:");
 		descriptionfield.setLineWrap(true);
@@ -149,14 +153,16 @@ public class RequirementsPanel extends JSplitPane {
 		c.gridy = 0;
 		leftside.add(nameArea, c);
 		c.gridy = 1;
-		leftside.add(priorityArea, c);
+		leftside.add(typeArea, c);
 		c.gridy = 2;
-		leftside.add(descriptionArea, c);
+		leftside.add(priorityArea, c);
 		c.gridy = 3;
-		leftside.add(statusArea, c);
+		leftside.add(descriptionArea, c);
 		c.gridy = 4;
-		leftside.add(estimateArea, c);
+		leftside.add(statusArea, c);
 		c.gridy = 5;
+		leftside.add(estimateArea, c);
+		c.gridy = 6;
 		// Make the save button taller
 		c.ipady = 20;
 		leftside.add(submit, c);
@@ -168,22 +174,28 @@ public class RequirementsPanel extends JSplitPane {
 		c.gridx = 1;
 		c.gridy = 0;
 		leftside.add(namefield, c);
+		c.anchor = GridBagConstraints.WEST;
+		c.gridy = 1;
+		leftside.add(type, c);
 		c.gridy = 2;
+		leftside.add(priority, c);
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridy = 3;
 		leftside.add(descScrollPane, c);
+		c.anchor = GridBagConstraints.WEST;
 		c.gridy = 4;
-		leftside.add(estimateField, c);
+		leftside.add(statusfield, c);
+		c.anchor = GridBagConstraints.CENTER;
 		c.gridy = 5;
+		leftside.add(estimateField, c);
+		c.gridy = 6;
 		leftside.add(results, c);
 		results.setEditable(false);
 		leftside.setMinimumSize(new Dimension(380,600));
 
-		// Right side but aligned left (west) for dropdowns
-		c.anchor = GridBagConstraints.WEST;
-		//c.fill = GridBagConstraints.NONE;
-		c.gridy = 1;
-		leftside.add(priority, c);
-		c.gridy = 3;
-		leftside.add(statusfield, c);
+//		// Right side but aligned left (west) for dropdowns
+//		c.anchor = GridBagConstraints.WEST;
+//		//c.fill = GridBagConstraints.NONE;
 		
 	}
 
@@ -248,6 +260,11 @@ public class RequirementsPanel extends JSplitPane {
 				priority.setSelectedIndex(i);
 			}
 		}
+		for(int i = 0; i < type.getItemCount(); i++) {  // Same as above
+			if(model.getType() == RequirementType.valueOf(type.getItemAt(i).toString())) {
+				type.setSelectedIndex(i);
+			}
+		}
 		estimateField.setText(model.getEstimate());
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
@@ -270,11 +287,13 @@ public class RequirementsPanel extends JSplitPane {
 		if (editMode.equals(Mode.EDIT) && (model.getStatus().equals(RequirementStatus.COMPLETE)
 				|| model.getStatus().equals(RequirementStatus.COMPLETE))) {
 			namefield.setEnabled(false);
+			type.setEnabled(false);
 			priority.setEnabled(false);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 		} else {
 			namefield.setEnabled(true);
+			type.setEnabled(true);
 			priority.setEnabled(true);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
@@ -298,6 +317,7 @@ public class RequirementsPanel extends JSplitPane {
 	 */
 	public RequirementModel getModel() {
 		model.setName(namefield.getText());
+		model.setType((RequirementType) type.getSelectedItem());
 		model.setPriority((RequirementPriority) priority.getSelectedItem());
 		model.setDescription(descriptionfield.getText());
 		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
