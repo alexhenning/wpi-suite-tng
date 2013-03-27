@@ -230,6 +230,7 @@ public class RequirementsPanel extends JSplitPane {
 		leftside.add(results, c);
 		results.setEditable(false);
 		leftside.setMinimumSize(new Dimension(380,600));
+		supplementPane.setMinimumSize(new Dimension(525,600));
 
 //		// Right side but aligned left (west) for dropdowns
 //		c.anchor = GridBagConstraints.WEST;

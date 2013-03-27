@@ -69,11 +69,11 @@ public class NotePanel extends JPanel {
 		
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		setLayout(new GridBagLayout());
-//		setLayout(new BorderLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
 		messageArea = new JTextArea(message);
 		messageArea.setLineWrap(true);
+		this.setSize(500,300);
 		messageArea.setEditable(false);
 		messageArea.setFocusable(false);
 		messageArea.setOpaque(false);
@@ -84,7 +84,7 @@ public class NotePanel extends JPanel {
 		
 //		infoLabel = new JTextField("<html><body><font size=4>" + author + " <font size=3>added a note at " + date.toString() + "</body></html>");
 		infoText = new JTextField(author + " added a note at " + date.toString());
-		infoText.setSize(400, 30);
+		infoText.setSize(500, 30);
 		infoText.setEditable(false);
 		infoText.setFocusable(false);
 		infoText.setOpaque(false);
