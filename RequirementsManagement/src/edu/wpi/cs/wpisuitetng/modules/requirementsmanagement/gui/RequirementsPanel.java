@@ -162,8 +162,8 @@ public class RequirementsPanel extends JPanel {
 		submitPanel.add(results);
 		
 		// Supplement Pane (i.e., notes, history, attachments)
-		NoteTab nt = new NoteTab(null);
-		NoteTab nt2 = new NoteTab(null);
+		NoteMainTab nt = new NoteMainTab(null);
+		NoteMainTab nt2 = new NoteMainTab(null);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("Notes 2", nt2);
 		

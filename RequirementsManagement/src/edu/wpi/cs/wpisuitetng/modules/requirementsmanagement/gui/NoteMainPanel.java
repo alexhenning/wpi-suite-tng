@@ -12,6 +12,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -19,6 +20,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.TextArea;
 import java.util.List;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -36,8 +38,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * @author Sergey
  */
 @SuppressWarnings("serial")
-public class NotePanel extends JPanel {
-	NoteTab parent;
+public class NoteMainPanel extends JPanel {
+	NoteMainTab parent;
 	boolean inputEnabled;
 	JTextArea ta;
 	JPanel noteViewer;
@@ -49,7 +51,7 @@ public class NotePanel extends JPanel {
 	 * 
 	 * @param parent NoteTab that contains this object
 	 */
-	public NotePanel(NoteTab parent) {
+	public NoteMainPanel(NoteMainTab parent) {
 		this.parent = parent;
 		
 		// Indicate that input is enabled
@@ -75,18 +77,36 @@ public class NotePanel extends JPanel {
 		ta = new JTextArea(5, 40);
 		ta.setText("Add a new message here.");
 		
-		FlowLayout fl = new FlowLayout();
-		fl.setAlignment(FlowLayout.CENTER);
-		noteViewer = new JPanel(fl);
-		noteViewer.setPreferredSize(new Dimension(250, 100));
-		noteViewer.add(new JTextArea(5, 35));
-		noteViewer.add(new JTextArea(5, 35));
-		noteViewer.add(new JTextArea(5, 35));
-		noteViewer.add(new JTextArea(5, 35));
-		noteViewer.add(new JTextArea(5, 35));
+		noteViewer = new JPanel(new GridBagLayout());
+		noteViewer.setMinimumSize(new Dimension(1000, 10));
+//		noteViewer = new JPanel(new BorderLayout());
+
+		GridBagConstraints innerGridCons = new GridBagConstraints();
+		innerGridCons.fill = GridBagConstraints.HORIZONTAL;
+		innerGridCons.insets = new Insets(5, 2, 5, 2);
+		innerGridCons.gridx = 0;
+		innerGridCons.gridy = 0;
+//		noteViewer.add(new NotePanel("1", "a1", new Date()), BorderLayout.LINE_START);
+		noteViewer.add(new NotePanel("1afsdasdfasdf", "a1longgggggggggggg", new Date()), innerGridCons);
+		
+		innerGridCons.gridy = 1;
+//		noteViewer.add(new NotePanel("2", "a2", new Date()), BorderLayout.LINE_START);
+		noteViewer.add(new NotePanel("2", "a2", new Date()), innerGridCons);
+		
+		innerGridCons.gridy = 2;
+//		noteViewer.add(new NotePanel("3 sdfkjlsjld fkjl sdklfdskjl fskjl dfkjl sdkjl fkjl sdj fklskjl dfj sldkjl fskjl dfkjl sdkjl fkjl sdfkjl skjl dfkjl skjl df sjldfsdjl fskjl dfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdffkjl s", "a3", new Date()), BorderLayout.LINE_START);
+		noteViewer.add(new NotePanel("3 sdfkjlsjld fkjl sdklfdskjl fskjl dfkjl sdkjl fkjl sdj fklskjl dfj sldkjl fskjl dfkjl sdkjl fkjl sdfkjl skjl dfkjl skjl df sjldfsdjl fskjl dfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdffkjl s", "a3", new Date()), innerGridCons);
+		
+		innerGridCons.gridy = 3;
+//		noteViewer.add(new NotePanel("4", "a4", new Date()), BorderLayout.LINE_START);
+		noteViewer.add(new NotePanel("4", "a4", new Date()), innerGridCons);
+		
+		innerGridCons.gridy = 4;
+//		noteViewer.add(new NotePanel("5poasidfpoi asdf[pioa sd[fp ioasdf[pio asdf[p ioasdf[po iasdf[ipo asdf[ipo asd[fpioa sd[pfoi as[dfipoa s[dfpio as[dfio", "a5", new Date()), BorderLayout.LINE_START);
+		noteViewer.add(new NotePanel("5poasidfpoi asdf[pioa sd[fp ioasdf[pio asdf[p ioasdf[po iasdf[ipo asdf[ipo asd[fpioa sd[pfoi as[dfipoa s[dfpio as[dfio", "a5", new Date()), innerGridCons);
 		
 		noteScrollPane = new JScrollPane(noteViewer);
-		noteScrollPane.setPreferredSize(new Dimension(250, 100));
+		noteScrollPane.setPreferredSize(new Dimension(300, 300));
 		noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
@@ -100,7 +120,8 @@ public class NotePanel extends JPanel {
 		
 		c.gridy = 1;
 		add(ta, c);
-		
+
+		c.fill = GridBagConstraints.NONE;
 		c.gridy = 2;
 		add(addButton, c);
 	}

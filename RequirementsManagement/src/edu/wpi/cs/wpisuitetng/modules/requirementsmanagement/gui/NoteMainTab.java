@@ -28,9 +28,9 @@ import javax.swing.JScrollPane;
  *
  */
 @SuppressWarnings("serial")
-public class NoteTab extends JPanel {
+public class NoteMainTab extends JPanel {
 	Tab containingTab;
-	NotePanel mainPanel;
+	NoteMainPanel mainPanel;
 	JScrollPane mainPanelScrollPane;
 
 	/**
@@ -38,7 +38,7 @@ public class NoteTab extends JPanel {
 	 * 
 	 * @param tab
 	 */
-	public NoteTab(Tab tab) {
+	public NoteMainTab(Tab tab) {
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
@@ -46,7 +46,7 @@ public class NoteTab extends JPanel {
 		containingTab.setTitle("Notes");
 		
 		// Instantiate the main create defect panel
-		mainPanel = new NotePanel(this);
+		mainPanel = new NoteMainPanel(this);
 		this.setLayout(new BorderLayout());
 		mainPanelScrollPane = new JScrollPane(mainPanel);
 		mainPanelScrollPane.getVerticalScrollBar().setUnitIncrement(10);
