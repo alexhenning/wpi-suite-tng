@@ -73,13 +73,16 @@ public class NoteMainPanel extends JPanel {
 	protected void addComponents() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		
+
 		ta = new JTextArea(5, 40);
-		ta.setText("Add a new message here.");
+		ta.setLineWrap(true);
+		ta.setText("New note");		
+		JScrollPane textPane = new JScrollPane(ta);
+		textPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		textPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		noteViewer = new JPanel(new GridBagLayout());
 		noteViewer.setMinimumSize(new Dimension(1000, 10));
-//		noteViewer = new JPanel(new BorderLayout());
 
 		noteScrollPane = new JScrollPane(noteViewer);
 		noteScrollPane.setPreferredSize(new Dimension(300, 300));
@@ -96,7 +99,7 @@ public class NoteMainPanel extends JPanel {
 		add(noteScrollPane, c);
 		
 		c.gridy = 1;
-		add(ta, c);
+		add(textPane, c);
 
 		c.fill = GridBagConstraints.NONE;
 		c.gridy = 2;
@@ -108,14 +111,23 @@ public class NoteMainPanel extends JPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(5, 2, 5, 2);
 		c.gridx = 0;
-		c.gridy = 0;
+		c.gridy = notes.size();
+		
+		noteViewer.removeAll();
 		
 		for (RequirementNote note : notes) {
 			if (note != null) {
 				noteViewer.add(new NotePanel(note), c);
-				c.gridy += 1;
+				c.gridy -= 1;
 			}
 		}
+
+		this.revalidate();
+		noteScrollPane.revalidate();
+		noteViewer.revalidate();
+		this.repaint();
+		noteScrollPane.repaint();
+		noteViewer.repaint();
 	}
 	
 	public void setTestNotes() {
