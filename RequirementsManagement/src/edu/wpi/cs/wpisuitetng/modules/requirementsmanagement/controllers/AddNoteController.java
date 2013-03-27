@@ -13,9 +13,15 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.AbstractAction;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.NoteMainPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.AddNoteObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -28,7 +34,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * @author Tim
  *
  */
-public class AddNoteController {
+public class AddNoteController extends AbstractAction implements ActionListener{
 	
 	private NoteMainPanel view;
 	private RequirementModel model;
@@ -48,21 +54,27 @@ public class AddNoteController {
 	}
 	
 	/**
+	 * Called by pressing add note button
+	 *
+	 * @param e
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		saveNote();
+	}
+
+	
+	/**
 	 * Save the new note to the server
 	 *
 	 */
 	public void saveNote() {
-		//final String commentText = view.getCommentField().getText();
-		//if(commentText.length() > 0) {
-			final AddNoteObserver saveNoteObserver = new AddNoteObserver(this);
-			final Request request = Network.getInstance().makeRequest(
-					"requirementsmanagement/requirementnote", HttpMethod.PUT);
-			//final RequirementNote note = new RequirementNote(model.getId(), model.getCreator(), commentText);
-			//view.getCommentField.setText("");
-			//request.setBody(note.toJSON());
-			request.addObserver(saveNoteObserver);
-			request.send();
-		//}
+		final String noteText = view.ta.getText();
+		final Request request = Network.getInstance().makeRequest(
+				"requirementsmanagement/requirementnote", HttpMethod.PUT);
+		request.setBody((new RequirementNote(model.getId(), model.getCreator(), noteText)).toJSON());
+		request.addObserver(new AddNoteObserver(this));
+		request.send();
 	}
 	
 	
@@ -83,5 +95,4 @@ public class AddNoteController {
 	public void receivedAddFailure(ResponseModel response) {
 		// TODO Implement failure
 	}
-
 }

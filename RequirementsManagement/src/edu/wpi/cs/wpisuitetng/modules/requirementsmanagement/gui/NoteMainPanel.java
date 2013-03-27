@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddNoteController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
 
 /**
@@ -36,7 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
 public class NoteMainPanel extends JPanel {
 	RequirementsPanel parent;
 	boolean inputEnabled;
-	JTextArea ta;
+	public JTextArea ta;
 	JPanel noteViewer;
 	JScrollPane noteScrollPane;
 	JButton addButton;
@@ -83,6 +84,7 @@ public class NoteMainPanel extends JPanel {
 		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		addButton = new JButton("Add note");
+		addButton.addActionListener(new AddNoteController(this, parent.model, parent));
 		
 		// Add elements to the main panel
 		c.fill = GridBagConstraints.HORIZONTAL;
