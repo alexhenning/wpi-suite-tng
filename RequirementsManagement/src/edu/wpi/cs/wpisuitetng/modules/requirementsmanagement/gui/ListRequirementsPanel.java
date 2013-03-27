@@ -21,8 +21,8 @@ public class ListRequirementsPanel extends JPanel {
 	
 	ListRequirementsTab parent;
 	boolean inputEnabled;
-	TextArea ta;
 	JTable table;
+	ViewReqTable tableModel;
 	
 	String[] columnNames = {"Name", "Status", "ID", "Description"};
 
@@ -48,24 +48,16 @@ public class ListRequirementsPanel extends JPanel {
 	 */
 	protected void addComponents() {
 		setLayout(new GridLayout());
-		//GridBagConstraints c = new GridBagConstraints();
 		
-		table = new JTable(new ViewReqTable());
+		tableModel = new ViewReqTable();
+		table = new JTable(tableModel);
 		table.setPreferredScrollableViewportSize(new Dimension(1, 1));
 		table.setFillsViewportHeight(true);
 		
 		JScrollPane scrollPane = new JScrollPane(table);
 		
-		ta = new TextArea();
-		ta.setText("Testing");
-		
-		//add subpanels to main panel
-	//	c.fill = GridBagConstraints.HORIZONTAL;
-	//	c.gridx = 0;
-	//	c.gridy = 0;
-		//add(ta, c);
-		//add(table, c);
 		add(scrollPane);
+		
 	}
 	
 	/**
@@ -81,19 +73,14 @@ public class ListRequirementsPanel extends JPanel {
 	}
 
 	public void updateAllRequirementList() {
-		List<RequirementModel> reqs = LocalRequirementModels.instance.getAllRequirements();
-		String output = "";
-		for(RequirementModel req : reqs) {
-			output = output + "Name: " + req.getName() + " (Status: " + req.getStatus() + ", ID: " + 
-					req.getId()  + ") " + "   Description: " + req.getDescription() + "\n";
-		}
-		ta.setText(output);
+		;
 	}
 	
 	public void addSingleRequirementToList(RequirementModel req) {
-		String output = "";
-		output = output + "Name: " + req.getName() + " (Status: " + req.getStatus() + ", ID: " + 
-				req.getId()  + ") " + "   Description: " + req.getDescription() + "\n";
-		ta.setText(output);
+		;
+	}
+	
+	public ViewReqTable getTable(){
+		return this.tableModel;
 	}
 }

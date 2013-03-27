@@ -1,13 +1,19 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.util.List;
+
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 public class ViewReqTable extends AbstractTableModel {
 
     private String[] columnNames = { "ID", "Name", "Status", "Priority", "Estimate"};
     //first list is row, second list is column data
-    private Object[][] data = {{"BOGUSID", "BOGUSNAME", "BOGUSSTATUS", "BOGUSPRIORITY", "BOGUSEST"}};
+    
+    private Object[][] data = {};
     
     public int getColumnCount() {
         return columnNames.length;
@@ -22,10 +28,11 @@ public class ViewReqTable extends AbstractTableModel {
     }
 
     public Object getValueAt(int row, int col) {
+    	System.out.println("Row is " + row + " and Column is " + col);
         return data[row][col];
     }
 
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }
 
@@ -46,6 +53,9 @@ public class ViewReqTable extends AbstractTableModel {
         fireTableCellUpdated(row, col);
     }
     
+    public void setData(Object[][] data){
+    	this.data = data;
+    }
     
      
 }
