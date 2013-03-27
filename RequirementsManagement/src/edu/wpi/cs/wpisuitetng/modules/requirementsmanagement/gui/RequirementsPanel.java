@@ -235,6 +235,16 @@ public class RequirementsPanel extends JPanel {
 	 * 
 	 * @param defect	The Defect which contains the new values for the model.
 	 */
+	public void refreshModel() {
+		updateModel(model, Mode.EDIT);
+	}
+	
+	/**
+	 * Updates the DefectPanel's model to contain the values of the given Defect and sets the 
+	 * DefectPanel's editMode to {@link Mode#EDIT}.
+	 * 
+	 * @param defect	The Defect which contains the new values for the model.
+	 */
 	public void updateModel(RequirementModel requirement) {
 		updateModel(requirement, Mode.EDIT);
 	}

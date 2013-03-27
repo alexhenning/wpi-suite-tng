@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.RequirementToolbarView;
 
 /**
  * This view is responsible for showing the form for creating or viewing a new requirements.
@@ -46,8 +47,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	/**
 	 * Constructs a new CreateDefectView where the user can enter the data for a new defect.
 	 */
-	public RequirementsTab() {
-		this(new RequirementModel(), Mode.CREATE, null);
+	public RequirementsTab(MainTabController tabController) {
+		this(tabController, new RequirementModel(), Mode.CREATE, null);
 	}
 
 	/**
@@ -57,14 +58,13 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	 * @param editMode	The editMode for editing the Defect
 	 * @param tab		The Tab holding this DefectView (can be null)
 	 */
-	public RequirementsTab(RequirementModel requirement, Mode editMode, Tab tab) {
+	public RequirementsTab(MainTabController tabController, RequirementModel requirement, Mode editMode, Tab tab) {
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
 		
-		// Instantiate the button panel
-		buttonGroup = new ToolbarGroupView("Create Requirement");
+		buttonGroup = new RequirementToolbarView(tabController, this);
 		
 		containingTab.setIcon(new ImageIcon());
 		if(editMode == Mode.CREATE) {
@@ -102,6 +102,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		// Instantiate the save button and add it to the button panel
 		saveButton = new JButton();
 		// TODO: saveButton.setAction(new SaveChangesAction(controller));
+		
+		// Instantiate the button panel
 		buttonGroup.getContent().add(saveButton);
 		buttonGroup.setPreferredWidth(150);
 	}
@@ -133,13 +135,13 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	 * 
 	 * @return the main panel with the data fields
 	 */
-	public JPanel getRequirementPanel() {
+	public RequirementsPanel getRequirementPanel() {
 		return mainPanel;
 	}
 	
 	@Override
 	public ToolbarGroupView getGroup() {
-		return null;
+		return buttonGroup;
 	}
 	
 	/**
