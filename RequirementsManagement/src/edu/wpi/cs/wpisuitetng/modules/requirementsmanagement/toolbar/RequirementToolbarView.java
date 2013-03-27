@@ -128,5 +128,15 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		Double toolbarGroupWidth = closeButton.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
+	
+	public void setMode(Mode mode) {
+		if (mode.equals(Mode.EDIT)) {
+			closeButton.setEnabled(true);
+			deleteButton.setEnabled(true);
+		} else {
+			closeButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+		}
+	}
 
 }

@@ -36,7 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.Requirement
 @SuppressWarnings("serial")
 public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 
-	private ToolbarGroupView buttonGroup;
+	RequirementToolbarView buttonGroup;
 	private JButton saveButton;
 	private RequirementsPanel mainPanel;
 	//private SaveDefectController controller;

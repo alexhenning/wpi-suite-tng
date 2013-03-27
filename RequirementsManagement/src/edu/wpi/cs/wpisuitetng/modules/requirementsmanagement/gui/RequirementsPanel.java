@@ -94,6 +94,7 @@ public class RequirementsPanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
+		parent.buttonGroup.setMode(mode);
 		
 		// TODO: prevent tab key from inserting tab characters into the description field
 		
@@ -296,6 +297,7 @@ public class RequirementsPanel extends JPanel {
 		if (editMode.equals(Mode.EDIT)) {
 			parent.setEditModeDescriptors(model);
 		}
+		parent.buttonGroup.setMode(editMode);
 	}
 
 	/**
