@@ -26,6 +26,7 @@ import javax.swing.JComboBox;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.DummyTab;
@@ -50,9 +51,12 @@ public class JanewayModule implements IJanewayModule {
 		// Setup button panel
 		buttonPanel.setLayout(new FlowLayout());
 		JButton Crtreq = new JButton("Create Requirement");
+		JButton CrtIteration = new JButton("Create Iteration");
 		JButton listReq = new JButton("List Requirements");
+		CrtIteration.setAction(new CreateIterationAction(mainTabController));
 		Crtreq.setAction(new CreateRequirementAction(mainTabController));
 		listReq.setAction(new ListRequirementsAction(mainTabController));
+		buttonPanel.add(CrtIteration);
 		buttonPanel.add(Crtreq);
 		buttonPanel.add(listReq);
 

@@ -87,7 +87,13 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
-	
+	private Tab addIterationTab(IterationModel iteration, Mode mode) {
+		Tab tab = addTab();
+		IterationTab view = new IterationTab(iteration, mode, tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
 	/**
 	 * Adds a tab that displays the given defect
 	 * @param defect the defect to display
