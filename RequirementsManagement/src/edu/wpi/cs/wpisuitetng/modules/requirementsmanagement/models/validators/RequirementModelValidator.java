@@ -152,11 +152,11 @@ public class RequirementModelValidator {
 				|| requirement.getName().length() > 100) {
 			issues.add(new ValidationIssue("Required, name must be 1-100 characters", "name"));
 		}
-		if(requirement.getDescription() == null) {
+		if(requirement.getDescription() == null || requirement.getDescription().length() <= 0) {
 			// empty descriptions are okay
-			requirement.setDescription("");
-		} else if(requirement.getDescription().length() > 5000) {
-			issues.add(new ValidationIssue("description Cannot be greater than 5000 characters", "description"));
+			//requirement.setDescription("");
+		//} else if(requirement.getDescription().length() > 5000  {
+			issues.add(new ValidationIssue("description Cannot be empty", "description"));
 		}
 		
 		// make sure the creator and assignee exist and aren't duplicated
