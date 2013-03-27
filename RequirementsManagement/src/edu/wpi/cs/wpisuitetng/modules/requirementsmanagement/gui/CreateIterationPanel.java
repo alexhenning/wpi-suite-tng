@@ -63,7 +63,9 @@ public class CreateIterationPanel extends JPanel{
 		add(iterationNumber, c);
 		c.gridy = 3;
 		add(submit, c);
-		
-		
+	}
+	
+	public void close() {
+		parent.tabController.closeCurrentTab();
 	}
 }

@@ -35,7 +35,7 @@ public class CreateIterationController extends AbstractAction implements ActionL
 	}
 	
 	public void receivedGetIterationConfirmation(List<Iteration> reqs) {
-		//TODO: something
+		panel.close();
 	}
 
 

@@ -13,13 +13,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 @SuppressWarnings("serial")
 public class IterationTab extends JPanel implements IToolbarGroupProvider{
 	
+	MainTabController tabController;
 	Tab containingTab;
 	Iteration iteration;
 	JScrollPane mainPanelScrollPane;
 	CreateIterationPanel mainPanel;
 	
 
-	public IterationTab(Iteration iteration, Tab tab) {
+	public IterationTab(MainTabController tabController, Iteration iteration, Tab tab) {
+		this.tabController = tabController;
 		this.iteration = iteration;
 		containingTab = tab;
 		if(containingTab == null) {
