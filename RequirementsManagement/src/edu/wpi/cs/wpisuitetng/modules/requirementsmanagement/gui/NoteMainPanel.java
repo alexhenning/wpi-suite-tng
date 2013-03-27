@@ -123,11 +123,7 @@ public class NoteMainPanel extends JPanel {
 		}
 
 		this.revalidate();
-		noteScrollPane.revalidate();
-		noteViewer.revalidate();
 		this.repaint();
-		noteScrollPane.repaint();
-		noteViewer.repaint();
 	}
 	
 	public void setTestNotes() {
