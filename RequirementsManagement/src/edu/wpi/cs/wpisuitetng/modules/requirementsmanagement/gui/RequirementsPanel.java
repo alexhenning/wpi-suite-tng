@@ -6,8 +6,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -20,7 +22,9 @@ import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -46,8 +50,11 @@ public class RequirementsPanel extends JSplitPane {
 	public JTextArea descriptionfield = new JTextArea(6, 0);
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	RequirementType[] typeStrings = RequirementType.values();
+	Iteration[] iterations;// = new String() {""};//new String()[];
+	//releaseNumberStrings[0] = "";
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
+	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
 	public JTextField estimateField = new JTextField("0", 25);
@@ -70,6 +77,30 @@ public class RequirementsPanel extends JSplitPane {
 	protected static final int VERTICAL_PADDING = 15;
 	protected static final int LABEL_ALIGNMENT = JLabel.TRAILING;
 
+	private void updateIterationList() {
+		DB.getAllIterations(new UpdateIterationListCallback());
+	}
+	
+	private void updateIterationComboBox() {
+		DefaultComboBoxModel comboboxModel = new DefaultComboBoxModel();
+		for(Iteration it : iterations) {
+			if (it == null) {
+				comboboxModel.addElement("");
+			} else {
+				comboboxModel.addElement(""+it.getIterationNumber());
+			}
+		}
+		iteration.setModel(comboboxModel);
+		iteration.setSelectedIndex(0);
+		for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
+			if(new Integer(model.getIteration().getIterationNumber()).toString().equals(iteration.getItemAt(i).toString())) {
+				iteration.setSelectedIndex(i);
+			}
+		}
+
+//		leftside.revalidate();
+	}
+	
 	/**
 	 * Constructs a DefectPanel for creating or editing a given Defect.
 	 * 
@@ -89,6 +120,8 @@ public class RequirementsPanel extends JSplitPane {
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
+		
+		updateIterationList();
 
 		// Add all components to this panel
 		addComponents();
@@ -113,6 +146,7 @@ public class RequirementsPanel extends JSplitPane {
 		JLabel nameArea = new JLabel("Name:");
 		JLabel typeArea = new JLabel("Type:");
 		JLabel priorityArea = new JLabel("Priority:");
+		JLabel iterationArea = new JLabel("Iteration:");
 		JLabel descriptionArea = new JLabel("Description:");
 		descriptionfield.setLineWrap(true);
 		JScrollPane descScrollPane = new JScrollPane(descriptionfield);
@@ -157,12 +191,14 @@ public class RequirementsPanel extends JSplitPane {
 		c.gridy = 2;
 		leftside.add(priorityArea, c);
 		c.gridy = 3;
-		leftside.add(descriptionArea, c);
+		leftside.add(iterationArea, c);
 		c.gridy = 4;
-		leftside.add(statusArea, c);
+		leftside.add(descriptionArea, c);
 		c.gridy = 5;
-		leftside.add(estimateArea, c);
+		leftside.add(statusArea, c);
 		c.gridy = 6;
+		leftside.add(estimateArea, c);
+		c.gridy = 7;
 		// Make the save button taller
 		c.ipady = 20;
 		leftside.add(submit, c);
@@ -179,16 +215,18 @@ public class RequirementsPanel extends JSplitPane {
 		leftside.add(type, c);
 		c.gridy = 2;
 		leftside.add(priority, c);
-		c.anchor = GridBagConstraints.CENTER;
 		c.gridy = 3;
+		leftside.add(iteration, c);
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridy = 4;
 		leftside.add(descScrollPane, c);
 		c.anchor = GridBagConstraints.WEST;
-		c.gridy = 4;
+		c.gridy = 5;
 		leftside.add(statusfield, c);
 		c.anchor = GridBagConstraints.CENTER;
-		c.gridy = 5;
-		leftside.add(estimateField, c);
 		c.gridy = 6;
+		leftside.add(estimateField, c);
+		c.gridy = 7;
 		leftside.add(results, c);
 		results.setEditable(false);
 		leftside.setMinimumSize(new Dimension(380,600));
@@ -265,6 +303,12 @@ public class RequirementsPanel extends JSplitPane {
 				type.setSelectedIndex(i);
 			}
 		}
+		iteration.setSelectedIndex(0);
+		for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
+			if(new Integer(model.getIteration().getIterationNumber()).toString().equals(iteration.getItemAt(i).toString())) {
+				iteration.setSelectedIndex(i);
+			}
+		}
 		estimateField.setText(model.getEstimate());
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
@@ -319,6 +363,7 @@ public class RequirementsPanel extends JSplitPane {
 		model.setName(namefield.getText());
 		model.setType((RequirementType) type.getSelectedItem());
 		model.setPriority((RequirementPriority) priority.getSelectedItem());
+		//TODO set the iteration
 		model.setDescription(descriptionfield.getText());
 		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
 		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
@@ -358,4 +403,20 @@ public class RequirementsPanel extends JSplitPane {
 			});
 		}
 	}
+	
+	class UpdateIterationListCallback implements IterationCallback {
+		@Override
+		public void callback(List<Iteration> iterationList) {
+			iterations = new Iteration[iterationList.size()+1];
+			iterations[0] = null;
+			if (iterationList.size() > 0) {
+				for(int i = 0; i<iterationList.size(); i++) {
+					iterationList.get(i+1);
+				}
+			}
+			updateIterationComboBox();
+		}
+		
+	}
+
 }
