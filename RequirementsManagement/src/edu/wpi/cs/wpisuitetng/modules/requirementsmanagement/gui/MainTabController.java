@@ -170,7 +170,7 @@ public class MainTabController {
 
 	public Tab addListRequirementsTab() {
 		Tab tab = addTab();
-		ListRequirementsTab view = new ListRequirementsTab(tab);
+		ListRequirementsTab view = new ListRequirementsTab(tab, this);
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;

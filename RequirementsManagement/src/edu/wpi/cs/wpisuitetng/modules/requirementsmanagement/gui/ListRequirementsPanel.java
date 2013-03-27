@@ -10,10 +10,13 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.GetRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.LocalRequirementModels;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -29,7 +32,7 @@ public class ListRequirementsPanel extends JPanel {
 	String[] columnNames = {"Name", "Status", "ID", "Description"};
 
 
-	public ListRequirementsPanel(ListRequirementsTab parent) {
+	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
 		
 		// Indicate that input is enabled
@@ -37,11 +40,30 @@ public class ListRequirementsPanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
-		DB.getAllRequirements(new UpdateTableCallback());
+		updateAllRequirementList();
+		
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                	DB.getSingleRequirement((String) table.getModel().getValueAt(table.getSelectedRow(), 0),
+                			new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							parent.tabController.addEditRequirementTab(req);
+						}
+                	});
+                }
+			}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent arg0) {}
+		});
 	}
 
 	/**
-	 * Adds the components to the panel and places constraints on them
+	 * adds the components to the panel and places constraints on them
 	 * for the SpringLayout manager.
 	 * @param layout the layout manager
 	 */
@@ -72,11 +94,7 @@ public class ListRequirementsPanel extends JPanel {
 	}
 
 	public void updateAllRequirementList() {
-		;
-	}
-	
-	public void addSingleRequirementToList(RequirementModel req) {
-		;
+		DB.getAllRequirements(new UpdateTableCallback());
 	}
 	
 	public ViewReqTable getTable(){
