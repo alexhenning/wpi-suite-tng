@@ -55,6 +55,7 @@ public class RequirementsPanel extends JSplitPane {
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
 	public JTextField estimateField = new JTextField("0", 35);
+	public JTextField actualEffortField = new JTextField(35);
 	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
@@ -159,10 +160,13 @@ public class RequirementsPanel extends JSplitPane {
 		
 		//estimate field
 		JLabel estimateArea = new JLabel("Estimate:");
+		JLabel actualEffortArea = new JLabel("Actual Effort:");
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
+			actualEffortField.setEditable(false);
 		} else {
 			estimateField.setEditable(true);
+			actualEffortField.setEditable(true);
 		}
 	
 		//submit panel
@@ -202,6 +206,8 @@ public class RequirementsPanel extends JSplitPane {
 		c.gridy = 6;
 		leftside.add(estimateArea, c);
 		c.gridy = 7;
+		leftside.add(actualEffortArea, c);
+		c.gridy = 8;
 		// Make the save button taller
 		c.ipady = 20;
 		leftside.add(submit, c);
@@ -230,6 +236,8 @@ public class RequirementsPanel extends JSplitPane {
 		c.gridy = 6;
 		leftside.add(estimateField, c);
 		c.gridy = 7;
+		leftside.add(actualEffortField, c);
+		c.gridy = 8;
 		leftside.add(results, c);
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
@@ -347,10 +355,13 @@ public class RequirementsPanel extends JSplitPane {
 			}
 		}
 		estimateField.setText(model.getEstimate());
+		actualEffortField.setText(model.getActualEffort());
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
+			actualEffortField.setEditable(false);
 		} else {
 			estimateField.setEditable(true);
+			actualEffortField.setEditable(true);
 		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
@@ -428,6 +439,7 @@ public class RequirementsPanel extends JSplitPane {
 			updateStatusField();
 		}
 		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
+		model.setActualEffort(actualEffortField.getText()); // TODO: Should be an integer
 		return model;
 	}
 	
