@@ -1,7 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * An interface for callbacks that return a single requirement.
