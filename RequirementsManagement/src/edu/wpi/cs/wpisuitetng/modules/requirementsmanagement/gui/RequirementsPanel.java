@@ -304,10 +304,12 @@ public class RequirementsPanel extends JSplitPane {
 				type.setSelectedIndex(i);
 			}
 		}
-		iteration.setSelectedIndex(0);
-		for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
-			if(new Integer(model.getIteration().getIterationNumber()).toString().equals(iteration.getItemAt(i).toString())) {
-				iteration.setSelectedIndex(i);
+		if (iteration.getItemCount() >= 1){
+			iteration.setSelectedIndex(0);
+			for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
+				if(new Integer(model.getIteration().getIterationNumber()).toString().equals(iteration.getItemAt(i).toString())) {
+					iteration.setSelectedIndex(i);
+				}
 			}
 		}
 		estimateField.setText(model.getEstimate());
@@ -330,18 +332,24 @@ public class RequirementsPanel extends JSplitPane {
 		parent.buttonGroup.update(editMode, model);
 		
 		if (editMode.equals(Mode.EDIT) && (model.getStatus().equals(RequirementStatus.COMPLETE)
-				|| model.getStatus().equals(RequirementStatus.COMPLETE))) {
+				|| model.getStatus().equals(RequirementStatus.COMPLETE) || model.getStatus().equals(RequirementStatus.DELETED))) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
 			priority.setEnabled(false);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
+			submit.setEnabled(false);
+			iteration.setEnabled(false);
+			nt.setInputEnabled(false);
 		} else {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
 			priority.setEnabled(true);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
+			submit.setEnabled(true);
+			iteration.setEnabled(true);
+			nt.setInputEnabled(true);
 		}
 		
 		nt.setNotes(Arrays.asList(model.getNotes()));
@@ -396,10 +404,15 @@ public class RequirementsPanel extends JSplitPane {
 	class EditRequirementAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			getModel();
 			DB.updateRequirements(model, new SingleRequirementCallback() {
 				@Override
 				public void callback(RequirementModel req) {
-					setStatus("Requirement Updated");
+					if(model.getStatus() == RequirementStatus.DELETED) {
+						setStatus("Requirement Deleted");
+					} else {
+						setStatus("Requirement Updated");
+					}
 				}
 			});
 		}
@@ -410,6 +423,7 @@ public class RequirementsPanel extends JSplitPane {
 		public void callback(List<Iteration> iterationList) {
 			iterations = new Iteration[iterationList.size()+1];
 			iterations[0] = null;
+			System.out.println("iterationList: "+iterationList);
 			if (iterationList.size() > 0) {
 				for(int i = 0; i<iterationList.size(); i++) {
 					iterationList.get(i+1);

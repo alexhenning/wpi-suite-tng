@@ -23,17 +23,18 @@ public class RetrieveIterationsRequestObserver implements RequestObserver {
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
 		final Iteration[] reqs = Iteration.fromJSONArray(response.getBody());
+		System.out.println(reqs.toString());
 		callback.callback(Arrays.asList(reqs));
 
 	}
 
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to add a message failed.");	
+		System.err.println("The request to retrieve Iterations failed.");	
 	}
 
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("The request to add a message failed.");
+		System.err.println("The request to retrieve Iterations failed.");
 	}
 }

@@ -40,6 +40,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 	private JButton cancelButton;
 	private JButton closeButton;
 	private JButton deleteButton;
+//	private JButton restoreButton;
 	private RequirementsTab tab;
 	
 	/**
@@ -110,7 +111,11 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			public void actionPerformed(ActionEvent e) {
 				RequirementModel model = tab.getRequirementPanel().getModel();
 				if (model.getStatus().equals(RequirementStatus.IN_PROGRESS)) return;
-				model.setStatus(RequirementStatus.DELETED);
+				if (model.getStatus() != RequirementStatus.DELETED) {
+					model.setStatus(RequirementStatus.DELETED);
+				} else {
+					model.setStatus(RequirementStatus.OPEN);
+				}
 				DB.updateRequirements(model, new SingleRequirementCallback() {
 					@Override
 					public void callback(RequirementModel req) {
@@ -124,6 +129,28 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		deleteButton.setText("Delete");
 		content.add(deleteButton, c);
 		
+//		// Add delete button
+//		restoreButton = new JButton("Restore");
+//		restoreButton.setAction(new AbstractAction() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				RequirementModel model = tab.getRequirementPanel().getModel();
+////				if (model.getStatus().equals(RequirementStatus.IN_PROGRESS)) return;
+//				model.setStatus(RequirementStatus.OPEN);
+//				DB.updateRequirements(model, new SingleRequirementCallback() {
+//					@Override
+//					public void callback(RequirementModel req) {
+////						tabController.closeCurrentTab();
+////						tabController.addListRequirementsTab();
+//						tab.getRequirementPanel().updateModel(req);
+//					}
+//				});
+//			}
+//		});
+//		c.gridy = 3;
+//		restoreButton.setText("Restore");
+//		content.add(restoreButton, c);
+
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
 		
@@ -144,6 +171,13 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			closeButton.setText("Reopen");
 		} else {
 			closeButton.setText("Complete!");
+		}
+		if (req.getStatus().equals(RequirementStatus.DELETED)) {
+			deleteButton.setText("Restore");
+			closeButton.setEnabled(false);
+		} else {
+			deleteButton.setText("Delete");
+			closeButton.setEnabled(true);
 		}
 	}
 

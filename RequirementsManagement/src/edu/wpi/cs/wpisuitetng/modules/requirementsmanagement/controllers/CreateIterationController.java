@@ -35,6 +35,7 @@ public class CreateIterationController extends AbstractAction implements ActionL
 	}
 	
 	public void receivedGetIterationConfirmation(List<Iteration> reqs) {
+		System.out.println("receivedGetIterationConfirmation: " +reqs.toString());
 		panel.close();
 	}
 

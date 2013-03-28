@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
@@ -37,4 +38,12 @@ public class DB {
 		request.send();
 	}
 	
+//	public static void updateIteration(Iteration req, SingleRequirementCallback callback) {
+//		System.out.println(req.toJSON());
+//		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration/" + req.getId(),  HttpMethod.POST);
+//		request.setBody(req.toJSON());
+//		request.addObserver(new EditIterationRequestObserver(callback));
+//		request.send();
+//	}
+
 }

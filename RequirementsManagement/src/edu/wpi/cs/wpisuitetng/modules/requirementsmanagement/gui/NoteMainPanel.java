@@ -156,6 +156,8 @@ public class NoteMainPanel extends JPanel {
 	protected void setInputEnabled(boolean enabled) {
 		inputEnabled = enabled;
 
+		ta.setEnabled(enabled);
+		addButton.setEnabled(enabled);
 		// TODO: implement
 	}
 }
