@@ -90,11 +90,11 @@ public class ToolbarView extends DefaultToolbarView {
 		c.gridwidth = 2;
 		content.add(Crtreq, c);
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 2;
 		c.gridwidth = 2;
 		content.add(CrtIteration, c);
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 1;
 		c.gridwidth = 1;
 		//content.add(createDefect);
 		content.add(searchField, c);
