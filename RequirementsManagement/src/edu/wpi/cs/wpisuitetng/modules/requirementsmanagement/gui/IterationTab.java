@@ -1,7 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;

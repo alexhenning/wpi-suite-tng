@@ -50,7 +50,7 @@ public class JTableListeners implements MouseListener{
 		if (e.getClickCount() == 2) {
 			JTable target = (JTable)e.getSource();
 			int row = target.getSelectedRow();
-			Object id = target.getValueAt(row, 0);
+			Object id = target.getValueAt(row, 0);//TODO what is this used for? is it even needed?
 		}
 		
 	}

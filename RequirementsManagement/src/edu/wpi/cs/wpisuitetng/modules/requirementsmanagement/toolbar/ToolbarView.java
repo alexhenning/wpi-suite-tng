@@ -38,8 +38,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
-	private JButton createDefect;
-	private JButton searchDefects;
+//	private JButton createRequirement;
+	private JButton searchRequirements;
 	private JPlaceholderTextField searchField;
 	
 	/**
@@ -61,17 +61,17 @@ public class ToolbarView extends DefaultToolbarView {
 		JButton CrtIteration = new JButton("Create Iteration");
 		CrtIteration.setAction(new CreateIterationAction(tabController));
 				
-		// Construct the create defect button
-		createDefect = new JButton();
-		//createDefect.setAction(new CreateDefectAction(tabController));
+//		// Construct the create defect button
+//		createRequirement = new JButton();
+//		//createDefect.setAction(new CreateDefectAction(tabController));
 		
 		// Construct the search button
-		searchDefects = new JButton("Lookup by ID");
+		searchRequirements = new JButton("Lookup by ID");
 		
 		// Construct the search field
 		searchField = new JPlaceholderTextField("Lookup by ID", 10);
 		
-		searchDefects.setAction(new AbstractAction() {
+		searchRequirements.setAction(new AbstractAction() {
 			@Override public void actionPerformed(ActionEvent event) {
 				DB.getSingleRequirement(searchField.getText(), new SingleRequirementCallback() {
 					@Override public void callback(RequirementModel req) {
@@ -80,7 +80,7 @@ public class ToolbarView extends DefaultToolbarView {
 				});
 			}
 		});
-		searchDefects.setText("Search Requirements");
+		searchRequirements.setText("Search Requirements");
 		//searchField.addActionListener(new LookupDefectController(tabController, searchField, this));
 		
 		// Add buttons to the content panel
@@ -99,13 +99,13 @@ public class ToolbarView extends DefaultToolbarView {
 		//content.add(createDefect);
 		content.add(searchField, c);
 		c.gridx = 1;
-		content.add(searchDefects, c);
+		content.add(searchRequirements, c);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar
 		ToolbarGroupView toolbarGroup = new ToolbarGroupView("Home", content);
 		
 		// Calculate the width of the toolbar
-		Double toolbarGroupWidth = searchField.getPreferredSize().getWidth() + searchDefects.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
+		Double toolbarGroupWidth = searchField.getPreferredSize().getWidth() + searchRequirements.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
 		addGroup(toolbarGroup);
 	}

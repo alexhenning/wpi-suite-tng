@@ -3,37 +3,21 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.TextArea;
-import java.awt.event.ActionEvent;
-import java.text.DateFormat;
-import java.text.FieldPosition;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.text.DateFormatter;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CreateIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.EditRequirementAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.UpdateIterationListCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 
 @SuppressWarnings("serial")
 public class CreateIterationPanel extends JPanel{
@@ -257,11 +241,11 @@ public class CreateIterationPanel extends JPanel{
 //			System.out.println("start:"+start.toLocaleString());
 		} catch (ParseException e) {
 			e.printStackTrace();
-			String[] startDateString = startDate.getText().split("/");
-			int startMonth = new Integer(startDateString[0]);
-			int startDay = new Integer(startDateString[1]);
-			int startYear = new Integer(startDateString[2]);
-			model.setStartDate(new Date(startYear-1900, startMonth-1, startDay-1));
+//			String[] startDateString = startDate.getText().split("/");
+//			int startMonth = new Integer(startDateString[0]);
+//			int startDay = new Integer(startDateString[1]);
+//			int startYear = new Integer(startDateString[2]);
+//			model.setStartDate(new Date(startYear-1900, startMonth-1, startDay-1));
 		}
 		try {
 			Date end = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(endDate.getText());
@@ -270,11 +254,11 @@ public class CreateIterationPanel extends JPanel{
 //			System.out.println("end:"+end.toLocaleString());
 		} catch (ParseException e) {
 			e.printStackTrace();
-			String[] endDateString = endDate.getText().split("/");
-			int endMonth = new Integer(endDateString[0]);
-			int endDay = new Integer(endDateString[1]);
-			int endYear = new Integer(endDateString[2]);
-			model.setEndDate(new Date(endYear-1900, endMonth-1, endDay-1));
+//			String[] endDateString = endDate.getText().split("/");
+//			int endMonth = new Integer(endDateString[0]);
+//			int endDay = new Integer(endDateString[1]);
+//			int endYear = new Integer(endDateString[2]);
+//			model.setEndDate(new Date(endYear-1900, endMonth-1, endDay-1));
 		}
 		
 //		model.setName(namefield.getText());

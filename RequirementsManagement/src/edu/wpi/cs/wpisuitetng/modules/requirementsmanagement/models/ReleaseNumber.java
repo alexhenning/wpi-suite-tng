@@ -1,7 +1,5 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
-import java.util.Date;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,6 +10,7 @@ public class ReleaseNumber extends AbstractModel {
 
 	private int id;
 	private int releaseNumber;
+	//TODO add any addition fields for the ReleaseNumber
 
 	public ReleaseNumber(int id, int releaseNumber, Project project) {
 		super();

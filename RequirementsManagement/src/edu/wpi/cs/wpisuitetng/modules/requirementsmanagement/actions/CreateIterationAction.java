@@ -6,6 +6,7 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 
 
+@SuppressWarnings("serial")
 public class CreateIterationAction extends AbstractAction{
 
 
