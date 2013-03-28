@@ -69,7 +69,7 @@ public class ToolbarView extends DefaultToolbarView {
 		searchDefects = new JButton("Lookup by ID");
 		
 		// Construct the search field
-		searchField = new JPlaceholderTextField("Lookup by ID", 15);
+		searchField = new JPlaceholderTextField("Lookup by ID", 10);
 		
 		searchDefects.setAction(new AbstractAction() {
 			@Override public void actionPerformed(ActionEvent event) {
@@ -80,7 +80,7 @@ public class ToolbarView extends DefaultToolbarView {
 				});
 			}
 		});
-		searchDefects.setText("Search");
+		searchDefects.setText("Search Requirements");
 		//searchField.addActionListener(new LookupDefectController(tabController, searchField, this));
 		
 		// Add buttons to the content panel
