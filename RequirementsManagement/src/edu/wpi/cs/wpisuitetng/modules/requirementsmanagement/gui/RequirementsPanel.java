@@ -46,7 +46,7 @@ public class RequirementsPanel extends JSplitPane {
 	/*
 	 * Form elements
 	 */
-	public JTextField namefield = new JTextField(25);
+	public JTextField namefield = new JTextField(35);
 	public JTextArea descriptionfield = new JTextArea(6, 0);
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	RequirementType[] typeStrings = RequirementType.values();
@@ -57,8 +57,8 @@ public class RequirementsPanel extends JSplitPane {
 	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
-	public JTextField estimateField = new JTextField("0", 25);
-	public JTextField results = new JTextField(25);
+	public JTextField estimateField = new JTextField("0", 35);
+	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
 	private JPanel leftside = new JPanel();
@@ -231,7 +231,7 @@ public class RequirementsPanel extends JSplitPane {
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
 		//sets the minimum size that the user can reduce the window to manually
-		leftside.setMinimumSize(new Dimension(400,600));
+		leftside.setMinimumSize(new Dimension(600,600));
 		supplementPane.setMinimumSize(new Dimension(525,600));
 		
 	}
