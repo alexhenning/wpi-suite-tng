@@ -24,9 +24,11 @@ import javax.swing.JTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -49,10 +51,12 @@ public class RequirementsPanel extends JSplitPane {
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	RequirementType[] typeStrings = RequirementType.values();
 	Iteration[] iterations;// = new String() {""};//new String()[];
+	ReleaseNumber[] releaseNumbers;
 	//releaseNumberStrings[0] = "";
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
 	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
+	public JComboBox releaseNumber = new JComboBox();// = new JComboBox(releaseNumberStrings);
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
 	public JTextField estimateField = new JTextField("0", 35);
@@ -104,6 +108,33 @@ public class RequirementsPanel extends JSplitPane {
 //		leftside.revalidate();
 	}
 	
+	private void updateReleaseNumberList() {
+		DB.getAllReleaseNumbers(new UpdateReleaseNumberListCallback());
+	}
+	
+	private void updateReleaseNumberComboBox() {
+		DefaultComboBoxModel comboboxModel = new DefaultComboBoxModel();
+		for(ReleaseNumber it : releaseNumbers) {
+			if (it == null) {
+				comboboxModel.addElement("");
+			} else {
+				comboboxModel.addElement(""+it.getReleaseNumber());
+			}
+		}
+		releaseNumber.setModel(comboboxModel);
+		releaseNumber.setSelectedIndex(0);
+		if (releaseNumber.getItemCount() > 1){
+			if(model.getReleaseNumber() != null) {
+				String modelrnStr = new Integer(model.getReleaseNumber().getReleaseNumber()).toString();
+				for(int i = 0; i < releaseNumber.getItemCount(); i++) {  // Same as above
+					if(modelrnStr.equals(releaseNumber.getItemAt(i).toString())) {
+						releaseNumber.setSelectedIndex(i);
+					}
+				}
+			}
+		}
+//		leftside.revalidate();
+	}
 	/**
 	 * Constructs a DefectPanel for creating or editing a given Defect.
 	 * 
@@ -125,6 +156,7 @@ public class RequirementsPanel extends JSplitPane {
 		inputEnabled = true;
 		
 		updateIterationList();
+		updateReleaseNumberList();
 
 		// Add all components to this panel
 		addComponents();
@@ -355,6 +387,17 @@ public class RequirementsPanel extends JSplitPane {
 				}
 			}
 		}
+		releaseNumber.setSelectedIndex(0);
+		if (releaseNumber.getItemCount() > 1){
+			if(model.getReleaseNumber() != null) {
+				String modelrnStr = new Integer(model.getReleaseNumber().getReleaseNumber()).toString();
+				for(int i = 0; i < releaseNumber.getItemCount(); i++) {  // Same as above
+					if(modelrnStr.equals(releaseNumber.getItemAt(i).toString())) {
+						releaseNumber.setSelectedIndex(i);
+					}
+				}
+			}
+		}
 		estimateField.setText(model.getEstimate());
 		actualEffortField.setText(model.getActualEffort());
 		if(this.editMode == Mode.CREATE) {
@@ -386,6 +429,7 @@ public class RequirementsPanel extends JSplitPane {
 			estimateField.setEnabled(false);
 			submit.setEnabled(false);
 			iteration.setEnabled(false);
+			releaseNumber.setEnabled(false);
 			nt.setInputEnabled(false);
 		} else {
 			namefield.setEnabled(true);
@@ -395,6 +439,7 @@ public class RequirementsPanel extends JSplitPane {
 			estimateField.setEnabled(true);
 			submit.setEnabled(true);
 			iteration.setEnabled(true);
+			releaseNumber.setEnabled(true);
 //			if(editMode == Mode.EDIT) {
 				nt.setInputEnabled(true);
 //			}
@@ -427,6 +472,16 @@ public class RequirementsPanel extends JSplitPane {
 			for(Iteration it : iterations) {  // Same as above
 				if(it != null && it.getIterationNumber() == selected) {
 					model.setIteration(it);
+				}
+			}
+		}
+		if (releaseNumber.getSelectedItem().toString().equals("")){
+			model.setReleaseNumber(null);
+		} else {
+			int selected = new Integer(releaseNumber.getSelectedItem().toString());
+			for(ReleaseNumber rn : releaseNumbers) {  // Same as above
+				if(rn != null && rn.getReleaseNumber() == selected) {
+					model.setReleaseNumber(rn);
 				}
 			}
 		}
@@ -497,6 +552,22 @@ public class RequirementsPanel extends JSplitPane {
 				}
 			}
 			updateIterationComboBox();
+		}
+		
+	}
+
+	class UpdateReleaseNumberListCallback implements ReleaseNumberCallback {
+		@Override
+		public void callback(List<ReleaseNumber> releaseNumberList) {
+			releaseNumbers = new ReleaseNumber[releaseNumberList.size()+1];
+			releaseNumbers[0] = null;
+			System.out.println("iterationList: "+releaseNumberList);
+			if (releaseNumberList.size() > 0) {
+				for(int i = 0; i<releaseNumberList.size(); i++) {
+					releaseNumbers[i+1] = releaseNumberList.get(i);
+				}
+			}
+			updateReleaseNumberComboBox();
 		}
 		
 	}

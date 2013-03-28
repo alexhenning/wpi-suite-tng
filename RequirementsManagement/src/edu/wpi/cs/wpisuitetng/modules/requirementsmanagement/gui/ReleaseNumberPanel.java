@@ -15,21 +15,24 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddReleaseNumberController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 @SuppressWarnings("serial")
-public class IterationPanel extends JPanel{
+public class ReleaseNumberPanel extends JPanel{
 	
-	Iteration model;
+	ReleaseNumber model;
 	
-	IterationTab parent;
+	ReleaseNumberTab parent;
 	private GridBagLayout panelLayout;
-	JLabel lbl1, lbl2, lbl3;
-	JTextField startDate, endDate, iterationNumber;
+	JLabel lbl3;
+	JTextField releaseNumberNumber;
 	JButton submit;
 
 	/** An enum indicating if the form is in create mode or edit mode */
@@ -38,14 +41,14 @@ public class IterationPanel extends JPanel{
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
 
-	public IterationPanel(IterationTab iterationTab){
-		this.parent = iterationTab;
-		model = parent.iteration;
+	public ReleaseNumberPanel(ReleaseNumberTab releaseNumberTab){
+		this.parent = releaseNumberTab;
+		model = parent.releaseNumber;
 		
 		editMode = Mode.CREATE;
 		
 		if(editMode == Mode.CREATE){
-			DB.getAllIterations(new UpdateIterationIdCallback());
+			DB.getAllReleaseNumbers(new UpdateReleaseNumberIdCallback());
 		}
 		
 		// Indicate that input is enabled
@@ -66,37 +69,37 @@ public class IterationPanel extends JPanel{
 		GridBagConstraints c = new GridBagConstraints();
 		setLayout(panelLayout);
 		
-		lbl1 = new JLabel("Start Date (mm/dd/yyyy)");
-		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
+//		lbl1 = new JLabel("Start Date (mm/dd/yyyy)");
+//		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
 		lbl3 = new JLabel ("Iteration Number");
 		
-		startDate = new JTextField();
-		endDate = new JTextField();
-		iterationNumber = new JTextField();
+//		startDate = new JTextField();
+//		endDate = new JTextField();
+		releaseNumberNumber = new JTextField();
 		
 		if(editMode == Mode.CREATE) {
 			submit = new JButton("Submit");
 		} else {
 			submit = new JButton("Update");
 		}
-		submit.addActionListener(new AddIterationController(this));
+		submit.addActionListener(new AddReleaseNumberController(this));
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(lbl1, c);
-		c.gridx = 1;
-		add(startDate, c);
-		c.gridy = 1;
-		c.gridx = 0;
-		add(lbl2, c);
-		c.gridx = 1;
-		add(endDate, c);
+//		c.gridx = 0;
+//		c.gridy = 0;
+//		add(lbl1, c);
+//		c.gridx = 1;
+//		add(startDate, c);
+//		c.gridy = 1;
+//		c.gridx = 0;
+//		add(lbl2, c);
+//		c.gridx = 1;
+//		add(endDate, c);
 		c.gridy = 2;
 		c.gridx = 0;
 		add(lbl3, c);
 		c.gridx = 1;
-		add(iterationNumber, c);
+		add(releaseNumberNumber, c);
 		c.gridy = 3;
 		add(submit, c);
 	}
@@ -117,10 +120,6 @@ public class IterationPanel extends JPanel{
 		// TODO: implement
 	}
 	
-	public boolean doDatesOverlap() {
-		return false;
-	}
-	
 	/**
 	 * Updates the IterationPanel's model to contain the values of the given Iteration and sets the 
 	 * IterationPanel's editMode to {@link Mode#EDIT}.
@@ -137,8 +136,8 @@ public class IterationPanel extends JPanel{
 	 * 
 	 * @param iteration	The Iteration which contains the new values for the model.
 	 */
-	public void updateModel(Iteration iteration) {
-		updateModel(iteration, Mode.EDIT);
+	public void updateModel(ReleaseNumber releaseNumber) {
+		updateModel(releaseNumber, Mode.EDIT);
 	}
 
 	/**
@@ -147,9 +146,9 @@ public class IterationPanel extends JPanel{
 	 * @param	iteration	The Iteration which contains the new values for the model.
 	 * @param	mode	The new editMode.
 	 */
-	protected void updateModel(Iteration iteration, Mode mode) {
+	protected void updateModel(ReleaseNumber releaseNumber, Mode mode) {
 		editMode = mode;
-		model = iteration;
+		model = releaseNumber;
 		updateFields();	
 	}
 	
@@ -174,22 +173,22 @@ public class IterationPanel extends JPanel{
 	 * Gets the IterationPanel's internal model.
 	 * @return
 	 */
-	public Iteration getModel() {
+	public ReleaseNumber getModel() {
 //		System.out.println("getting model from panel");
-		model.setIterationNumber(new Integer(iterationNumber.getText()));
+		model.setReleaseNumber(new Integer(releaseNumberNumber.getText()));
 
-		try {
-			Date start = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(startDate.getText());
-			model.setStartDate(start);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		try {
-			Date end = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(endDate.getText());
-			model.setEndDate(end);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Date start = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(startDate.getText());
+//			model.setStartDate(start);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//		try {
+//			Date end = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(endDate.getText());
+//			model.setEndDate(end);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
 		
 		return model;
 	}
@@ -199,7 +198,7 @@ public class IterationPanel extends JPanel{
 	 * 
 	 * @return the parent IterationTab.
 	 */
-	public IterationTab getParent() {
+	public ReleaseNumberTab getParent() {
 		return parent;
 	}
 
@@ -229,33 +228,10 @@ public class IterationPanel extends JPanel{
 //	}
 	
 	
-	class UpdateIterationIdCallback implements IterationCallback {
+	class UpdateReleaseNumberIdCallback implements ReleaseNumberCallback {
 		@Override
-		public void callback(List<Iteration> iterationList) {
-			model.setId(iterationList.size()+1);
-		}
-	}
-
-	class CheckDateOvelapCallback implements IterationCallback {
-		@Override
-		public void callback(List<Iteration> iterationList) {
-			List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
-			for (Iteration i : iterationList) {
-				if(i.getId() != model.getId()) {
-					if(model.getStartDate().after(i.getStartDate()) && model.getStartDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
-					}
-					if(model.getEndDate().after(i.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
-					}
-					if(i.getStartDate().after(model.getStartDate()) && model.getStartDate().before(i.getEndDate()) ||
-							i.getEndDate().after(model.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-					}
-				}
-			}
-			//TODO figure out how to display the issues...
-
+		public void callback(List<ReleaseNumber> releaseNumberList) {
+			model.setId(releaseNumberList.size()+1);
 		}
 	}
 
