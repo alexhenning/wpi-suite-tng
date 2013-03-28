@@ -92,12 +92,16 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		iteration.setModel(comboboxModel);
 		iteration.setSelectedIndex(0);
-		for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
-			if(new Integer(model.getIteration().getIterationNumber()).toString().equals(iteration.getItemAt(i).toString())) {
-				iteration.setSelectedIndex(i);
+		if (iteration.getItemCount() > 1){
+			if(model.getIteration() != null) {
+				String modelItStr = new Integer(model.getIteration().getIterationNumber()).toString();
+				for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
+					if(modelItStr.equals(iteration.getItemAt(i).toString())) {
+						iteration.setSelectedIndex(i);
+					}
+				}
 			}
 		}
-
 //		leftside.revalidate();
 	}
 	
@@ -320,11 +324,14 @@ public class RequirementsPanel extends JSplitPane {
 				type.setSelectedIndex(i);
 			}
 		}
-		if (iteration.getItemCount() >= 1){
+		if (iteration.getItemCount() > 1){
 			iteration.setSelectedIndex(0);
-			for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
-				if(new Integer(model.getIteration().getIterationNumber()).toString().equals(iteration.getItemAt(i).toString())) {
-					iteration.setSelectedIndex(i);
+			if(model.getIteration() != null) {
+				String modelItStr = new Integer(model.getIteration().getIterationNumber()).toString();
+				for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
+					if(modelItStr.equals(iteration.getItemAt(i).toString())) {
+						iteration.setSelectedIndex(i);
+					}
 				}
 			}
 		}

@@ -54,7 +54,7 @@ public class RequirementModel extends AbstractModel {
 		lastModifiedDate = new Date();
 		events = new ArrayList<RequirementEvent>();
 		subRequirements = new ArrayList<RequirementModel>();
-		iteration = new Iteration();
+		iteration = null;
 		setType(null);
 		priority = null;
 		releaseNumber = null;
