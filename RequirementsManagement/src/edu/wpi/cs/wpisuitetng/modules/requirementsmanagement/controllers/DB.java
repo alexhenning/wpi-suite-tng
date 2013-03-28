@@ -5,7 +5,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveReleaseNumbersRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -48,10 +47,4 @@ public class DB {
 		request.send();
 	}
 
-	public static void getAllReleaseNumbers(ReleaseNumberCallback callback) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/releasenumber",  HttpMethod.GET);
-		request.addObserver(new RetrieveReleaseNumbersRequestObserver(callback));
-		request.send();
-	}
-	
 }

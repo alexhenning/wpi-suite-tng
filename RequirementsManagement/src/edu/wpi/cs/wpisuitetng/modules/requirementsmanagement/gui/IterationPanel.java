@@ -118,7 +118,7 @@ public class IterationPanel extends JPanel{
 	}
 	
 	public boolean doDatesOverlap() {
-		return false;
+		
 	}
 	
 	/**
