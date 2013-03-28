@@ -113,16 +113,23 @@ public class RequirementToolbarView extends ToolbarGroupView {
 				if (model.getStatus().equals(RequirementStatus.IN_PROGRESS)) return;
 				if (model.getStatus() != RequirementStatus.DELETED) {
 					model.setStatus(RequirementStatus.DELETED);
+					DB.updateRequirements(model, new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							tabController.closeCurrentTab();
+							tabController.addListRequirementsTab();
+						}
+					});
 				} else {
 					model.setStatus(RequirementStatus.OPEN);
+					DB.updateRequirements(model, new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							tabController.closeCurrentTab();
+							tabController.addEditRequirementTab(req);
+						}
+					});
 				}
-				DB.updateRequirements(model, new SingleRequirementCallback() {
-					@Override
-					public void callback(RequirementModel req) {
-						tabController.closeCurrentTab();
-						tabController.addListRequirementsTab();
-					}
-				});
 			}
 		});
 		c.gridy = 2;
