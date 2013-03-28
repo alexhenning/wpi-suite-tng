@@ -67,13 +67,14 @@ public class NotePanel extends JPanel {
 	 */
 	protected void addComponents() {
 		
+		//set layout
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
+		//creates area for message and adds to note panel
 		messageArea = new JTextArea(message);
 		messageArea.setLineWrap(true);
-		this.setSize(500,300);
 		messageArea.setEditable(false);
 		messageArea.setFocusable(false);
 		messageArea.setOpaque(false);
@@ -82,7 +83,7 @@ public class NotePanel extends JPanel {
 		c.gridy = 0;
 		add(messageArea, c);
 		
-//		infoLabel = new JTextField("<html><body><font size=4>" + author + " <font size=3>added a note at " + date.toString() + "</body></html>");
+		//creates area for creation information and adds to note panel
 		infoText = new JTextField(author + " added a note at " + date.toString());
 		infoText.setSize(500, 30);
 		infoText.setEditable(false);
@@ -93,11 +94,5 @@ public class NotePanel extends JPanel {
 		c.gridy = 1;
 		add(infoText, c);
 		
-//		otherInfoLabel = new JLabel(date.toString());
-//		c.gridx = 3;
-//		c.gridy = 1;
-//		c.gridwidth = 1;
-//		c.gridheight = 1;
-//		add(otherInfoLabel, c);
 	}
 }

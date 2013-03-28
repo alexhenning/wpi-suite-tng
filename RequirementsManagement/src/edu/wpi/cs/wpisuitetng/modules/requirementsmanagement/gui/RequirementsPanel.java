@@ -228,13 +228,11 @@ public class RequirementsPanel extends JSplitPane {
 		leftside.add(estimateField, c);
 		c.gridy = 7;
 		leftside.add(results, c);
-		results.setEditable(false);
-		leftside.setMinimumSize(new Dimension(380,600));
+		//pointless to allow user to edit result text
+		results.setEditable(false); 
+		//sets the minimum size that the user can reduce the window to manually
+		leftside.setMinimumSize(new Dimension(400,600));
 		supplementPane.setMinimumSize(new Dimension(525,600));
-
-//		// Right side but aligned left (west) for dropdowns
-//		c.anchor = GridBagConstraints.WEST;
-//		//c.fill = GridBagConstraints.NONE;
 		
 	}
 
