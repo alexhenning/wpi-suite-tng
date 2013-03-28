@@ -6,6 +6,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditItera
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -33,6 +34,12 @@ public class DB {
 		request.send();
 	}
 
+	public static void getSingleIteration(String id, SingleIterationCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration/" + id, HttpMethod.GET);
+		request.addObserver(new RetrieveSingleIterationRequestObserver(callback));
+		request.send();
+	}
+	
 	public static void getAllIterations(IterationCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration",  HttpMethod.GET);
 		request.addObserver(new RetrieveIterationsRequestObserver(callback));

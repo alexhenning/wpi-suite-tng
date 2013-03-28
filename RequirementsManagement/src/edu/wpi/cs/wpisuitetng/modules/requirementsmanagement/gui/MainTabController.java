@@ -91,6 +91,19 @@ public class MainTabController {
 		return tab;
 	}
 	
+	/**
+	 * Adds a tab that displays the given defect in the given mode
+	 * @param defect The defect to display
+	 * @param mode The Mode to use
+	 */
+	private Tab addIterationTab(Iteration iteration, Mode mode) {
+		Tab tab = addTab();
+		IterationTab view = new IterationTab(this, iteration, mode, tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
 	public Tab addCreateIterationTab() {
 		Iteration iteration = new Iteration();
 		Tab tab = addTab();
@@ -99,6 +112,22 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
+	
+	/**
+	 * Adds a tab that displays the given defect
+	 * @param defect the defect to display
+	 * @return The created Tab 
+	 */
+	public Tab addEditIterationTab(Iteration iteration) {
+		for (int i=0; i<view.getTabCount(); i++) {
+			if (("Requirement #"+(iteration.getId())).equals(view.getTitleAt(i))) {
+				switchToTab(i);
+				return null;//TODO figure out what to return
+			}
+		}
+		return addIterationTab(iteration, Mode.EDIT);
+	}
+	
 	/**
 	 * Adds a tab that displays the given defect
 	 * @param defect the defect to display

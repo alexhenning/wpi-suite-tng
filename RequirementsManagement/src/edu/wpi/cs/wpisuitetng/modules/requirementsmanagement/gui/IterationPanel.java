@@ -59,6 +59,28 @@ public class IterationPanel extends JPanel{
 		updateFields();
 	}
 
+	public IterationPanel(IterationTab iterationTab, Iteration iteration, Mode editMode){
+		this.parent = iterationTab;
+		model = iteration;
+		
+		this.editMode = editMode;
+		
+		if(editMode == Mode.CREATE){
+			DB.getAllIterations(new UpdateIterationIdCallback());
+		}
+		
+		// Indicate that input is enabled
+		inputEnabled = true;
+		
+		// Add all components to this panel
+		addComponents();
+//		parent.buttonGroup.update(mode, model);
+
+		// TODO: prevent tab key from inserting tab characters into the description field
+		
+		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
+		updateFields();
+	}
 	
 	private void addComponents(){
 		panelLayout =new GridBagLayout();
