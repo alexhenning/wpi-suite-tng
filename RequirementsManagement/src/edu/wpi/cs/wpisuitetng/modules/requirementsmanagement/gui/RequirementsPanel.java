@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -302,18 +303,32 @@ public class RequirementsPanel extends JSplitPane {
 		updateFields();	
 	}
 	
+	
 	/**
 	 * Updates the RequirementsPanel's fields to match those in the current model
 	 *
 	 */
-	private void updateFields() {
-		namefield.setText(model.getName());
-		descriptionfield.setText(model.getDescription());
+	private void updateStatusField() {
 		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
 			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
 				statusfield.setSelectedIndex(i);
 			}
 		}
+	}
+	
+	/**
+	 * Updates the RequirementsPanel's fields to match those in the current model
+	 *
+	 */
+	private void updateFields() {
+		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
+			model.setStatus(RequirementStatus.IN_PROGRESS);
+		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
+			model.setStatus(RequirementStatus.OPEN);
+		}
+		namefield.setText(model.getName());
+		descriptionfield.setText(model.getDescription());
+		updateStatusField();
 		for(int i = 0; i < priority.getItemCount(); i++) {  // Same as above
 			if(model.getPriority() == RequirementPriority.valueOf(priority.getItemAt(i).toString())) {
 				priority.setSelectedIndex(i);
@@ -409,6 +424,13 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		model.setDescription(descriptionfield.getText());
 		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
+		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
+			model.setStatus(RequirementStatus.IN_PROGRESS);
+			updateStatusField();
+		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
+			model.setStatus(RequirementStatus.OPEN);
+			updateStatusField();
+		}
 		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
 		return model;
 	}
