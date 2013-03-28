@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.CreateIterationPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.IterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -22,10 +22,10 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 @SuppressWarnings("serial")
 public class AddIterationController extends AbstractAction implements ActionListener {
 	
-	private final CreateIterationPanel panel;
+	private final IterationPanel panel;
 	//private final JPanel buttonPanel;
 
-	public AddIterationController(CreateIterationPanel panel) {
+	public AddIterationController(IterationPanel panel) {
 		this.panel = panel;
 	}
 	

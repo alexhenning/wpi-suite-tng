@@ -16,7 +16,7 @@ public class IterationTab extends JPanel implements IToolbarGroupProvider{
 	Tab containingTab;
 	Iteration iteration;
 	JScrollPane mainPanelScrollPane;
-	CreateIterationPanel mainPanel;
+	IterationPanel mainPanel;
 	
 
 	public IterationTab(MainTabController tabController, Iteration iteration, Tab tab) {
@@ -29,7 +29,7 @@ public class IterationTab extends JPanel implements IToolbarGroupProvider{
 		containingTab.setTitle("Add Iteration");
 		
 		// Instantiate the main create iteration panel
-		mainPanel = new CreateIterationPanel(this);
+		mainPanel = new IterationPanel(this);
 		this.setLayout(new BorderLayout());
 		mainPanelScrollPane = new JScrollPane(mainPanel);
 		mainPanelScrollPane.getVerticalScrollBar().setUnitIncrement(10);

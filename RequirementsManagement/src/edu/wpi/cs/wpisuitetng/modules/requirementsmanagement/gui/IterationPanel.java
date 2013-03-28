@@ -20,7 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 
 @SuppressWarnings("serial")
-public class CreateIterationPanel extends JPanel{
+public class IterationPanel extends JPanel{
 	
 	Iteration model;
 	
@@ -36,7 +36,7 @@ public class CreateIterationPanel extends JPanel{
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
 
-	public CreateIterationPanel(IterationTab iterationTab){
+	public IterationPanel(IterationTab iterationTab){
 		this.parent = iterationTab;
 		model = parent.iteration;
 		
