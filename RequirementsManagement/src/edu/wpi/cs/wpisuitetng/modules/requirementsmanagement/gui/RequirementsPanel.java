@@ -1,5 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -55,7 +56,7 @@ public class RequirementsPanel extends JSplitPane {
 	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JComboBox statusfield = new JComboBox(statusStrings);
 	public JTextField estimateField = new JTextField("0", 35);
-	public JTextField actualEffortField = new JTextField(35);
+	public JTextField actualEffortField = new JTextField("0", 35);
 	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
@@ -496,6 +497,24 @@ public class RequirementsPanel extends JSplitPane {
 			updateIterationComboBox();
 		}
 		
+	}
+
+	public boolean validateFields() {
+		if(namefield.getText().length()<1) {
+			namefield.setBackground(Color.RED);
+			return false;
+		} else {
+			namefield.setBackground(Color.WHITE);
+		}
+		if(descriptionfield.getText().length()<1) {
+			descriptionfield.setBackground(Color.RED);
+			return false;
+		} else {
+			descriptionfield.setBackground(Color.WHITE);
+		}
+		
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

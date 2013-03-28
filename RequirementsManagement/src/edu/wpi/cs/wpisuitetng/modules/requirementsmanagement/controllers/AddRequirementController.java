@@ -37,10 +37,12 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.PUT);
-		request.setBody(panel.getModel().toJSON());
-		request.addObserver(new CreateRequirementModelRequestObserver(this));
-		request.send();
+		if(panel.validateFields()){
+			final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.PUT);
+			request.setBody(panel.getModel().toJSON());
+			request.addObserver(new CreateRequirementModelRequestObserver(this));
+			request.send();
+		}
 	}
 	
 	public void receivedAddConfirmation(RequirementModel req) {
