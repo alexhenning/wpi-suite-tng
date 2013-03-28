@@ -504,12 +504,14 @@ public class RequirementsPanel extends JSplitPane {
 	public boolean validateFields() {
 		if(namefield.getText().length()<1) {
 			namefield.setBackground(Color.RED);
+			setStatus("name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
 		if(descriptionfield.getText().length()<1) {
 			descriptionfield.setBackground(Color.RED);
+			setStatus("description must be 1-5000 characters long.");
 			return false;
 		} else {
 			descriptionfield.setBackground(Color.WHITE);
