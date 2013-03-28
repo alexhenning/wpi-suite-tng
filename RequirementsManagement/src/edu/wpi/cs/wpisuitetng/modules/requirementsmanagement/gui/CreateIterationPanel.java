@@ -6,9 +6,13 @@ import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.text.DateFormat;
 import java.text.FieldPosition;
+import java.text.ParseException;
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -20,8 +24,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIter
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CreateIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.EditRequirementAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel.UpdateIterationListCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -51,6 +57,10 @@ public class CreateIterationPanel extends JPanel{
 		model = parent.iteration;
 		
 		editMode = Mode.CREATE;
+		
+		if(editMode == Mode.CREATE){
+			DB.getAllIterations(new UpdateIterationIdCallback());
+		}
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
@@ -236,19 +246,36 @@ public class CreateIterationPanel extends JPanel{
 	 * @return
 	 */
 	public Iteration getModel() {
+		System.out.println("getting model from panel");
 		//TODO finish this
 		model.setIterationNumber(new Integer(iterationNumber.getText()));
-		String[] startDateString = startDate.getText().split("/");
-		int startMonth = new Integer(startDateString[0]);
-		int startDay = new Integer(startDateString[1]);
-		int startYear = new Integer(startDateString[2]);
-		String[] endDateString = endDate.getText().split("/");
-		int endMonth = new Integer(endDateString[0]);
-		int endDay = new Integer(endDateString[1]);
-		int endYear = new Integer(endDateString[2]);
-		//TODO use newer methods....
-		model.setStartDate(new Date(startYear, startMonth, startDay));
-		model.setEndDate(new Date(endYear, endMonth, endDay));
+
+		try {
+			Date start = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(startDate.getText());
+			model.setStartDate(start);
+//			System.out.println("Start: " + startDate.getText());
+//			System.out.println("start:"+start.toLocaleString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			String[] startDateString = startDate.getText().split("/");
+			int startMonth = new Integer(startDateString[0]);
+			int startDay = new Integer(startDateString[1]);
+			int startYear = new Integer(startDateString[2]);
+			model.setStartDate(new Date(startYear-1900, startMonth-1, startDay-1));
+		}
+		try {
+			Date end = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(endDate.getText());
+			model.setEndDate(end);
+//			System.out.println("End: " + endDate.getText());
+//			System.out.println("end:"+end.toLocaleString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+			String[] endDateString = endDate.getText().split("/");
+			int endMonth = new Integer(endDateString[0]);
+			int endDay = new Integer(endDateString[1]);
+			int endYear = new Integer(endDateString[2]);
+			model.setEndDate(new Date(endYear-1900, endMonth-1, endDay-1));
+		}
 		
 //		model.setName(namefield.getText());
 //		model.setType((RequirementType) type.getSelectedItem());
@@ -294,5 +321,13 @@ public class CreateIterationPanel extends JPanel{
 //		}
 //	}
 	
+	
+	class UpdateIterationIdCallback implements IterationCallback {
+		@Override
+		public void callback(List<Iteration> iterationList) {
+			model.setId(iterationList.size()+1);
+		}
+		
+	}
 
 }

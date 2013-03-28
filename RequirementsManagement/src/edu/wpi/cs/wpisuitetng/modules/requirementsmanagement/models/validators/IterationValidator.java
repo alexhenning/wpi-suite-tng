@@ -120,19 +120,25 @@ public class IterationValidator {
 			return issues;
 		}
 		
+		Iteration[] allIterations = getAllExistingIterations(session.getProject(), issues);
+
 		//check if the id is unique
 		if(mode == Mode.CREATE) {
-			if(getExistingIteration(iteration.getId(), session.getProject(), issues, "id") != null) {
-				issues.add(new ValidationIssue("Unable to create an Iteration with the provided id ("+iteration.getId()+") since there is already an iteration with that id"));
-//				return issues;
+			for(Iteration it : allIterations) {
+				if(it.getId() == iteration.getId()) {
+					issues.add(new ValidationIssue("Unable to create an Iteration with the provided id ("+iteration.getId()+") since there is already an iteration with that id"));
+	//				return issues;
+				}
 			}
 		}
 
 		//check if the iterationNumber is unique for the project
 		if(mode == Mode.CREATE) {
-			if(getExistingIteration(iteration.getIterationNumber(), session.getProject(), issues, "iterationNumber") != null) {
-				issues.add(new ValidationIssue("Unable to create an Iteration with the provided iterationNumber ("+iteration.getIterationNumber()+") since there is already an iteration with that iterationNumber"));
+			for(Iteration it : allIterations) {
+				if(it.getIterationNumber() == iteration.getIterationNumber()) {
+					issues.add(new ValidationIssue("Unable to create an Iteration with the provided iterationNumber ("+iteration.getIterationNumber()+") since there is already an iteration with that iterationNumber"));
 //				return issues;
+				}
 			}
 		}
 
@@ -209,21 +215,24 @@ public class IterationValidator {
 		if(iteration.getEndDate() == null) {
 			issues.add(new ValidationIssue("Required, must not be null", "endDate"));
 		}
-		if((iteration.getStartDate() != null && iteration.getEndDate() != null) && iteration.getStartDate().before(iteration.getEndDate())) {
-			issues.add(new ValidationIssue("startDate must be before endDate", "startDate"));
+		if((iteration.getStartDate() == null || iteration.getEndDate() == null) || 
+				iteration.getStartDate().after(iteration.getEndDate())) {
+//			System.out.println("start: "+iteration.getStartDate().getTime());
+//			System.out.println("end: "+iteration.getEndDate().getTime());
+			
+//			issues.add(new ValidationIssue("startDate must be before endDate", "startDate"));
 			issues.add(new ValidationIssue("startDate must be before endDate", "endDate"));
 		}
 		
 		//TODO make sure this works. I think it should but I've been wrong before....
 		//check if dates overlap with other iterations
-		Iteration[] allIterations = getAllExistingIterations(session.getProject(), issues);
 		for (Iteration i : allIterations) {
 			if(i.getId() != iteration.getId()) {
-				if(iteration.getStartDate().before(i.getEndDate())) {
-					issues.add(new ValidationIssue("startDate is before the endDate of Iteration "+i.getIterationNumber(), "startDate"));
+				if(iteration.getStartDate().after(i.getStartDate()) && iteration.getStartDate().before(i.getEndDate())) {
+					issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
 				}
-				if(iteration.getEndDate().after(i.getStartDate())) {
-					issues.add(new ValidationIssue("endDate is before the startDate of Iteration "+i.getIterationNumber(), "endDate"));
+				if(iteration.getEndDate().after(i.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
+					issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
 				}
 			}
 		}
@@ -244,6 +253,9 @@ public class IterationValidator {
 //			requirement.setEvents(new ArrayList<RequirementEvent>());
 //		}
 		
+		if (issues.size() > 0){
+			System.out.println("iteration json: "+iteration.toJSON());
+		}
 		return issues;
 	}
 
