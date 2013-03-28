@@ -50,14 +50,14 @@ public class CreateIterationRequestObserver implements RequestObserver {
 
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to add a message had an error.");
+		System.err.println("The request to create an iteration had an error.");
 		System.err.println("\tResponse: "+iReq.getResponse().getStatusCode()+" --- "
 							+iReq.getResponse().getBody());
 	}
 
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("The request to add a message has failed.");
+		System.err.println("The request to create an iteration has failed.");
 	}
 	
 }

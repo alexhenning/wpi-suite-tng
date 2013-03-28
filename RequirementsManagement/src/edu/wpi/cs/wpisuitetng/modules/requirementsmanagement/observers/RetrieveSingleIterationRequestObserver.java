@@ -1,6 +1,5 @@
 /*******************************************************************************
  * Copyright (c) 2013 -- WPI Suite
-
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,72 +7,68 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    David Modica
- *    Tim Calvert
+ *    
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
- * This observer is called when a response is received from a request to the server
- * to edit a requirement.
- * 
- * @author David
+ *
+ * Description goes here
+ * @author Tim
+ * @author Jacob Palnick
  *
  */
-public class EditRequirementModelRequestObserver implements RequestObserver {
-
-	private SingleRequirementCallback callback;
+public class RetrieveSingleIterationRequestObserver implements RequestObserver {
+	
+	private SingleIterationCallback callback;
 	
 	/**
 	 * Default constructor
-	 * @param callback Controller paired with this observer
+	 * @param callback Controller this Observer handles requests from
 	 */
-	public EditRequirementModelRequestObserver(SingleRequirementCallback callback){
+	public RetrieveSingleIterationRequestObserver(SingleIterationCallback callback) {
 		this.callback = callback;
 	}
-	
+
 	/**
-	 * Server reported a successful request
+	 * Successful request
 	 *
-	 * @param iReq Request returned from server
+	 * @param iReq Request returned from db
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		// Get the response to the given request
 		final ResponseModel response = iReq.getResponse();
-		
-		// Parse the message out of the response body
-		final RequirementModel requirement = RequirementModel.fromJSON(response.getBody());
-		
-		// Pass the messages back to the controller
-		callback.callback(requirement);
+		final Iteration[] reqs = Iteration.fromJSONArray(response.getBody());
+		callback.callback(reqs[0]);
 	}
 
 	/**
-	 * Server reported an error in the request
+	 * Error on return
 	 *
-	 * @param iReq Request returned from the server
+	 * @param iReq
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to edit a requirement failed.");
+		System.err.println("The request to get a iteration failed.");
 	}
 
 	/**
-	 * Server reported an failure in the request
+	 * Failure on return
 	 *
-	 * @param iReq Request returned from the server
-	 * @param exception Exception thrown on the server
+	 * @param iReq
+	 * @param exception
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("The request to edit a requirement failed.");
+		System.err.println("The request to get a iteration failed.\nError: " + exception.getMessage());
 	}
 
 }
