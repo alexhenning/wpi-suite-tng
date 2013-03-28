@@ -2,7 +2,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.TextArea;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +11,7 @@ import java.util.Locale;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
@@ -27,7 +27,7 @@ public class CreateIterationPanel extends JPanel{
 	IterationTab parent;
 	private GridBagLayout panelLayout;
 	JLabel lbl1, lbl2, lbl3;
-	TextArea startDate, endDate, iterationNumber;
+	JTextField startDate, endDate, iterationNumber;
 	JButton submit;
 
 	/** An enum indicating if the form is in create mode or edit mode */
@@ -69,9 +69,9 @@ public class CreateIterationPanel extends JPanel{
 		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
 		lbl3 = new JLabel ("Iteration Number");
 		
-		startDate = new TextArea();
-		endDate = new TextArea();
-		iterationNumber = new TextArea();
+		startDate = new JTextField();
+		endDate = new JTextField();
+		iterationNumber = new JTextField();
 		
 		if(editMode == Mode.CREATE) {
 			submit = new JButton("Submit");
