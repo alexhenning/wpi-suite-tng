@@ -13,6 +13,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
@@ -77,7 +78,7 @@ public class RequirementModelValidator {
 	 * Return all ReleaseNumbers of the specified project.
 	 * 
 	 * @param project the project this ReleaseNumber belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if ReleaseNumber doesn't exist
 	 * @return all ReleaseNumbers in the project
 	 * @throws WPISuiteException 
 	 */
@@ -88,6 +89,63 @@ public class RequirementModelValidator {
 		return releaseNumbers;
 	}
 		
+	/**
+	 * Return the ReleaseNumber with the given id if it already exists in the database.
+	 * 
+	 * @param id the id of the ReleaseNumber
+	 * @param project the project this ReleaseNumber belongs to
+	 * @param issues list of errors to add to if ReleaseNumber doesn't exist
+	 * @param fieldName name of field to use in error if necessary
+	 * @return The ReleaseNumber with the given id, or null if it doesn't exist
+	 * @throws WPISuiteException 
+	 */
+	ReleaseNumber getExistingReleaseNumber(int id, Project project, List<ValidationIssue> issues, String fieldName)
+			throws WPISuiteException {
+		List<Model> oldReleases = data.retrieve(ReleaseNumber.class, "id", id, project);
+		if(oldReleases.size() < 1 || oldReleases.get(0) == null) {
+			issues.add(new ValidationIssue("ReleaseNumber with "+fieldName+" ("+id+") does not exist in project", fieldName));
+			return null;
+		} else {
+			return (ReleaseNumber) oldReleases.get(0);
+		}
+	}
+	
+	/**
+	 * Return all Iterations of the specified project.
+	 * 
+	 * @param project the project this Iterations belongs to
+	 * @param issues list of errors to add to if Iterations doesn't exist
+	 * @return all Iterations in the project
+	 * @throws WPISuiteException 
+	 */
+	Iteration[] getAllExistingIterations(Project project, List<ValidationIssue> issues)
+			throws WPISuiteException {
+		Iteration sample = new Iteration();
+		Iteration[] iterations = (data.retrieveAll(sample, project)).toArray(new Iteration[0]);
+		return iterations;
+	}
+		
+	/**
+	 * Return the Iteration with the given id if it already exists in the database.
+	 * 
+	 * @param id the id of the Iteration
+	 * @param project the project this Iteration belongs to
+	 * @param issues list of errors to add to if Iteration doesn't exist
+	 * @param fieldName name of field to use in error if necessary
+	 * @return The Iteration with the given id, or null if it doesn't exist
+	 * @throws WPISuiteException 
+	 */
+	Iteration getExistingIteration(int id, Project project, List<ValidationIssue> issues, String fieldName)
+			throws WPISuiteException {
+		List<Model> oldIterations = data.retrieve(Iteration.class, "id", id, project);
+		if(oldIterations.size() < 1 || oldIterations.get(0) == null) {
+			issues.add(new ValidationIssue("Iteration with "+fieldName+" ("+id+") does not exist in project", fieldName));
+			return null;
+		} else {
+			return (Iteration) oldIterations.get(0);
+		}
+	}
+	
 	/**
 	 * Return the RequirementModel with the given id if it already exists in the database.
 	 * 
@@ -189,7 +247,7 @@ public class RequirementModelValidator {
 			requirement.setAssignees(assignees2);
 		}
 		
-		//check if releaseNumber is null or has a matching Releasenumber in the project
+		//check if releaseNumber is null or has a matching ReleaseNumber in the project
 		if(requirement.getReleaseNumber() != null) {
 			ReleaseNumber[] existingReleaseNumbers = getAllExistingReleaseNumbers(session.getProject(), issues);
 			boolean isExistingReleaseNumber = false;
@@ -200,9 +258,28 @@ public class RequirementModelValidator {
 			}
 			if (!isExistingReleaseNumber) {
 				issues.add(new ValidationIssue("releaseNumber must match an existing ReleaseNumber or be null", "releaseNumber"));
+			} else {
+				requirement.setReleaseNumber(
+						getExistingReleaseNumber(requirement.getReleaseNumber().getId(), session.getProject(), issues, "id"));
 			}
 		}
 		
+		//check if iteration is null or has a matching Iteration in the project
+		if(requirement.getIteration() != null) {
+			Iteration[] existingIterations = getAllExistingIterations(session.getProject(), issues);
+			boolean isExistingIteration = false;
+			for(Iteration existingIteration : existingIterations) {
+				if(requirement.getIteration().getIterationNumber() == existingIteration.getIterationNumber()) {
+					isExistingIteration = true;
+				}
+			}
+			if (!isExistingIteration) {
+				issues.add(new ValidationIssue("iteration must match an existing Iteration or be null", "iteration"));
+			} else {
+				requirement.setIteration(
+						getExistingIteration(requirement.getIteration().getId(), session.getProject(), issues, "id"));
+			}
+		}
 		
 		// make sure we're not being spoofed with some weird date
 		final Date now = new Date();
