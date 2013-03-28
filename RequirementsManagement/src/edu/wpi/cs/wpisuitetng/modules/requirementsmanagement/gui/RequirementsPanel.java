@@ -424,7 +424,7 @@ public class RequirementsPanel extends JSplitPane {
 			System.out.println("iterationList: "+iterationList);
 			if (iterationList.size() > 0) {
 				for(int i = 0; i<iterationList.size(); i++) {
-					iterationList.get(i+1);
+					iterations[i+1] = iterationList.get(i);
 				}
 			}
 			updateIterationComboBox();
