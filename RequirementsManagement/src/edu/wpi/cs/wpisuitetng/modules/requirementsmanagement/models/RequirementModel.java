@@ -49,7 +49,7 @@ public class RequirementModel extends AbstractModel {
 		assignees = new ArrayList<User>();
 //		assignees.add(new User("", "", "", -1));
 		estimate = "0";
-		actualEffort = "";
+		actualEffort = "0";
 		creationDate = new Date();
 		lastModifiedDate = new Date();
 		events = new ArrayList<RequirementEvent>();
