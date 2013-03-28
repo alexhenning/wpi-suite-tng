@@ -125,8 +125,9 @@ public class RequirementToolbarView extends ToolbarGroupView {
 					DB.updateRequirements(model, new SingleRequirementCallback() {
 						@Override
 						public void callback(RequirementModel req) {
-							tabController.closeCurrentTab();
-							tabController.addEditRequirementTab(req);
+//							tabController.closeCurrentTab();
+							tab.getRequirementPanel().updateModel(req);
+//							tabController.addEditRequirementTab(req);
 						}
 					});
 				}

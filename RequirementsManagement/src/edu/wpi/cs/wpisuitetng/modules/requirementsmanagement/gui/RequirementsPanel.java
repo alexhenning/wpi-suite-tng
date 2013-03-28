@@ -174,9 +174,11 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		
 		// Supplement Pane (i.e., notes, history, attachments)
+//		if(this.editMode == Mode.EDIT) {
 		nt = new NoteMainPanel(this);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("History", new JPanel());
+//		}
 		
 		// Add subpanels to main panel
 		// Left side (gridx = 0) and aligned right (east)
@@ -275,6 +277,22 @@ public class RequirementsPanel extends JSplitPane {
 	 * @param	mode	The new editMode.
 	 */
 	protected void updateModel(RequirementModel requirement, Mode mode) {
+		if(editMode == Mode.CREATE && mode == Mode.EDIT) {
+			nt = new NoteMainPanel(this);
+			for(int i=0; i< supplementPane.getTabCount(); i++){
+				if(supplementPane.getTitleAt(i).equals("Notes")) {
+					supplementPane.remove(i);
+					nt = null;
+					nt = new NoteMainPanel(this);
+					supplementPane.add(nt, i);
+					supplementPane.setTitleAt(i, "Notes");
+					supplementPane.setSelectedIndex(i);
+				}
+			}
+//			supplementPane.ge
+//			supplementPane.add("Notes", nt);
+		}
+		this.revalidate();
 		editMode = mode;
 		model = requirement;
 		updateFields();	
@@ -347,7 +365,9 @@ public class RequirementsPanel extends JSplitPane {
 			estimateField.setEnabled(true);
 			submit.setEnabled(true);
 			iteration.setEnabled(true);
-			nt.setInputEnabled(true);
+//			if(editMode == Mode.EDIT) {
+				nt.setInputEnabled(true);
+//			}
 		}
 		
 		nt.setNotes(Arrays.asList(model.getNotes()));
