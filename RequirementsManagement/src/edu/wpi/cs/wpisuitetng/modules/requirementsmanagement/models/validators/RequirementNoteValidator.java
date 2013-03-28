@@ -17,7 +17,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 /**
  * Responsible for validating a comment model.
  */
-public class RequirementCommentValidator {
+public class RequirementNoteValidator {
 
 	private RequirementModel lastExistingRequirement;
 	private RequirementModelValidator requirementValidator;
@@ -27,7 +27,7 @@ public class RequirementCommentValidator {
 	 * 
 	 * @param data The Data implementation to use
 	 */
-	public RequirementCommentValidator(Data data) {
+	public RequirementNoteValidator(Data data) {
 		requirementValidator = new RequirementModelValidator(data);
 	}
 	

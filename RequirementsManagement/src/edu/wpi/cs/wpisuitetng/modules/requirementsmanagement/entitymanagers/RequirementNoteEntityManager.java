@@ -24,7 +24,7 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementCommentValidator;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementNoteValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 /**
@@ -38,12 +38,12 @@ public class RequirementNoteEntityManager implements
 	
 	private final Data db;
 	private final Gson gson;
-	private final RequirementCommentValidator validator;
+	private final RequirementNoteValidator validator;
 	
 	public RequirementNoteEntityManager(Data data) {
 		db = data;
 		gson = new Gson();
-		validator = new RequirementCommentValidator(data);
+		validator = new RequirementNoteValidator(data);
 	}
 
 	@Override
