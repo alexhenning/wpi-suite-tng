@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateIterationAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateReleaseNumberAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
@@ -60,6 +61,9 @@ public class ToolbarView extends DefaultToolbarView {
 		
 		JButton CrtIteration = new JButton("Create Iteration");
 		CrtIteration.setAction(new CreateIterationAction(tabController));
+
+		JButton crtReleaseNumber = new JButton("Create ReleaseNumber");
+		crtReleaseNumber.setAction(new CreateReleaseNumberAction(tabController));
 				
 //		// Construct the create defect button
 //		createRequirement = new JButton();
@@ -91,8 +95,12 @@ public class ToolbarView extends DefaultToolbarView {
 		content.add(Crtreq, c);
 		c.gridx = 0;
 		c.gridy = 2;
-		c.gridwidth = 2;
+		c.gridwidth = 1;
 		content.add(CrtIteration, c);
+		c.gridx = 1;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		content.add(crtReleaseNumber, c);
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 1;

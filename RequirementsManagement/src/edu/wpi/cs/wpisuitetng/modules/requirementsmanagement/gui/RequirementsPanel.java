@@ -387,8 +387,8 @@ public class RequirementsPanel extends JSplitPane {
 				}
 			}
 		}
-		releaseNumber.setSelectedIndex(0);
 		if (releaseNumber.getItemCount() > 1){
+			releaseNumber.setSelectedIndex(0);
 			if(model.getReleaseNumber() != null) {
 				String modelrnStr = new Integer(model.getReleaseNumber().getReleaseNumber()).toString();
 				for(int i = 0; i < releaseNumber.getItemCount(); i++) {  // Same as above
