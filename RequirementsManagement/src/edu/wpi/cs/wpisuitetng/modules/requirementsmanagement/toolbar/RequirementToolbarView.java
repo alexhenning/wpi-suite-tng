@@ -175,6 +175,11 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			closeButton.setEnabled(false);
 			deleteButton.setEnabled(false);
 		}
+		if (req.getStatus().equals(RequirementStatus.IN_PROGRESS)) {
+			deleteButton.setEnabled(false);
+		} else {
+			deleteButton.setEnabled(true);
+		}
 		if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
 			closeButton.setText("Reopen");
 		} else {

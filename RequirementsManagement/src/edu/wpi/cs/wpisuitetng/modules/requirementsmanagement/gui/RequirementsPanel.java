@@ -434,9 +434,11 @@ public class RequirementsPanel extends JSplitPane {
 		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
 		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
+			parent.buttonGroup.update(editMode, model);
 			updateStatusField();
 		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
 			model.setStatus(RequirementStatus.OPEN);
+			parent.buttonGroup.update(editMode, model);
 			updateStatusField();
 		}
 		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
