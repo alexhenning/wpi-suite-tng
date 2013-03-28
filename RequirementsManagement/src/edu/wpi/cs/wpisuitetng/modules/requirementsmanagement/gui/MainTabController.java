@@ -105,6 +105,12 @@ public class MainTabController {
 	 * @return The created Tab 
 	 */
 	public Tab addEditRequirementTab(RequirementModel requirement) {
+		for (int i=0; i<view.getTabCount(); i++) {
+			if (("Requirement #"+(requirement.getId())).equals(view.getTitleAt(i))) {
+				switchToTab(i);
+				return null;//TODO figure out what to return
+			}
+		}
 		return addRequirementTab(requirement, Mode.EDIT);
 	}
 	
