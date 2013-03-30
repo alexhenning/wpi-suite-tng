@@ -38,7 +38,7 @@ public class RequirementsPanel extends JSplitPane {
 	/** The parent view **/
 	protected RequirementsTab parent;
 	
-	/** The Defect displayed in this panel */
+	/** The requirement displayed in this panel */
 	protected RequirementModel model;
 
 	/*
@@ -362,7 +362,10 @@ public class RequirementsPanel extends JSplitPane {
 			actualEffortField.setEditable(false);
 		} else {
 			estimateField.setEditable(true);
-			actualEffortField.setEditable(true);
+			if (model.getStatus() == RequirementStatus.COMPLETE)
+				actualEffortField.setEditable(true);
+			else
+				actualEffortField.setEditable(false);
 		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
@@ -377,27 +380,48 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		parent.buttonGroup.update(editMode, model);
 		
-		if (editMode.equals(Mode.EDIT) && (model.getStatus().equals(RequirementStatus.COMPLETE)
-				|| model.getStatus().equals(RequirementStatus.COMPLETE) || model.getStatus().equals(RequirementStatus.DELETED))) {
-			namefield.setEnabled(false);
-			type.setEnabled(false);
-			priority.setEnabled(false);
-			descriptionfield.setEnabled(false);
-			estimateField.setEnabled(false);
-			submit.setEnabled(false);
-			iteration.setEnabled(false);
-			nt.setInputEnabled(false);
+		if (editMode.equals(Mode.EDIT))  {
+			if (model.getStatus().equals(RequirementStatus.COMPLETE)){
+				namefield.setEnabled(false);
+				type.setEnabled(false);
+				priority.setEnabled(false);
+				descriptionfield.setEnabled(false);
+				estimateField.setEnabled(false);
+				actualEffortField.setEnabled(true);
+				submit.setEnabled(true);
+				iteration.setEnabled(false);
+				nt.setInputEnabled(true);
+			} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
+				namefield.setEnabled(false);
+				type.setEnabled(false);
+				priority.setEnabled(false);
+				descriptionfield.setEnabled(false);
+				estimateField.setEnabled(false);
+				actualEffortField.setEnabled(false);
+				submit.setEnabled(false);
+				iteration.setEnabled(false);
+				nt.setInputEnabled(false);
+			} else {
+				namefield.setEnabled(true);
+				type.setEnabled(true);
+				priority.setEnabled(true);
+				descriptionfield.setEnabled(true);
+				estimateField.setEnabled(true);
+				actualEffortField.setEnabled(false);
+				submit.setEnabled(true);
+				iteration.setEnabled(true);
+				nt.setInputEnabled(true);
+			}
 		} else {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
 			priority.setEnabled(true);
 			descriptionfield.setEnabled(true);
-			estimateField.setEnabled(true);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(false);
 			submit.setEnabled(true);
 			iteration.setEnabled(true);
-//			if(editMode == Mode.EDIT) {
-				nt.setInputEnabled(true);
-//			}
+			nt.setInputEnabled(true);
 		}
 		
 		nt.setNotes(Arrays.asList(model.getNotes()));
@@ -471,18 +495,21 @@ public class RequirementsPanel extends JSplitPane {
 	class EditRequirementAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			getModel();
-			DB.updateRequirements(model, new SingleRequirementCallback() {
-				@Override
-				public void callback(RequirementModel req) {
-					if(model.getStatus() == RequirementStatus.DELETED) {
-						setStatus("Requirement Deleted");
-					} else {
-						setStatus("Requirement Updated");
+			if (!validateFields()){
+				
+			} else {
+				getModel();
+				DB.updateRequirements(model, new SingleRequirementCallback() {
+					@Override
+					public void callback(RequirementModel req) {
+						if(model.getStatus() == RequirementStatus.DELETED) {
+							setStatus("Requirement Deleted");
+						} else {
+							setStatus("Requirement Updated");
+						}
 					}
-				}
-			});
-		}
+				});
+			}}
 	}
 	
 	class UpdateIterationListCallback implements IterationCallback {
@@ -504,20 +531,36 @@ public class RequirementsPanel extends JSplitPane {
 	public boolean validateFields() {
 		if(namefield.getText().length()<1) {
 			namefield.setBackground(Color.RED);
-			setStatus("name must be 1-100 characters long.");
+			setStatus("Name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
 		if(descriptionfield.getText().length()<1) {
 			descriptionfield.setBackground(Color.RED);
-			setStatus("description must be 1-5000 characters long.");
+			setStatus("Description must be 1-5000 characters long.");
 			return false;
 		} else {
 			descriptionfield.setBackground(Color.WHITE);
 		}
-		
-		// TODO Auto-generated method stub
+		if(Integer.parseInt(estimateField.getText()) < 0){
+			estimateField.setBackground(Color.RED);
+			setStatus("Estimate must be non-negative integer.");
+			System.out.println("Estimate value is " + estimateField.getText());
+			return false;
+		} else {
+			estimateField.setBackground(Color.WHITE);
+		}
+		if(Integer.parseInt(actualEffortField.getText()) < 0){
+			actualEffortField.setBackground(Color.RED);
+			setStatus("Actual Effort must be a non-negative integer.");
+			System.out.println("Estimate value is " + estimateField.getText());
+			return false;
+		} else {
+			actualEffortField.setBackground(Color.WHITE);
+		}
+		System.out.println("Estimate value is " + estimateField.getText());
+
 		return true;
 	}
 
