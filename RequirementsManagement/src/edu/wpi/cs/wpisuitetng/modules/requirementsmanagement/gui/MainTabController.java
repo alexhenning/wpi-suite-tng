@@ -185,6 +185,7 @@ public class MainTabController {
 		}
 	}
 
+	// TODO: fix listIndex (issue #37)
 	private int listIndex = -1;
 	ListRequirementsTab listReqsView;
 	public Tab addListRequirementsTab() {
@@ -204,6 +205,31 @@ public class MainTabController {
 			return tab;
 		} else {
 			view.setSelectedIndex(listIndex);
+			view.requestFocus();
+			return null;
+		}
+	}
+
+	// TODO: fix listBacklogIndex (similar to listIndex)
+	private int listBacklogIndex = -1;
+	ListBacklogsTab listBacklogView;
+	public Tab addListBacklogsTab() {
+		if (listBacklogIndex == -1) {
+			listBacklogView = new ListBacklogsTab(null, this);
+			Tab tab = addTab("Backlogs", new ImageIcon(), listBacklogView,
+								"List of backlogs");
+			tab.setComponent(listBacklogView);
+			listBacklogView.requestFocus();
+			listBacklogIndex = view.getTabCount() - 1;
+			view.addChangeListener(new ChangeListener() {				
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					listBacklogView.mainPanel.updateBacklogList();
+				}
+			});
+			return tab;
+		} else {
+			view.setSelectedIndex(listBacklogIndex);
 			view.requestFocus();
 			return null;
 		}
