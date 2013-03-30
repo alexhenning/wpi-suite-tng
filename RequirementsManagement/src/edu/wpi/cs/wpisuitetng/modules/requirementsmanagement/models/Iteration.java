@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 
 /**
  * @author jpalnick
@@ -43,6 +44,18 @@ public class Iteration extends AbstractModel {
 		
 		this.setProject(new Project("", "-1"));
 		// TODO Auto-generated constructor stub
+	}
+	
+	/**
+	 * Get the sum of all the estimate of the requirements in the iteration
+	 *
+	 * @return The sum of the estimates for all the requirements in the iteration
+	 */
+	public int getEstimate() {
+		IterationEstimate estimate = new IterationEstimate(this); // Create a new IterationEstimate class
+		DB.getAllRequirements(estimate); // Have that class run its callback method to get the estimate
+		return estimate.getEstimate(); // Return the estimate
+		
 	}
 
 	/**
