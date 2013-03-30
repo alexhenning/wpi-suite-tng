@@ -9,6 +9,7 @@
  * Contributors:
  *    Andrew Hurle
  *    Chris Casola
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -31,8 +32,8 @@ public class MainTabView extends JTabbedPane {
 		setTabPlacement(TOP);
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
 		setBorder(BorderFactory.createEmptyBorder(5, 3, 3, 3));
-		addTab("Dashboard", new ImageIcon(), new DashboardView(),
-		       "Your Dashboard - notifications, etc.");
+//		addTab("Dashboard", new ImageIcon(), new DashboardView(),
+//		       "Your Dashboard - notifications, etc.");
 	}
 	
 	@Override
@@ -40,7 +41,8 @@ public class MainTabView extends JTabbedPane {
 		super.insertTab(title, icon, component, tip, index);
 		// the Dashboard tab cannot be closed
 		if(!(component instanceof DashboardView)
-				&& !(component instanceof ListRequirementsTab)) {
+				&& !(component instanceof ListRequirementsTab)
+				&& !(component instanceof ListBacklogsTab)) {
 			setTabComponentAt(index, new ClosableTabComponent(this));
 		}
 	}
