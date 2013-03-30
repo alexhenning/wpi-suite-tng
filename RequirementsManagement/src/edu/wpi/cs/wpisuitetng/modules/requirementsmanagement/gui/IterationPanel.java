@@ -176,7 +176,7 @@ public class IterationPanel extends JPanel{
 	 */
 	public Iteration getModel() {
 //		System.out.println("getting model from panel");
-		model.setIterationNumber(new Integer(iterationNumber.getText()));
+		model.setIterationNumber(iterationNumber.getText());
 
 		try {
 			Date start = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(startDate.getText());

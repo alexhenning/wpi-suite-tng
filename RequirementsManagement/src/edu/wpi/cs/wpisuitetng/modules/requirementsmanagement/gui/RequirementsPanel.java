@@ -423,7 +423,7 @@ public class RequirementsPanel extends JSplitPane {
 		if (iteration.getSelectedItem().toString().equals("")){
 			model.setIteration(null);
 		} else {
-			int selected = new Integer(iteration.getSelectedItem().toString());
+			String selected = iteration.getSelectedItem().toString();
 			for(Iteration it : iterations) {  // Same as above
 				if(it != null && it.getIterationNumber() == selected) {
 					model.setIteration(it);

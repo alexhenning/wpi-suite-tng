@@ -22,9 +22,9 @@ public class Iteration extends AbstractModel {
 	private int id;
 	private Date startDate;
 	private Date endDate;
-	private int iterationNumber;
+	private String iterationNumber;
 
-	public Iteration(int id, Date startDate, Date endDate, int iterationNumber,
+	public Iteration(int id, Date startDate, Date endDate, String iterationNumber,
 			Project project) {
 		super();
 		this.id = id;
@@ -39,7 +39,7 @@ public class Iteration extends AbstractModel {
 		id = -1;
 		startDate = new Date();
 		endDate = new Date(); //TODO should probably make this set to the next day...
-		iterationNumber = -1;
+		iterationNumber = "-1";
 		
 		this.setProject(new Project("", "-1"));
 		// TODO Auto-generated constructor stub
@@ -90,14 +90,14 @@ public class Iteration extends AbstractModel {
 	/**
 	 * @return the iterationNumber
 	 */
-	public int getIterationNumber() {
+	public String getIterationNumber() {
 		return iterationNumber;
 	}
 
 	/**
 	 * @param iterationNumber the iterationNumber to set
 	 */
-	public void setIterationNumber(int iterationNumber) {
+	public void setIterationNumber(String iterationNumber) {
 		this.iterationNumber = iterationNumber;
 	}
 
