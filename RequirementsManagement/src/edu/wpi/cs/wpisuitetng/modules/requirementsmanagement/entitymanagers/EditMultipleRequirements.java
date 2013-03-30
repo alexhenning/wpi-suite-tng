@@ -11,15 +11,8 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import edu.wpi.cs.wpisuitetng.modules.Model;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.AbstractEditCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -32,56 +25,39 @@ public class EditMultipleRequirements {
 	
 	/** List of requirements to edit */
 	private List<RequirementModel> requirements;
-	//private ModelMapper mapper;
+	// no need for a default callback, because there is no default action
 
 	/**
 	 * Default constructor
 	 */
 	public EditMultipleRequirements(List<RequirementModel> requirements) {
 		this.requirements = requirements;
-		//this.mapper = new ModelMapper();
-		//this.mapper.getBlacklist().addAll(getFields());
 	}
 	
-	private List<String> getFields() {
-		final Method[] methods = requirements.get(1).getClass().getMethods();
-		List<String> fields = new ArrayList<String>();
-		
-		for(Method m : methods) {
-			fields.add(accessorNameToFieldName(m.getName()));
-		}
-		
-		return fields;
-	}
-	
-	private static String accessorNameToFieldName(String methodName) {
-		methodName = methodName.substring(3);
-		return methodName.substring(0, 1).toLowerCase() + methodName.substring(1);
-	}
-	
-	public interface EditCallback {
-		
-		/**
-		 * Called whenever a model's field needs to be changed
-		 *
-		 */
-		Object call(RequirementModel req, String field);
-	}
-	
-	// TODO add a public method to start all this off
-	
-	public void editRequirements(String field, EditCallback callback) {
+	/**
+	 * For every requirement to be worked with, call walk
+	 *
+	 * @param callback Callback that actually performs the needed actions
+	 */
+	public void editRequirements(AbstractEditCallback callback) {
 		for(RequirementModel req : requirements) {
-			walk(req, field,callback);
+			walk(req, callback);
 		}
 	}
 	
-	private void walk(final RequirementModel req, String field, EditCallback callback) {
-		// TODO do what needs to be done and then recurse
-		callback.call(req, field);
+	/**
+	 * Walks through a requirement and all of its children and performs
+	 * an undefined action on it
+	 *
+	 * @param req The requirement to work with
+	 * @param callback Callback that performs the actions
+	 */
+	private void walk(final RequirementModel req,AbstractEditCallback callback) {
+		// do what needs to be done and then recurse
+		callback.call(req);
 		if(req.getSubRequirements().size() >= 1 || req.getSubRequirements() != null) {
 			for(RequirementModel r : req.getSubRequirements()) {
-				walk(r, field, callback);
+				walk(r, callback);
 			}
 		}
 	}
