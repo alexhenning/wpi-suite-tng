@@ -297,6 +297,13 @@ public class RequirementModelValidator {
 			requirement.setEvents(new ArrayList<RequirementEvent>());
 		}
 		
+		// Check if the iteration is still in progress
+		if(requirement.getIteration() != null) {
+			if(now.after(requirement.getIteration().getEndDate())) {
+				issues.add(new ValidationIssue("iteration must not be over", "iteration"));
+			}
+		}
+		
 		return issues;
 	}
 
