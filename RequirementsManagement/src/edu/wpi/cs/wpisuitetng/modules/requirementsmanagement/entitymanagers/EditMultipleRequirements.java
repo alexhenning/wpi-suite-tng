@@ -47,8 +47,10 @@ public class EditMultipleRequirements {
 	 * @param callback Callback that actually performs the needed actions
 	 */
 	public void editRequirements(AbstractEditCallback callback) {
-		for(RequirementModel req : requirements) {
-			walk(req, callback);
+		if(requirements != null) {
+			for(RequirementModel req : requirements) {
+				walk(req, callback);
+			}
 		}
 	}
 	

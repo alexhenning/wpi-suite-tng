@@ -45,14 +45,16 @@ public class EditFieldOfRequirementsCallback extends AbstractEditCallback {
 			}
 		}
 		
-		try {
-			methodToUse.invoke(req, newValue);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
+		if(methodToUse != null) {
+			try {
+				methodToUse.invoke(req, newValue);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			} catch (IllegalArgumentException e) {
+				throw new RuntimeException(e);
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		
 		return null;
