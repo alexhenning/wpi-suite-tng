@@ -49,7 +49,6 @@ public class EditMultipleRequirementsTest {
 	@Test
 	public void testEditingOneRequirementName() {
 		requirements.add(new RequirementModel());
-		edit.setRequirements(requirements);
 		assertEquals("", requirements.get(0).getName());
 		callback = new EditFieldOfRequirementsCallback("name", "test name");
 		edit.workRequirements(requirements, callback);
@@ -68,7 +67,6 @@ public class EditMultipleRequirementsTest {
 		req = new RequirementModel();
 		req.setId(2);
 		requirements.add(req);
-		edit.setRequirements(requirements);
 		assertFalse(requirements.get(0).getId() == requirements.get(1).getId());
 		callback = new EditFieldOfRequirementsCallback("id", 13);
 		edit.workRequirements(requirements, callback);
@@ -85,7 +83,6 @@ public class EditMultipleRequirementsTest {
 		for(int i = 0; i < 4; i++) {
 			requirements.add(new RequirementModel());
 		}
-		edit.setRequirements(requirements);
 		for(int i = 0; i < 4; i++) {
 			assertEquals("", requirements.get(i).getName());
 		}
@@ -110,7 +107,6 @@ public class EditMultipleRequirementsTest {
 		for(int i = 0; i < 4; i++) {
 			requirements.add(new RequirementModel());
 		}
-		edit.setRequirements(requirements);
 		for(int i = 0; i < 4; i++) {
 			assertEquals("", requirements.get(i).getDescription());
 		}
@@ -133,7 +129,6 @@ public class EditMultipleRequirementsTest {
 		for(int i = 0; i < 10; i++) {
 			requirements.add(new RequirementModel());
 		}
-		edit.setRequirements(requirements);
 		for(int i = 0; i < 10; i++) {
 			assertEquals(-1, requirements.get(i).getId());
 			assertEquals("", requirements.get(i).getName());
@@ -197,11 +192,9 @@ public class EditMultipleRequirementsTest {
 		req.setSubRequirementIDs(reqs); // actually set the sub reqs
 		requirements.add(req);  // add to list of reqs
 		requirements.add(new RequirementModel());  // add second req to list of reqs, leaving tree looking as above
-		edit.setRequirements(requirements);
 		edit.workRequirements(requirements, new EditFieldOfRequirementsCallback("name", "recursive name"));
 		
 		// we'll check these manually because I'd do the recursion the same way, so that doesn't really help
-		requirements = edit.getRequirements();
 		// top level of two reqs
 		assertEquals("recursive name", requirements.get(0).getName());
 		assertEquals("recursive name", requirements.get(1).getName());
@@ -212,6 +205,11 @@ public class EditMultipleRequirementsTest {
 		assertEquals("recursive name", requirements.get(2).getName());
 		// check sub req of first sub req
 		assertEquals("recursive name", requirements.get(0).getSubRequirements().get(0).getName());
+	}
+	
+	@Test
+	public void testAccumulatingEstimates() {
+		
 	}
 
 }

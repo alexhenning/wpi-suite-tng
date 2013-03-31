@@ -9,7 +9,9 @@
  * Contributors:
  *    
  ******************************************************************************/
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.callbacks;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  *
@@ -21,23 +23,26 @@ public abstract class AbstractWorkCallback {
 
 	protected String field;
 	protected Object newValue;
-	protected Integer accumulator;
+	protected Object[] parameters = null;
 	
 	public AbstractWorkCallback(String field, Object newValue) {
 		this.field = field;
 		this.newValue = newValue;
-		this.accumulator = 0;
+	}
+	
+	public AbstractWorkCallback(String field, Object newValue, Object[] parameters) {
+		this.field = field;
+		this.newValue = newValue;
+		this.parameters = parameters;
 	}
 	
 	public abstract Object call(RequirementModel req);
 
-	public Integer getAccumulator() {
-		return accumulator;
+	public Object[] getParameters() {
+		return parameters;
 	}
 
-	public void setAccumulator(Integer accumulator) {
-		this.accumulator = accumulator;
-	}
-	
-	
+	public void setParameters(Object[] parameters) {
+		this.parameters = parameters;
+	}	
 }

@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.callbacks;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.AbstractWorkCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -57,6 +56,7 @@ public class UpdateEstimatesCallback extends AbstractWorkCallback{
 		
 		if(getMethodToUse != null && setMethodToUse != null) {
 			try {
+				setMethodToUse.invoke(req, parameters[0]);
 				requirementsEstimate = (Integer) getMethodToUse.invoke(req);
 			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);

@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.callbacks;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.AbstractWorkCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
