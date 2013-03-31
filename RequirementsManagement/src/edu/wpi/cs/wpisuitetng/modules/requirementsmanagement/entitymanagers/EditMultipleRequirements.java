@@ -26,9 +26,16 @@ public class EditMultipleRequirements {
 	/** List of requirements to edit */
 	private List<RequirementModel> requirements;
 	// no need for a default callback, because there is no default action
-
+	
 	/**
 	 * Default constructor
+	 */
+	public EditMultipleRequirements() {
+		
+	}
+
+	/**
+	 * Useful constructor
 	 */
 	public EditMultipleRequirements(List<RequirementModel> requirements) {
 		this.requirements = requirements;
@@ -60,5 +67,23 @@ public class EditMultipleRequirements {
 				walk(r, callback);
 			}
 		}
+	}
+	
+	/**
+	 * Getter for requirements
+	 *
+	 * @return List of requirements that this class will work with
+	 */
+	public List<RequirementModel> getRequirements() {
+		return requirements;
+	}
+
+	/**
+	 * Setter for requirements
+	 *
+	 * @param requirements List of requirements to work with
+	 */
+	public void setRequirements(List<RequirementModel> requirements) {
+		this.requirements = requirements;
 	}
 }

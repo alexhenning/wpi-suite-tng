@@ -23,9 +23,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * @author Tim Calvert
  *
  */
-public class EditFieldOfRequirements extends AbstractEditCallback {
+public class EditFieldOfRequirementsCallback extends AbstractEditCallback {
 
-	public EditFieldOfRequirements(String field, Object newValue) {
+	public EditFieldOfRequirementsCallback(String field, Object newValue) {
 		super(field, newValue);
 	}
 
