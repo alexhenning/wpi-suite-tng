@@ -12,7 +12,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
 import java.util.List;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.AbstractEditCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.AbstractWorkCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -46,7 +46,7 @@ public class WorkMultipleRequirements {
 	 *
 	 * @param callback Callback that actually performs the needed actions
 	 */
-	public void workRequirements(AbstractEditCallback callback) {
+	public void workRequirements(AbstractWorkCallback callback) {
 		if(requirements != null) {
 			for(RequirementModel req : requirements) {
 				walk(req, callback);
@@ -55,14 +55,14 @@ public class WorkMultipleRequirements {
 	}
 	
 	/**
-	 * Walks through a requirement and all of its children and performs
+	 * Walks through a requirement's children and performs
 	 * an undefined action on it
 	 *
 	 * @param req The requirement to work with
 	 * @param callback Callback that performs the actions
 	 * @return Whatever value the call function is set up to return
 	 */
-	private Object walk(final RequirementModel req, AbstractEditCallback callback) {
+	private Object walk(final RequirementModel req, AbstractWorkCallback callback) {
 		// do what needs to be done and then recurse
 		if(req.getSubRequirements().size() >= 1 || req.getSubRequirements() != null) {
 			for(RequirementModel r : req.getSubRequirements()) {

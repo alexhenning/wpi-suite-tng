@@ -13,19 +13,31 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 /**
  *
- * Description goes here
+ * Abstract framework for applying a method to a requirement
  * @author Tim Calvert
  *
  */
-public abstract class AbstractEditCallback {
+public abstract class AbstractWorkCallback {
 
 	protected String field;
 	protected Object newValue;
+	protected Integer accumulator;
 	
-	public AbstractEditCallback(String field, Object newValue) {
+	public AbstractWorkCallback(String field, Object newValue) {
 		this.field = field;
 		this.newValue = newValue;
+		this.accumulator = 0;
 	}
 	
 	public abstract Object call(RequirementModel req);
+
+	public Integer getAccumulator() {
+		return accumulator;
+	}
+
+	public void setAccumulator(Integer accumulator) {
+		this.accumulator = accumulator;
+	}
+	
+	
 }

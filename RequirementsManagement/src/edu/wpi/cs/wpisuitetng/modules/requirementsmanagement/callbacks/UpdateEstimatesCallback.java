@@ -23,32 +23,41 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * @author Tim Calvert
  *
  */
-public class EditFieldOfRequirementsCallback extends AbstractWorkCallback {
-
-	public EditFieldOfRequirementsCallback(String field, Object newValue) {
-		super(field, newValue);
+public class UpdateEstimatesCallback extends AbstractWorkCallback{
+	
+	public UpdateEstimatesCallback() {
+		super("", null);
 	}
 
 	/**
-	 * Changes the field of each requirement to a given value
+	 * Updates the estimate fields of requirements, given their children
+	 * * Currently assuming that if a requirement has children, then the
+	 *   sum of the childrens' estimates is the entirety of the parent
+	 *   requirement's estimate; it does not have any additional estimates
+	 *   of its own. *
 	 *
-	 * @param req requirement to work with
-	 * @return null - there is nothing to return
+	 * @param req
+	 * @return
 	 */
 	@Override
 	public Object call(RequirementModel req) {
+		Integer requirementsEstimate = null;
 		Method[] methods = RequirementModel.class.getMethods();
-		Method methodToUse = null;
+		Method getMethodToUse = null;
+		Method setMethodToUse = null;
 
 		for(Method method : methods) {
 			if(method.getName().equals("set" + field.substring(0,1).toUpperCase() + field.substring(1))) {
-				methodToUse = method;
+				setMethodToUse = method;
+			}
+			if(method.getName().equals("get" + field.substring(0,1).toUpperCase() + field.substring(1))) {
+				getMethodToUse = method;
 			}
 		}
 		
-		if(methodToUse != null) {
+		if(getMethodToUse != null && setMethodToUse != null) {
 			try {
-				methodToUse.invoke(req, newValue);
+				accumulator += (Integer) getMethodToUse.invoke(req);
 			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);
 			} catch (IllegalArgumentException e) {

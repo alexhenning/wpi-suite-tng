@@ -166,7 +166,7 @@ public class EditMultipleRequirementsTest {
 		}
 	}
 	
-	/* * The commented out assert will pass if this function is used as ReleaseNumber's equals method *
+	/* * The commented out assert will pass if this function (or any other proper one) is used as ReleaseNumber's equals method *
 	 public boolean equals(Object o) {
 		if(o instanceof ReleaseNumber) {
 			if(this.id == ((ReleaseNumber)o).getId() &&
@@ -180,7 +180,7 @@ public class EditMultipleRequirementsTest {
 	
 	/**
 	 * Tests recursion by trying to edit a tree of requirements
-	 * Setup: Req  -> SubReq -> SubReq
+	 * Setup: Req  -> SubReq -> SubSubReq
 	 *            \-> SubReq
 	 *            \-> SubReq
 	 *        Req
