@@ -355,8 +355,8 @@ public class RequirementsPanel extends JSplitPane {
 				}
 			}
 		}
-		estimateField.setText(model.getEstimate());
-		actualEffortField.setText(model.getActualEffort());
+		estimateField.setText(model.getEstimate()+"");
+		actualEffortField.setText(model.getActualEffort()+"");
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
 			actualEffortField.setEditable(false);
@@ -465,8 +465,8 @@ public class RequirementsPanel extends JSplitPane {
 			parent.buttonGroup.update(editMode, model);
 			updateStatusField();
 		}
-		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
-		model.setActualEffort(actualEffortField.getText()); // TODO: Should be an integer
+		model.setEstimate(new Integer(estimateField.getText())); // TODO: Should be an integer
+		model.setActualEffort(new Integer(actualEffortField.getText())); // TODO: Should be an integer
 		return model;
 	}
 	

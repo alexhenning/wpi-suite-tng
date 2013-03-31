@@ -117,7 +117,7 @@ public class ListRequirementsPanel extends JPanel {
 					else {
 						entries[i][3] = "";
 					}
-					entries[i][4] = req.getEstimate();
+					entries[i][4] = req.getEstimate()+"";
 					i++;
 					}
 				getTable().setData(entries);
