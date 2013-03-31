@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.callbacks.EditFieldOfRequirementsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers.EditMultipleRequirements;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers.WorkMultipleRequirements;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
@@ -33,13 +33,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 public class EditMultipleRequirementsTest {
 	
 	List<RequirementModel> requirements;
-	EditMultipleRequirements edit;
+	WorkMultipleRequirements edit;
 	EditFieldOfRequirementsCallback callback;	
 	
 	@Before
 	public void setUp() {
 		requirements = new ArrayList<RequirementModel>();
-		edit = new EditMultipleRequirements();
+		edit = new WorkMultipleRequirements();
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class EditMultipleRequirementsTest {
 		edit.setRequirements(requirements);
 		assertEquals("", requirements.get(0).getName());
 		callback = new EditFieldOfRequirementsCallback("name", "test name");
-		edit.editRequirements(callback);
+		edit.workRequirements(callback);
 		assertEquals("test name", requirements.get(0).getName());
 	}
 	
@@ -71,7 +71,7 @@ public class EditMultipleRequirementsTest {
 		edit.setRequirements(requirements);
 		assertFalse(requirements.get(0).getId() == requirements.get(1).getId());
 		callback = new EditFieldOfRequirementsCallback("id", 13);
-		edit.editRequirements(callback);
+		edit.workRequirements(callback);
 		assertEquals(requirements.get(0).getId(), requirements.get(1).getId());
 	}
 	
@@ -90,7 +90,7 @@ public class EditMultipleRequirementsTest {
 			assertEquals("", requirements.get(i).getName());
 		}
 		callback = new EditFieldOfRequirementsCallback("name", "test name");
-		edit.editRequirements(callback);
+		edit.workRequirements(callback);
 		for(int i = 0; i < 4; i++) {
 			assertEquals("test name", requirements.get(i).getName());
 		}
@@ -115,7 +115,7 @@ public class EditMultipleRequirementsTest {
 			assertEquals("", requirements.get(i).getDescription());
 		}
 		callback = new EditFieldOfRequirementsCallback("description", "test description");
-		edit.editRequirements(callback);
+		edit.workRequirements(callback);
 		for(int i = 0; i < 4; i++) {
 			assertEquals("test description", requirements.get(i).getDescription());
 		}
@@ -142,12 +142,12 @@ public class EditMultipleRequirementsTest {
 			assertEquals(RequirementStatus.NEW, requirements.get(i).getStatus());
 			assertEquals(null, requirements.get(i).getPriority());
 		}
-		edit.editRequirements(new EditFieldOfRequirementsCallback("id", 15));
-		edit.editRequirements(new EditFieldOfRequirementsCallback("name", "test name"));
-		edit.editRequirements(new EditFieldOfRequirementsCallback("description", "test description"));
-		edit.editRequirements(new EditFieldOfRequirementsCallback("releaseNumber", new ReleaseNumber()));
-		edit.editRequirements(new EditFieldOfRequirementsCallback("status", RequirementStatus.DELETED));
-		edit.editRequirements(new EditFieldOfRequirementsCallback("priority", RequirementPriority.HIGH));
+		edit.workRequirements(new EditFieldOfRequirementsCallback("id", 15));
+		edit.workRequirements(new EditFieldOfRequirementsCallback("name", "test name"));
+		edit.workRequirements(new EditFieldOfRequirementsCallback("description", "test description"));
+		edit.workRequirements(new EditFieldOfRequirementsCallback("releaseNumber", new ReleaseNumber()));
+		edit.workRequirements(new EditFieldOfRequirementsCallback("status", RequirementStatus.DELETED));
+		edit.workRequirements(new EditFieldOfRequirementsCallback("priority", RequirementPriority.HIGH));
 		for(int i = 0; i < 10; i++) {
 			assertEquals(15, requirements.get(i).getId());
 			assertEquals("test name", requirements.get(i).getName());
@@ -198,7 +198,7 @@ public class EditMultipleRequirementsTest {
 		requirements.add(req);  // add to list of reqs
 		requirements.add(new RequirementModel());  // add second req to list of reqs, leaving tree looking as above
 		edit.setRequirements(requirements);
-		edit.editRequirements(new EditFieldOfRequirementsCallback("name", "recursive name"));
+		edit.workRequirements(new EditFieldOfRequirementsCallback("name", "recursive name"));
 		
 		// we'll check these manually because I'd do the recursion the same way, so that doesn't really help
 		requirements = edit.getRequirements();

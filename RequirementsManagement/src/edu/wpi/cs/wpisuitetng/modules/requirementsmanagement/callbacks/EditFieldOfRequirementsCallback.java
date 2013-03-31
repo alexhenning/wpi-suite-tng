@@ -33,12 +33,13 @@ public class EditFieldOfRequirementsCallback extends AbstractEditCallback {
 	 * Changes the field of each requirement to a given value
 	 *
 	 * @param req requirement to work with
-	 * @return
+	 * @return null - there is nothing to return
 	 */
 	@Override
 	public Object call(RequirementModel req) {
 		Method[] methods = RequirementModel.class.getMethods();
 		Method methodToUse = null;
+
 		for(Method method : methods) {
 			if(method.getName().equals("set" + field.substring(0,1).toUpperCase() + field.substring(1))) {
 				methodToUse = method;

@@ -21,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * @author Tim Calvert
  *
  */
-public class EditMultipleRequirements {
+public class WorkMultipleRequirements {
 	
 	/** List of requirements to edit */
 	private List<RequirementModel> requirements;
@@ -30,14 +30,14 @@ public class EditMultipleRequirements {
 	/**
 	 * Default constructor
 	 */
-	public EditMultipleRequirements() {
+	public WorkMultipleRequirements() {
 		
 	}
 
 	/**
 	 * Useful constructor
 	 */
-	public EditMultipleRequirements(List<RequirementModel> requirements) {
+	public WorkMultipleRequirements(List<RequirementModel> requirements) {
 		this.requirements = requirements;
 	}
 	
@@ -46,7 +46,7 @@ public class EditMultipleRequirements {
 	 *
 	 * @param callback Callback that actually performs the needed actions
 	 */
-	public void editRequirements(AbstractEditCallback callback) {
+	public void workRequirements(AbstractEditCallback callback) {
 		if(requirements != null) {
 			for(RequirementModel req : requirements) {
 				walk(req, callback);
@@ -60,15 +60,16 @@ public class EditMultipleRequirements {
 	 *
 	 * @param req The requirement to work with
 	 * @param callback Callback that performs the actions
+	 * @return Whatever value the call function is set up to return
 	 */
-	private void walk(final RequirementModel req,AbstractEditCallback callback) {
+	private Object walk(final RequirementModel req, AbstractEditCallback callback) {
 		// do what needs to be done and then recurse
-		callback.call(req);
 		if(req.getSubRequirements().size() >= 1 || req.getSubRequirements() != null) {
 			for(RequirementModel r : req.getSubRequirements()) {
 				walk(r, callback);
 			}
 		}
+		return callback.call(req);
 	}
 	
 	/**
