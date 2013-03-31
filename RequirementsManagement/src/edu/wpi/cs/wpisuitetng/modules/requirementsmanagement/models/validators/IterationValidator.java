@@ -235,7 +235,8 @@ public class IterationValidator {
 					issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
 				}
 				if((i.getStartDate().after(iteration.getStartDate()) && i.getStartDate().before(iteration.getEndDate())) ||
-						(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate()))) {
+						(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate())) ||
+						(i.getStartDate().equals(iteration.getStartDate()) || i.getEndDate().equals(iteration.getEndDate()))) {
 					issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
 				}
 			}
