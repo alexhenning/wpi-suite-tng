@@ -56,7 +56,9 @@ public class UpdateEstimatesCallback extends AbstractWorkCallback{
 		
 		if(getMethodToUse != null && setMethodToUse != null) {
 			try {
-				setMethodToUse.invoke(req, parameters[0]);
+				if(parameters[0] != null) {
+					setMethodToUse.invoke(req, parameters[0]);
+				}
 				requirementsEstimate = (Integer) getMethodToUse.invoke(req);
 			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);

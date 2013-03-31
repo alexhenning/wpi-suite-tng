@@ -209,7 +209,35 @@ public class EditMultipleRequirementsTest {
 	
 	@Test
 	public void testAccumulatingEstimates() {
+		List<RequirementModel> subrequirements;
+		RequirementModel req = new RequirementModel();
+		ArrayList<RequirementModel> reqs = new ArrayList<RequirementModel>();
+		RequirementModel subReq = new RequirementModel();
+		subReq.addSubRequirementID(new RequirementModel());
+		reqs.add(subReq);
+		reqs.add(new RequirementModel());
+		reqs.add(new RequirementModel());
+		req.setSubRequirementIDs(reqs);
+		requirements.add(req);
+		requirements.add(new RequirementModel());
+		edit.workRequirements(requirements, new EditFieldOfRequirementsCallback("estimate", "50"));
 		
+		assertEquals("50", requirements.get(0).getEstimate());
+		assertEquals("50", requirements.get(1).getEstimate());
+		subrequirements = requirements.get(0).getSubRequirements();
+		assertEquals("50", subrequirements.get(0).getEstimate());
+		assertEquals("50", subrequirements.get(1).getEstimate());
+		assertEquals("50", subrequirements.get(2).getEstimate());
+		assertEquals("50", subrequirements.get(0).getSubRequirements().get(0).getEstimate());
+		
+		subrequirements.get(0).getSubRequirements().get(0).setEstimate("25");
+		assertEquals("50", requirements.get(0).getEstimate());
+		assertEquals("50", requirements.get(1).getEstimate());
+		subrequirements = requirements.get(0).getSubRequirements();
+		assertEquals("50", subrequirements.get(0).getEstimate());
+		assertEquals("50", subrequirements.get(1).getEstimate());
+		assertEquals("50", subrequirements.get(2).getEstimate());
+		assertEquals("25", subrequirements.get(0).getSubRequirements().get(0).getEstimate());
 	}
 
 }

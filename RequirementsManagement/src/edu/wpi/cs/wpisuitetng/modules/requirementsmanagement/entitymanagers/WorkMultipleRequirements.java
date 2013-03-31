@@ -45,8 +45,8 @@ public class WorkMultipleRequirements {
 	public Object workRequirements(List<RequirementModel> reqs, AbstractWorkCallback callback) {
 		if(reqs != null && reqs.size() >= 1) {
 			Object[] returnValues = new Object[1];
-			RequirementModel req = reqs.get(0);
 			workRequirements(reqs.subList(1, reqs.size()), callback);
+			RequirementModel req = reqs.get(0);
 			if(req.getSubRequirements().size() >=1 && req.getSubRequirements() != null) {
 				returnValues[0] = workRequirements(req.getSubRequirements(), callback);
 			}
