@@ -33,6 +33,7 @@ public class HintedTextArea extends JTextArea {
 				if (getText().equals(hint)) {
 					setText("");
 					setFont(gainFont);
+					setForeground(Color.BLACK);
 				} else {
 					setText(getText());
 					setFont(gainFont);

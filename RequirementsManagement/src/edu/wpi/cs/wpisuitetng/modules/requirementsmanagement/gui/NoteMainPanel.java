@@ -23,7 +23,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddNoteController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
