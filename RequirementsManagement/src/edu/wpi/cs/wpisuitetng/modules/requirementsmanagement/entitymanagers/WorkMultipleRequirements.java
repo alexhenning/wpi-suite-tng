@@ -42,37 +42,6 @@ public class WorkMultipleRequirements {
 	}
 	
 	/**
-	 * For every requirement to be worked with, call walk
-	 *
-	 * @param callback Callback that actually performs the needed actions
-	 */
-/*	public void workRequirements(AbstractWorkCallback callback) {
-		if(requirements != null) {
-			for(RequirementModel req : requirements) {
-				walk(req, callback);
-			}
-		}
-	}
-	
-	*//**
-	 * Walks through a requirement's children and performs
-	 * an undefined action on it
-	 *
-	 * @param req The requirement to work with
-	 * @param callback Callback that performs the actions
-	 * @return Whatever value the call function is set up to return
-	 *//*
-	private Object walk(final RequirementModel req, AbstractWorkCallback callback) {
-		// do what needs to be done and then recurse
-		if(req.getSubRequirements().size() >= 1 || req.getSubRequirements() != null) {
-			for(RequirementModel r : req.getSubRequirements()) {
-				walk(r, callback);
-			}
-		}
-		return callback.call(req);
-	}*/
-	
-	/**
 	 * Works through all requirements in a list and all their children
 	 * and perform an action (defined by callback.call) on each
 	 *
@@ -86,8 +55,8 @@ public class WorkMultipleRequirements {
 			if(req.getSubRequirements().size() >=1 && req.getSubRequirements() != null) {
 				workRequirements(req.getSubRequirements(), callback);
 			}
-			callback.call(req);
 			workRequirements(reqs.subList(1, reqs.size()), callback);
+			return callback.call(req);	
 		}
 		return null;
 	}
