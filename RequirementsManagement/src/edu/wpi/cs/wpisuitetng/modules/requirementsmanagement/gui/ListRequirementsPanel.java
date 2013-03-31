@@ -11,8 +11,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ProjectEventsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 @SuppressWarnings("serial")
@@ -54,6 +56,7 @@ public class ListRequirementsPanel extends JPanel {
 			@Override public void mouseEntered(MouseEvent arg0) {}
 			@Override public void mouseClicked(MouseEvent arg0) {}
 		});
+		DB.getAllProjectEvents(new ListProjectEvents());
 	}
 
 	/**
@@ -126,7 +129,22 @@ public class ListRequirementsPanel extends JPanel {
 			else {
 				// do nothing, there are no requirements
 			}
+			DB.getAllProjectEvents(new ListProjectEvents());
+
 		}
+		
+	}
+	class ListProjectEvents implements ProjectEventsCallback {
+		
+		@Override
+		public void callback(List<ProjectEvent> projectEvents) {
+			// TODO Auto-generated method stub
+			for(ProjectEvent pe : projectEvents) {
+				System.out.println("PE: " + pe.toJSON());
+			}
+		}
+
+
 		
 	}
 }

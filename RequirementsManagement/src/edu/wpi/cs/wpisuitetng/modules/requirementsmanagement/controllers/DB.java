@@ -52,12 +52,19 @@ public class DB {
 	}
 
 	public static void createProjectEvent(ProjectEvent projectEvent, AddProjectEventController callback) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration",  HttpMethod.PUT);
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.PUT);
 		request.setBody(projectEvent.toJSON());
 		request.addObserver(new CreateProjectEventRequestObserver(callback));
 		request.send();
 	}
+	
 	public static void getAllProjectEvents(ProjectEventsCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
+		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
+		request.send();
+	}
+	
+	public static void getAllProjectEventsFor(ProjectEventsCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
 		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
 		request.send();

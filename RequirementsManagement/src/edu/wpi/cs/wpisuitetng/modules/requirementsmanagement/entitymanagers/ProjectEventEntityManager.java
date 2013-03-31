@@ -23,20 +23,17 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * @author Tim
  *
  */
-public class ProjectEntityManager implements EntityManager<ProjectEvent> {
+public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	private final Data db;
 	private final ProjectEventValidator validator;
-//	private final ModelMapper updateMapper;
 	
 	/**
 	 * Default constructor
 	 * @param data database
 	 */
-	public ProjectEntityManager(Data data) {
+	public ProjectEventEntityManager(Data data) {
 		db = data;
 		validator = new ProjectEventValidator(db);
-//		updateMapper = new ModelMapper();
-//		updateMapper.getBlacklist().add("project");
 	}
 
 	/**
@@ -52,6 +49,7 @@ public class ProjectEntityManager implements EntityManager<ProjectEvent> {
 	@Override
 	public ProjectEvent makeEntity(Session s, String content) throws BadRequestException,
 			ConflictException, WPISuiteException {
+		System.out.println("ProjectEventEntityManager.makeEntity: "+content);
 		ProjectEvent newProjectEvent = ProjectEvent.fromJSON(content);
 		
 		newProjectEvent.setId(Count() + 1);
@@ -158,6 +156,8 @@ public class ProjectEntityManager implements EntityManager<ProjectEvent> {
 		db.save(model, s.getProject());
 	}
 
+	//TODO should probably remove the delete functions....
+	
 	/**
 	 * Deletes a ProjectEvent by id
 	 *
@@ -197,6 +197,9 @@ public class ProjectEntityManager implements EntityManager<ProjectEvent> {
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
 		throw new NotImplementedException();
+//		ProjectEvent[] projectEvents = getAll(s);
+//		return db.retrieveAll(new ProjectEvent(), s.getProject()).toArray(new ProjectEvent[0]);
+
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.IterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateProjectEventRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
@@ -47,7 +48,7 @@ public class AddProjectEventController extends AbstractAction implements ActionL
 //		request.send();
 	}
 	
-	public void receivedAddConfirmation(Iteration req) {
+	public void receivedAddConfirmation(ProjectEvent req) {
 //		panel.close();//setStatus("Requirement saved!");
 	}
 

@@ -42,10 +42,10 @@ public class CreateProjectEventRequestObserver implements RequestObserver {
 		final ResponseModel response = iReq.getResponse();
 		
 		// Parse the message out of the response body
-		final ProjectEvent iteration = ProjectEvent.fromJSON(response.getBody());
+		final ProjectEvent projectEvent = ProjectEvent.fromJSON(response.getBody());
 		
 		// Pass the messages back to the controller
-		controller.receivedAddConfirmation(iteration);
+		controller.receivedAddConfirmation(projectEvent);
 	}
 
 	@Override
