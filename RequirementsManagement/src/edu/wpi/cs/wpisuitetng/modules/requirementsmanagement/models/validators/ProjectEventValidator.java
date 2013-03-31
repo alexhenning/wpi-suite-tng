@@ -68,20 +68,19 @@ public class ProjectEventValidator {
 		}
 	}
 	
-//	/**
-//	 * Return all Iterations of the specified project.
-//	 * 
-//	 * @param project the project this Iteration belongs to
-//	 * @param issues list of errors to add to if defect doesn't exist
-//	 * @return all Iterations in the project
-//	 * @throws WPISuiteException 
-//	 */
-//	Iteration[] getAllExistingIterations(Project project, List<ValidationIssue> issues)
-//			throws WPISuiteException {
-//		Iteration sample = new Iteration();
-//		Iteration[] iterations = (data.retrieveAll(sample, project)).toArray(new Iteration[0]);
-//		return iterations;
-//	}
+	/**
+	 * Return all ProjectEvents of the specified project.
+	 * 
+	 * @param project the project these ProjectEvents belong to
+	 * @return all ProjectEvents in the project
+	 * @throws WPISuiteException 
+	 */
+	ProjectEvent[] getAllExistingProjectEvents(Project project)
+			throws WPISuiteException {
+		ProjectEvent sample = new ProjectEvent();
+		ProjectEvent[] projectEvents = (data.retrieveAll(sample, project)).toArray(new ProjectEvent[0]);
+		return projectEvents;
+	}
 		
 //	/**
 //	 * Return the Iteration with the given id if it already exists in the database.
@@ -109,7 +108,7 @@ public class ProjectEventValidator {
 	 * from the Data given in the constructor.
 	 * 
 	 * @param session The session to validate against
-	 * @param defect The defect model to validate
+	 * @param projectEvent The ProjectEvent model to validate
 	 * @param mode The mode to validate for
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException 
@@ -123,16 +122,16 @@ public class ProjectEventValidator {
 		
 		//TODO finish this validator for ProjectEvent objects
 		
-//		ProjectEvent[] allProjectEvents = getAllExistingProjectEvents(session.getProject(), issues);
-//
-//		//check if the id is unique
-//		if(mode == Mode.CREATE) {
-//			for(Iteration it : allProjectEvents) {
-//				if(it.getId() == projectEvent.getId()) {
-//					issues.add(new ValidationIssue("Unable to create a ProjectEvent with the provided id ("+projectEvent.getId()+") since there is already a ProjectEvent with that id"));
-//				}
-//			}
-//		}
+		ProjectEvent[] allProjectEvents = getAllExistingProjectEvents(session.getProject());
+
+		//check if the id is unique
+		if(mode == Mode.CREATE) {
+			for(ProjectEvent pe : allProjectEvents) {
+				if(pe.getId() == projectEvent.getId()) {
+					issues.add(new ValidationIssue("Unable to create a ProjectEvent with the provided id ("+projectEvent.getId()+") since there is already a ProjectEvent with that id"));
+				}
+			}
+		}
 //
 //		Iteration oldIteration = null;
 //		if(mode == Mode.EDIT) {
@@ -140,23 +139,15 @@ public class ProjectEventValidator {
 //		}
 //		lastExistingProjectEvent = oldIteration;
 //		
-////		// make sure the creator and assignee exist and aren't duplicated
-////		if(mode == Mode.EDIT) {
-////			if(oldRequirement != null) {
-////				requirement.setCreator(oldRequirement.getCreator());
-////			}
-////		} else if(requirement.getCreator() == null) {
-////			issues.add(new ValidationIssue("Required", "creator"));
-////		} else {
-////			User creator = getExistingUser(requirement.getCreator().getUsername(), issues, "creator");
-////			if(creator != null) {
-////				if(!creator.getUsername().equals(session.getUsername())) {
-////					issues.add(new ValidationIssue("Must match currently logged in user", "creator"));
-////				} else {
-////					requirement.setCreator(creator);
-////				}
-////			}
-////		}
+		// make sure the user is not duplicated
+		User user = getExistingUser(projectEvent.getUser().getUsername(), issues, "creator");
+		if(user != null) {
+			if(!user.getUsername().equals(session.getUsername())) {
+				issues.add(new ValidationIssue("Must match currently logged in user", "user"));
+			} else {
+				projectEvent.setUser(user);
+			}
+		}
 //
 ////		// make sure start/endDates are not null
 ////		if(requirement.getName() == null || requirement.getName().length() > 150
@@ -188,7 +179,7 @@ public class ProjectEventValidator {
 //		}
 
 		if (issues.size() > 0){
-			System.out.println("iteration json: "+projectEvent.toJSON());
+			System.out.println("ProjectEvent json: "+projectEvent.toJSON());
 		}
 		return issues;
 	}

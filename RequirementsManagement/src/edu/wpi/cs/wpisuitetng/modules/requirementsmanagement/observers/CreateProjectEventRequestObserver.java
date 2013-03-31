@@ -22,7 +22,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 /**
  * This observer is called when a response is received from a request 
- * to the server to create an iteration.
+ * to the server to create a ProjectEvent.
  * 
  * @author David
  * @author Jacob Palnick
@@ -50,14 +50,14 @@ public class CreateProjectEventRequestObserver implements RequestObserver {
 
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to create an iteration had an error.");
+		System.err.println("The request to create a ProjectEvent had an error.");
 		System.err.println("\tResponse: "+iReq.getResponse().getStatusCode()+" --- "
 							+iReq.getResponse().getBody());
 	}
 
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("The request to create an iteration has failed.");
+		System.err.println("The request to create a ProjectEvent has failed.");
 	}
 	
 }
