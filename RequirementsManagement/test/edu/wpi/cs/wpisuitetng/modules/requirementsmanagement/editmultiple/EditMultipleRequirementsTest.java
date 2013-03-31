@@ -166,7 +166,7 @@ public class EditMultipleRequirementsTest {
 		}
 	}
 	
-	/* * This commented out assert will pass if this function is used as ReleaseNumber's equals method *
+	/* * The commented out assert will pass if this function is used as ReleaseNumber's equals method *
 	 public boolean equals(Object o) {
 		if(o instanceof ReleaseNumber) {
 			if(this.id == ((ReleaseNumber)o).getId() &&
@@ -177,5 +177,41 @@ public class EditMultipleRequirementsTest {
 		return false;
 	}
 	 */
+	
+	/**
+	 * Tests recursion by trying to edit a tree of requirements
+	 * Setup: Req  -> SubReq -> SubReq
+	 *            \-> SubReq
+	 *            \-> SubReq
+	 *        Req
+	 */           
+	@Test
+	public void testEditingMultipleLeveledRequirements() {
+		RequirementModel req = new RequirementModel();  // top level req
+		ArrayList<RequirementModel> reqs = new ArrayList<RequirementModel>();  // sub reqs for top level
+		RequirementModel subReq = new RequirementModel();  // sub req with sub req
+		subReq.addSubRequirementID(new RequirementModel()); // add sub req to seb req
+		reqs.add(subReq);  // add three sub reqs to first req
+		reqs.add(new RequirementModel());
+		reqs.add(new RequirementModel());
+		req.setSubRequirementIDs(reqs); // actually set the sub reqs
+		requirements.add(req);  // add to list of reqs
+		requirements.add(new RequirementModel());  // add second req to list of reqs, leaving tree looking as above
+		edit.setRequirements(requirements);
+		edit.editRequirements(new EditFieldOfRequirementsCallback("name", "recursive name"));
+		
+		// we'll check these manually because I'd do the recursion the same way, so that doesn't really help
+		requirements = edit.getRequirements();
+		// top level of two reqs
+		assertEquals("recursive name", requirements.get(0).getName());
+		assertEquals("recursive name", requirements.get(1).getName());
+		requirements = requirements.get(0).getSubRequirements(); // sub tree under first requirement
+		// check second level of three reqs
+		assertEquals("recursive name", requirements.get(0).getName());
+		assertEquals("recursive name", requirements.get(1).getName());
+		assertEquals("recursive name", requirements.get(2).getName());
+		// check sub req of first sub req
+		assertEquals("recursive name", requirements.get(0).getSubRequirements().get(0).getName());
+	}
 
 }
