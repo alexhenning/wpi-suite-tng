@@ -36,7 +36,7 @@ public class EditFieldOfRequirementsCallback extends AbstractWorkCallback {
 	 * @return null - there is nothing to return
 	 */
 	@Override
-	public Integer call(RequirementModel req) {
+	public Integer call(RequirementModel req, Integer value) {
 		Method[] methods = RequirementModel.class.getMethods();
 		Method methodToUse = null;
 

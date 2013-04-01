@@ -40,7 +40,7 @@ public class UpdateEstimatesCallback extends AbstractWorkCallback{
 	 * @return
 	 */
 	@Override
-	public Integer call(RequirementModel req) {
+	public Integer call(RequirementModel req, Integer value) {
 		Integer requirementsEstimate = 0;
 		Method[] methods = RequirementModel.class.getMethods();
 		Method getMethodToUse = null;
@@ -57,8 +57,8 @@ public class UpdateEstimatesCallback extends AbstractWorkCallback{
 		
 		if(getMethodToUse != null && setMethodToUse != null) {
 			try {
-				if(parameters != null && parameters[0] != null) {
-					setMethodToUse.invoke(req, parameters[0]);
+				if(value != 0) {
+					setMethodToUse.invoke(req, value);
 				}
 				requirementsEstimate = (Integer) getMethodToUse.invoke(req);
 			} catch (IllegalAccessException e) {
