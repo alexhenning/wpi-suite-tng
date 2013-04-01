@@ -61,6 +61,7 @@ public class RequirementsPanel extends JSplitPane {
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
 	private JPanel leftside = new JPanel();
+	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
 
 	/** A flag indicating if input is enabled on the form */
@@ -114,7 +115,10 @@ public class RequirementsPanel extends JSplitPane {
 	 */
 	public RequirementsPanel(RequirementsTab parent, RequirementModel requirement, Mode mode) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		setLeftComponent(leftside);
+		leftScrollPane = new JScrollPane(leftside);
+		leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		leftScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		setLeftComponent(leftScrollPane);
 		setRightComponent(supplementPane);
 		
 		this.parent = parent;
@@ -243,8 +247,9 @@ public class RequirementsPanel extends JSplitPane {
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
 		//sets the minimum size that the user can reduce the window to manually
-		leftside.setMinimumSize(new Dimension(600,600));
-		supplementPane.setMinimumSize(new Dimension(525,600));
+		leftside.setMinimumSize(new Dimension(600,700));
+		leftScrollPane.setMinimumSize(new Dimension(600,700));
+		supplementPane.setMinimumSize(new Dimension(525,700));
 		
 	}
 
