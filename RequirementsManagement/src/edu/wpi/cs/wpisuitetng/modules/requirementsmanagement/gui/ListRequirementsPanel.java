@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,6 +29,7 @@ import javax.swing.table.TableRowSorter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.FilterListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 @SuppressWarnings("serial")
@@ -39,8 +41,8 @@ public class ListRequirementsPanel extends JPanel {
 	JTextField filterBox;
 	ViewReqTable tableModel;
 	TableRowSorter<ViewReqTable> sorter;
-	
-	String[] columnNames = {"Name", "Status", "ID", "Description"};
+	JComboBox columnSelector;
+	String[] columnNames = { "ID", "Name", "Status", "Priority", "Estimate"};
 
 	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
@@ -78,8 +80,10 @@ public class ListRequirementsPanel extends JPanel {
 	 * @param layout the layout manager
 	 */
 	protected void addComponents() {
+		//borderlayout so the table can expand while the filter area remains constant
 		setLayout(new BorderLayout());
 		
+		//create the table part of the GUI
 		tableModel = new ViewReqTable();
 		sorter = new TableRowSorter<ViewReqTable>(tableModel);
 		table = new JTable(tableModel);
@@ -88,15 +92,28 @@ public class ListRequirementsPanel extends JPanel {
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
+		//Add the table to a scrollpane and add it
 		JScrollPane scrollPane = new JScrollPane(table);
-		
 		scrollPane.setPreferredSize(new Dimension(200, 100));
 		add(scrollPane, BorderLayout.CENTER);
 		
+		//create the filter part of the GUI
 		JPanel filterArea = new JPanel(new FlowLayout());
+		
+		//add the column enum selector
+		columnSelector = new JComboBox(columnNames);
+		columnSelector.setSelectedIndex(0);
+		columnSelector.addActionListener(new FilterListener());
+		filterArea.add(columnSelector);
+		
+		//add filter text label
 		JLabel filterLabel = new JLabel("Filter Text:", SwingConstants.TRAILING);
 		filterArea.add(filterLabel);
+		
+		//create input text box
 		filterBox = new JTextField(30);
+		
+		//add a listener to the filterbox
 		filterBox.getDocument().addDocumentListener(
 				new DocumentListener() {
 					public void changedUpdate(DocumentEvent e) {
@@ -109,6 +126,8 @@ public class ListRequirementsPanel extends JPanel {
                         newFilter();
                     }
 				});
+		
+		//add components to GUI
 		filterLabel.setLabelFor(filterBox);
 		filterArea.add(filterBox);
 		filterArea.setPreferredSize(new Dimension(100, 50));
@@ -119,7 +138,7 @@ public class ListRequirementsPanel extends JPanel {
 		RowFilter<ViewReqTable, Object> rf = null;
 		//If current expression doesn't parse, don't update.
 		try {
-			rf = RowFilter.regexFilter(filterBox.getText(), 0);
+			rf = RowFilter.regexFilter(filterBox.getText(), columnSelector.getSelectedIndex());
 		} 
 		catch (java.util.regex.PatternSyntaxException e) {
 			return;

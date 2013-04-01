@@ -124,27 +124,6 @@ public class NoteMainPanel extends JPanel {
 		this.repaint();
 	}
 	
-	public void setTestNotes() {
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 2, 5, 2);
-		c.gridx = 0;
-		c.gridy = 0;
-		noteViewer.add(new NotePanel("1afsdasdfasdf", "a1longgggggggggggg", new Date()), c);
-		
-		c.gridy = 1;
-		noteViewer.add(new NotePanel("2", "a2", new Date()), c);
-		
-		c.gridy = 2;
-		noteViewer.add(new NotePanel("3 sdfkjlsjld fkjl sdklfdskjl fskjl dfkjl sdkjl fkjl sdj fklskjl dfj sldkjl fskjl dfkjl sdkjl fkjl sdfkjl skjl dfkjl skjl df sjldfsdjl fskjl dfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdffkjl s", "a3", new Date()), c);
-		
-		c.gridy = 3;
-		noteViewer.add(new NotePanel("4", "a4", new Date()), c);
-		
-		c.gridy = 4;
-		noteViewer.add(new NotePanel("5poasidfpoi asdf[pioa sd[fp ioasdf[pio asdf[p ioasdf[po iasdf[ipo asdf[ipo asd[fpioa sd[pfoi as[dfipoa s[dfpio as[dfio", "a5", new Date()), c);
-	}
-	
 	/**
 	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
 	 * JComponent#setEnabled because setEnabled does not affect its children.
