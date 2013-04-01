@@ -81,7 +81,6 @@ public class NoteMainPanel extends JPanel {
 		textPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		noteViewer = new JPanel(new GridBagLayout());
-		noteViewer.setMinimumSize(new Dimension(1000, 10));
 
 		noteScrollPane = new JScrollPane(noteViewer);
 		noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -106,12 +105,15 @@ public class NoteMainPanel extends JPanel {
 		c.insets = new Insets(5, 0, 5, 0);
 		c.gridx = 0;
 		c.gridy = notes.size();
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		
 		noteViewer.removeAll();
 		
 		for (RequirementNote note : notes) {
 			if (note != null) {
-				noteViewer.add(new NotePanel(note), c);
+				NotePanel newNote = new NotePanel(note);
+				noteViewer.add(newNote, c);
 				c.gridy -= 1;
 			}
 		}
