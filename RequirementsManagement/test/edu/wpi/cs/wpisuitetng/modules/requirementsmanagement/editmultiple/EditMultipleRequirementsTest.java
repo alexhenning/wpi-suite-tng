@@ -258,5 +258,70 @@ public class EditMultipleRequirementsTest {
 		assertEquals(50, subrequirements.get(2).getEstimate());
 		assertEquals(25, subrequirements.get(0).getSubRequirements().get(0).getEstimate());
 	}
+	
+	@Test
+	public void testUpdateEstimates() {
+		List<RequirementModel> subrequirements;
+		ArrayList<RequirementModel> reqs = new ArrayList<RequirementModel>();
+		RequirementModel req = new RequirementModel();
+		RequirementModel subreq1 = new RequirementModel();
+		RequirementModel subreq2 = new RequirementModel();
+		
+		subreq1.addSubRequirementID(new RequirementModel());
+		subreq1.addSubRequirementID(new RequirementModel());
+		subreq1.addSubRequirementID(new RequirementModel());
+		reqs.add(subreq1);
+		
+		reqs.add(new RequirementModel());
+		
+		subreq2.addSubRequirementID(new RequirementModel());
+		subreq2.addSubRequirementID(new RequirementModel());
+		subreq2.addSubRequirementID(new RequirementModel());
+		subreq2.addSubRequirementID(new RequirementModel());
+		reqs.add(subreq2);
+		
+		req.setSubRequirementIDs(reqs);
+		
+		requirements.add(req);
+		requirements.add(new RequirementModel());
+		requirements.add(new RequirementModel());
+		requirements.add(new RequirementModel());
+		
+		edit.workRequirements(requirements, new EditFieldOfRequirementsCallback("estimate", 37));
+		
+		assertEquals(37, requirements.get(0).getEstimate());
+		assertEquals(37, requirements.get(1).getEstimate());
+		assertEquals(37, requirements.get(2).getEstimate());
+		assertEquals(37, requirements.get(3).getEstimate());
+		subrequirements = requirements.get(0).getSubRequirements();
+		assertEquals(37, subrequirements.get(0).getEstimate());
+		assertEquals(37, subrequirements.get(1).getEstimate());
+		assertEquals(37, subrequirements.get(2).getEstimate());
+		assertEquals(37, subrequirements.get(0).getSubRequirements().get(0).getEstimate());
+		assertEquals(37, subrequirements.get(0).getSubRequirements().get(1).getEstimate());
+		assertEquals(37, subrequirements.get(0).getSubRequirements().get(2).getEstimate());
+		assertEquals(37, subrequirements.get(2).getSubRequirements().get(0).getEstimate());
+		assertEquals(37, subrequirements.get(2).getSubRequirements().get(1).getEstimate());
+		assertEquals(37, subrequirements.get(2).getSubRequirements().get(2).getEstimate());
+		assertEquals(37, subrequirements.get(2).getSubRequirements().get(3).getEstimate());
+		
+		edit.workRequirements(requirements, new UpdateEstimatesCallback());
+		
+		assertEquals(296, requirements.get(0).getEstimate());
+		assertEquals(37, requirements.get(1).getEstimate());
+		assertEquals(37, requirements.get(2).getEstimate());
+		assertEquals(37, requirements.get(3).getEstimate());
+		subrequirements = requirements.get(0).getSubRequirements();
+		assertEquals(111, subrequirements.get(0).getEstimate());
+		assertEquals(37, subrequirements.get(1).getEstimate());
+		assertEquals(148, subrequirements.get(2).getEstimate());
+		assertEquals(37, subrequirements.get(0).getSubRequirements().get(0).getEstimate());
+		assertEquals(37, subrequirements.get(0).getSubRequirements().get(1).getEstimate());
+		assertEquals(37, subrequirements.get(0).getSubRequirements().get(2).getEstimate());
+		assertEquals(37, subrequirements.get(2).getSubRequirements().get(0).getEstimate());
+		assertEquals(37, subrequirements.get(2).getSubRequirements().get(1).getEstimate());
+		assertEquals(37, subrequirements.get(2).getSubRequirements().get(2).getEstimate());
+		assertEquals(37, subrequirements.get(2).getSubRequirements().get(3).getEstimate());
+	}
 
 }
