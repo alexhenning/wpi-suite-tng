@@ -18,14 +18,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 
 /**
  *
- * Description goes here
+ * Updates the estimates of requirements so that a requirement's estimate
+ * is the sum of the estimates of its children
  * @author Tim Calvert
  *
  */
 public class UpdateEstimatesCallback extends AbstractWorkCallback{
 	
 	public UpdateEstimatesCallback() {
-		super("", null);
+		super("estimate", null);
 	}
 
 	/**
@@ -39,7 +40,7 @@ public class UpdateEstimatesCallback extends AbstractWorkCallback{
 	 * @return
 	 */
 	@Override
-	public Object call(RequirementModel req) {
+	public Integer call(RequirementModel req) {
 		Integer requirementsEstimate = 0;
 		Method[] methods = RequirementModel.class.getMethods();
 		Method getMethodToUse = null;
@@ -56,7 +57,7 @@ public class UpdateEstimatesCallback extends AbstractWorkCallback{
 		
 		if(getMethodToUse != null && setMethodToUse != null) {
 			try {
-				if(parameters[0] != null) {
+				if(parameters != null && parameters[0] != null) {
 					setMethodToUse.invoke(req, parameters[0]);
 				}
 				requirementsEstimate = (Integer) getMethodToUse.invoke(req);

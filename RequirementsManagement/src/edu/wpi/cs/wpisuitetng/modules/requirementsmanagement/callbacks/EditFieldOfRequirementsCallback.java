@@ -18,7 +18,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 
 /**
  *
- * Description goes here
+ * Can take an identifier for a field in a requirement and change the value
+ * of that field to a given value
  * @author Tim Calvert
  *
  */
@@ -35,7 +36,7 @@ public class EditFieldOfRequirementsCallback extends AbstractWorkCallback {
 	 * @return null - there is nothing to return
 	 */
 	@Override
-	public Object call(RequirementModel req) {
+	public Integer call(RequirementModel req) {
 		Method[] methods = RequirementModel.class.getMethods();
 		Method methodToUse = null;
 
@@ -57,7 +58,7 @@ public class EditFieldOfRequirementsCallback extends AbstractWorkCallback {
 			}
 		}
 		
-		return null;
+		return 0;
 	}
 
 }

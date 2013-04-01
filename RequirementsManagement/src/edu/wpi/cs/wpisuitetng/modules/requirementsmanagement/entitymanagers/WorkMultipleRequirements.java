@@ -40,20 +40,21 @@ public class WorkMultipleRequirements {
 	 *
 	 * @param reqs list of requirements to work with
 	 * @param callback callback
-	 * @return an Object as returned by call
+	 * @return an Integer as returned by call
 	 */
-	public Object workRequirements(List<RequirementModel> reqs, AbstractWorkCallback callback) {
+	public Integer workRequirements(List<RequirementModel> reqs, AbstractWorkCallback callback) {
 		if(reqs != null && reqs.size() >= 1) {
-			Object[] returnValues = new Object[1];
+			//Integer[] returnValues = new Integer[1];
 			workRequirements(reqs.subList(1, reqs.size()), callback);
 			RequirementModel req = reqs.get(0);
 			if(req.getSubRequirements().size() >=1 && req.getSubRequirements() != null) {
-				returnValues[0] = workRequirements(req.getSubRequirements(), callback);
+				return workRequirements(req.getSubRequirements(), callback) + callback.call(req);
+			} else {
+				//callback.setParameters(returnValues);
+				return callback.call(req);	
 			}
-			callback.setParameters(returnValues);
-			return callback.call(req);	
 		}
-		return null;
+		return 0;
 	}
 
 }

@@ -23,26 +23,26 @@ public abstract class AbstractWorkCallback {
 
 	protected String field;
 	protected Object newValue;
-	protected Object[] parameters = null;
+	protected Integer[] parameters = null;
 	
 	public AbstractWorkCallback(String field, Object newValue) {
 		this.field = field;
 		this.newValue = newValue;
 	}
 	
-	public AbstractWorkCallback(String field, Object newValue, Object[] parameters) {
+	public AbstractWorkCallback(String field, Object newValue, Integer[] parameters) {
 		this.field = field;
 		this.newValue = newValue;
 		this.parameters = parameters;
 	}
 	
-	public abstract Object call(RequirementModel req);
+	public abstract Integer call(RequirementModel req);
 
-	public Object[] getParameters() {
+	public Integer[] getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(Object[] parameters) {
+	public void setParameters(Integer[] parameters) {
 		this.parameters = parameters;
 	}	
 }
