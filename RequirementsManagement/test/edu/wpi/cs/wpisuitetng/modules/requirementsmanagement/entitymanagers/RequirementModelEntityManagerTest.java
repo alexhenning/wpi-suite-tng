@@ -54,8 +54,12 @@ public class RequirementModelEntityManagerTest {
 		existingUser = new User("tim", "tim", "password", 2);
 		existingRequirement = new RequirementModel(1, new ReleaseNumber(1,3, testProject), RequirementStatus.NEW,
 				RequirementPriority.NONE, "existingReq", "descrip", "0","0", existingUser, null,
-				new Date(), new Date(), null, null, null, RequirementType.EPIC );
+				new Date(0), new Date(0), null, null, null, RequirementType.EPIC );
 		
+		otherRequirement = new RequirementModel();
+		otherRequirement.setProject(otherProject);
+	
+		//TODO more setup for tests
 		
 	}
 
@@ -66,6 +70,7 @@ public class RequirementModelEntityManagerTest {
 	public void tearDown() throws Exception {
 	}
 
+	//TODO test entity managers
 	@Ignore
 	@Test
 	public void test() {
