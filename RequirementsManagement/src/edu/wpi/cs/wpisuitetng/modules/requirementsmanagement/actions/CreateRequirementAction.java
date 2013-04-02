@@ -28,7 +28,7 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 
 /**
- * Action that calls {@link MainTabController#addCreateDefectTab()}, default mnemonic key is C. 
+ * Action that calls {@link MainTabController#addCreateRequirementTab()}, default mnemonic key is C. 
  */
 @SuppressWarnings("serial")
 public class CreateRequirementAction extends AbstractAction {
@@ -36,7 +36,7 @@ public class CreateRequirementAction extends AbstractAction {
 	private final MainTabController controller;
 	
 	/**
-	 * Create a CreateDefectAction
+	 * Create a CreateRequirementAction
 	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
 	 */
 	public CreateRequirementAction(MainTabController controller) {

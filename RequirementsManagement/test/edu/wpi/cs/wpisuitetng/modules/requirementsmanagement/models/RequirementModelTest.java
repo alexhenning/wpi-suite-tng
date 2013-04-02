@@ -123,21 +123,31 @@ public class RequirementModelTest {
 	// TODO: Need to change if estimates are numbers (integers)
 	@Test
 	public void testAssigningEstimate() {
-		String s = "2 hours";
+		int s = 2;
 		rm.setEstimate(s);
 		assertEquals(s, rm.getEstimate());
-		rm.setEstimate("5 minutes");
-		assertEquals("5 minutes", rm.getEstimate());
+		rm.setEstimate(5);
+		assertEquals(5, rm.getEstimate());
+//		String s = "2 hours";
+//		rm.setEstimate(s);
+//		assertEquals(s, rm.getEstimate());
+//		rm.setEstimate("5 minutes");
+//		assertEquals("5 minutes", rm.getEstimate());
 	}
 
 	// TODO: Need to change if efforts are numbers (integers)
 	@Test
 	public void testAssigningActualEffort() {
-		String s = "3 hours";
+		int s = 3;
 		rm.setActualEffort(s);
 		assertEquals(s, rm.getActualEffort());
-		rm.setActualEffort("about 90 minutes");
-		assertEquals("about 90 minutes", rm.getActualEffort());
+		rm.setActualEffort(90);
+		assertEquals(90, rm.getActualEffort());
+//		String s = "3 hours";
+//		rm.setActualEffort(s);
+//		assertEquals(s, rm.getActualEffort());
+//		rm.setActualEffort("about 90 minutes");
+//		assertEquals("about 90 minutes", rm.getActualEffort());
 	}
 	
 	@Ignore

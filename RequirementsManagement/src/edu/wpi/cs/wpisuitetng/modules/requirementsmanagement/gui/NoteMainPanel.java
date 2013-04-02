@@ -12,6 +12,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -40,6 +41,7 @@ public class NoteMainPanel extends JPanel {
 	boolean inputEnabled;
 	public JTextArea ta;
 	JPanel noteViewer;
+	JPanel noteAdder;
 	JScrollPane noteScrollPane;
 	JButton addButton;
 	List<RequirementNote> notes;
@@ -59,7 +61,7 @@ public class NoteMainPanel extends JPanel {
 		// Add all components to this panel
 		addComponents();
 		
-		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
+		
 		// TODO: updateFields();
 	}
 
@@ -69,8 +71,7 @@ public class NoteMainPanel extends JPanel {
 	 * @param layout the layout manager
 	 */
 	protected void addComponents() {
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		setLayout(new BorderLayout());
 
 		ta = new JTextArea(5, 40);
 		ta.setLineWrap(true);
@@ -80,28 +81,22 @@ public class NoteMainPanel extends JPanel {
 		textPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		noteViewer = new JPanel(new GridBagLayout());
-		noteViewer.setMinimumSize(new Dimension(1000, 10));
 
 		noteScrollPane = new JScrollPane(noteViewer);
-		noteScrollPane.setPreferredSize(new Dimension(300, 300));
-		noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		addButton = new JButton("Add note");
 		addButton.addActionListener(new AddNoteController(this, parent.model, parent));
 		
 		// Add elements to the main panel
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.gridx = 0;
-		add(noteScrollPane, c);
+		add(noteScrollPane, BorderLayout.CENTER);
 		
-		c.gridy = 1;
-		add(textPane, c);
-
-		c.fill = GridBagConstraints.NONE;
-		c.gridy = 2;
-		add(addButton, c);
+		noteAdder = new JPanel(new BorderLayout());
+		
+		noteAdder.add(textPane, BorderLayout.PAGE_START);
+		noteAdder.add(addButton, BorderLayout.LINE_START);
+		add(noteAdder, BorderLayout.PAGE_END);
 	}
 	
 	public void setNotes(List<RequirementNote> notes) {
@@ -110,39 +105,21 @@ public class NoteMainPanel extends JPanel {
 		c.insets = new Insets(5, 0, 5, 0);
 		c.gridx = 0;
 		c.gridy = notes.size();
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		
 		noteViewer.removeAll();
 		
 		for (RequirementNote note : notes) {
 			if (note != null) {
-				noteViewer.add(new NotePanel(note), c);
+				NotePanel newNote = new NotePanel(note);
+				noteViewer.add(newNote, c);
 				c.gridy -= 1;
 			}
 		}
 
 		this.revalidate();
 		this.repaint();
-	}
-	
-	public void setTestNotes() {
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 2, 5, 2);
-		c.gridx = 0;
-		c.gridy = 0;
-		noteViewer.add(new NotePanel("1afsdasdfasdf", "a1longgggggggggggg", new Date()), c);
-		
-		c.gridy = 1;
-		noteViewer.add(new NotePanel("2", "a2", new Date()), c);
-		
-		c.gridy = 2;
-		noteViewer.add(new NotePanel("3 sdfkjlsjld fkjl sdklfdskjl fskjl dfkjl sdkjl fkjl sdj fklskjl dfj sldkjl fskjl dfkjl sdkjl fkjl sdfkjl skjl dfkjl skjl df sjldfsdjl fskjl dfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdfdfk jlsdkjl f skjldsdfsdfsdfsdfsdfposipdiofiposdffkjl s", "a3", new Date()), c);
-		
-		c.gridy = 3;
-		noteViewer.add(new NotePanel("4", "a4", new Date()), c);
-		
-		c.gridy = 4;
-		noteViewer.add(new NotePanel("5poasidfpoi asdf[pioa sd[fp ioasdf[pio asdf[p ioasdf[po iasdf[ipo asdf[ipo asd[fpioa sd[pfoi as[dfipoa s[dfpio as[dfio", "a5", new Date()), c);
 	}
 	
 	/**

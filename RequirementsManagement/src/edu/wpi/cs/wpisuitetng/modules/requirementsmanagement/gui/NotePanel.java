@@ -11,9 +11,8 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -70,18 +69,13 @@ public class NotePanel extends JPanel {
 		
 		//set layout
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		setLayout(new BorderLayout());
 		
 		authorText = new JTextField(author);
-		authorText.setSize(500, 30);
 		authorText.setEditable(false);
 		authorText.setFocusable(false);
 		authorText.setOpaque(false);
-		c.fill = GridBagConstraints.NONE;
-		c.gridx = 0;
-		c.gridy = 0;
-		add(authorText, c);
+		add(authorText, BorderLayout.PAGE_START);
 
 		//creates area for message and adds to note panel
 		messageArea = new JTextArea(message);
@@ -89,22 +83,14 @@ public class NotePanel extends JPanel {
 		messageArea.setEditable(false);
 		messageArea.setFocusable(false);
 		messageArea.setOpaque(false);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 1;
-		add(messageArea, c);
+		add(messageArea, BorderLayout.CENTER);
 		
 		//creates area for creation information and adds to note panel
-		infoText = new JTextField("                                                         " +
-				"added note on " + date.toString());
-		infoText.setSize(500, 30);
+		infoText = new JTextField("added note on " + date.toString());
 		infoText.setEditable(false);
 		infoText.setFocusable(false);
 		infoText.setOpaque(false);
-		c.fill = GridBagConstraints.NONE;
-		c.gridx = 0;
-		c.gridy = 2;
-		add(infoText, c);
+		add(infoText, BorderLayout.PAGE_END);
 		
 	}
 }

@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    //TODO
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import java.util.ArrayList;
@@ -234,8 +243,9 @@ public class IterationValidator {
 				if(iteration.getEndDate().after(i.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
 					issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
 				}
-				if(i.getStartDate().after(iteration.getStartDate()) && iteration.getStartDate().before(i.getEndDate()) ||
-						i.getEndDate().after(iteration.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
+				if((i.getStartDate().after(iteration.getStartDate()) && i.getStartDate().before(iteration.getEndDate())) ||
+						(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate())) ||
+						(i.getStartDate().equals(iteration.getStartDate()) || i.getEndDate().equals(iteration.getEndDate()))) {
 					issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
 				}
 			}
