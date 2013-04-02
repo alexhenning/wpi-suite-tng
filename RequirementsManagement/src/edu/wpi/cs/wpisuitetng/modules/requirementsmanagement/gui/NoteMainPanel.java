@@ -23,7 +23,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddNoteController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
@@ -38,7 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
 public class NoteMainPanel extends JPanel {
 	RequirementsPanel parent;
 	boolean inputEnabled;
-	public JTextArea ta;
+	public HintedTextArea ta;
 	JPanel noteViewer;
 	JScrollPane noteScrollPane;
 	JButton addButton;
@@ -72,9 +71,8 @@ public class NoteMainPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		ta = new JTextArea(5, 40);
-		ta.setLineWrap(true);
-		ta.setText("New note");		
+		ta = new HintedTextArea(5, 40, "New note");
+		ta.setLineWrap(true);	
 		JScrollPane textPane = new JScrollPane(ta);
 		textPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		textPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
