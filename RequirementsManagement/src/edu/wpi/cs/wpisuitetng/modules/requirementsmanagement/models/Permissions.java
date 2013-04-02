@@ -7,6 +7,7 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import edu.wpi.cs.wpisuitetng.Permission;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -19,70 +20,51 @@ public class Permissions extends AbstractModel {
 	
 	//TODO Do we want a transaction log for the Permissions data?
 	
-	private HashMap<User, PermissionLevel> permissionMapping = new HashMap<User, PermissionLevel>();
+	private PermissionLevel permissions;
+	private String username;
 	private Project project;
 
-	public Permissions(Project project, User admin) {
-		this.permissionMapping.put(admin, PermissionLevel.EDIT_ALL);
-		this.setProject(project);
+	public Permissions(){
+		
+	}
+	
+	public Permissions(Project project, String username, PermissionLevel permissionLevel) {
+		this.username = username;
+		this.permissions = permissionLevel;
+		this.project = project;
 	}
 
 	/**
-	 * adds user with the appropriate permissions level for a project manager
-	 *
-	 * @param user
-	 */
-	public void addManager(User user){
-		permissionMapping.put(user, PermissionLevel.EDIT_ALL);
-	}
-	
-	/**
-	 * adds a user with the appropriate permissions level for a team member
-	 *
-	 * @param user
-	 */
-	public void addTeamMember(User user){
-		permissionMapping.put(user, PermissionLevel.EDIT_LIMITED);
-	}
-	
-	/**
-	 * adds a user with the appropriate permissions level for a customer
-	 *
-	 * @param user
-	 */
-	public void addCustomer(User user){
-		permissionMapping.put(user, PermissionLevel.VIEW);
-	}
-
-	/**
-	 * returns the permissions currently granted to a given user
+	 * returns the permissions currently granted this user
 	 *
 	 * @param user
 	 * @return PermissionLevel
 	 */
-	public PermissionLevel getPermissionLevel(User user){
-		if(permissionMapping.containsKey(user)) return permissionMapping.get(user);
-		else return PermissionLevel.NONE;
+	public PermissionLevel getPermissionLevel(){
+		return permissions;
 	}
 	
 	/**
-	 * Remove the permissions for a given user
-	 *
-	 * @param user
-	 */
-	public void removePermissions(User user){
-		permissionMapping.remove(user);
-	}
-	
-	/**
-	 * Change the permissions level for a given user
+	 * Change the permissions level for this user
 	 *
 	 * @param user
 	 * @param newLevel
 	 */
-	public void changePermissions(User user, PermissionLevel newLevel){
-		permissionMapping.remove(user);
-		permissionMapping.put(user, newLevel);
+	public void changePermissions(PermissionLevel newLevel){
+		permissions = newLevel;
+	}
+	
+	public String getUsername(){
+		return username;
+	}
+	
+	/**
+	 * Project getter
+	 *
+	 * @return project
+	 */
+	public Project getProject(){
+		return project;
 	}
 	
 	/* (non-Javadoc)
