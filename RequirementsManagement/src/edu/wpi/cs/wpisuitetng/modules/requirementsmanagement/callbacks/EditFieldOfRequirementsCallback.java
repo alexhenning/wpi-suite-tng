@@ -25,6 +25,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  */
 public class EditFieldOfRequirementsCallback extends AbstractWorkCallback {
 
+	/**
+	 * Default constructor
+	 * @param field Field that will be edited
+	 * @param newValue New value for field
+	 */
 	public EditFieldOfRequirementsCallback(String field, Object newValue) {
 		super(field, newValue);
 	}

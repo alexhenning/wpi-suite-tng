@@ -25,6 +25,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  */
 public class UpdateEstimatesCallback extends AbstractWorkCallback{
 	
+	/**
+	 * Default constructor; sets field automatically
+	 */
 	public UpdateEstimatesCallback() {
 		super("estimate", null);
 	}
