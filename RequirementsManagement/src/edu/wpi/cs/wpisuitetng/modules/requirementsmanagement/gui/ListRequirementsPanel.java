@@ -50,12 +50,8 @@ public class ListRequirementsPanel extends JPanel {
 	ListRequirementsTab parent;
 	boolean inputEnabled;
 	JTable table;
-	JTextField filterBox;
 	ViewReqTable tableModel;
-	TableRowSorter<ViewReqTable> sorter;
-	JComboBox columnSelector;
-	String[] columnNames = { "ID", "Name", "Status", "Priority", "Estimate"};
-
+	
 	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
 		
@@ -97,9 +93,7 @@ public class ListRequirementsPanel extends JPanel {
 		
 		//create the table part of the GUI
 		tableModel = new ViewReqTable();
-		sorter = new TableRowSorter<ViewReqTable>(tableModel);
 		table = new JTable(tableModel);
-		table.setRowSorter(sorter);
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -108,56 +102,8 @@ public class ListRequirementsPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 100));
 		add(scrollPane, BorderLayout.CENTER);
-		
-		//create the filter part of the GUI
-		JPanel filterArea = new JPanel(new FlowLayout());
-		
-		//add the column enum selector
-		columnSelector = new JComboBox(columnNames);
-		columnSelector.setSelectedIndex(0);
-		columnSelector.addActionListener(new FilterListener());
-		filterArea.add(columnSelector);
-		
-		//add filter text label
-		JLabel filterLabel = new JLabel("Filter Text:", SwingConstants.TRAILING);
-		filterArea.add(filterLabel);
-		
-		//create input text box
-		filterBox = new JTextField(30);
-		
-		//add a listener to the filterbox
-		filterBox.getDocument().addDocumentListener(
-				new DocumentListener() {
-					public void changedUpdate(DocumentEvent e) {
-						newFilter();
-					}
-					public void insertUpdate(DocumentEvent e) {
-                        newFilter();
-                    }
-                    public void removeUpdate(DocumentEvent e) {
-                        newFilter();
-                    }
-				});
-		
-		//add components to GUI
-		filterLabel.setLabelFor(filterBox);
-		filterArea.add(filterBox);
-		filterArea.setPreferredSize(new Dimension(100, 50));
-		add(filterArea, BorderLayout.PAGE_END);	
+
 	}
-	
-	private void newFilter() {
-		RowFilter<ViewReqTable, Object> rf = null;
-		//If current expression doesn't parse, don't update.
-		try {
-			rf = RowFilter.regexFilter(filterBox.getText(), columnSelector.getSelectedIndex());
-		} 
-		catch (java.util.regex.PatternSyntaxException e) {
-			return;
-		}
-		sorter.setRowFilter(rf);
-	}
-	
 	/**
 	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
 	 * JComponent#setEnabled because setEnabled does not affect its children.
