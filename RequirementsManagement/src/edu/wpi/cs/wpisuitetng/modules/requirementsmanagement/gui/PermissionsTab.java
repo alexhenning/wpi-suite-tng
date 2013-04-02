@@ -10,6 +10,11 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
+/**
+ * 
+ * @author William Terry
+ *
+ */
 @SuppressWarnings("serial")
 public class PermissionsTab extends JPanel implements IToolbarGroupProvider {
 	MainTabController tabController;

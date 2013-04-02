@@ -23,12 +23,13 @@ public class Permissions extends AbstractModel {
 	private PermissionLevel permissions;
 	private String username;
 	private Project project;
+	private int id;
 
 	public Permissions(){
 		
 	}
 	
-	public Permissions(Project project, String username, PermissionLevel permissionLevel) {
+	public Permissions(Project project, String username, PermissionLevel permissionLevel, int id) {
 		this.username = username;
 		this.permissions = permissionLevel;
 		this.project = project;
@@ -56,6 +57,10 @@ public class Permissions extends AbstractModel {
 	
 	public String getUsername(){
 		return username;
+	}
+	
+	public int getId(){
+		return id;
 	}
 	
 	/**
@@ -116,6 +121,11 @@ public class Permissions extends AbstractModel {
 	@Override
 	public Boolean identify(Object o) {
 		return (o.getClass() == this.getClass());
+	}
+
+	public static Permissions[] fromJSONArray(String body) {
+		GsonBuilder builder = new GsonBuilder();
+		return builder.create().fromJson(body, Permissions[].class);
 	}
 
 }

@@ -12,6 +12,11 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
+/**
+ * 
+ * @author William Terry
+ *
+ */
 public class PermissionsValidator {
 	private Data data;
 	private Permissions lastExistingPermissions;

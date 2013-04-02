@@ -2,6 +2,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,35 +12,53 @@ import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionsController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.IterationPanel.UpdateIterationIdCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.UpdateTableCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
+/**
+ * 
+ * @author William Terry
+ *
+ */
 public class PermissionsPanel extends JPanel {
 	Permissions model;
 	
 	PermissionsTab parent;
 	private GridBagLayout panelLayout;
-	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile;
-	JTextField username;
+	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
+	HintedTextArea username;
 	JButton submit, update;
 	JComboBox permissionSelect;
+	JPanel profilePanel;
+	JScrollPane tablePane;
+	JTable profileTable;
+	String sName, sUsername, sID;
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
 
 	public PermissionsPanel(PermissionsTab permissionsTab){
 		this.parent = permissionsTab;
-		model = parent.permission;
+//		model = parent.permission;
 		// Indicate that input is enabled
 		inputEnabled = true;
 		
@@ -50,9 +71,8 @@ public class PermissionsPanel extends JPanel {
 
 	
 	private void addComponents(){
-		panelLayout =new GridBagLayout();
+		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		setLayout(panelLayout);
 		
 		lbl1 = new JLabel("Add ");
 		lbl2 = new JLabel(" to project with ");
@@ -61,35 +81,108 @@ public class PermissionsPanel extends JPanel {
 		lblname = new JLabel("Name: ");
 		lblusername = new JLabel("Username: ");
 		
+		username = new HintedTextArea(1, 20, "Username");
+		
 		submit = new JButton("Submit");
-		update = new JButton("Update");
 		
-		permissionSelect = new JComboBox<PermissionLevel>();
+		PermissionLevel[] levels={PermissionLevel.WRITE, PermissionLevel.WRITE_LIMITED, PermissionLevel.READ};
+		permissionSelect = new JComboBox<PermissionLevel>(levels);
 		
+		submit.addActionListener(new AddPermissionsController(this));
 		
-		username = new JTextField();
-		
-		//submit.addActionListener(new AddPermissionsController(this));
-		//update.addActionListener(new ADDPermissionsController(this));
+		instantiateTable();
+		tablePane = new JScrollPane();
+tablePane.add(new JLabel("This will be a table"));
+		instantiateProfilePanel();
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.weighty = 0.1;
 		add(lbl1, c);
+		
 		c.gridx = 1;
-		//add(startDate, c);
-		c.gridy = 1;
-		c.gridx = 0;
-		//add(lbl2, c);
-		c.gridx = 1;
-		//add(endDate, c);
-		c.gridy = 2;
-		c.gridx = 0;
+		add(username, c);
+		
+		c.gridx = 2;
+		add(lbl2, c);
+		
+		c.gridx = 3;
+		add(permissionSelect, c);
+		
+		c.gridx = 4;
 		add(lbl3, c);
-		c.gridx = 1;
-		//add(iterationNumber, c);
-		c.gridy = 3;
+		
+		c.gridx = 5;
 		add(submit, c);
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 3;
+		c.weighty = 1.0;
+		add(tablePane);
+		
+		c.gridx = 4;
+		c.gridwidth = 2;
+		add(profilePanel);
+		
+	}
+	
+	private void instantiateProfilePanel() {
+		lblprofile = new JLabel("Selected Profile");
+		lblname = new JLabel("Name: "+sName);
+		lblusername = new JLabel("Username: "+sUsername);
+		lblID = new JLabel("ID number: "+sID);
+		lblpermissions = new JLabel("Permission privileges: ");
+		
+		profilePanel =new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		profilePanel.add(lblprofile);
+		profilePanel.add(lblname);
+		profilePanel.add(lblusername);
+		profilePanel.add(lblpermissions);
+		
+		update = new JButton("Update");
+		update.addActionListener(new AddPermissionsController(this));
+	}
+
+	public void updateProfileLabels(){
+		lblname.setText("Name: "+sName);
+		lblusername.setText("Username: "+sUsername);
+		lblID.setText("ID number: "+sID);
+		profilePanel.repaint();
+	}
+
+	private void instantiateTable() {
+	profileTable = new JTable(new ViewPermissionsTable());
+		
+		updateAllPermissionsList();
+		
+		profileTable.addMouseListener(new MouseListener() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                	DB.getSinglePermissions((String) profileTable.getModel().getValueAt(profileTable.getSelectedRow(), 0),
+                			new SinglePermissionsCallback() {
+						@Override
+						public void callback(Permissions profile) {
+							parent.tabController.addEditPermissionsTab(profile);
+						}
+                	});
+                }
+			}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent arg0) {}
+		});
+	}
+
+	public void updateAllPermissionsList() {
+//		DB.getAllPermissions(new UpdateTableCallback());
 	}
 	
 	public void close() {
@@ -159,5 +252,23 @@ public class PermissionsPanel extends JPanel {
 		//TODO: implement getting model from panel
 		
 		return model;
+	}
+	
+	public static void main(String[] args){
+		 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	            public void run() {
+	            	JFrame frame = new JFrame("ComboBoxDemo");
+	                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	         
+	                //Create and set up the content pane.
+	                JComponent newContentPane = new PermissionsPanel(null);
+	                newContentPane.setOpaque(true); //content panes must be opaque
+	                frame.setContentPane(newContentPane);
+	         
+	                //Display the window.
+	                frame.pack();
+	                frame.setVisible(true);
+	            }
+	        });
 	}
 }
