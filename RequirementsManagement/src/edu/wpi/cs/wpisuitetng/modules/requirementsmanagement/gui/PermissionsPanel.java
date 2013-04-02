@@ -47,7 +47,7 @@ public class PermissionsPanel extends JPanel {
 	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
 	HintedTextArea username;
 	JButton submit, update;
-	JComboBox permissionSelect;
+	JComboBox permissionSelectNew, permissionSelectExisting;
 	JPanel profilePanel;
 	JScrollPane tablePane;
 	JTable profileTable;
@@ -86,13 +86,14 @@ public class PermissionsPanel extends JPanel {
 		submit = new JButton("Submit");
 		
 		PermissionLevel[] levels={PermissionLevel.WRITE, PermissionLevel.WRITE_LIMITED, PermissionLevel.READ};
-		permissionSelect = new JComboBox<PermissionLevel>(levels);
+		permissionSelectNew = new JComboBox<PermissionLevel>(levels);
+		permissionSelectExisting = new JComboBox<PermissionLevel>(levels);
 		
 		submit.addActionListener(new AddPermissionsController(this));
 		
 		instantiateTable();
 		tablePane = new JScrollPane();
-tablePane.add(new JLabel("This will be a table"));
+		tablePane.add(profileTable);
 		instantiateProfilePanel();
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -108,7 +109,7 @@ tablePane.add(new JLabel("This will be a table"));
 		add(lbl2, c);
 		
 		c.gridx = 3;
-		add(permissionSelect, c);
+		add(permissionSelectNew, c);
 		
 		c.gridx = 4;
 		add(lbl3, c);
@@ -120,11 +121,11 @@ tablePane.add(new JLabel("This will be a table"));
 		c.gridy = 1;
 		c.gridwidth = 3;
 		c.weighty = 1.0;
-		add(tablePane);
+		add(tablePane, c);
 		
 		c.gridx = 4;
 		c.gridwidth = 2;
-		add(profilePanel);
+		add(profilePanel, c);
 		
 	}
 	
@@ -134,19 +135,32 @@ tablePane.add(new JLabel("This will be a table"));
 		lblusername = new JLabel("Username: "+sUsername);
 		lblID = new JLabel("ID number: "+sID);
 		lblpermissions = new JLabel("Permission privileges: ");
+		update = new JButton("Update");
+		update.addActionListener(new AddPermissionsController(this));
 		
 		profilePanel =new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
 		c.gridx = 0;
 		c.gridy = 0;
-		profilePanel.add(lblprofile);
-		profilePanel.add(lblname);
-		profilePanel.add(lblusername);
-		profilePanel.add(lblpermissions);
+		c.gridwidth = 2;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		profilePanel.add(lblprofile, c);
+		c.gridy = 1;
+		profilePanel.add(lblname, c);
+		c.gridy = 2;
+		profilePanel.add(lblusername, c);
+		c.gridy = 3;
+		c.gridwidth = 1;
+		profilePanel.add(lblpermissions, c);
+		c.gridx = 1;
+		profilePanel.add(permissionSelectExisting, c);
+		c.gridx = 0;
+		c.gridy = 4;
+		c.gridwidth = 2;
+		c.fill = GridBagConstraints.NONE;
+		profilePanel.add(update, c);
 		
-		update = new JButton("Update");
-		update.addActionListener(new AddPermissionsController(this));
 	}
 
 	public void updateProfileLabels(){

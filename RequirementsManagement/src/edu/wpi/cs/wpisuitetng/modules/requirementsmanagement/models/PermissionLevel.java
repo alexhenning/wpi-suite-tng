@@ -5,8 +5,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
  * @author William Terry
  */
 public enum PermissionLevel {
-	WRITE,		//Admin level
-	WRITE_LIMITED,	//Team member level
-	READ,			//Customer level
-	NONE			//User not associated with project
+	ADMIN,		//Admin level
+	UPDATE,		//Team member level
+	NONE		//Customer level
+	//TBI		//User not associated with project
 }
