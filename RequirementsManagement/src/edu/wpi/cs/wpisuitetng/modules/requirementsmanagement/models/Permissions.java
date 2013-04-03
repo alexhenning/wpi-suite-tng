@@ -38,14 +38,26 @@ public class Permissions extends AbstractModel {
 //	private Project project;
 	private int id;
 
+	/**
+	 * Constructs an empty user permission
+	 */
 	public Permissions(){
-		
+		this(null, "", PermissionLevel.NONE, -1);
 	}
 	
+	/**
+	 * Constructs a user permission using given parameters
+	 * 
+	 * @param project (unused right now)
+	 * @param username whose's permission is to be assigned
+	 * @param permissionLevel
+	 * @param id unique permission model identifier
+	 */
 	public Permissions(Project project, String username, PermissionLevel permissionLevel, int id) {
 		this.username = username;
 		this.permissionLevel = permissionLevel;
 //		this.project = project;
+		this.id = id;
 	}
 
 	/**
