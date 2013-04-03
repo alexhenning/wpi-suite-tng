@@ -1,10 +1,11 @@
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
+ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
@@ -48,9 +49,16 @@ public class DB {
 		request.send();
 	}
 
-	public static void getSinglePermission(String id, SinglePermissionCallback callback) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + id, HttpMethod.GET);
+	public static void getSinglePermission(String username, SinglePermissionCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + username, HttpMethod.GET);
 		request.addObserver(new RetrieveSinglePermissionRequestObserver(callback));
+		request.send();
+	}
+
+	public static void getAllPermissions(PermissionsCallback updateTableCallback) {
+		System.out.println("get all permissions");
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions", HttpMethod.GET);
+		request.addObserver(new RetrievePermissionsRequestObserver(updateTableCallback));
 		request.send();
 	}
 
