@@ -16,6 +16,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.Require
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementHistoryTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
 
 @SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel {
@@ -56,7 +58,6 @@ public class ListRequirementsPanel extends JPanel {
 			@Override public void mouseEntered(MouseEvent arg0) {}
 			@Override public void mouseClicked(MouseEvent arg0) {}
 		});
-		DB.getAllProjectEvents(new ListProjectEvents());
 	}
 
 	/**
@@ -129,22 +130,19 @@ public class ListRequirementsPanel extends JPanel {
 			else {
 				// do nothing, there are no requirements
 			}
-			DB.getAllProjectEvents(new ListProjectEvents());
+//			DB.getAllProjectEvents(new ListProjectEvents());
 
 		}
 		
 	}
-	class ListProjectEvents implements ProjectEventsCallback {
-		
-		@Override
-		public void callback(List<ProjectEvent> projectEvents) {
-			// TODO Auto-generated method stub
-			for(ProjectEvent pe : projectEvents) {
-				System.out.println("PE: " + pe.toJSON());
-			}
-		}
-
-
-		
-	}
+//	class ListProjectEvents implements ProjectEventsCallback {
+//		
+//		@Override
+//		public void callback(List<ProjectEvent> projectEvents) {
+//			RequirementsPanel.setHistory(projectEvents);
+//		}
+//
+//
+//		
+//	}
 }
