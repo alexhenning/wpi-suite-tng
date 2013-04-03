@@ -15,13 +15,17 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 
 /**
@@ -46,18 +50,29 @@ public class RequirementHistoryPanel extends JPanel {
 	 * @param author
 	 * @param date
 	 */
-	public RequirementHistoryPanel(String message, String author, Date date) {
+	public RequirementHistoryPanel(Map<String, FieldChange<?>> map, String author, Date date) {
 		
-		this.message = message;
+
 		this.author = author;
 		this.date = date;
+		String eol = System.getProperty("line.separator");
+		String message = "";
+		for (Entry <String,FieldChange<?>> change: map.entrySet()) {
+			if (message.compareTo("") != 0) {
+				message = message + eol + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
+			}
+			else {
+				message = message + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
+			}
+		}
+		this.message = message;
 
 		// Add all components to this panel
 		addComponents();
 	}
 
 	public RequirementHistoryPanel(ProjectEvent event) {
-		this(event.getObjectId(), event.getUser().getName(), event.getDate());
+		this(event.getChanges(), event.getUser().getName(), event.getDate());
 	}
 
 	/**
@@ -80,7 +95,7 @@ public class RequirementHistoryPanel extends JPanel {
 		add(messageArea, BorderLayout.CENTER);
 		
 		//creates area for creation information and adds to note panel
-		infoText = new JTextField(author + "changed on " + date.toString());
+		infoText = new JTextField(author + " changed on " + date.toString());
 		infoText.setEditable(false);
 		infoText.setFocusable(false);
 		infoText.setOpaque(false);
