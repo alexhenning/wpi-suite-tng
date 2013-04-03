@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -49,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.Require
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 @SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel {
@@ -143,16 +145,13 @@ public class ListRequirementsPanel extends JPanel {
 		
 		editPanel.add(editButton);
 		
-		
-		
-		//Add the table to a scrollpane and add it
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setPreferredSize(new Dimension(200, 100));
-		
 		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
 		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
 		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
 		
+		//Add the table to a scrollpane and add it
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setPreferredSize(new Dimension(200, 100));
 		add(scrollPane, BorderLayout.CENTER);
 		add(editPanel, BorderLayout.PAGE_END);
 	}
@@ -203,9 +202,13 @@ public class ListRequirementsPanel extends JPanel {
 	
 	public void setUpStatusColumn(JTable table, TableColumn statusColumn) {
 		JComboBox comboBox = new JComboBox();
-		comboBox.addItem("Test Status");
+		comboBox.addItem(RequirementStatus.DELETED);
 		
 		statusColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setToolTipText("Tooltip");
+		statusColumn.setCellRenderer(renderer);
 	}
 	
 	public void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
@@ -213,6 +216,10 @@ public class ListRequirementsPanel extends JPanel {
 		comboBox.addItem("Test Priority");
 		
 		priorityColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setToolTipText("Tooltip");
+		priorityColumn.setCellRenderer(renderer);
 	}
 	
 	class UpdateTableCallback implements RequirementsCallback {
