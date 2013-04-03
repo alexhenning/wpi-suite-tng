@@ -8,7 +8,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  * 
  * @author William Terry
  */
-public interface SinglePermissionsCallback {
+public interface SinglePermissionCallback {
 	/**
 	 * Implements an action to be performed on the permissions profile being passed back.
 	 * 

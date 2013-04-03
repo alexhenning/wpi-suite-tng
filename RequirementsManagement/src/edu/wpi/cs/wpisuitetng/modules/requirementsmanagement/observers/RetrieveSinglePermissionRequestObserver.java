@@ -1,6 +1,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -12,16 +12,16 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * @author William Terry
  *
  */
-public class RetrieveSinglePermissionsRequestObserver implements
+public class RetrieveSinglePermissionRequestObserver implements
 		RequestObserver {
 
-private SinglePermissionsCallback callback;
+private SinglePermissionCallback callback;
 	
 	/**
 	 * Default constructor
 	 * @param callback Controller this Observer handles requests from
 	 */
-	public RetrieveSinglePermissionsRequestObserver(SinglePermissionsCallback callback) {
+	public RetrieveSinglePermissionRequestObserver(SinglePermissionCallback callback) {
 		this.callback = callback;
 	}
 

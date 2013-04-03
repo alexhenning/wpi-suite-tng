@@ -13,12 +13,12 @@ import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
-public class AddPermissionsController implements ActionListener {
+public class AddPermissionController implements ActionListener {
 
 		private final PermissionsPanel panel;
 		//private final JPanel buttonPanel;
 
-		public AddPermissionsController(PermissionsPanel panel) {
+		public AddPermissionController(PermissionsPanel panel) {
 			this.panel = panel;
 		}
 		
