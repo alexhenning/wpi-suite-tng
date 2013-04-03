@@ -128,7 +128,8 @@ public class ListRequirementsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO THIS NEEDS TO MAKES SURE ALL CHANGES ARE VALID AND THEN SAVE THEM, THEN BRING THE TABLE BACK TO VIEW MODE
-				
+				// After everything else is done, call setViewTable()
+				setViewTable();
 			}
 			
 		});
@@ -138,6 +139,8 @@ public class ListRequirementsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO THIS NEEDS TO REMOVE ALL CHANGES MADE AND BRING THE TABLE BACK TO VIEW MODE
+				// After everything else is done, call setViewTable()
+				setViewTable();
 				
 			}
 			
@@ -193,6 +196,20 @@ public class ListRequirementsPanel extends JPanel {
 		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
 		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
 		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
+	}
+	
+	/**
+	 * Function to turn the table into view mode
+	 *
+	 */
+	public void setViewTable() {
+		tableModel.setMode(Mode.VIEW);
+		editPanel.remove(saveButton);
+		editPanel.remove(cancelButton);
+		editPanel.add(editButton);
+		editPanel.revalidate();
+		editPanel.repaint();
+		//TODO: MAKE THE FIELDS NOT EDITABLE ANYMORE
 	}
 	
 	/**
