@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -155,6 +156,21 @@ public class ListRequirementsPanel extends JPanel {
 			else {
 				// do nothing, there are no requirements
 			}
+		
+			TableColumn column = null;
+			for (int i = 0; i < 5; i++) {
+				column = table.getColumnModel().getColumn(i);
+				if (i == 0) {
+					column.setPreferredWidth(20); //third column is bigger
+				}
+				else if (i == 1) {
+					column.setPreferredWidth(700);
+				}
+				else {
+					column.setPreferredWidth(200);
+				}
+			}
+	
 		}
 		
 	}
