@@ -34,6 +34,7 @@ public class AddPermissionController implements ActionListener {
 			request.addObserver(new CreatePermissionRequestObserver(this));
 			request.send();
 //			}
+			System.out.println("END---Button "+((JButton)e.getSource()).getText()+" pushed");
 		}
 		
 		public void receivedAddConfirmation(Permissions profile) {

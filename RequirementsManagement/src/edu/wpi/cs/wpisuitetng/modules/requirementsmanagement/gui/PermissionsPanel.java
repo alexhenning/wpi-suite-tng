@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    William Terry
+ *    vpatara
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
@@ -45,8 +57,8 @@ public class PermissionsPanel extends JPanel {
 	PermissionsTab parent;
 	private GridBagLayout panelLayout;
 	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
-	HintedTextArea username;
-	JButton submit, update;
+	HintedTextArea usernameTextArea;
+	JButton submitButton, updateButton;
 	JComboBox permissionSelectNew, permissionSelectExisting;
 	JPanel profilePanel;
 	JScrollPane tablePane;
@@ -58,7 +70,8 @@ public class PermissionsPanel extends JPanel {
 
 	public PermissionsPanel(PermissionsTab permissionsTab){
 		this.parent = permissionsTab;
-//		model = parent.permission;
+		model = parent.permission;
+		
 		// Indicate that input is enabled
 		inputEnabled = true;
 		
@@ -70,7 +83,7 @@ public class PermissionsPanel extends JPanel {
 	}
 
 	
-	private void addComponents(){
+	private void addComponents() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -81,15 +94,15 @@ public class PermissionsPanel extends JPanel {
 		lblname = new JLabel("Name: ");
 		lblusername = new JLabel("Username: ");
 		
-		username = new HintedTextArea(1, 20, "Username");
+		usernameTextArea = new HintedTextArea(1, 20, "Username");
 		
-		submit = new JButton("Submit");
+		submitButton = new JButton("Submit");
 		
 		PermissionLevel[] levels = PermissionLevel.values();
 		permissionSelectNew = new JComboBox<PermissionLevel>(levels);
 		permissionSelectExisting = new JComboBox<PermissionLevel>(levels);
 		
-		submit.addActionListener(new AddPermissionController(this));
+		submitButton.addActionListener(new AddPermissionController(this));
 		
 		instantiateTable();
 		tablePane = new JScrollPane();
@@ -103,7 +116,7 @@ public class PermissionsPanel extends JPanel {
 		add(lbl1, c);
 		
 		c.gridx = 1;
-		add(username, c);
+		add(usernameTextArea, c);
 		
 		c.gridx = 2;
 		add(lbl2, c);
@@ -115,7 +128,7 @@ public class PermissionsPanel extends JPanel {
 		add(lbl3, c);
 		
 		c.gridx = 5;
-		add(submit, c);
+		add(submitButton, c);
 		
 		c.gridx = 0;
 		c.gridy = 1;
@@ -135,8 +148,8 @@ public class PermissionsPanel extends JPanel {
 		lblusername = new JLabel("Username: "+sUsername);
 		lblID = new JLabel("ID number: "+sID);
 		lblpermissions = new JLabel("Permission privileges: ");
-		update = new JButton("Update");
-		update.addActionListener(new AddPermissionController(this));
+		updateButton = new JButton("Update");
+		updateButton.addActionListener(new AddPermissionController(this));
 		
 		profilePanel =new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -159,11 +172,11 @@ public class PermissionsPanel extends JPanel {
 		c.gridy = 4;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.NONE;
-		profilePanel.add(update, c);
+		profilePanel.add(updateButton, c);
 		
 	}
 
-	public void updateProfileLabels(){
+	public void updateProfileLabels() {
 		lblname.setText("Name: "+sName);
 		lblusername.setText("Username: "+sUsername);
 		lblID.setText("ID number: "+sID);
@@ -171,7 +184,8 @@ public class PermissionsPanel extends JPanel {
 	}
 
 	private void instantiateTable() {
-	profileTable = new JTable(new ViewPermissionsTable());
+		
+		profileTable = new JTable(new ViewPermissionsTable());
 		
 		updateAllPermissionsList();
 		
@@ -263,7 +277,16 @@ public class PermissionsPanel extends JPanel {
 	 */
 	public Permissions getModel() {
 //		System.out.println("getting model from panel");
-		//TODO: implement getting model from panel
+		// TODO: For now, assume getting model from the add panel;
+		// need to get a model from the update panel
+
+		System.out.println("cafe1 : " + permissionSelectNew.getName());
+		System.out.println("cafe2 : " + permissionSelectNew.getSelectedIndex());
+
+		PermissionLevel permissionLevel = PermissionLevel.values()[permissionSelectNew.getSelectedIndex()];
+
+		model.setUsername(usernameTextArea.getText());
+		model.setPermissionLevel(permissionLevel);
 		
 		return model;
 	}

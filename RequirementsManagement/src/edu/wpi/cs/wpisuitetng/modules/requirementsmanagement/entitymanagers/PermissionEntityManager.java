@@ -23,8 +23,9 @@ import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementNoteValidator;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.PermissionsValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 /**
@@ -38,31 +39,29 @@ public class PermissionEntityManager implements
 	
 	private final Data db;
 	private final Gson gson;
-	private final RequirementNoteValidator validator;
+	private final PermissionsValidator validator;
 	
 	public PermissionEntityManager(Data data) {
 		db = data;
 		gson = new Gson();
-		validator = new RequirementNoteValidator(data);
+		validator = new PermissionsValidator(data);
 	}
 
 	@Override
 	public Permissions makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
-		Permissions newNote = gson.fromJson(content, Permissions.class);
+		Permissions newPermission = gson.fromJson(content, Permissions.class);
 		
-		// TODO: need to set up validation
-//		List<ValidationIssue> issues = validator.validate(s, newNote);
-//		if(issues.size() > 0) {
-//			throw new BadRequestException();
-//		}
-//		
-//		Permissions requirement = validator.getLastExistingRequirement();
-//		requirement.getEvents().add(newNote);
-//		db.save(requirement, s.getProject());
-//		db.save(requirement.getEvents());
+		List<ValidationIssue> issues = validator.validate(s, newPermission, Mode.CREATE);
+		if(issues.size() > 0) {
+			throw new BadRequestException();
+		}
 		
-		return newNote;
+		if(!db.save(newPermission, s.getProject())) {
+			throw new WPISuiteException();
+		}
+
+		return newPermission;
 	}
 
 	@Override

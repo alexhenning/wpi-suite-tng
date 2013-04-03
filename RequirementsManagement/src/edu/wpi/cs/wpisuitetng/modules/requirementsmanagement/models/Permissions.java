@@ -1,4 +1,15 @@
-
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    William Terry
+ *    vpatara
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import java.util.Date;
@@ -17,11 +28,14 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  */
 public class Permissions extends AbstractModel {
 	
-	//TODO Do we want a transaction log for the Permissions data?
+	// TODO: Do we want a transaction log for the Permissions data?
 	
-	private PermissionLevel permissions;
+	// TODO: project is already defined AbstractModel
+	// Is this ID to distinguish different permissions models?
+	
+	private PermissionLevel permissionLevel;
 	private String username;
-	private Project project;
+//	private Project project;
 	private int id;
 
 	public Permissions(){
@@ -30,8 +44,8 @@ public class Permissions extends AbstractModel {
 	
 	public Permissions(Project project, String username, PermissionLevel permissionLevel, int id) {
 		this.username = username;
-		this.permissions = permissionLevel;
-		this.project = project;
+		this.permissionLevel = permissionLevel;
+//		this.project = project;
 	}
 
 	/**
@@ -41,7 +55,7 @@ public class Permissions extends AbstractModel {
 	 * @return PermissionLevel
 	 */
 	public PermissionLevel getPermissionLevel(){
-		return permissions;
+		return permissionLevel;
 	}
 	
 	/**
@@ -50,16 +64,44 @@ public class Permissions extends AbstractModel {
 	 * @param user
 	 * @param newLevel
 	 */
-	public void changePermissions(PermissionLevel newLevel){
-		permissions = newLevel;
+	public void setPermissionLevel(PermissionLevel newLevel) {
+		permissionLevel = newLevel;
 	}
 	
-	public String getUsername(){
+	/**
+	 * Gets username from the model
+	 *
+	 * @return model's username
+	 */
+	public String getUsername() {
 		return username;
 	}
 	
-	public int getId(){
+	/**
+	 * Sets model's username
+	 *
+	 * @param username
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	/**
+	 * Gets an ID from the model
+	 *
+	 * @return model's ID
+	 */
+	public int getId() {
 		return id;
+	}
+	
+	/**
+	 * Sets model's ID 
+	 *
+	 * @param id
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	/**
@@ -67,9 +109,9 @@ public class Permissions extends AbstractModel {
 	 *
 	 * @return project
 	 */
-	public Project getProject(){
-		return project;
-	}
+//	public Project getProject(){
+//		return project;
+//	}
 	
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
@@ -96,7 +138,7 @@ public class Permissions extends AbstractModel {
 	public String toJSON() {
 		String json;
 		Gson gson = new Gson();
-		json = gson.toJson(this, Iteration.class);
+		json = gson.toJson(this, Permissions.class);
 		return json;
 	}
 	
