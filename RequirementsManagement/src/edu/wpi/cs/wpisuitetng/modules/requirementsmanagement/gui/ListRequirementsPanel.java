@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -21,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -52,6 +54,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleR
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 @SuppressWarnings("serial")
@@ -131,7 +134,7 @@ public class ListRequirementsPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO THIS NEEDS TO MAKES SURE ALL CHANGES ARE VALID AND THEN SAVE THEM, THEN BRING THE TABLE BACK TO VIEW MODE
 				// After everything else is done, call setViewTable()
-				setViewTable();
+				setViewTable(false);
 			}
 			
 		});
@@ -142,7 +145,7 @@ public class ListRequirementsPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO THIS NEEDS TO REMOVE ALL CHANGES MADE AND BRING THE TABLE BACK TO VIEW MODE
 				// After everything else is done, call setViewTable()
-				setViewTable();
+				setViewTable(true);
 				
 			}
 			
@@ -201,13 +204,33 @@ public class ListRequirementsPanel extends JPanel {
 	 * Function to turn the table into view mode
 	 *
 	 */
-	public void setViewTable() {
+	public void setViewTable(boolean cancelled) {
+		System.out.println("entered set view\ncancelled = " + cancelled);
+		boolean noErrors = true;
 		tableModel.setMode(Mode.VIEW);
-		editPanel.remove(saveButton);
-		editPanel.remove(cancelButton);
-		editPanel.add(editButton);
-		editPanel.revalidate();
-		editPanel.repaint();
+		if(cancelled) {
+			System.out.println("entered cancelled branch");
+			updateAllRequirementList();
+		} else {
+			System.out.println("entered saved branch");
+			// validate fields
+			noErrors = validateModels();
+			System.out.println("validated");
+			if(noErrors) {  // no errors, update models and save
+				// get all models from data base and continue from callback
+				RetrieveAllRequirementsCallback cb = new RetrieveAllRequirementsCallback();
+				System.out.println("made callback");
+				DB.getAllRequirements(cb);
+			}
+			
+		}
+		if(noErrors) { // no errors (or cancelled), so go back to view
+			editPanel.remove(saveButton);
+			editPanel.remove(cancelButton);
+			editPanel.add(editButton);
+			editPanel.revalidate();
+			editPanel.repaint();
+		}
 		//TODO: MAKE THE FIELDS NOT EDITABLE ANYMORE
 	}
 	
@@ -259,10 +282,10 @@ public class ListRequirementsPanel extends JPanel {
 	 */
 	public void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
 		JComboBox priorityBox = new JComboBox();
-		priorityBox.addItem("HIGH");
-		priorityBox.addItem("MEDIUM");
-		priorityBox.addItem("LOW");
 		priorityBox.addItem("NONE");
+		priorityBox.addItem("LOW");
+		priorityBox.addItem("MEDIUM");
+		priorityBox.addItem("HIGH");
 		
 		priorityColumn.setCellEditor(new DefaultCellEditor(priorityBox));
 		
@@ -270,6 +293,74 @@ public class ListRequirementsPanel extends JPanel {
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 		renderer.setToolTipText("Click to change priority");
 		priorityColumn.setCellRenderer(renderer);
+	}
+	
+	public List<RequirementModel> updateModels(List<RequirementModel> reqs) {
+
+		if(reqs != null && reqs.size() >= 1) {
+			for(int i = 0; i < tableModel.getColumnCount(); ++i) {
+				for(RequirementModel req : reqs) {
+					if(req.getId() == Integer.valueOf((String)tableModel.getValueAt(i, 0))) {
+						// we have the correct requirement, update values
+						req.setName((String)tableModel.getValueAt(i, 1));
+						GetIterationByStringCallback cb = new GetIterationByStringCallback((String)tableModel.getValueAt(i, 2));
+						DB.getAllIterations(cb);
+						req.setIteration(cb.getIter());
+						req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
+						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
+						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
+					}
+				}
+			}
+		}
+		
+		return reqs;
+	}
+	
+	public boolean validateModels() {
+		boolean noErrors = true;
+		
+		for(int i = 0; i < tableModel.getColumnCount(); ++i) {
+			// check name
+			if(((String)tableModel.getValueAt(i, 1)).length() < 1) {
+				// highlight field
+				System.out.println("Error in name for Requirement in row " + i);
+				noErrors = false;
+			}
+			// check estimate
+			if((Integer.valueOf((String)tableModel.getValueAt(i, 5))).intValue() < 0) {
+				// highlight field
+				System.out.println("Error in description for Requirement in row " + i);
+				noErrors = false;
+			}
+		}
+
+		return noErrors;
+	}
+	
+	public void sendRequirementsToDatabase(List<RequirementModel> reqs) {
+		for(RequirementModel req : reqs) {
+			DB.updateRequirements(req, new UpdateRequirementCallback());
+		}
+	}
+	
+	class UpdateRequirementCallback implements SingleRequirementCallback {
+
+		@Override
+		public void callback(RequirementModel req) {
+			updateAllRequirementList();
+		}
+		
+	}
+	
+	class RetrieveAllRequirementsCallback implements RequirementsCallback {
+		
+		@Override
+		public void callback(List<RequirementModel> reqs) {
+			List<RequirementModel> requirements = updateModels(reqs);
+			sendRequirementsToDatabase(requirements);
+		}
+		
 	}
 	
 	class UpdateTableCallback implements RequirementsCallback {
@@ -347,6 +438,7 @@ public class ListRequirementsPanel extends JPanel {
 		 */
 		public FillIterationDropdown(JComboBox iterationBox) {
 			this.iterationBox = iterationBox;
+			iterationBox.addItem("Backlog");
 		}
 
 		/**
@@ -358,9 +450,34 @@ public class ListRequirementsPanel extends JPanel {
 		public void callback(List<Iteration> iterationss) {
 			if(iterationss.size() > 0) {
 				for(Iteration iteration : iterationss) {
-					iterationBox.addItem(iteration.getIterationNumber());
+					iterationBox.addItem("Iteration " + iteration.getIterationNumber());
 				}
 			}
+		}
+		
+	}
+	
+	class GetIterationByStringCallback implements IterationCallback {
+		
+		Iteration iter = null;
+		String value;
+		
+		public GetIterationByStringCallback(String value) {
+			this.value = value;
+		}
+
+		@Override
+		public void callback(List<Iteration> iterations) {
+			for(Iteration iteration : iterations) {
+				if(("Iteration " + iteration.getIterationNumber()).equals(value)) {
+					iter = iteration;
+					break;
+				}
+			}
+		}
+		
+		public Iteration getIter() {
+			return iter;
 		}
 		
 	}
