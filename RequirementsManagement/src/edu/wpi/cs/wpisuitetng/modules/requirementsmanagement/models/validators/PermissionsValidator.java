@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    William Terry
+ *    vpatara
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import java.util.ArrayList;
@@ -13,8 +25,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
 /**
+ * Validates permission models
  * 
  * @author William Terry
+ * @author vpatara
  *
  */
 public class PermissionsValidator {
@@ -80,7 +94,29 @@ public class PermissionsValidator {
 		User[] users = (data.retrieveAll(sample)).toArray(new User[0]);
 		return users;
 	}
-	
+
+	/**
+	 * Return the Permissions for the given user if it already exists in the database.
+	 *
+	 * @param id the id of the permission
+	 * @param project the project this permission belongs to
+	 * @param issues list of errors to add to if permission doesn't exist
+	 * @param fieldName name of field to use in error if necessary
+	 * @return
+	 * @throws WPISuiteException 
+	 */
+	Permissions getExistingPermissions(String id, Project project,
+			List<ValidationIssue> issues, String fieldName)
+			throws WPISuiteException {
+		List<Model> oldPermissions = data.retrieve(Permissions.class, "id", id, project);
+		if(oldPermissions.size() < 1 || oldPermissions.get(0) == null) {
+			issues.add(new ValidationIssue("This project has no permissions files", id));
+			return null;
+		} else {
+			return (Permissions) oldPermissions.get(0);
+		}
+	}
+
 	/**
 	 * Return all Permissions of the specified project.
 	 * 
@@ -96,71 +132,79 @@ public class PermissionsValidator {
 	}
 		
 	/**
-	 * Return the Permissions for the given user if it already exists in the database.
-	 * 
-	 * @param id the id of the permission
-	 * @param project the project this permission belongs to
-	 * @param issues list of errors to add to if permission doesn't exist
-	 * @param fieldName name of field to use in error if necessary
-	 * @return
-	 * @throws WPISuiteException 
-	 */
-	Permissions getExistingPermissions(String username, Project project,
-			List<ValidationIssue> issues, String fieldName)
-			throws WPISuiteException {
-		List<Model> oldPermissions = data.retrieve(Permissions.class, "username", username, project);
-		if(oldPermissions.size() < 1 || oldPermissions.get(0) == null) {
-			issues.add(new ValidationIssue("This project has no permissions files", username));
-			return null;
-		} else {
-			return (Permissions) oldPermissions.get(0);
-		}
-	}
-		
-	/**
-	 * Validate the given model such that the requesting user has authority to modify and .
+	 * Validate the given model such that the requesting user has authority to modify
 	 * 
 	 * @param session The session to validate against
-	 * @param defect The defect model to validate
+	 * @param permissions The permission model to validate
 	 * @param mode The mode to validate for
 	 * @return A list of ValidationIssues (possibly empty)
-	 * @throws WPISuiteException 
+	 * @throws WPISuiteException
 	 */
-	public List<ValidationIssue> validate(Session session, Permissions permissions, Mode mode) throws WPISuiteException {
+	public List<ValidationIssue> validate(Session session,
+			Permissions permissions, Mode mode) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
-		if(permissions == null) {
+		if (permissions == null) {
 			issues.add(new ValidationIssue("Permissions cannot be null"));
 			return issues;
 		}
 
-		System.out.println("validate this : " + permissions.getUsername());
-		lastExistingPermissions = null;
+		System.out.println("validate this : " + permissions.getUsername() + " - id : " + permissions.getId());
+		Permissions oldPermissions = null;
 		
 		//check if user is in the db
-		if(mode == Mode.EDIT){
-			lastExistingPermissions = getExistingPermissions(permissions.getUsername(), permissions.getProject(), issues, "");
+		if (mode == Mode.EDIT) {
+			oldPermissions = getExistingPermissions("" + permissions.getId(),
+					permissions.getProject(), issues, "id");
+			
+			if (oldPermissions != null) {
+				// TODO: If these checks are inappropriate, delete them
+				if(!oldPermissions.getUsername().equals(permissions.getUsername())) {
+					issues.add(new ValidationIssue("Username cannot be changed"));
+				}
+				if(!oldPermissions.getProject().equals(permissions.getProject())) {
+					issues.add(new ValidationIssue("Project cannot be changed"));
+				}
+				
+			} else {
+				System.out.println("Cannot find an existing user ("
+						+ permissions.getUsername() + ", "
+						+ permissions.getId() + ")");
+			}
 		}
 		
+		lastExistingPermissions = oldPermissions;
 		Permissions[] allPermissions = getAllExistingPermissions(session.getProject());
 
-		//check if the user already has a permissions profile
 		if(mode == Mode.CREATE) {
+			// Check if the user already has a permissions profile
 			for(Permissions profile : allPermissions) {
 				System.out.println("get user : " + profile.getUsername());
 				
 				// Check if the permission pair (user, project) already exists
+				// Need to check between profile and session since permissions.getProject() is null
 				if(profile.getUsername().equals(permissions.getUsername()) &&
-						profile.getProject().equals(permissions.getProject())) {
-					issues.add(new ValidationIssue("Unable to create a permissions profile for ("+permissions.getUsername()+") since there is already a profile for this user"));
-					return issues;
+						profile.getProject().equals(session.getProject())) {
+					issues.add(new ValidationIssue("Unable to create a permission profile for ("+permissions.getUsername()+") since there is already a profile for this user"));
+				}
+
+				// Check if the ID already exists (in which case, an implementation error)
+				if(profile.getId() == permissions.getId()) {
+					issues.add(new ValidationIssue("Unable to create a permission profile for ("+permissions.getUsername()+") due to conflicting IDs"));
 				}
 			}
+			
+			// Check if the username exists in the database
+			if(getExistingUser(permissions.getUsername(), issues, "username") == null) {
+				issues.add(new ValidationIssue("Unable to create a permission profile for non-existent user ("+permissions.getUsername()+")"));
+			}
 		}
+		
+		System.out.println("issue count : " + issues.size());
 		
 		if (issues.size() > 0){
 			System.out.println("permissions json: "+permissions.toJSON());
 		}
-		System.out.println("issue count : " + issues.size());
+		
 		return issues;
 	}
 

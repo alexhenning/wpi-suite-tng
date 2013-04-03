@@ -14,12 +14,10 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
 import java.util.List;
 
-import com.google.gson.Gson;
-
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
-import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
+import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
@@ -38,24 +36,37 @@ public class PermissionEntityManager implements
 		EntityManager<Permissions> {
 	
 	private final Data db;
-	private final Gson gson;
 	private final PermissionsValidator validator;
+	private final ModelMapper updateMapper;
 	
 	public PermissionEntityManager(Data data) {
 		db = data;
-		gson = new Gson();
 		validator = new PermissionsValidator(data);
+		updateMapper = new ModelMapper();
+		updateMapper.getBlacklist().add("project");
 	}
 
+	/**
+	 * Creates a user permission
+	 *
+	 * @param s
+	 * @param content
+	 * @return
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public Permissions makeEntity(Session s, String content)
-			throws BadRequestException, ConflictException, WPISuiteException {
-		Permissions newPermission = gson.fromJson(content, Permissions.class);
+			throws WPISuiteException {
+		Permissions newPermission = Permissions.fromJSON(content);
 		
 		List<ValidationIssue> issues = validator.validate(s, newPermission, Mode.CREATE);
 		if(issues.size() > 0) {
 			throw new BadRequestException();
 		}
+
+		// TODO: Find a better way to assign permission ID
+		newPermission.setId(Count() + 1);
+//		newPermission.setProject(s.getProject());
 		
 		if(!db.save(newPermission, s.getProject())) {
 			throw new WPISuiteException();
@@ -64,46 +75,126 @@ public class PermissionEntityManager implements
 		return newPermission;
 	}
 
+	/**
+	 * Retrieves a user permission from the database by id
+	 *
+	 * @param s
+	 * @param id
+	 * @return
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public Permissions[] getEntity(Session s, String id)
-			throws NotImplementedException {
-		throw new NotImplementedException();
+			throws WPISuiteException {
+		
+		final int intId = Integer.parseInt(id);
+		if(intId < 1) {
+			throw new NotFoundException();
+		}
+
+		Permissions[] Permissions = null;
+		try {
+			Permissions = db.retrieve(Permissions.class, "id", intId, s.getProject()).toArray(new Permissions[0]);
+		} catch (WPISuiteException e) {
+			e.printStackTrace();
+		}
+		
+		if(Permissions.length < 1 || Permissions[0] == null) {
+			throw new NotFoundException();
+		}
+		return Permissions;
 	}
 
+	/**
+	 * Retrieves all the user permissions from the database
+	 *
+	 * @param s
+	 * @return
+	 */
 	@Override
-	public Permissions[] getAll(Session s) throws NotImplementedException {
-		throw new NotImplementedException();
+	public Permissions[] getAll(Session s) {
+		return db.retrieveAll(new Permissions(), s.getProject()).toArray(new Permissions[0]);
 	}
 
+	/**
+	 * Updates the user permission in the database
+	 *
+	 * @param s
+	 * @param content
+	 * @return
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public Permissions update(Session s, String content)
-			throws NotImplementedException {
-		throw new NotImplementedException();
+			throws WPISuiteException {
+		Permissions updatedPermissions = Permissions.fromJSON(content);
+		
+		List<ValidationIssue> issues = validator.validate(s, updatedPermissions, Mode.EDIT);
+		if(issues.size() > 0) {
+			throw new BadRequestException();
+		}
+		
+		Permissions existingPermissions = validator.getLastExistingPermissions();
+		
+		updateMapper.map(updatedPermissions, existingPermissions);
+		
+		if(!db.save(existingPermissions, s.getProject())) {
+			throw new WPISuiteException();
+		}
+		
+		return existingPermissions;
 	}
 
+	/**
+	 * Saves a permission into the database
+	 *
+	 * @param s
+	 * @param model
+	 * @throws NotImplementedException
+	 */
 	@Override
-	public void save(Session s, Permissions model) throws NotImplementedException {
-		throw new NotImplementedException();
+	public void save(Session s, Permissions model) {
+		db.save(model, s.getProject());
 	}
 
+	/**
+	 * Deletes a permission by id
+	 *
+	 * @param s
+	 * @param id
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
-	public boolean deleteEntity(Session s, String id) throws NotImplementedException {
-		throw new NotImplementedException();
+	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
+		return (db.delete(getEntity(s, id)[0]) != null);
+	}
+
+	/**
+	 * Deletes all the user permissions in the database
+	 *
+	 * @param s
+	 * @throws NotImplementedException
+	 */
+	@Override
+	public void deleteAll(Session s) {
+		db.deleteAll(new Permissions(), s.getProject());
+	}
+
+	/**
+	 * Returns the number of existing user-permission pairs
+	 *
+	 * @return the number of existing user-permission pairs
+	 * @throws NotImplementedException
+	 */
+	@Override
+	public int Count() {
+		return db.retrieveAll(new Permissions()).size();
 	}
 
 	@Override
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
-		throw new NotImplementedException();
-	}
-
-	@Override
-	public void deleteAll(Session s) throws NotImplementedException {
-		throw new NotImplementedException();
-	}
-
-	@Override
-	public int Count() throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
