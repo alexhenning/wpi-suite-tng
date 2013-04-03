@@ -224,7 +224,7 @@ public class IterationValidator {
 		if(iteration.getEndDate() == null) {
 			issues.add(new ValidationIssue("Required, must not be null", "endDate"));
 		}
-		if((iteration.getStartDate() == null || iteration.getEndDate() == null) || 
+		if(iteration.getStartDate() != null && iteration.getEndDate() != null && 
 				iteration.getStartDate().after(iteration.getEndDate())) {
 //			System.out.println("start: "+iteration.getStartDate().getTime());
 //			System.out.println("end: "+iteration.getEndDate().getTime());
