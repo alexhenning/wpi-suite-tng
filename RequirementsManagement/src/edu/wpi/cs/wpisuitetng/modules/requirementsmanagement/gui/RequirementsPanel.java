@@ -60,6 +60,7 @@ public class RequirementsPanel extends JSplitPane {
 	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
+	private RequirementHistoryTab hs;
 	private JPanel leftside = new JPanel();
 	public JTabbedPane supplementPane = new JTabbedPane();
 
@@ -182,8 +183,9 @@ public class RequirementsPanel extends JSplitPane {
 		// Supplement Pane (i.e., notes, history, attachments)
 //		if(this.editMode == Mode.EDIT) {
 		nt = new NoteMainPanel(this);
+		hs = new RequirementHistoryTab(this);
 		supplementPane.add("Notes", nt);
-		supplementPane.add("History", new JPanel());
+		supplementPane.add("History", hs);
 //		}
 		
 		// Add subpanels to main panel
