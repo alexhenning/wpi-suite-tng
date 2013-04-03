@@ -56,6 +56,8 @@ public class ListRequirementsPanel extends JPanel {
 	JTable table;
 	ViewReqTable tableModel;
 	JButton editButton;
+	JButton saveButton;
+	JButton cancelButton;
 	JPanel editPanel;
 	
 	public ListRequirementsPanel(final ListRequirementsTab parent) {
@@ -112,7 +114,30 @@ public class ListRequirementsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				tableModel.setMode(Mode.EDIT);
+				setEditTable();
 			}
+		});
+		
+		// create the save and cancel buttons
+		saveButton = new JButton("Save");
+		saveButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO THIS NEEDS TO MAKES SURE ALL CHANGES ARE VALID AND THEN SAVE THEM, THEN BRING THE TABLE BACK TO VIEW MODE
+				
+			}
+			
+		});
+		cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO THIS NEEDS TO REMOVE ALL CHANGES MADE AND BRING THE TABLE BACK TO VIEW MODE
+				
+			}
+			
 		});
 		
 		editPanel.add(editButton);
@@ -141,6 +166,17 @@ public class ListRequirementsPanel extends JPanel {
 	
 	public ViewReqTable getTable(){
 		return this.tableModel;
+	}
+	
+	/**
+	 * Function to turn the table into edit mode
+	 *
+	 */
+	public void setEditTable() {
+		editPanel.remove(editButton);
+		editPanel.add(saveButton);
+		editPanel.add(cancelButton);
+		//TODO: SET THE TABLE INTO A MODE WHERE ALL THE FIELDS CAN BE EDITED
 	}
 	
 	class UpdateTableCallback implements RequirementsCallback {
