@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.*;
 
 /**
@@ -103,8 +104,9 @@ public class TestReleaseNumberValidator {
 		
 	}
 	
-	public List<edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue> checkNumIssues(int num, Session session, ReleaseNumber releasenum, Mode mode){
-		List<edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue> issues;
+	
+	public List<ValidationIssue> checkNumIssues(int num, Session session, ReleaseNumber releasenum, Mode mode){
+		List<ValidationIssue> issues;
 		try{
 			issues = validator.validate(session, releasenum, mode);
 			assertEquals(num, issues.size());
@@ -114,26 +116,31 @@ public class TestReleaseNumberValidator {
 		return issues;
 	}
 	
+	//Asserts that there are no issues
 	public void checkNoIssues(Session session, ReleaseNumber releasenum, Mode mode){
 		checkNumIssues(0, session, releasenum, mode);
 	}
 	
+	//Asserts that there is one issue 
 	public List<ValidationIssue> checkIssue(Session session, ReleaseNumber releasenum, Mode mode){
 		return checkNumIssues(1, session, releasenum, mode);
 	}
 	
+	//Asserts that there is a non-field validation issue
 	public List<ValidationIssue> checkNonFieldIssue(Session session, ReleaseNumber releasenum, Mode mode) {
 		List<ValidationIssue> issues = checkIssue(session, releasenum, mode);
 		assertFalse(issues.get(0).hasFieldName());
 		return issues;
 	}
 	
+	//Asserts that there is a validation issue with a field for the given Release Number
 	public List<ValidationIssue> checkFieldIssue(Session session, ReleaseNumber releasenum, Mode mode, 
 			String fieldName) {
 		List<ValidationIssue> issues = checkNumIssues(1, session, releasenum, mode);
 		assertEquals(fieldName, issues.get(0).getFieldName());
 		return issues;
 	}
+	
 	
 	@Test
 	public void testNullNewReleaseNum(){
