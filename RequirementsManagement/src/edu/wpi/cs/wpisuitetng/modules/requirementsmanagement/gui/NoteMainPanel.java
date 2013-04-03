@@ -74,7 +74,6 @@ public class NoteMainPanel extends JPanel {
 	protected void addComponents() {
 		setLayout(new BorderLayout());
 
-		ta.setText("New note");	
 		ta = new HintedTextArea(5, 40, "New note");
 		ta.setLineWrap(true);	
 		ta.setEditable(inputEnabled);
