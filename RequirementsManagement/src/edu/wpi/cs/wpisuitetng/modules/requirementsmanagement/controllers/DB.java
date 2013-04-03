@@ -6,7 +6,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditItera
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -48,9 +48,9 @@ public class DB {
 		request.send();
 	}
 
-	public static void getSinglePermissions(String id, SinglePermissionsCallback callback) {
+	public static void getSinglePermissions(String id, SinglePermissionCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + id, HttpMethod.GET);
-		request.addObserver(new RetrieveSinglePermissionsRequestObserver(callback));
+		request.addObserver(new RetrieveSinglePermissionRequestObserver(callback));
 		request.send();
 	}
 

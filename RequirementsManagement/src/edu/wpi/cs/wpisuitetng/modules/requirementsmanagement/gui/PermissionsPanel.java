@@ -22,9 +22,9 @@ import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionsController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.IterationPanel.UpdateIterationIdCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.UpdateTableCallback;
@@ -89,7 +89,7 @@ public class PermissionsPanel extends JPanel {
 		permissionSelectNew = new JComboBox<PermissionLevel>(levels);
 		permissionSelectExisting = new JComboBox<PermissionLevel>(levels);
 		
-		submit.addActionListener(new AddPermissionsController(this));
+		submit.addActionListener(new AddPermissionController(this));
 		
 		instantiateTable();
 		tablePane = new JScrollPane();
@@ -136,7 +136,7 @@ public class PermissionsPanel extends JPanel {
 		lblID = new JLabel("ID number: "+sID);
 		lblpermissions = new JLabel("Permission privileges: ");
 		update = new JButton("Update");
-		update.addActionListener(new AddPermissionsController(this));
+		update.addActionListener(new AddPermissionController(this));
 		
 		profilePanel =new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -180,7 +180,7 @@ public class PermissionsPanel extends JPanel {
 			public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                 	DB.getSinglePermissions((String) profileTable.getModel().getValueAt(profileTable.getSelectedRow(), 0),
-                			new SinglePermissionsCallback() {
+                			new SinglePermissionCallback() {
 						@Override
 						public void callback(Permissions profile) {
 							parent.tabController.addEditPermissionsTab(profile);
