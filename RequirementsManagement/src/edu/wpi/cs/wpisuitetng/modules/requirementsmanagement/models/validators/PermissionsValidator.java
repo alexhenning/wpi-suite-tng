@@ -56,6 +56,9 @@ public class PermissionsValidator {
 	 */
 	User getExistingUser(String username, List<ValidationIssue> issues, String fieldName) throws WPISuiteException {
 		final List<Model> existingUsers = data.retrieve(User.class, "username", username);
+		
+		System.out.println("Edit user permission - size : " + existingUsers.size());
+		
 		if(existingUsers.size() > 0 && existingUsers.get(0) != null) {
 			return (User) existingUsers.get(0);
 		} else {
@@ -95,18 +98,19 @@ public class PermissionsValidator {
 	/**
 	 * Return the Permissions for the given user if it already exists in the database.
 	 * 
-	 * @param id the id of the Iteration
-	 * @param project the project this Iteration belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param id the id of the permission
+	 * @param project the project this permission belongs to
+	 * @param issues list of errors to add to if permission doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The Iteration with the given id, or null if it doesn't exist
+	 * @return
 	 * @throws WPISuiteException 
 	 */
-	Permissions getExistingPermissions(String username, Project project, List<ValidationIssue> issues, String fieldName)
+	Permissions getExistingPermissions(String username, Project project,
+			List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
 		List<Model> oldPermissions = data.retrieve(Permissions.class, "username", username, project);
 		if(oldPermissions.size() < 1 || oldPermissions.get(0) == null) {
-			issues.add(new ValidationIssue("This project has no permissions files", fieldName));
+			issues.add(new ValidationIssue("This project has no permissions files", username));
 			return null;
 		} else {
 			return (Permissions) oldPermissions.get(0);
@@ -128,10 +132,13 @@ public class PermissionsValidator {
 			issues.add(new ValidationIssue("Permissions cannot be null"));
 			return issues;
 		}
+
+		System.out.println("validate this : " + permissions.getUsername());
+		lastExistingPermissions = null;
 		
 		//check if user is in the db
 		if(mode == Mode.EDIT){
-			getExistingUser(permissions.getUsername(), issues, "");
+			lastExistingPermissions = getExistingPermissions(permissions.getUsername(), permissions.getProject(), issues, "");
 		}
 		
 		Permissions[] allPermissions = getAllExistingPermissions(session.getProject());
@@ -139,9 +146,13 @@ public class PermissionsValidator {
 		//check if the user already has a permissions profile
 		if(mode == Mode.CREATE) {
 			for(Permissions profile : allPermissions) {
-				if(profile.getUsername() == permissions.getUsername()) {
+				System.out.println("get user : " + profile.getUsername());
+				
+				// Check if the permission pair (user, project) already exists
+				if(profile.getUsername().equals(permissions.getUsername()) &&
+						profile.getProject().equals(permissions.getProject())) {
 					issues.add(new ValidationIssue("Unable to create a permissions profile for ("+permissions.getUsername()+") since there is already a profile for this user"));
-	//				return issues;
+					return issues;
 				}
 			}
 		}
@@ -149,6 +160,7 @@ public class PermissionsValidator {
 		if (issues.size() > 0){
 			System.out.println("permissions json: "+permissions.toJSON());
 		}
+		System.out.println("issue count : " + issues.size());
 		return issues;
 	}
 
