@@ -41,14 +41,16 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	private boolean inputEnabled = true;
 
 	/**
-	 * Constructs a new CreateDefectView where the user can enter the data for a new defect.
+	 * Constructs a new CreateRequirementView where the user can enter the data for a new defect.
 	 */
 	public RequirementsTab(MainTabController tabController) {
 		this(tabController, new RequirementModel(), Mode.CREATE, null);
 	}
 
 	/**
-	 * Constructs a new DefectView where the user can view (and edit) a defect.
+	 * Constructs a new RequirementView where the user can view (and edit) a requirement.
+	 * 
+	 *TODO: Fix the documentation of this method
 	 * 
 	 * @param defect	The defect to show.
 	 * @param editMode	The editMode for editing the Defect
@@ -126,7 +128,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	}
 	
 	/**
-	 * @param defect Set the tab title, tooltip, and group name according to this Defect
+	 * @param requirement Set the tab title and group name according to this Requirement
 	 */
 	public void setEditModeDescriptors(RequirementModel requirement) {
 		containingTab.setTitle("Requirement #" + requirement.getId());

@@ -9,6 +9,7 @@
  * Contributors:
  *    vpatara
  *    Sergey
+ *    Josh
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
@@ -34,6 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  * 
  * @author vpatara
  * @author Sergey
+ * @author Josh
  */
 @SuppressWarnings("serial")
 public class NoteMainPanel extends JPanel {
@@ -61,7 +63,7 @@ public class NoteMainPanel extends JPanel {
 		// Add all components to this panel
 		addComponents();
 		
-		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
+		
 		// TODO: updateFields();
 	}
 
@@ -102,7 +104,7 @@ public class NoteMainPanel extends JPanel {
 	public void setNotes(List<RequirementNote> notes) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 0, 5, 0);
+		c.insets = new Insets(3, 0, 3, 0);
 		c.gridx = 0;
 		c.gridy = notes.size();
 		c.weightx = 1.0;

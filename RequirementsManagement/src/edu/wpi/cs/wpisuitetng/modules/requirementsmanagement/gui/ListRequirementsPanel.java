@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    //Josh
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
@@ -23,13 +35,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.FilterListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 @SuppressWarnings("serial")
@@ -38,12 +50,8 @@ public class ListRequirementsPanel extends JPanel {
 	ListRequirementsTab parent;
 	boolean inputEnabled;
 	JTable table;
-	JTextField filterBox;
 	ViewReqTable tableModel;
-	TableRowSorter<ViewReqTable> sorter;
-	JComboBox columnSelector;
-	String[] columnNames = { "ID", "Name", "Status", "Priority", "Estimate"};
-
+	
 	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
 		
@@ -85,9 +93,7 @@ public class ListRequirementsPanel extends JPanel {
 		
 		//create the table part of the GUI
 		tableModel = new ViewReqTable();
-		sorter = new TableRowSorter<ViewReqTable>(tableModel);
 		table = new JTable(tableModel);
-		table.setRowSorter(sorter);
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -96,56 +102,8 @@ public class ListRequirementsPanel extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 100));
 		add(scrollPane, BorderLayout.CENTER);
-		
-		//create the filter part of the GUI
-		JPanel filterArea = new JPanel(new FlowLayout());
-		
-		//add the column enum selector
-		columnSelector = new JComboBox(columnNames);
-		columnSelector.setSelectedIndex(0);
-		columnSelector.addActionListener(new FilterListener());
-		filterArea.add(columnSelector);
-		
-		//add filter text label
-		JLabel filterLabel = new JLabel("Filter Text:", SwingConstants.TRAILING);
-		filterArea.add(filterLabel);
-		
-		//create input text box
-		filterBox = new JTextField(30);
-		
-		//add a listener to the filterbox
-		filterBox.getDocument().addDocumentListener(
-				new DocumentListener() {
-					public void changedUpdate(DocumentEvent e) {
-						newFilter();
-					}
-					public void insertUpdate(DocumentEvent e) {
-                        newFilter();
-                    }
-                    public void removeUpdate(DocumentEvent e) {
-                        newFilter();
-                    }
-				});
-		
-		//add components to GUI
-		filterLabel.setLabelFor(filterBox);
-		filterArea.add(filterBox);
-		filterArea.setPreferredSize(new Dimension(100, 50));
-		add(filterArea, BorderLayout.PAGE_END);	
+
 	}
-	
-	private void newFilter() {
-		RowFilter<ViewReqTable, Object> rf = null;
-		//If current expression doesn't parse, don't update.
-		try {
-			rf = RowFilter.regexFilter(filterBox.getText(), columnSelector.getSelectedIndex());
-		} 
-		catch (java.util.regex.PatternSyntaxException e) {
-			return;
-		}
-		sorter.setRowFilter(rf);
-	}
-	
 	/**
 	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
 	 * JComponent#setEnabled because setEnabled does not affect its children.
@@ -171,32 +129,53 @@ public class ListRequirementsPanel extends JPanel {
 		public void callback(List<RequirementModel> reqs) {
 			if (reqs.size() > 0) {
 				// put the data in the table
-				Object[][] entries = new Object[reqs.size()][5];
+				Object[][] entries = new Object[reqs.size()][6];
 				int i = 0;
 				for(RequirementModel req : reqs) {
 					entries[i][0] = String.valueOf(req.getId());
 					entries[i][1] = req.getName();
-					if (req.getStatus() != null) {
-						entries[i][2] = req.getStatus().toString();
+					if (req.getIteration() != null) {
+						entries[i][2] = req.getIteration().toString();
 					}
 					else {
-						entries[i][2] = "Error: Status set to null";
+						entries[i][2] = "Backlog";
+					}
+					if (req.getStatus() != null) {
+						entries[i][3] = req.getStatus().toString();
+					}
+					else {
+						entries[i][3] = "Error: Status set to null";
 					}
 					if (req.getPriority() != null) {
-						entries[i][3] = req.getPriority().toString();
+						entries[i][4] = req.getPriority().toString();
 					}
 					else {
-						entries[i][3] = "";
+						entries[i][4] = "";
 					}
-					entries[i][4] = req.getEstimate()+"";
+					entries[i][5] = req.getEstimate()+"";
 					i++;
-					}
+				}
 				getTable().setData(entries);
 				getTable().fireTableStructureChanged();
 			}
 			else {
 				// do nothing, there are no requirements
 			}
+		
+			TableColumn column = null;
+			for (int i = 0; i < 6; i++) {
+				column = table.getColumnModel().getColumn(i);
+				if (i == 0) {
+					column.setPreferredWidth(25); //third column is bigger
+				}
+				else if (i == 1) {
+					column.setPreferredWidth(700);
+				}
+				else {
+					column.setPreferredWidth(200);
+				}
+			}
+	
 		}
 		
 	}
