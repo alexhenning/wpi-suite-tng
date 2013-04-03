@@ -85,7 +85,7 @@ public class PermissionsPanel extends JPanel {
 		
 		submit = new JButton("Submit");
 		
-		PermissionLevel[] levels={PermissionLevel.WRITE, PermissionLevel.WRITE_LIMITED, PermissionLevel.READ};
+		PermissionLevel[] levels = PermissionLevel.values();
 		permissionSelectNew = new JComboBox<PermissionLevel>(levels);
 		permissionSelectExisting = new JComboBox<PermissionLevel>(levels);
 		
