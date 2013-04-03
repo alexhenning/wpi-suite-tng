@@ -8,10 +8,12 @@
  *
  * Contributors:
  *    Josh
+ *    Deniz
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,9 +30,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
 
 /**
  * Main panel for notes viewing and editing
- * 
- * @author vpatara
- * @author Sergey
+ * @author Josh
+ * @author Deniz
  */
 @SuppressWarnings("serial")
 public class RequirementHistoryTab extends JPanel {
@@ -59,11 +60,9 @@ public class RequirementHistoryTab extends JPanel {
 	 * @param layout the layout manager
 	 */
 	protected void addComponents() {
-		setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		setLayout(new BorderLayout());
 		
 		noteViewer = new JPanel(new GridBagLayout());
-		noteViewer.setMinimumSize(new Dimension(1000, 10));
 
 		noteScrollPane = new JScrollPane(noteViewer);
 		noteScrollPane.setPreferredSize(new Dimension(300, 300));
@@ -71,18 +70,17 @@ public class RequirementHistoryTab extends JPanel {
 		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		// Add elements to the main panel
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.gridx = 0;
-		add(noteScrollPane, c);
+		add(noteScrollPane, BorderLayout.CENTER);
 	}
 	
 	public void setNotes(List<ProjectEvent> events) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 0, 5, 0);
+		c.insets = new Insets(3, 0, 3, 0);
 		c.gridx = 0;
 		c.gridy = events.size();
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		
 		noteViewer.removeAll();
 		
