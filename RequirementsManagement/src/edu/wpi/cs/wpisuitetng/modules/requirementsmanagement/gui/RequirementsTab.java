@@ -37,20 +37,20 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	RequirementToolbarView buttonGroup;
 	private JButton saveButton;
 	private RequirementsPanel mainPanel;
-	//private SaveDefectController controller;
-	final JScrollPane mainPanelScrollPane;
 	private Tab containingTab;
 	private boolean inputEnabled = true;
 
 	/**
-	 * Constructs a new CreateDefectView where the user can enter the data for a new defect.
+	 * Constructs a new CreateRequirementView where the user can enter the data for a new defect.
 	 */
 	public RequirementsTab(MainTabController tabController) {
 		this(tabController, new RequirementModel(), Mode.CREATE, null);
 	}
 
 	/**
-	 * Constructs a new DefectView where the user can view (and edit) a defect.
+	 * Constructs a new RequirementView where the user can view (and edit) a requirement.
+	 * 
+	 *TODO: Fix the documentation of this method
 	 * 
 	 * @param defect	The defect to show.
 	 * @param editMode	The editMode for editing the Defect
@@ -72,26 +72,15 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 			setEditModeDescriptors(requirement);
 		}
 		
-		// If this is a new defect, set the creator
+		// If this is new, set the creator
 		if (editMode == Mode.CREATE) {
 			// TODO: requirement.setCreator(new User("", ConfigManager.getConfig().getUserName(), "", -1));
 		}
 		
-		// Instantiate the main create defect panel
+		// Instantiate the main create panel
 		mainPanel = new RequirementsPanel(this, requirement, editMode);
 		this.setLayout(new BorderLayout());
-		mainPanelScrollPane = new JScrollPane(mainPanel);
-		mainPanelScrollPane.getVerticalScrollBar().setUnitIncrement(10);
-		
-		// Prevent content of scroll pane from smearing (credit: https://gist.github.com/303464)
-		mainPanelScrollPane.getVerticalScrollBar().addAdjustmentListener(new java.awt.event.AdjustmentListener(){
-			public void adjustmentValueChanged(java.awt.event.AdjustmentEvent ae){
-						mainPanelScrollPane.repaint();
-			}
-		});
-		
-		this.add(mainPanelScrollPane, BorderLayout.CENTER);
-		//controller = new SaveDefectController(this);
+		this.add(mainPanel, BorderLayout.CENTER);
 
 		// Instantiate the save button and add it to the button panel
 		saveButton = new JButton();
@@ -139,27 +128,12 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	}
 	
 	/**
-	 * @param defect Set the tab title, tooltip, and group name according to this Defect
+	 * @param requirement Set the tab title and group name according to this Requirement
 	 */
 	public void setEditModeDescriptors(RequirementModel requirement) {
 		containingTab.setTitle("Requirement #" + requirement.getId());
 		// TODO: containingTab.setToolTipText("View defect " + requirement.getTitle());
 		buttonGroup.setName("Edit Requirement");
 	}
-	
-	/**
-	 * Scrolls the scroll pane containing the main panel to the bottom
-	 */
-	public void scrollToBottom() {
-		JScrollBar vBar = mainPanelScrollPane.getVerticalScrollBar();
-		vBar.setValue(vBar.getMaximum());
-	}
 
-	/**
-	 * Revalidates and repaints the scroll pane containing the DefectPanel
-	 */
-	public void refreshScrollPane() {
-		mainPanelScrollPane.revalidate();
-		mainPanelScrollPane.repaint();
-	}
 }

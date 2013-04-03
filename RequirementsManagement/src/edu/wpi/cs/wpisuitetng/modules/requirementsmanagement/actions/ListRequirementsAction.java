@@ -14,7 +14,7 @@ public class ListRequirementsAction extends AbstractAction {
 	
 	/**
 	 * Create a CreateDefectAction
-	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
+	 * @param controller When the action is performed, controller.addListRequirementsTab() is called
 	 */
 	public ListRequirementsAction(MainTabController controller) {
 		super("List Requirements");

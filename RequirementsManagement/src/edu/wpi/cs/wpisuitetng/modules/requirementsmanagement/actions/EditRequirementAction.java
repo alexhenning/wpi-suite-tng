@@ -32,7 +32,7 @@ public class EditRequirementAction extends AbstractAction {
 	
 	/**
 	 * Create a GetSiAction
-	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
+	 * @param controller When the action is performed, controller.addEditRequirementTab() is called
 	 */
 	public EditRequirementAction(MainTabController controller) {
 		super("Edit Requirement");

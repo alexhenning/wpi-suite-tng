@@ -13,8 +13,8 @@ public class CreateIterationAction extends AbstractAction{
 	private final MainTabController controller;
 	
 	/**
-	 * Create a CreateDefectAction
-	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
+	 * Create a CreateIterationAction
+	 * @param controller When the action is performed, controller.addCreateIterationTab() is called
 	 */
 	public CreateIterationAction(MainTabController controller) {
 		super("Create Iteration");

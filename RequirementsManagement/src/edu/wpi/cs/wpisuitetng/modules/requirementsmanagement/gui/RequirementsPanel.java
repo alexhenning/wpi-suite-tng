@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    //Josh
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.Color;
@@ -6,6 +18,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +47,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 
 @SuppressWarnings("serial")
-public class RequirementsPanel extends JSplitPane {
+public class RequirementsPanel extends JSplitPane implements KeyListener{
 
 	/** The parent view **/
 	protected RequirementsTab parent;
@@ -61,6 +75,7 @@ public class RequirementsPanel extends JSplitPane {
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
 	private JPanel leftside = new JPanel();
+	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
 
 	/** A flag indicating if input is enabled on the form */
@@ -114,7 +129,10 @@ public class RequirementsPanel extends JSplitPane {
 	 */
 	public RequirementsPanel(RequirementsTab parent, RequirementModel requirement, Mode mode) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		setLeftComponent(leftside);
+		leftScrollPane = new JScrollPane(leftside);
+		leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		leftScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		setLeftComponent(leftScrollPane);
 		setRightComponent(supplementPane);
 		
 		this.parent = parent;
@@ -243,8 +261,9 @@ public class RequirementsPanel extends JSplitPane {
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
 		//sets the minimum size that the user can reduce the window to manually
-		leftside.setMinimumSize(new Dimension(600,600));
-		supplementPane.setMinimumSize(new Dimension(525,600));
+		leftside.setMinimumSize(new Dimension(600,700));
+		leftScrollPane.setMinimumSize(new Dimension(600,700));
+		supplementPane.setMinimumSize(new Dimension(525,700));
 		
 	}
 
@@ -326,6 +345,8 @@ public class RequirementsPanel extends JSplitPane {
 	 *
 	 */
 	private void updateFields() {
+		namefield.addKeyListener(this);
+		descriptionfield.addKeyListener(this);
 		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
 		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
@@ -380,42 +401,37 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		parent.buttonGroup.update(editMode, model);
 		
-		if (editMode.equals(Mode.EDIT))  {
-			if (model.getStatus().equals(RequirementStatus.COMPLETE)){
-				namefield.setEnabled(false);
-				type.setEnabled(false);
-				priority.setEnabled(false);
-				descriptionfield.setEnabled(false);
-				estimateField.setEnabled(false);
-				actualEffortField.setEnabled(true);
-				submit.setEnabled(true);
-				iteration.setEnabled(false);
-				nt.setInputEnabled(true);
-			} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
-				namefield.setEnabled(false);
-				type.setEnabled(false);
-				priority.setEnabled(false);
-				descriptionfield.setEnabled(false);
-				estimateField.setEnabled(false);
-				actualEffortField.setEnabled(false);
-				submit.setEnabled(false);
-				iteration.setEnabled(false);
-				nt.setInputEnabled(false);
-			} else {
-				namefield.setEnabled(true);
-				type.setEnabled(true);
-				priority.setEnabled(true);
-				descriptionfield.setEnabled(true);
-				estimateField.setEnabled(true);
-				actualEffortField.setEnabled(false);
-				submit.setEnabled(true);
-				iteration.setEnabled(true);
-				nt.setInputEnabled(true);
-			}
-		} else {
+		if (editMode.equals(Mode.EDIT) && (model.getStatus().equals(RequirementStatus.COMPLETE)
+				|| model.getStatus().equals(RequirementStatus.COMPLETE) || model.getStatus().equals(RequirementStatus.DELETED))) {
+			namefield.setEnabled(false);
+			type.setEnabled(false);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(false);
+			priority.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(false);
+			estimateField.setEnabled(false);
+			submit.setEnabled(false);
+			iteration.setEnabled(false);
+			nt.setInputEnabled(false);
+		}else if(namefield.getText().length() < 1 || namefield.getText().length() < 1){
 			namefield.setEnabled(true);
 			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
 			priority.setEnabled(true);
+			priority.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(true);
+			estimateField.setEnabled(true);
+			submit.setEnabled(false);
+			iteration.setEnabled(true);
+//			if(editMode == Mode.EDIT) {
+				nt.setInputEnabled(true);
+		}
+		else {
+			namefield.setEnabled(true);
+			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(true);
+			priority.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
@@ -563,5 +579,25 @@ public class RequirementsPanel extends JSplitPane {
 
 		return true;
 	}
+	//checked for input from keyboard
+	public void keyTyped ( KeyEvent e ){  
+		//check to see if name and description fields are empty or not
+		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
+			submit.setEnabled(true);
+		}
+		if((namefield.getText().length()==0)
+				|| ( descriptionfield.getText().length()==0)){
+			submit.setEnabled(false);
+		}
+	
+	}
+	//check if key is pressed. Doesn't really do anything now, but needs to be included 
+	public void keyPressed ( KeyEvent e){  
+		//l1.setText ( "Key Pressed" ) ; 
+	}  
+	//check if key is released. Doesn't really do anything now, but needs to be included 
+	public void keyReleased ( KeyEvent e ){  
+		//l1.setText( "Key Released" ) ; 
+	}  
 
 }
