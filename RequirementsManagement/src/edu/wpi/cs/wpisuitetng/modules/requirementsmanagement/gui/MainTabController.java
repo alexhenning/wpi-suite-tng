@@ -31,6 +31,7 @@ import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -99,6 +100,33 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
+	
+	/**
+	 * Description goes here
+	 *
+	 * @return
+	 */
+	public Tab addPermissionTab() {
+		// If the tab is already opened, switch to that tab.
+		for (int i = 0; i < this.view.getTabCount(); i++) {
+
+			// TODO: May have to refactor "Manage Permissions"
+			if (view.getTitleAt(i).equals("Manage Permissions")) {
+				switchToTab(i);
+				// TODO: figure out what to return
+				return null;
+			}
+		}
+
+		// Otherwise, create a new one.
+		Permissions profile = new Permissions();
+		Tab tab = addTab();
+		PermissionsTab view = new PermissionsTab(this, profile, tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
 	/**
 	 * Adds a tab that displays the given defect
 	 * @param defect the defect to display
@@ -207,5 +235,9 @@ public class MainTabController {
 			view.requestFocus();
 			return null;
 		}
+	}
+
+	public void addEditPermissionsTab(Permissions profile) {
+		System.out.println("addEditPermissionsTab called (NYI)");
 	}
 }
