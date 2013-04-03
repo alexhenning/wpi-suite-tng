@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    //Josh
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.Color;
@@ -6,6 +18,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,12 +50,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 
 @SuppressWarnings("serial")
-public class RequirementsPanel extends JSplitPane {
+public class RequirementsPanel extends JSplitPane implements KeyListener{
 
 	/** The parent view **/
 	protected RequirementsTab parent;
 	
-	/** The Defect displayed in this panel */
+	/** The requirement displayed in this panel */
 	protected RequirementModel model;
 
 	/*
@@ -65,6 +79,7 @@ public class RequirementsPanel extends JSplitPane {
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
 	private JPanel leftside = new JPanel();
+	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
 
 	/** A flag indicating if input is enabled on the form */
@@ -118,7 +133,10 @@ public class RequirementsPanel extends JSplitPane {
 	 */
 	public RequirementsPanel(RequirementsTab parent, RequirementModel requirement, Mode mode) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		setLeftComponent(leftside);
+		leftScrollPane = new JScrollPane(leftside);
+		leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		leftScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		setLeftComponent(leftScrollPane);
 		setRightComponent(supplementPane);
 		
 		this.parent = parent;
@@ -248,8 +266,9 @@ public class RequirementsPanel extends JSplitPane {
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
 		//sets the minimum size that the user can reduce the window to manually
-		leftside.setMinimumSize(new Dimension(600,600));
-		supplementPane.setMinimumSize(new Dimension(525,600));
+		leftside.setMinimumSize(new Dimension(600,700));
+		leftScrollPane.setMinimumSize(new Dimension(600,700));
+		supplementPane.setMinimumSize(new Dimension(525,700));
 		
 	}
 
@@ -331,6 +350,8 @@ public class RequirementsPanel extends JSplitPane {
 	 *
 	 */
 	private void updateFields() {
+		namefield.addKeyListener(this);
+		descriptionfield.addKeyListener(this);
 		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
 		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
@@ -360,14 +381,17 @@ public class RequirementsPanel extends JSplitPane {
 				}
 			}
 		}
-		estimateField.setText(model.getEstimate());
-		actualEffortField.setText(model.getActualEffort());
+		estimateField.setText(model.getEstimate()+"");
+		actualEffortField.setText(model.getActualEffort()+"");
 		if(this.editMode == Mode.CREATE) {
 			estimateField.setEditable(false);
 			actualEffortField.setEditable(false);
 		} else {
 			estimateField.setEditable(true);
-			actualEffortField.setEditable(true);
+			if (model.getStatus() == RequirementStatus.COMPLETE)
+				actualEffortField.setEditable(true);
+			else
+				actualEffortField.setEditable(false);
 		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
@@ -386,23 +410,39 @@ public class RequirementsPanel extends JSplitPane {
 				|| model.getStatus().equals(RequirementStatus.COMPLETE) || model.getStatus().equals(RequirementStatus.DELETED))) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
+			type.setBackground(Color.WHITE);
 			priority.setEnabled(false);
+			priority.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 			submit.setEnabled(false);
 			iteration.setEnabled(false);
 			nt.setInputEnabled(false);
-		} else {
+		}else if(namefield.getText().length() < 1 || namefield.getText().length() < 1){
 			namefield.setEnabled(true);
 			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
 			priority.setEnabled(true);
+			priority.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
-			submit.setEnabled(true);
+			submit.setEnabled(false);
 			iteration.setEnabled(true);
 //			if(editMode == Mode.EDIT) {
 				nt.setInputEnabled(true);
-//			}
+		}
+		else {
+			namefield.setEnabled(true);
+			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(true);
+			priority.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(true);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(false);
+			submit.setEnabled(true);
+			iteration.setEnabled(true);
+			nt.setInputEnabled(true);
 		}
 		
 		nt.setNotes(Arrays.asList(model.getNotes()));
@@ -454,8 +494,8 @@ public class RequirementsPanel extends JSplitPane {
 			parent.buttonGroup.update(editMode, model);
 			updateStatusField();
 		}
-		model.setEstimate(estimateField.getText()); // TODO: Should be an integer
-		model.setActualEffort(actualEffortField.getText()); // TODO: Should be an integer
+		model.setEstimate(new Integer(estimateField.getText())); // TODO: Should be an integer
+		model.setActualEffort(new Integer(actualEffortField.getText())); // TODO: Should be an integer
 		return model;
 	}
 	
@@ -484,18 +524,21 @@ public class RequirementsPanel extends JSplitPane {
 	class EditRequirementAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			getModel();
-			DB.updateRequirements(model, new SingleRequirementCallback() {
-				@Override
-				public void callback(RequirementModel req) {
-					if(model.getStatus() == RequirementStatus.DELETED) {
-						setStatus("Requirement Deleted");
-					} else {
-						setStatus("Requirement Updated");
+			if (!validateFields()){
+				
+			} else {
+				getModel();
+				DB.updateRequirements(model, new SingleRequirementCallback() {
+					@Override
+					public void callback(RequirementModel req) {
+						if(model.getStatus() == RequirementStatus.DELETED) {
+							setStatus("Requirement Deleted");
+						} else {
+							setStatus("Requirement Updated");
+						}
 					}
-				}
-			});
-		}
+				});
+			}}
 	}
 	
 	class UpdateIterationListCallback implements IterationCallback {
@@ -517,20 +560,36 @@ public class RequirementsPanel extends JSplitPane {
 	public boolean validateFields() {
 		if(namefield.getText().length()<1) {
 			namefield.setBackground(Color.RED);
-			setStatus("name must be 1-100 characters long.");
+			setStatus("Name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
 		if(descriptionfield.getText().length()<1) {
 			descriptionfield.setBackground(Color.RED);
-			setStatus("description must be 1-5000 characters long.");
+			setStatus("Description must be 1-5000 characters long.");
 			return false;
 		} else {
 			descriptionfield.setBackground(Color.WHITE);
 		}
-		
-		// TODO Auto-generated method stub
+		if(Integer.parseInt(estimateField.getText()) < 0){
+			estimateField.setBackground(Color.RED);
+			setStatus("Estimate must be non-negative integer.");
+			System.out.println("Estimate value is " + estimateField.getText());
+			return false;
+		} else {
+			estimateField.setBackground(Color.WHITE);
+		}
+		if(Integer.parseInt(actualEffortField.getText()) < 0){
+			actualEffortField.setBackground(Color.RED);
+			setStatus("Actual Effort must be a non-negative integer.");
+			System.out.println("Estimate value is " + estimateField.getText());
+			return false;
+		} else {
+			actualEffortField.setBackground(Color.WHITE);
+		}
+		System.out.println("Estimate value is " + estimateField.getText());
+
 		return true;
 	}
 	class ListProjectEvents implements ProjectEventsCallback {
@@ -543,5 +602,26 @@ public class RequirementsPanel extends JSplitPane {
 
 		
 	}
+	
+	//checked for input from keyboard
+	public void keyTyped ( KeyEvent e ){  
+		//check to see if name and description fields are empty or not
+		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
+			submit.setEnabled(true);
+		}
+		if((namefield.getText().length()==0)
+				|| ( descriptionfield.getText().length()==0)){
+			submit.setEnabled(false);
+		}
+	
+	}
+	//check if key is pressed. Doesn't really do anything now, but needs to be included 
+	public void keyPressed ( KeyEvent e){  
+		//l1.setText ( "Key Pressed" ) ; 
+	}  
+	//check if key is released. Doesn't really do anything now, but needs to be included 
+	public void keyReleased ( KeyEvent e ){  
+		//l1.setText( "Key Released" ) ; 
+	}  
 
 }

@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    //TODO
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import java.util.ArrayList;
@@ -295,6 +304,13 @@ public class RequirementModelValidator {
 		} else {
 			// new defects should never have any events
 			requirement.setEvents(new ArrayList<RequirementEvent>());
+		}
+		
+		// Check if the iteration is still in progress
+		if(requirement.getIteration() != null) {
+			if(now.after(requirement.getIteration().getEndDate()) && now != requirement.getIteration().getEndDate()) {
+				issues.add(new ValidationIssue("iteration must not be over", "iteration"));
+			}
 		}
 		
 		return issues;

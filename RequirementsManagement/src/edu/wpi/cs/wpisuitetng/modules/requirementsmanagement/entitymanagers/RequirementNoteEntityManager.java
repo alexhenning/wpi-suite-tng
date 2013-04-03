@@ -33,6 +33,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * @author Tim Calvert
  *
  */
+
+//TODO Document this class
+
 public class RequirementNoteEntityManager implements
 		EntityManager<RequirementNote> {
 	

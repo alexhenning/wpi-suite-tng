@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    //TODO
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 
@@ -20,8 +32,8 @@ public class RequirementModel extends AbstractModel {
 	private RequirementPriority priority;
 	private String name;
 	private String description;
-	private String estimate;
-	private String actualEffort;
+	private int estimate;
+	private int actualEffort;
 	private Date creationDate;
 	private Date lastModifiedDate;
 	private List<RequirementEvent> events;
@@ -48,8 +60,8 @@ public class RequirementModel extends AbstractModel {
 		creator = new User("", "", "", -1);
 		assignees = new ArrayList<User>();
 //		assignees.add(new User("", "", "", -1));
-		estimate = "0";
-		actualEffort = "0";
+		estimate = 0;
+		actualEffort = 0;
 		creationDate = new Date();
 		lastModifiedDate = new Date();
 		events = new ArrayList<RequirementEvent>();
@@ -83,7 +95,7 @@ public class RequirementModel extends AbstractModel {
 	 */
 	public RequirementModel(int id, ReleaseNumber releaseNumber, RequirementStatus status,
 			RequirementPriority priority, String name, String description,
-			String estimate, String actualEffort, User creator, List<User> assignees,
+			int estimate, int actualEffort, User creator, List<User> assignees,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
 			List<RequirementModel> subRequirements, Iteration iteration, RequirementType type) {
 		super();
@@ -234,19 +246,19 @@ public class RequirementModel extends AbstractModel {
 		this.description = description;
 	}
 
-	public String getEstimate() {
+	public int getEstimate() {
 		return estimate;
 	}
 
-	public void setEstimate(String estimate) {
+	public void setEstimate(int estimate) {
 		this.estimate = estimate;
 	}
 
-	public String getActualEffort() {
+	public int getActualEffort() {
 		return actualEffort;
 	}
 
-	public void setActualEffort(String actualEffort) {
+	public void setActualEffort(int actualEffort) {
 		this.actualEffort = actualEffort;
 	}
 
