@@ -195,6 +195,12 @@ public class ListRequirementsPanel extends JPanel {
 		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
 	}
 	
+	/**
+	 * make the iteration comboboxes in the iteration column
+	 *
+	 * @param table the JTable that has the column
+	 * @param iterColumn the iteration column
+	 */
 	public void setUpIterationColumn(JTable table, TableColumn iterColumn) {
 		JComboBox iterationBox = new JComboBox();
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
@@ -206,6 +212,12 @@ public class ListRequirementsPanel extends JPanel {
 		iterColumn.setCellRenderer(renderer);
 	}
 	
+	/**
+	 * make the status comboboxes in the status column
+	 *
+	 * @param table the JTable that has the column
+	 * @param statusColumn the status column
+	 */
 	public void setUpStatusColumn(JTable table, TableColumn statusColumn) {
 		JComboBox statusBox = new JComboBox();
 		statusBox.addItem("NEW");
@@ -222,6 +234,12 @@ public class ListRequirementsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * make the priority comboxes in the priority column
+	 *
+	 * @param table the JTable that hs the column
+	 * @param priorityColumn the priority column
+	 */
 	public void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
 		JComboBox priorityBox = new JComboBox();
 		priorityBox.addItem("HIGH");
