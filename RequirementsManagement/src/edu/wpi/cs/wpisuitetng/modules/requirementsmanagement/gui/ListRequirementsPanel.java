@@ -46,9 +46,11 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
@@ -128,7 +130,8 @@ public class ListRequirementsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO THIS NEEDS TO MAKES SURE ALL CHANGES ARE VALID AND THEN SAVE THEM, THEN BRING THE TABLE BACK TO VIEW MODE
-				
+				// After everything else is done, call setViewTable()
+				setViewTable();
 			}
 			
 		});
@@ -138,6 +141,8 @@ public class ListRequirementsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO THIS NEEDS TO REMOVE ALL CHANGES MADE AND BRING THE TABLE BACK TO VIEW MODE
+				// After everything else is done, call setViewTable()
+				setViewTable();
 				
 			}
 			
@@ -187,38 +192,83 @@ public class ListRequirementsPanel extends JPanel {
 		editPanel.revalidate();
 		editPanel.repaint();
 		//TODO: SET THE TABLE INTO A MODE WHERE ALL THE FIELDS CAN BE EDITED
+		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
+		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
+		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
 	}
 	
+	/**
+	 * Function to turn the table into view mode
+	 *
+	 */
+	public void setViewTable() {
+		tableModel.setMode(Mode.VIEW);
+		editPanel.remove(saveButton);
+		editPanel.remove(cancelButton);
+		editPanel.add(editButton);
+		editPanel.revalidate();
+		editPanel.repaint();
+		//TODO: MAKE THE FIELDS NOT EDITABLE ANYMORE
+	}
+	
+	/**
+	 * make the iteration comboboxes in the iteration column
+	 *
+	 * @param table the JTable that has the column
+	 * @param iterColumn the iteration column
+	 */
 	public void setUpIterationColumn(JTable table, TableColumn iterColumn) {
-		JComboBox comboBox = new JComboBox();
-		comboBox.addItem("Test Iter");
-		
-		iterColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		JComboBox iterationBox = new JComboBox();
+		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
+		DB.getAllIterations(iterationDropdown);
+		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox));
 		
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Tooltip");
+		renderer.setToolTipText("Click to change iteration");
 		iterColumn.setCellRenderer(renderer);
 	}
 	
+	/**
+	 * make the status comboboxes in the status column
+	 *
+	 * @param table the JTable that has the column
+	 * @param statusColumn the status column
+	 */
 	public void setUpStatusColumn(JTable table, TableColumn statusColumn) {
-		JComboBox comboBox = new JComboBox();
-		comboBox.addItem(RequirementStatus.DELETED);
+
+		JComboBox statusBox = new JComboBox();
+		statusBox.addItem("NEW");
+		statusBox.addItem("OPEN");
+		statusBox.addItem("IN_PROGRESS");
+		statusBox.addItem("COMPLETE");
+		statusBox.addItem("DELETED");
 		
-		statusColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		statusColumn.setCellEditor(new DefaultCellEditor(statusBox));
 		
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Tooltip");
+		renderer.setToolTipText("Click to change status");
 		statusColumn.setCellRenderer(renderer);
+		
 	}
 	
+	/**
+	 * make the priority comboxes in the priority column
+	 *
+	 * @param table the JTable that hs the column
+	 * @param priorityColumn the priority column
+	 */
 	public void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
-		JComboBox comboBox = new JComboBox();
-		comboBox.addItem("Test Priority");
+		JComboBox priorityBox = new JComboBox();
+		priorityBox.addItem("HIGH");
+		priorityBox.addItem("MEDIUM");
+		priorityBox.addItem("LOW");
+		priorityBox.addItem("NONE");
 		
-		priorityColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		priorityColumn.setCellEditor(new DefaultCellEditor(priorityBox));
 		
+
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Tooltip");
+		renderer.setToolTipText("Click to change priority");
 		priorityColumn.setCellRenderer(renderer);
 	}
 	
@@ -274,6 +324,43 @@ public class ListRequirementsPanel extends JPanel {
 				}
 			}
 	
+		}
+		
+	}
+	
+	/**
+	 *
+	 * Class to take the list of iterations from the database and fill in a combobox with their names
+	 * @author James
+	 *
+	 */
+	class FillIterationDropdown implements IterationCallback {
+		
+		/**
+		 * The combo box that will get filled in
+		 */
+		JComboBox iterationBox;
+		
+		/**
+		 * Constructor
+		 * @param iterationBox the combobox that will get filled in
+		 */
+		public FillIterationDropdown(JComboBox iterationBox) {
+			this.iterationBox = iterationBox;
+		}
+
+		/**
+		 * Go through the list of iterations and add their name to the combobox
+		 *
+		 * @param iterationss the list of iterations
+		 */
+		@Override
+		public void callback(List<Iteration> iterationss) {
+			if(iterationss.size() > 0) {
+				for(Iteration iteration : iterationss) {
+					iterationBox.addItem(iteration.getIterationNumber());
+				}
+			}
 		}
 		
 	}
