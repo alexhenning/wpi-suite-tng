@@ -65,10 +65,10 @@ public class RequirementModelEntityManagerTest {
 		adminSession = new Session(admin, testProject, mockSsid);
 		
 		existingUser = new User("tim", "tim", "password", 2);
-		existingRequirement = new RequirementModel(1, new ReleaseNumber(1,3, testProject), RequirementStatus.NEW,
+		/*existingRequirement = new RequirementModel(1, new ReleaseNumber(1,3, testProject), RequirementStatus.NEW,
 				RequirementPriority.NONE, "existingReq", "descrip", "0","0", existingUser, null,
 				new Date(0), new Date(0), null, null, null, RequirementType.EPIC );
-		
+		*/
 		otherRequirement = new RequirementModel();
 		otherRequirement.setProject(otherProject);
 	
