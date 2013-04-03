@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    Josh
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
@@ -27,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  * 
  * @author vpatara
  * @author Sergey
- *
+ * @author Josh
  */
 @SuppressWarnings("serial")
 public class NotePanel extends JPanel {
@@ -56,6 +56,9 @@ public class NotePanel extends JPanel {
 		addComponents();
 	}
 
+	/**
+	 * Calls first constructor given a note
+	 */
 	public NotePanel(RequirementNote note) {
 		this(note.getBody(), note.getUser().getName(), note.getDate());
 	}
@@ -63,7 +66,6 @@ public class NotePanel extends JPanel {
 	/**
 	 * Adds GUI components to display a note (including a message, an author,
 	 * and a date)
-	 * 
 	 */
 	protected void addComponents() {
 		
