@@ -378,15 +378,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		estimateField.setText(model.getEstimate()+"");
 		actualEffortField.setText(model.getActualEffort()+"");
-		if(this.editMode == Mode.CREATE) {
+		if(this.editMode == Mode.CREATE || model.getStatus() == RequirementStatus.DELETED || model.getStatus() == RequirementStatus.COMPLETE) {
 			estimateField.setEditable(false);
 			actualEffortField.setEditable(false);
 		} else {
 			estimateField.setEditable(true);
-			if (model.getStatus() == RequirementStatus.COMPLETE)
-				actualEffortField.setEditable(true);
-			else
-				actualEffortField.setEditable(false);
+			actualEffortField.setEditable(true);
 		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
@@ -410,6 +407,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			priority.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(false);
 			submit.setEnabled(false);
 			iteration.setEnabled(false);
 			nt.setInputEnabled(false);
@@ -420,7 +418,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			priority.setEnabled(true);
 			priority.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
-			estimateField.setEnabled(true);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(false);
 			submit.setEnabled(false);
 			iteration.setEnabled(true);
 //			if(editMode == Mode.EDIT) {
@@ -433,8 +432,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			priority.setEnabled(true);
 			priority.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
-			estimateField.setEnabled(false);
-			actualEffortField.setEnabled(false);
+			estimateField.setEnabled(true);
+			actualEffortField.setEnabled(true);
 			submit.setEnabled(true);
 			iteration.setEnabled(true);
 			nt.setInputEnabled(true);
