@@ -6,6 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 
 @SuppressWarnings("serial")
-public class RequirementsPanel extends JSplitPane {
+public class RequirementsPanel extends JSplitPane implements KeyListener{
 
 	/** The parent view **/
 	protected RequirementsTab parent;
@@ -326,6 +328,8 @@ public class RequirementsPanel extends JSplitPane {
 	 *
 	 */
 	private void updateFields() {
+		namefield.addKeyListener(this);
+		descriptionfield.addKeyListener(this);
 		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
 		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
@@ -381,16 +385,33 @@ public class RequirementsPanel extends JSplitPane {
 				|| model.getStatus().equals(RequirementStatus.COMPLETE) || model.getStatus().equals(RequirementStatus.DELETED))) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
+			type.setBackground(Color.WHITE);
 			priority.setEnabled(false);
+			priority.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 			submit.setEnabled(false);
 			iteration.setEnabled(false);
 			nt.setInputEnabled(false);
-		} else {
+		}else if(namefield.getText().length() <1 || namefield.getText().length() <1){
 			namefield.setEnabled(true);
 			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
 			priority.setEnabled(true);
+			priority.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(true);
+			estimateField.setEnabled(true);
+			submit.setEnabled(false);
+			iteration.setEnabled(true);
+//			if(editMode == Mode.EDIT) {
+				nt.setInputEnabled(true);
+		}
+		else {
+			namefield.setEnabled(true);
+			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(true);
+			priority.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
 			submit.setEnabled(true);
@@ -520,5 +541,25 @@ public class RequirementsPanel extends JSplitPane {
 		// TODO Auto-generated method stub
 		return true;
 	}
+	//checked for input from keyboard
+	public void keyTyped ( KeyEvent e ){  
+		//check to see if name and description fields are empty or not
+		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
+			submit.setEnabled(true);
+		}
+		if((namefield.getText().length()==0)
+				|| ( descriptionfield.getText().length()==0)){
+			submit.setEnabled(false);
+		}
+	
+	}
+	//check if key is pressed. Doesn't really do anything now, but needs to be included 
+	public void keyPressed ( KeyEvent e){  
+		//l1.setText ( "Key Pressed" ) ; 
+	}  
+	//check if key is released. Doesn't really do anything now, but needs to be included 
+	public void keyReleased ( KeyEvent e ){  
+		//l1.setText( "Key Released" ) ; 
+	}  
 
 }
