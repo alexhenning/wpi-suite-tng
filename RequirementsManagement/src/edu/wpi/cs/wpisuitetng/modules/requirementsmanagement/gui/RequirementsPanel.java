@@ -38,9 +38,12 @@ import javax.swing.JTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ProjectEventsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+//import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.ListProjectEvents;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -74,6 +77,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
+	private RequirementHistoryTab hs;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
@@ -200,8 +204,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		// Supplement Pane (i.e., notes, history, attachments)
 //		if(this.editMode == Mode.EDIT) {
 		nt = new NoteMainPanel(this);
+		hs = new RequirementHistoryTab(this);
 		supplementPane.add("Notes", nt);
-		supplementPane.add("History", new JPanel());
+		supplementPane.add("History", hs);
 //		}
 		
 		// Add subpanels to main panel
@@ -441,6 +446,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		
 		nt.setNotes(Arrays.asList(model.getNotes()));
+		DB.getAllProjectEvents(new ListProjectEvents());
+	}
+	
+	/**
+	 * Sets the transaction log in the history tab
+	 */
+	public void setHistory(List<ProjectEvent> projectEvents) {
+		hs.setNotes(projectEvents);
 	}
 
 	/**
@@ -579,6 +592,17 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 
 		return true;
 	}
+	class ListProjectEvents implements ProjectEventsCallback {
+		
+		@Override
+		public void callback(List<ProjectEvent> projectEvents) {
+			setHistory(projectEvents);
+		}
+
+
+		
+	}
+	
 	//checked for input from keyboard
 	public void keyTyped ( KeyEvent e ){  
 		//check to see if name and description fields are empty or not

@@ -14,10 +14,14 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateIterationRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateProjectEventRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveProjectEventsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
@@ -64,6 +68,25 @@ public class DB {
 	public static void getSinglePermission(String id, SinglePermissionCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + id, HttpMethod.GET);
 		request.addObserver(new RetrieveSinglePermissionRequestObserver(callback));
+		request.send();
+	}
+
+//	public static void createProjectEvent(ProjectEvent projectEvent, AddProjectEventController callback) {
+//		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.PUT);
+//		request.setBody(projectEvent.toJSON());
+//		request.addObserver(new CreateProjectEventRequestObserver(callback));
+//		request.send();
+//	}
+	
+	public static void getAllProjectEvents(ProjectEventsCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
+		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
+		request.send();
+	}
+	
+	public static void getAllProjectEventsFor(ProjectEventsCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
+		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
 		request.send();
 	}
 

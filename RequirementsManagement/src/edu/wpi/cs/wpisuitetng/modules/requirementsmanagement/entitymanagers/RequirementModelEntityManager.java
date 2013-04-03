@@ -28,7 +28,11 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddProjectEventController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEventObjectType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementChangeset;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementModelValidator;
@@ -81,7 +85,12 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 			throw new BadRequestException();
 		}
 		
-		if(!db.save(newRequirementModel, s.getProject())) {
+		ProjectEvent creation = ProjectEvent.createProjectCreationEvent(ProjectEventObjectType.REQUIREMENT, newRequirementModel.getId()+"");
+		// make sure the user exists
+		creation.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
+		creation.setId(CountEvents() + 1);
+
+		if(!db.save(newRequirementModel, s.getProject()) || !db.save(creation, s.getProject())) {
 			throw new WPISuiteException();
 		}
 		
@@ -142,10 +151,15 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		RequirementModel existingRequirement = validator.getLastExistingRequirement();
 		Date originalLastModified = existingRequirement.getLastModifiedDate();
 		
-		RequirementChangeset changeset = new RequirementChangeset();
+//		RequirementChangeset changeset = new RequirementChangeset();
+//		// make sure the user exists
+//		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
+//		RequirementChangesetCallback callback = new RequirementChangesetCallback(changeset);
+		ProjectEvent changeset = ProjectEvent.createProjectChangesetEvent(ProjectEventObjectType.REQUIREMENT, existingRequirement.getId()+"");
 		// make sure the user exists
 		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
-		RequirementChangesetCallback callback = new RequirementChangesetCallback(changeset);
+		changeset.setId(CountEvents() + 1);
+		RequirementModelEventCallback callback = new RequirementModelEventCallback(changeset);
 		
 		// copy over values
 		updateMapper.map(updatedRequirement, existingRequirement, callback);
@@ -155,8 +169,9 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 			existingRequirement.setLastModifiedDate(originalLastModified);
 		} else {
 			// add changeset to events
-			existingRequirement.getEvents().add(changeset);
-			if(!db.save(existingRequirement, s.getProject()) || !db.save(existingRequirement.getEvents())) {
+//			existingRequirement.getEvents().add(changeset);
+//			DB.createProjectEvent(changeset, new AddProjectEventController());
+			if(!db.save(existingRequirement, s.getProject()) || !db.save(changeset, s.getProject()) || !db.save(existingRequirement.getEvents())) {
 				throw new WPISuiteException();
 			}
 		}
@@ -194,6 +209,10 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	@Override
 	public int Count() throws WPISuiteException {
 		return db.retrieveAll(new RequirementModel()).size();
+	}
+	
+	public int CountEvents() throws WPISuiteException {
+		return db.retrieveAll(new ProjectEvent()).size();
 	}
 	
 	/* (non-Javadoc)
