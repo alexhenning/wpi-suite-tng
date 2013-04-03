@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -206,7 +207,6 @@ public class ListRequirementsPanel extends JPanel {
 	 */
 	public void setViewTable(boolean cancelled) {
 		boolean noErrors = true;
-		tableModel.setMode(Mode.VIEW);
 		if(cancelled) {
 			updateAllRequirementList();
 		} else {
@@ -220,6 +220,7 @@ public class ListRequirementsPanel extends JPanel {
 			
 		}
 		if(noErrors) { // no errors (or cancelled), so go back to view
+			tableModel.setMode(Mode.VIEW);
 			editPanel.remove(saveButton);
 			editPanel.remove(cancelButton);
 			editPanel.add(editButton);
@@ -290,7 +291,7 @@ public class ListRequirementsPanel extends JPanel {
 		priorityColumn.setCellRenderer(renderer);
 	}
 	
-	public List<RequirementModel> updateModels(List<RequirementModel> reqs) {
+	public List<RequirementModel> updateModels(List<RequirementModel> reqs, List<Iteration> iterations) {
 
 		if(reqs != null && reqs.size() >= 1) {
 			for(int i = 0; i < tableModel.getRowCount(); i++) {
@@ -298,7 +299,18 @@ public class ListRequirementsPanel extends JPanel {
 					if(req.getId() == Integer.valueOf((String)tableModel.getValueAt(i, 0))) {
 						// we have the correct requirement, update values
 						req.setName((String)tableModel.getValueAt(i, 1));
-						req.setIteration((Iteration)tableModel.getValueAt(i, 2));
+						// Find the right iteration from the list
+						if(tableModel.getValueAt(i, 2) == "Backlog") {
+							req.setIteration(null);
+						}
+						else {
+							for(Iteration iteration : iterations) {
+								if(iteration.getIterationNumber() == (String)tableModel.getValueAt(i, 2)) {
+									req.setIteration(iteration);
+									break;
+								}
+							}
+						}
 						req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
 						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
 						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
@@ -350,8 +362,24 @@ public class ListRequirementsPanel extends JPanel {
 		
 		@Override
 		public void callback(List<RequirementModel> reqs) {
-			List<RequirementModel> requirements = updateModels(reqs);
+			DB.getAllIterations(new RetrieveAllIterationsCallback(reqs));
+		}
+		
+	}
+	
+	class RetrieveAllIterationsCallback implements IterationCallback {
+		
+		List<RequirementModel> reqs;
+		
+		public RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
+			this.reqs = reqs;
+		}
+
+		@Override
+		public void callback(List<Iteration> iterationss) {
+			List<RequirementModel> requirements = updateModels(reqs, iterationss);
 			sendRequirementsToDatabase(requirements);
+			
 		}
 		
 	}
@@ -442,8 +470,12 @@ public class ListRequirementsPanel extends JPanel {
 		@Override
 		public void callback(List<Iteration> iterationss) {
 			if(iterationss.size() > 0) {
+				final Date now = new Date();
 				for(Iteration iteration : iterationss) {
-					iterationBox.addItem("" + iteration.getIterationNumber());
+					// Make sure the iteration the only iterations that are added are still in progress
+					if(now.before(iteration.getEndDate()) || now == iteration.getEndDate()) {
+						iterationBox.addItem("" + iteration.getIterationNumber());
+					}
 				}
 			}
 		}
