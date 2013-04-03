@@ -78,6 +78,7 @@ public class NoteMainPanel extends JPanel {
 		ta = new JTextArea(5, 40);
 		ta.setLineWrap(true);
 		ta.setText("New note");		
+		ta.setEditable(inputEnabled);
 		JScrollPane textPane = new JScrollPane(ta);
 		textPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		textPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -90,6 +91,7 @@ public class NoteMainPanel extends JPanel {
 		
 		addButton = new JButton("Add note");
 		addButton.addActionListener(new AddNoteController(this, parent.model, parent));
+		addButton.setEnabled(inputEnabled);
 		
 		// Add elements to the main panel
 		add(noteScrollPane, BorderLayout.CENTER);
@@ -130,9 +132,10 @@ public class NoteMainPanel extends JPanel {
 	 * 
 	 * @param enabled	Whether or not input is enabled.
 	 */
-	protected void setInputEnabled(boolean enabled) {
+	public void setInputEnabled(boolean enabled) {
 		inputEnabled = enabled;
 
+		ta.setEditable(enabled);
 		ta.setEnabled(enabled);
 		addButton.setEnabled(enabled);
 		// TODO: implement
