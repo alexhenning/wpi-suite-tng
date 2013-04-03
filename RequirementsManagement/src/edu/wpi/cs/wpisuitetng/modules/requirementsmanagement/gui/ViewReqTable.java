@@ -50,8 +50,8 @@ public class ViewReqTable extends AbstractTableModel {
     }
 
     public boolean isCellEditable(int row, int col) {
-    	if(editMode == Mode.VIEW) {
-    		return false; //Cells should not be editable in table, should be able to double click and open edit tab
+    	if(editMode == Mode.VIEW || col == 0) { // Id cell should not be editable, even in edit mode
+    		return false; 
     	} else {
     		return true;
     	}

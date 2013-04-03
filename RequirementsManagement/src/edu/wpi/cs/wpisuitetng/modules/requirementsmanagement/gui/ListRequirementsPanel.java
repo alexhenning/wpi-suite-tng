@@ -23,6 +23,7 @@ import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -38,6 +39,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -113,7 +115,6 @@ public class ListRequirementsPanel extends JPanel {
 		editButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tableModel.setMode(Mode.EDIT);
 				setEditTable();
 			}
 		});
@@ -142,9 +143,16 @@ public class ListRequirementsPanel extends JPanel {
 		
 		editPanel.add(editButton);
 		
+		
+		
 		//Add the table to a scrollpane and add it
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 100));
+		
+		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
+		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
+		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
+		
 		add(scrollPane, BorderLayout.CENTER);
 		add(editPanel, BorderLayout.PAGE_END);
 	}
@@ -173,10 +181,38 @@ public class ListRequirementsPanel extends JPanel {
 	 *
 	 */
 	public void setEditTable() {
+		tableModel.setMode(Mode.EDIT);
 		editPanel.remove(editButton);
 		editPanel.add(saveButton);
 		editPanel.add(cancelButton);
+		editPanel.revalidate();
+		editPanel.repaint();
 		//TODO: SET THE TABLE INTO A MODE WHERE ALL THE FIELDS CAN BE EDITED
+	}
+	
+	public void setUpIterationColumn(JTable table, TableColumn iterColumn) {
+		JComboBox comboBox = new JComboBox();
+		comboBox.addItem("Test Iter");
+		
+		iterColumn.setCellEditor(new DefaultCellEditor(comboBox));
+		
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setToolTipText("Tooltip");
+		iterColumn.setCellRenderer(renderer);
+	}
+	
+	public void setUpStatusColumn(JTable table, TableColumn statusColumn) {
+		JComboBox comboBox = new JComboBox();
+		comboBox.addItem("Test Status");
+		
+		statusColumn.setCellEditor(new DefaultCellEditor(comboBox));
+	}
+	
+	public void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
+		JComboBox comboBox = new JComboBox();
+		comboBox.addItem("Test Priority");
+		
+		priorityColumn.setCellEditor(new DefaultCellEditor(comboBox));
 	}
 	
 	class UpdateTableCallback implements RequirementsCallback {
