@@ -347,7 +347,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	private void updateFields() {
 		namefield.addKeyListener(this);
 		descriptionfield.addKeyListener(this);
-		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
+		if(model.getIteration() != null && !(model.getStatus() == RequirementStatus.COMPLETE || model.getStatus() == RequirementStatus.DELETED)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
 		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
 			model.setStatus(RequirementStatus.OPEN);
