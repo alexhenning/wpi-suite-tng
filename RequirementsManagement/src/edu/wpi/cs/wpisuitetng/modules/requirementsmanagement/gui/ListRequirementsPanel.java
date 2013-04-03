@@ -205,21 +205,16 @@ public class ListRequirementsPanel extends JPanel {
 	 *
 	 */
 	public void setViewTable(boolean cancelled) {
-		System.out.println("entered set view\ncancelled = " + cancelled);
 		boolean noErrors = true;
 		tableModel.setMode(Mode.VIEW);
 		if(cancelled) {
-			System.out.println("entered cancelled branch");
 			updateAllRequirementList();
 		} else {
-			System.out.println("entered saved branch");
 			// validate fields
 			noErrors = validateModels();
-			System.out.println("validated");
 			if(noErrors) {  // no errors, update models and save
 				// get all models from data base and continue from callback
 				RetrieveAllRequirementsCallback cb = new RetrieveAllRequirementsCallback();
-				System.out.println("made callback");
 				DB.getAllRequirements(cb);
 			}
 			
@@ -298,14 +293,12 @@ public class ListRequirementsPanel extends JPanel {
 	public List<RequirementModel> updateModels(List<RequirementModel> reqs) {
 
 		if(reqs != null && reqs.size() >= 1) {
-			for(int i = 0; i < tableModel.getColumnCount(); ++i) {
+			for(int i = 0; i < tableModel.getRowCount(); i++) {
 				for(RequirementModel req : reqs) {
 					if(req.getId() == Integer.valueOf((String)tableModel.getValueAt(i, 0))) {
 						// we have the correct requirement, update values
 						req.setName((String)tableModel.getValueAt(i, 1));
-						GetIterationByStringCallback cb = new GetIterationByStringCallback((String)tableModel.getValueAt(i, 2));
-						DB.getAllIterations(cb);
-						req.setIteration(cb.getIter());
+						req.setIteration((Iteration)tableModel.getValueAt(i, 2));
 						req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
 						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
 						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
@@ -320,7 +313,7 @@ public class ListRequirementsPanel extends JPanel {
 	public boolean validateModels() {
 		boolean noErrors = true;
 		
-		for(int i = 0; i < tableModel.getColumnCount(); ++i) {
+		for(int i = 0; i < tableModel.getRowCount(); i++) {
 			// check name
 			if(((String)tableModel.getValueAt(i, 1)).length() < 1) {
 				// highlight field
@@ -328,9 +321,9 @@ public class ListRequirementsPanel extends JPanel {
 				noErrors = false;
 			}
 			// check estimate
-			if((Integer.valueOf((String)tableModel.getValueAt(i, 5))).intValue() < 0) {
+			if((Integer.valueOf((String)tableModel.getValueAt(i, 5))) < 0) {
 				// highlight field
-				System.out.println("Error in description for Requirement in row " + i);
+				System.out.println("Error in estimate for Requirement in row " + i);
 				noErrors = false;
 			}
 		}
@@ -348,7 +341,7 @@ public class ListRequirementsPanel extends JPanel {
 
 		@Override
 		public void callback(RequirementModel req) {
-			updateAllRequirementList();
+			// nothing to do
 		}
 		
 	}
@@ -450,35 +443,11 @@ public class ListRequirementsPanel extends JPanel {
 		public void callback(List<Iteration> iterationss) {
 			if(iterationss.size() > 0) {
 				for(Iteration iteration : iterationss) {
-					iterationBox.addItem("Iteration " + iteration.getIterationNumber());
+					iterationBox.addItem("" + iteration.getIterationNumber());
 				}
 			}
 		}
 		
 	}
-	
-	class GetIterationByStringCallback implements IterationCallback {
-		
-		Iteration iter = null;
-		String value;
-		
-		public GetIterationByStringCallback(String value) {
-			this.value = value;
-		}
 
-		@Override
-		public void callback(List<Iteration> iterations) {
-			for(Iteration iteration : iterations) {
-				if(("Iteration " + iteration.getIterationNumber()).equals(value)) {
-					iter = iteration;
-					break;
-				}
-			}
-		}
-		
-		public Iteration getIter() {
-			return iter;
-		}
-		
-	}
 }
