@@ -49,7 +49,7 @@ public class ManagementToolbarView extends ToolbarGroupView {
 
 		// Setup button panel
 		permissionButton = new JButton("User Permissions");
-		permissionButton.setAction(new ViewPermissionAction(tabController)); // TODO: create permission action
+		permissionButton.setAction(new ViewPermissionAction(tabController));
 		content.add(permissionButton);
 
 		// Construct a new toolbar group to be added to the end of the toolbar

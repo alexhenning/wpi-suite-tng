@@ -6,9 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreatePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
@@ -30,21 +29,21 @@ public class AddPermissionController implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Button "+((JButton)e.getSource()).getText()+" pushed");
 //			if(panel.validateFields()){
-//				final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions",  HttpMethod.PUT);
-//				request.setBody(panel.getModel().toJSON());
-//				request.addObserver(new CreatePermissionsModelRequestObserver(this));
-//				request.send();
+			final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions",  HttpMethod.PUT);
+			request.setBody(panel.getModel().toJSON());
+			request.addObserver(new CreatePermissionRequestObserver(this));
+			request.send();
 //			}
 		}
 		
-//		public void receivedAddConfirmation(Permissions profile) {
-//			DB.getSinglePermissions(""+profile.getId(), new SingleProfileCallback() {
-//				@Override public void callback(Permissions profile) {
+		public void receivedAddConfirmation(Permissions profile) {
+			DB.getSinglePermission(""+profile.getId(), new SinglePermissionCallback() {
+				@Override public void callback(Permissions profile) {
 //					panel.updateModel();
-//				}
-//			});
+				}
+			});
 //			panel.setStatus("Profile saved!");
-//		}
+		}
 
 
 }

@@ -179,7 +179,7 @@ public class PermissionsPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                	DB.getSinglePermissions((String) profileTable.getModel().getValueAt(profileTable.getSelectedRow(), 0),
+                	DB.getSinglePermission((String) profileTable.getModel().getValueAt(profileTable.getSelectedRow(), 0),
                 			new SinglePermissionCallback() {
 						@Override
 						public void callback(Permissions profile) {

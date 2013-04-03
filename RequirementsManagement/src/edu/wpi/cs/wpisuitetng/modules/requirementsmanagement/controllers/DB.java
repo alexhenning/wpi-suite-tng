@@ -48,7 +48,7 @@ public class DB {
 		request.send();
 	}
 
-	public static void getSinglePermissions(String id, SinglePermissionCallback callback) {
+	public static void getSinglePermission(String id, SinglePermissionCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + id, HttpMethod.GET);
 		request.addObserver(new RetrieveSinglePermissionRequestObserver(callback));
 		request.send();
