@@ -16,11 +16,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,6 +45,7 @@ import javax.swing.table.TableRowSorter;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 @SuppressWarnings("serial")
@@ -51,6 +55,8 @@ public class ListRequirementsPanel extends JPanel {
 	boolean inputEnabled;
 	JTable table;
 	ViewReqTable tableModel;
+	JButton editButton;
+	JPanel editPanel;
 	
 	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
@@ -65,7 +71,7 @@ public class ListRequirementsPanel extends JPanel {
 		table.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 2 && tableModel.getMode() != Mode.EDIT) {
                 	DB.getSingleRequirement((String) table.getModel().getValueAt(table.getSelectedRow(), 0),
                 			new SingleRequirementCallback() {
 						@Override
@@ -93,16 +99,29 @@ public class ListRequirementsPanel extends JPanel {
 		
 		//create the table part of the GUI
 		tableModel = new ViewReqTable();
+		tableModel.setMode(Mode.VIEW);
 		table = new JTable(tableModel);
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
+		// create panel and button to change table to edit mode
+		editPanel = new JPanel();
+		editButton = new JButton("Edit");
+		editButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tableModel.setMode(Mode.EDIT);
+			}
+		});
+		
+		editPanel.add(editButton);
+		
 		//Add the table to a scrollpane and add it
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 100));
 		add(scrollPane, BorderLayout.CENTER);
-
+		add(editPanel, BorderLayout.PAGE_END);
 	}
 	/**
 	 * Sets whether input is enabled for this panel and its children. This should be used instead of 

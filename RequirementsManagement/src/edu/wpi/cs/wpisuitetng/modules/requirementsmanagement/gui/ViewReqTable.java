@@ -16,11 +16,18 @@ import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class ViewReqTable extends AbstractTableModel {
+	
+	public enum Mode {
+		VIEW,
+		EDIT
+	};
 
     private String[] columnNames = { "ID", "Name", "Iteration", "Status", "Priority", "Estimate"};
     //first list is row, second list is column data
     
     private Object[][] data = {};
+    
+    private Mode editMode;
     
     public int getColumnCount() {
         return columnNames.length;
@@ -42,18 +49,14 @@ public class ViewReqTable extends AbstractTableModel {
         return getValueAt(0, c).getClass();
     }
 
-    /*
-     * Don't need to implement this method unless your table's
-     * editable.
-     */
     public boolean isCellEditable(int row, int col) {
-       return false; //Cells should not be editable in table, should be able to double click and open edit tab
+    	if(editMode == Mode.VIEW) {
+    		return false; //Cells should not be editable in table, should be able to double click and open edit tab
+    	} else {
+    		return true;
+    	}
     }
 
-    /*
-     * Don't need to implement this method unless your table's
-     * data can change.
-     */
     public void setValueAt(Object value, int row, int col) {
         data[row][col] = value;
         fireTableCellUpdated(row, col);
@@ -61,6 +64,14 @@ public class ViewReqTable extends AbstractTableModel {
     
     public void setData(Object[][] data){
     	this.data = data;
+    }
+    
+    public void setMode(Mode editMode) {
+    	this.editMode = editMode;
+    }
+    
+    public Mode getMode() {
+    	return editMode;
     }
     
      
