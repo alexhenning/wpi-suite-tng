@@ -19,7 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewPermissionAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 
 /**
@@ -48,8 +48,8 @@ public class ManagementToolbarView extends ToolbarGroupView {
 		content.setOpaque(false);
 
 		// Setup button panel
-		permissionButton = new JButton("List Requirements");
-		permissionButton.setAction(new ListRequirementsAction(tabController)); // TODO: create permission action
+		permissionButton = new JButton("User Permissions");
+		permissionButton.setAction(new ViewPermissionAction(tabController)); // TODO: create permission action
 		content.add(permissionButton);
 
 		// Construct a new toolbar group to be added to the end of the toolbar

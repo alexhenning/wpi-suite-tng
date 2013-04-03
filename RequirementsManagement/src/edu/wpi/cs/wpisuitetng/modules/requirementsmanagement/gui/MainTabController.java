@@ -54,7 +54,6 @@ public class MainTabController {
 				MainTabController.this.onMouseClick(event);
 			}
 		});
-		addPermissionsTab();
 	}
 	
 	/**
@@ -102,7 +101,24 @@ public class MainTabController {
 		return tab;
 	}
 	
-	public Tab addPermissionsTab() {
+	/**
+	 * Description goes here
+	 *
+	 * @return
+	 */
+	public Tab addPermissionTab() {
+		// If the tab is already opened, switch to that tab.
+		for (int i = 0; i < this.view.getTabCount(); i++) {
+
+			// TODO: May have to refactor "Manage Permissions"
+			if (view.getTitleAt(i).equals("Manage Permissions")) {
+				switchToTab(i);
+				// TODO: figure out what to return
+				return null;
+			}
+		}
+
+		// Otherwise, create a new one.
 		Permissions profile = new Permissions();
 		Tab tab = addTab();
 		PermissionsTab view = new PermissionsTab(this, profile, tab);
