@@ -63,10 +63,6 @@ public class PermissionEntityManager implements
 		if(issues.size() > 0) {
 			throw new BadRequestException();
 		}
-
-		// TODO: Find a better way to assign permission ID
-		newPermission.setId(Count() + 1);
-//		newPermission.setProject(s.getProject());
 		
 		if(!db.save(newPermission, s.getProject())) {
 			throw new WPISuiteException();
@@ -76,25 +72,19 @@ public class PermissionEntityManager implements
 	}
 
 	/**
-	 * Retrieves a user permission from the database by id
+	 * Retrieves a user permission from the database by username
 	 *
 	 * @param s
-	 * @param id
+	 * @param username
 	 * @return
 	 * @throws WPISuiteException
 	 */
 	@Override
-	public Permissions[] getEntity(Session s, String id)
+	public Permissions[] getEntity(Session s, String username)
 			throws WPISuiteException {
-		
-		final int intId = Integer.parseInt(id);
-		if(intId < 1) {
-			throw new NotFoundException();
-		}
-
 		Permissions[] Permissions = null;
 		try {
-			Permissions = db.retrieve(Permissions.class, "id", intId, s.getProject()).toArray(new Permissions[0]);
+			Permissions = db.retrieve(Permissions.class, "username", username, s.getProject()).toArray(new Permissions[0]);
 		} catch (WPISuiteException e) {
 			e.printStackTrace();
 		}
@@ -158,16 +148,16 @@ public class PermissionEntityManager implements
 	}
 
 	/**
-	 * Deletes a permission by id
+	 * Deletes a permission by username
 	 *
 	 * @param s
-	 * @param id
+	 * @param username
 	 * @return
 	 * @throws NotImplementedException
 	 */
 	@Override
-	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
-		return (db.delete(getEntity(s, id)[0]) != null);
+	public boolean deleteEntity(Session s, String username) throws WPISuiteException {
+		return (db.delete(getEntity(s, username)[0]) != null);
 	}
 
 	/**

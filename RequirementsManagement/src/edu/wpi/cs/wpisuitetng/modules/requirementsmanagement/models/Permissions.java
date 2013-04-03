@@ -30,34 +30,25 @@ public class Permissions extends AbstractModel {
 	
 	// TODO: Do we want a transaction log for the Permissions data?
 	
-	// TODO: project is already defined AbstractModel
-	// Is this ID to distinguish different permissions models?
-	
 	private PermissionLevel permissionLevel;
 	private String username;
-//	private Project project;
-	private int id;
 
 	/**
 	 * Constructs an empty user permission
 	 */
 	public Permissions(){
-		this(null, "", PermissionLevel.NONE, -1);
+		this("", PermissionLevel.NONE);
 	}
 	
 	/**
 	 * Constructs a user permission using given parameters
 	 * 
-	 * @param project (unused right now)
 	 * @param username whose's permission is to be assigned
 	 * @param permissionLevel
-	 * @param id unique permission model identifier
 	 */
-	public Permissions(Project project, String username, PermissionLevel permissionLevel, int id) {
+	public Permissions(String username, PermissionLevel permissionLevel) {
 		this.username = username;
 		this.permissionLevel = permissionLevel;
-//		this.project = project;
-		this.id = id;
 	}
 
 	/**
@@ -97,34 +88,7 @@ public class Permissions extends AbstractModel {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	/**
-	 * Gets an ID from the model
-	 *
-	 * @return model's ID
-	 */
-	public int getId() {
-		return id;
-	}
-	
-	/**
-	 * Sets model's ID 
-	 *
-	 * @param id
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	/**
-	 * Project getter
-	 *
-	 * @return project
-	 */
-//	public Project getProject(){
-//		return project;
-//	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
 	 */

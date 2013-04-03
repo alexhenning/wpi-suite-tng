@@ -238,11 +238,6 @@ public class MainTabController {
 	}
 
 	public void addEditPermissionsTab(Permissions profile) {
-		for (int i=0; i<view.getTabCount(); i++) {
-			if (("Requirement #"+(profile.getId())).equals(view.getTitleAt(i))) {
-				switchToTab(i);
-			}
-		}
-		
+		System.out.println("addEditPermissionsTab called (NYI)");
 	}
 }

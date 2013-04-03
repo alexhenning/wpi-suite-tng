@@ -38,7 +38,7 @@ public class AddPermissionController implements ActionListener {
 		}
 		
 		public void receivedAddConfirmation(Permissions profile) {
-			DB.getSinglePermission(""+profile.getId(), new SinglePermissionCallback() {
+			DB.getSinglePermission(profile.getUsername(), new SinglePermissionCallback() {
 				@Override public void callback(Permissions profile) {
 //					panel.updateModel();
 				}
