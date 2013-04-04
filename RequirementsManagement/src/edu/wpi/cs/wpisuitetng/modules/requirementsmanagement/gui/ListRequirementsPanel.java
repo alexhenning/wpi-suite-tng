@@ -7,7 +7,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //Josh
+ *    Josh Morse
+ *    James Megin
+ *    Tim Calvert
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -131,10 +133,6 @@ public class ListRequirementsPanel extends JPanel {
 		});
 		
 		editPanel.add(editButton);
-		// TODO are these necessary here?
-		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
-		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
-		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
 		
 		//Add the table to a scrollpane and add it
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -173,10 +171,8 @@ public class ListRequirementsPanel extends JPanel {
 		editPanel.add(cancelButton);
 		editPanel.revalidate();
 		editPanel.repaint();
-		// TODO perhaps make these a single function?
-		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
-		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
-		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
+		
+		setUpColumns();
 	}
 	
 	/**
@@ -207,12 +203,22 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
+	 * Helper function to call other functions to set up individual columns
+	 *
+	 */
+	public void setUpColumns() {
+		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
+		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
+		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
+	}
+	
+	/**
 	 * make the iteration comboboxes in the iteration column
 	 *
 	 * @param table the JTable that has the column
 	 * @param iterColumn the iteration column
 	 */
-	public void setUpIterationColumn(JTable table, TableColumn iterColumn) {
+	private void setUpIterationColumn(JTable table, TableColumn iterColumn) {
 		JComboBox iterationBox = new JComboBox();
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
@@ -229,7 +235,7 @@ public class ListRequirementsPanel extends JPanel {
 	 * @param table the JTable that has the column
 	 * @param statusColumn the status column
 	 */
-	public void setUpStatusColumn(JTable table, TableColumn statusColumn) {
+	private void setUpStatusColumn(JTable table, TableColumn statusColumn) {
 
 		JComboBox statusBox = new JComboBox();
 		statusBox.addItem("NEW");
@@ -252,7 +258,7 @@ public class ListRequirementsPanel extends JPanel {
 	 * @param table the JTable that hs the column
 	 * @param priorityColumn the priority column
 	 */
-	public void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
+	private void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
 		JComboBox priorityBox = new JComboBox();
 		priorityBox.addItem("NONE");
 		priorityBox.addItem("LOW");
