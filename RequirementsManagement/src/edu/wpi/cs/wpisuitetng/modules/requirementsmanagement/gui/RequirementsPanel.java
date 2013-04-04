@@ -156,7 +156,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
 		updateFields();
-		System.out.println("loaded: "+requirement.toJSON());
 	}
 
 	/**
@@ -185,13 +184,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		//estimate field
 		JLabel estimateArea = new JLabel("Estimate:");
 		JLabel actualEffortArea = new JLabel("Actual Effort:");
-		if(this.editMode == Mode.CREATE) {
-			estimateField.setEditable(false);
-			actualEffortField.setEditable(false);
-		} else {
-			estimateField.setEditable(true);
-			actualEffortField.setEditable(true);
-		}
+//		if(this.editMode == Mode.CREATE) {
+//			estimateField.setEnabled(false);
+//			actualEffortField.setEnabled(false);
+//		} else {
+//			estimateField.setEnabled(true);
+//			actualEffortField.setEnabled(true);
+//		}
 	
 		//submit panel
 		if(this.editMode == Mode.CREATE) { 
@@ -372,13 +371,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		estimateField.setText(model.getEstimate()+"");
 		actualEffortField.setText(model.getActualEffort()+"");
-		if(this.editMode == Mode.CREATE || model.getStatus() == RequirementStatus.DELETED || model.getStatus() == RequirementStatus.COMPLETE) {
-			estimateField.setEditable(false);
-			actualEffortField.setEditable(false);
-		} else {
-			estimateField.setEditable(true);
-			actualEffortField.setEditable(true);
-		}
+//		if(this.editMode == Mode.CREATE || model.getStatus() == RequirementStatus.DELETED || model.getStatus() == RequirementStatus.COMPLETE) {
+//			estimateField.setEditable(false);
+//			actualEffortField.setEditable(false);
+//		} else {
+//			estimateField.setEditable(true);
+//			actualEffortField.setEditable(true);
+//		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
