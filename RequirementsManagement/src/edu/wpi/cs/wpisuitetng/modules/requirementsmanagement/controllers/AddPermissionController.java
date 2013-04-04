@@ -26,12 +26,11 @@ public class AddPermissionController implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("Button "+((JButton)e.getSource()).getText()+" pushed");
+		panel.setAddPermissionStatus("");
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions",  HttpMethod.PUT);
 		request.setBody(panel.getNewModel().toJSON());
 		request.addObserver(new CreatePermissionRequestObserver(this));
 		request.send();
-		System.out.println("END---Button "+((JButton)e.getSource()).getText()+" pushed");
 	}
 
 	public void receivedAddConfirmation(Permissions profile) {
@@ -42,5 +41,12 @@ public class AddPermissionController implements ActionListener {
 			}
 		});
 		panel.resetCreationFields();
+		panel.setAddPermissionStatus("New permission added for "
+				+ profile.getUsername() + " with "
+				+ profile.getPermissionLevel().toString());
+	}
+
+	public void receivedAddError() {
+		panel.setAddPermissionStatus("Invalid username, username already exists, or an internal error occurred");
 	}
 }

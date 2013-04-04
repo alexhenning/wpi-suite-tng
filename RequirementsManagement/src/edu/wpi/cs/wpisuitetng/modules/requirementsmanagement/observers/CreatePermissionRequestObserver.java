@@ -48,6 +48,9 @@ public class CreatePermissionRequestObserver implements RequestObserver {
 
 	@Override
 	public void responseError(IRequest iReq) {
+		// Tells the controller that an error occurred
+		controller.receivedAddError();
+
 		System.err.println("The request to create a permission had an error.");
 		System.err.println("\tResponse: "+iReq.getResponse().getStatusCode()+" --- "
 							+iReq.getResponse().getBody());

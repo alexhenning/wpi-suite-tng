@@ -57,6 +57,7 @@ public class PermissionsPanel extends JPanel {
 //	private GridBagLayout panelLayout;
 	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
 	HintedTextArea usernameTextArea;
+	JTextField addStatus;
 	JButton submitButton, updateButton;
 	JComboBox permissionSelectNew, permissionSelectExisting;
 	JPanel profilePanel;
@@ -83,7 +84,6 @@ public class PermissionsPanel extends JPanel {
 		updateFields();
 	}
 
-	
 	private void addComponents() {
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -96,6 +96,21 @@ public class PermissionsPanel extends JPanel {
 		lblusername = new JLabel("Username: ");
 		
 		usernameTextArea = new HintedTextArea(1, 20, "Username");
+		usernameTextArea.addMouseListener(new MouseListener() {
+			@Override public void mousePressed(MouseEvent arg0) {}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() >= 1) {
+					setAddPermissionStatus("");
+				}
+			}
+		});
+
+		addStatus = new JTextField("");
+		addStatus.setOpaque(false);
+		addStatus.setEditable(false);
 		
 		submitButton = new JButton("Submit");
 		
@@ -104,14 +119,27 @@ public class PermissionsPanel extends JPanel {
 		permissionSelectExisting = new JComboBox<PermissionLevel>(levels);
 		permissionSelectExisting.setEnabled(false);
 		
+		permissionSelectNew.addMouseListener(new MouseListener() {
+			@Override public void mousePressed(MouseEvent arg0) {}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() >= 1) {
+					setAddPermissionStatus("");
+				}
+			}
+		});
+
 		submitButton.addActionListener(new AddPermissionController(this));
-		
+
 		instantiateTable();
 		tablePane = new JScrollPane(profileTable);
 		//tablePane.setRowHeaderView(profileTable.getTableHeader());
 		instantiateProfilePanel();
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(3, 3, 3, 3);
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weighty = 0.1;
@@ -131,9 +159,15 @@ public class PermissionsPanel extends JPanel {
 		
 		c.gridx = 5;
 		add(submitButton, c);
-		
+
 		c.gridx = 0;
 		c.gridy = 1;
+		c.gridwidth = 6;
+		c.weighty = 0.1;
+		add(addStatus, c);
+
+		c.gridx = 0;
+		c.gridy = 2;
 		c.gridwidth = 3;
 		c.weighty = 1.0;
 		add(profileTable, c);
@@ -260,8 +294,13 @@ public class PermissionsPanel extends JPanel {
 		// TODO: implement
 	}
 	
-	public boolean doDatesOverlap() {
-		return false;
+	/**
+	 * Sets a status for permission creation
+	 *
+	 * @param status to be displayed
+	 */
+	public void setAddPermissionStatus(String status) {
+		addStatus.setText(status);
 	}
 	
 	/**
@@ -328,6 +367,9 @@ public class PermissionsPanel extends JPanel {
 		return editModel;
 	}
 	
+	/**
+	 * @return the current table model
+	 */
 	public ViewPermissionsTable getTable(){
 		return this.tableModel;
 	}
