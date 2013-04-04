@@ -205,17 +205,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		nt = new NoteMainPanel(this);
 		hs = new RequirementHistoryTab(this);
 		supplementPane.add("Notes", nt);
-<<<<<<< HEAD
 		supplementPane.add("History", hs);
-//		}
-=======
-		supplementPane.add("History", new JPanel());
 		if(this.editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
 		} else {
 			nt.setInputEnabled(true);
 		}
->>>>>>> dev-bugfix#7
 		
 		// Add subpanels to main panel
 		// Left side (gridx = 0) and aligned right (east)
@@ -319,21 +314,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 * @param	mode	The new editMode.
 	 */
 	protected void updateModel(RequirementModel requirement, Mode mode) {
-//		if(editMode == Mode.CREATE && mode == Mode.EDIT) {
-//			nt = new NoteMainPanel(this);
-//			for(int i=0; i< supplementPane.getTabCount(); i++){
-//				if(supplementPane.getTitleAt(i).equals("Notes")) {
-//					supplementPane.remove(i);
-//					nt = null;
-//					nt = new NoteMainPanel(this);
-//					supplementPane.add(nt, i);
-//					supplementPane.setTitleAt(i, "Notes");
-//					supplementPane.setSelectedIndex(i);
-//				}
-//			}
-////			supplementPane.ge
-////			supplementPane.add("Notes", nt);
-//		}
 		this.revalidate();
 		editMode = mode;
 		model = requirement;
@@ -414,42 +394,57 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		parent.buttonGroup.update(editMode, model);
 		
-		if (model.getStatus().equals(RequirementStatus.COMPLETE)
-				|| model.getStatus().equals(RequirementStatus.DELETED)) {
-			namefield.setEnabled(false);
-			type.setEnabled(false);
-			type.setBackground(Color.WHITE);
-			priority.setEnabled(false);
-			priority.setBackground(Color.WHITE);
-			descriptionfield.setEnabled(false);
-			estimateField.setEnabled(false);
-			submit.setEnabled(false);
-			iteration.setEnabled(false);
-		} else if (namefield.getText().length() < 1 || namefield.getText().length() < 1){
+		if(editMode == Mode.CREATE) {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
 			type.setBackground(Color.WHITE);
 			priority.setEnabled(true);
 			priority.setBackground(Color.WHITE);
-			descriptionfield.setEnabled(true);
-			estimateField.setEnabled(true);
-			submit.setEnabled(false);
 			iteration.setEnabled(true);
+			iteration.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(true);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(false);
+			submit.setEnabled((namefield.getText().length() < 1 || namefield.getText().length() < 1));
+		} else if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
+			namefield.setEnabled(false);
+			type.setEnabled(false);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(false);
+			priority.setBackground(Color.WHITE);
+			iteration.setEnabled(false);
+			iteration.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(false);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(true);
+			submit.setEnabled(true);
+		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
+			namefield.setEnabled(false);
+			type.setEnabled(false);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(false);
+			priority.setBackground(Color.WHITE);
+			iteration.setEnabled(false);
+			iteration.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(false);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(false);
+			submit.setEnabled(false);
 		} else {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
 			type.setBackground(Color.WHITE);
 			priority.setEnabled(true);
 			priority.setBackground(Color.WHITE);
-			descriptionfield.setEnabled(true);
-			estimateField.setEnabled(false);
-			actualEffortField.setEnabled(false);
-			submit.setEnabled(true);
 			iteration.setEnabled(true);
+			iteration.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(true);
+			estimateField.setEnabled(true);
+			actualEffortField.setEnabled(false);
+			submit.setEnabled((namefield.getText().length() < 1 || namefield.getText().length() < 1));
 		}
 		
 		nt.setNotes(Arrays.asList(model.getNotes()));
-<<<<<<< HEAD
 		DB.getAllProjectEvents(new ListProjectEvents());
 	}
 	
@@ -458,13 +453,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 */
 	public void setHistory(List<ProjectEvent> projectEvents) {
 		hs.setNotes(projectEvents);
-=======
-		if(this.editMode == Mode.CREATE) {
-			nt.setInputEnabled(false);
-		} else {
-			nt.setInputEnabled(true);
-		}
->>>>>>> dev-bugfix#7
 	}
 
 	/**
