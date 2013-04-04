@@ -9,17 +9,19 @@
  * Contributors:
  *    William Terry
  *    vpatara
+ *    Josh
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JButton;
@@ -33,44 +35,47 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditPermissionController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.PermissionsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.IterationPanel.UpdateIterationIdCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.UpdateTableCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
- * 
+ * GUI for a project manager to manage user permissions 
+ *
  * @author William Terry
  *
  */
+@SuppressWarnings("serial")
 public class PermissionsPanel extends JPanel {
-	Permissions model;
+	Permissions newModel;
+	Permissions editModel;
 	
 	PermissionsTab parent;
-	private GridBagLayout panelLayout;
+//	private GridBagLayout panelLayout;
 	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
 	HintedTextArea usernameTextArea;
+	JTextField addStatus;
 	JButton submitButton, updateButton;
 	JComboBox permissionSelectNew, permissionSelectExisting;
 	JPanel profilePanel;
 	JScrollPane tablePane;
 	JTable profileTable;
-	String sName, sUsername, sID;
+	ViewPermissionsTable tableModel;
+//	String sName, sUsername, sID;
+	JPanel topPanel;
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
 
 	public PermissionsPanel(PermissionsTab permissionsTab){
 		this.parent = permissionsTab;
-		model = parent.permission;
+		newModel = null;
+		editModel = null;
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
@@ -82,110 +87,166 @@ public class PermissionsPanel extends JPanel {
 		updateFields();
 	}
 
-	
 	private void addComponents() {
-		setLayout(new GridBagLayout());
+		setLayout(new BorderLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
 		lbl1 = new JLabel("Add ");
 		lbl2 = new JLabel(" to project with ");
-		lbl3 = new JLabel(" privelages.");
+		lbl3 = new JLabel(" privilege");
 		lblprofile = new JLabel("Selected Profile");
 		lblname = new JLabel("Name: ");
 		lblusername = new JLabel("Username: ");
 		
 		usernameTextArea = new HintedTextArea(1, 20, "Username");
+		usernameTextArea.addMouseListener(new MouseListener() {
+			@Override public void mousePressed(MouseEvent arg0) {}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() >= 1) {
+					setAddPermissionStatus("");
+				}
+			}
+		});
+
+		addStatus = new JTextField("");
+		addStatus.setOpaque(false);
+		addStatus.setEditable(false);
 		
 		submitButton = new JButton("Submit");
 		
 		PermissionLevel[] levels = PermissionLevel.values();
 		permissionSelectNew = new JComboBox<PermissionLevel>(levels);
 		permissionSelectExisting = new JComboBox<PermissionLevel>(levels);
+		permissionSelectExisting.setEnabled(false);
 		
+		permissionSelectNew.addMouseListener(new MouseListener() {
+			@Override public void mousePressed(MouseEvent arg0) {}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() >= 1) {
+					setAddPermissionStatus("");
+				}
+			}
+		});
+
 		submitButton.addActionListener(new AddPermissionController(this));
-		
+
 		instantiateTable();
-		tablePane = new JScrollPane();
-		tablePane.add(profileTable);
+		tablePane = new JScrollPane(profileTable);
 		instantiateProfilePanel();
 		
+		topPanel = new JPanel();
+		topPanel.setLayout(new GridBagLayout());
 		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(3, 3, 3, 3);
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weighty = 0.1;
-		add(lbl1, c);
+		topPanel.add(lbl1, c);
 		
 		c.gridx = 1;
-		add(usernameTextArea, c);
+		topPanel.add(usernameTextArea, c);
 		
 		c.gridx = 2;
-		add(lbl2, c);
+		topPanel.add(lbl2, c);
 		
 		c.gridx = 3;
-		add(permissionSelectNew, c);
+		topPanel.add(permissionSelectNew, c);
 		
 		c.gridx = 4;
-		add(lbl3, c);
+		topPanel.add(lbl3, c);
 		
 		c.gridx = 5;
-		add(submitButton, c);
-		
+		topPanel.add(submitButton, c);
+
 		c.gridx = 0;
 		c.gridy = 1;
-		c.gridwidth = 3;
-		c.weighty = 1.0;
-		add(tablePane, c);
-		
-		c.gridx = 4;
-		c.gridwidth = 2;
-		add(profilePanel, c);
+		c.gridwidth = 6;
+		c.weighty = 0.1;
+		topPanel.add(addStatus, c);
+
+		add(topPanel, BorderLayout.PAGE_START);
+		add(tablePane, BorderLayout.CENTER);
+		add(profilePanel, BorderLayout.LINE_END);
 		
 	}
 	
 	private void instantiateProfilePanel() {
 		lblprofile = new JLabel("Selected Profile");
-		lblname = new JLabel("Name: "+sName);
-		lblusername = new JLabel("Username: "+sUsername);
-		lblID = new JLabel("ID number: "+sID);
+		lblname = new JLabel("Name: ");
+		lblusername = new JLabel("Username: ");
+		lblID = new JLabel("ID number: ");
 		lblpermissions = new JLabel("Permission privileges: ");
 		updateButton = new JButton("Update");
-		updateButton.addActionListener(new AddPermissionController(this));
+		updateButton.addActionListener(new EditPermissionController(this));
+		updateButton.setEnabled(false);
 		
 		profilePanel =new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(3, 3, 3, 3);
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 2;
-		c.fill = GridBagConstraints.HORIZONTAL;
 		profilePanel.add(lblprofile, c);
 		c.gridy = 1;
 		profilePanel.add(lblname, c);
 		c.gridy = 2;
 		profilePanel.add(lblusername, c);
 		c.gridy = 3;
+		profilePanel.add(lblID, c);
+		c.gridy = 4;
 		c.gridwidth = 1;
 		profilePanel.add(lblpermissions, c);
 		c.gridx = 1;
 		profilePanel.add(permissionSelectExisting, c);
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 5;
 		c.gridwidth = 2;
 		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.CENTER;
 		profilePanel.add(updateButton, c);
 		
 	}
 
 	public void updateProfileLabels() {
-		lblname.setText("Name: "+sName);
-		lblusername.setText("Username: "+sUsername);
-		lblID.setText("ID number: "+sID);
+		System.out.println("update profile labels");
+		
+		if(editModel != null) {
+			
+			// Update fields and enable elements
+//			lblname.setText("Name: " + model.);
+			lblusername.setText("Username: " + editModel.getUsername());
+//			lblID.setText("ID: " + model.);
+			permissionSelectExisting.setSelectedIndex(editModel.getPermissionLevel().ordinal());
+			permissionSelectExisting.setEnabled(true);
+			updateButton.setEnabled(true);
+			
+		} else {
+			
+			// Clear fields and disable elements
+			lblname.setText("Name: ");
+			lblusername.setText("Username: ");
+			lblID.setText("ID: ");
+			permissionSelectExisting.setSelectedIndex(0);
+			permissionSelectExisting.setEnabled(false);
+			updateButton.setEnabled(false);
+		}
 		profilePanel.repaint();
 	}
 
 	private void instantiateTable() {
 		
-		profileTable = new JTable(new ViewPermissionsTable());
+		tableModel = new ViewPermissionsTable();
+		profileTable = new JTable(tableModel);
+		profileTable.setPreferredScrollableViewportSize(new Dimension(1, 1));
+		profileTable.setFillsViewportHeight(true);
 		
 		updateAllPermissionsList();
 		
@@ -197,7 +258,7 @@ public class PermissionsPanel extends JPanel {
                 			new SinglePermissionCallback() {
 						@Override
 						public void callback(Permissions profile) {
-							parent.tabController.addEditPermissionsTab(profile);
+							updateModel(profile);
 						}
                 	});
                 }
@@ -210,7 +271,7 @@ public class PermissionsPanel extends JPanel {
 	}
 
 	public void updateAllPermissionsList() {
-//		DB.getAllPermissions(new UpdateTableCallback());
+		DB.getAllPermissions(new UpdateTableCallback());
 	}
 	
 	public void close() {
@@ -229,28 +290,34 @@ public class PermissionsPanel extends JPanel {
 		// TODO: implement
 	}
 	
-	public boolean doDatesOverlap() {
-		return false;
+	/**
+	 * Sets a status for permission creation
+	 *
+	 * @param status to be displayed
+	 */
+	public void setAddPermissionStatus(String status) {
+		addStatus.setText(status);
 	}
 	
 	/**
-	 * Updates the IterationPanel's model to contain the values of the given Iteration and sets the 
-	 * IterationPanel's editMode to {@link Mode#EDIT}.
+	 * Updates the PermissionsPanel's model to contain the values of the given Permission and sets the 
+	 * PermissionsPanel's editMode to {@link Mode#EDIT}.
 	 * 
-	 * @param iteration	The Iteration which contains the new values for the model.
+	 * @param permission The Permission which contains the new values for the model.
 	 */
 	public void refreshModel() {
-		updateModel(model);
+		updateModel(editModel);
+		System.out.println("refresh permission model");
 	}
 
 	/**
-	 * Updates the IterationPanel's model to contain the values of the given Iteration.
-	 * 
-	 * @param	iteration	The Iteration which contains the new values for the model.
-	 * @param	mode	The new editMode.
+	 * Updates the PermissionsPanel's model to contain the values of the given Permission.
+	 *
+	 * @param permission The Permissions which contains the new values for the model.
+	 * @param mode The new editMode.
 	 */
 	protected void updateModel(Permissions permission) {
-		model = permission;
+		editModel = permission;
 		updateFields();	
 	}
 	
@@ -259,7 +326,7 @@ public class PermissionsPanel extends JPanel {
 	 *
 	 */
 	private void updateFields() {
-		//TODO finish this
+		updateProfileLabels();
 	}
 
 	/**
@@ -272,40 +339,91 @@ public class PermissionsPanel extends JPanel {
 	}
 
 	/**
-	 * Gets the IterationPanel's internal model.
+	 * Gets the PermissionsPanel's (new) internal model.
 	 * @return
 	 */
-	public Permissions getModel() {
-//		System.out.println("getting model from panel");
-		// TODO: For now, assume getting model from the add panel;
-		// need to get a model from the update panel
-
-		System.out.println("cafe1 : " + permissionSelectNew.getName());
-		System.out.println("cafe2 : " + permissionSelectNew.getSelectedIndex());
+	public Permissions getNewModel() {
 
 		PermissionLevel permissionLevel = PermissionLevel.values()[permissionSelectNew.getSelectedIndex()];
-
-		model.setUsername(usernameTextArea.getText());
-		model.setPermissionLevel(permissionLevel);
+		newModel = new Permissions(usernameTextArea.getText(), permissionLevel);
 		
-		return model;
+		return newModel;
+	}
+
+	/**
+	 * Gets the PermissionsPanel's (existing) internal model.
+	 * @return
+	 */
+	public Permissions getUpdatedModel() {
+
+		// editModel should not be null at this point
+		PermissionLevel permissionLevel = PermissionLevel.values()[permissionSelectExisting.getSelectedIndex()];
+		editModel.setPermissionLevel(permissionLevel);
+		
+		return editModel;
 	}
 	
-	public static void main(String[] args){
-		 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	            public void run() {
-	            	JFrame frame = new JFrame("ComboBoxDemo");
-	                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	         
-	                //Create and set up the content pane.
-	                JComponent newContentPane = new PermissionsPanel(null);
-	                newContentPane.setOpaque(true); //content panes must be opaque
-	                frame.setContentPane(newContentPane);
-	         
-	                //Display the window.
-	                frame.pack();
-	                frame.setVisible(true);
-	            }
-	        });
+	/**
+	 * @return the current table model
+	 */
+	public ViewPermissionsTable getTable(){
+		return this.tableModel;
 	}
+	
+	/**
+	 * Clear all fields for permission creation
+	 *
+	 */
+	public void resetCreationFields() {
+		newModel = null;
+		usernameTextArea.setText("");
+	}
+
+	/**
+	 * Clear all fields for permission editing
+	 *
+	 */
+	public void resetUpdateFields() {
+		updateModel(null);
+	}
+	
+	class UpdateTableCallback implements PermissionsCallback {
+		@Override
+		public void callback(List<Permissions> profiles) {
+			System.out.println("profile count : " + profiles.size());
+			if (profiles.size() > 0) {
+				// put the data in the table
+				Object[][] entries = new Object[profiles.size()][2];
+				int i = 0;
+				for(Permissions p: profiles) {
+					entries[i][0] = p.getUsername();
+					entries[i][1] = p.getPermissionLevel().toString();
+					i++;
+				}
+				getTable().setData(entries);
+				getTable().fireTableStructureChanged();
+			}
+			else {
+				// do nothing, there are no requirements
+			}
+		}
+	}
+	
+//	public static void main(String[] args){
+//		 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//	            public void run() {
+//	            	JFrame frame = new JFrame("ComboBoxDemo");
+//	                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//	         
+//	                //Create and set up the content pane.
+//	                JComponent newContentPane = new PermissionsPanel(null);
+//	                newContentPane.setOpaque(true); //content panes must be opaque
+//	                frame.setContentPane(newContentPane);
+//	         
+//	                //Display the window.
+//	                frame.pack();
+//	                frame.setVisible(true);
+//	            }
+//	        });
+//	}
 }

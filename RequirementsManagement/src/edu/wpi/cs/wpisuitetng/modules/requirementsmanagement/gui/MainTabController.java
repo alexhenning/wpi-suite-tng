@@ -236,8 +236,4 @@ public class MainTabController {
 			return null;
 		}
 	}
-
-	public void addEditPermissionsTab(Permissions profile) {
-		System.out.println("addEditPermissionsTab called (NYI)");
-	}
 }
