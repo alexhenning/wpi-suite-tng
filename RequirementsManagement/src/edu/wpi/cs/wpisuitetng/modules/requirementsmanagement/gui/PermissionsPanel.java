@@ -9,9 +9,11 @@
  * Contributors:
  *    William Terry
  *    vpatara
+ *    Josh
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -65,6 +67,7 @@ public class PermissionsPanel extends JPanel {
 	JTable profileTable;
 	ViewPermissionsTable tableModel;
 //	String sName, sUsername, sID;
+	JPanel topPanel;
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -85,7 +88,7 @@ public class PermissionsPanel extends JPanel {
 	}
 
 	private void addComponents() {
-		setLayout(new GridBagLayout());
+		setLayout(new BorderLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
 		lbl1 = new JLabel("Add ");
@@ -135,48 +138,41 @@ public class PermissionsPanel extends JPanel {
 
 		instantiateTable();
 		tablePane = new JScrollPane(profileTable);
-		//tablePane.setRowHeaderView(profileTable.getTableHeader());
 		instantiateProfilePanel();
 		
+		topPanel = new JPanel();
+		topPanel.setLayout(new GridBagLayout());
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(3, 3, 3, 3);
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weighty = 0.1;
-		add(lbl1, c);
+		topPanel.add(lbl1, c);
 		
 		c.gridx = 1;
-		add(usernameTextArea, c);
+		topPanel.add(usernameTextArea, c);
 		
 		c.gridx = 2;
-		add(lbl2, c);
+		topPanel.add(lbl2, c);
 		
 		c.gridx = 3;
-		add(permissionSelectNew, c);
+		topPanel.add(permissionSelectNew, c);
 		
 		c.gridx = 4;
-		add(lbl3, c);
+		topPanel.add(lbl3, c);
 		
 		c.gridx = 5;
-		add(submitButton, c);
+		topPanel.add(submitButton, c);
 
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 6;
 		c.weighty = 0.1;
-		add(addStatus, c);
+		topPanel.add(addStatus, c);
 
-		c.gridx = 0;
-		c.gridy = 2;
-		c.gridwidth = 3;
-		c.weighty = 1.0;
-		add(profileTable, c);
-		// TODO: display tablePane and table header
-//		add(tablePane, c);
-		
-		c.gridx = 4;
-		c.gridwidth = 2;
-		add(profilePanel, c);
+		add(topPanel, BorderLayout.PAGE_START);
+		add(tablePane, BorderLayout.CENTER);
+		add(profilePanel, BorderLayout.LINE_END);
 		
 	}
 	
