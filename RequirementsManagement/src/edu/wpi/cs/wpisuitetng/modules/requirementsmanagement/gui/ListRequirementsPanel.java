@@ -13,41 +13,23 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowFilter;
-import javax.swing.SpringLayout;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
@@ -300,20 +282,23 @@ public class ListRequirementsPanel extends JPanel {
 						// we have the correct requirement, update values
 						req.setName((String)tableModel.getValueAt(i, 1));
 						// Find the right iteration from the list
-						if(tableModel.getValueAt(i, 2) == "Backlog") {
+						//if(tableModel.getValueAt(i, 2) == "Backlog") {
 							req.setIteration(null);
-						}
-						else {
+						//}
+						//else {
 							for(Iteration iteration : iterations) {
-								if(iteration.getIterationNumber() == (String)tableModel.getValueAt(i, 2)) {
+								System.out.println("** Iteration: " + iteration.toString());
+								if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 2))) {
+									System.out.println("Chose this iteration: " + iteration.toString());
 									req.setIteration(iteration);
 									break;
 								}
 							}
-						}
+						//}
 						req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
 						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
 						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
+						break;
 					}
 				}
 			}
@@ -395,7 +380,7 @@ public class ListRequirementsPanel extends JPanel {
 					entries[i][0] = String.valueOf(req.getId());
 					entries[i][1] = req.getName();
 					if (req.getIteration() != null) {
-						entries[i][2] = req.getIteration().toString();
+						entries[i][2] = req.getIteration().getIterationNumber().toString();	
 					}
 					else {
 						entries[i][2] = "Backlog";
