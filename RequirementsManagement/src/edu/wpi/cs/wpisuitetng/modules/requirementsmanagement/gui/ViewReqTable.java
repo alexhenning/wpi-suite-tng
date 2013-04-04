@@ -50,7 +50,7 @@ public class ViewReqTable extends AbstractTableModel {
     }
 
     public boolean isCellEditable(int row, int col) {
-    	if(editMode == Mode.VIEW || col == 0 || (getValueAt(row, 3) == "COMPLETE" && col != 3)
+    	if(editMode == Mode.VIEW || col == 0 || col == 3 || (getValueAt(row, 3) == "COMPLETE" && col != 3)
     			|| (getValueAt(row,3) == "DELETED" && col != 3)) { // Id cell should not be editable, even in edit mode
     		return false;                                          
     	} else {
