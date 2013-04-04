@@ -282,19 +282,13 @@ public class ListRequirementsPanel extends JPanel {
 						// we have the correct requirement, update values
 						req.setName((String)tableModel.getValueAt(i, 1));
 						// Find the right iteration from the list
-						//if(tableModel.getValueAt(i, 2) == "Backlog") {
-							req.setIteration(null);
-						//}
-						//else {
-							for(Iteration iteration : iterations) {
-								System.out.println("** Iteration: " + iteration.toString());
-								if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 2))) {
-									System.out.println("Chose this iteration: " + iteration.toString());
-									req.setIteration(iteration);
-									break;
-								}
+						req.setIteration(null);  // assume iteration is null, then find the correct one
+						for(Iteration iteration : iterations) {
+							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 2))) {
+								req.setIteration(iteration);
+								break;
 							}
-						//}
+						}
 						req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
 						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
 						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
