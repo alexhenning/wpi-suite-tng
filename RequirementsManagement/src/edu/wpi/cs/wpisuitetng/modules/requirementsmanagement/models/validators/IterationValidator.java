@@ -236,7 +236,7 @@ public class IterationValidator {
 		//TODO make sure this works. I think it should but I've been wrong before....
 		//check if dates overlap with other iterations
 		for (Iteration i : allIterations) {
-			if(i.getId() != iteration.getId()) {
+			if(i != null && i.getId() != iteration.getId()) {
 				if(iteration.getStartDate().after(i.getStartDate()) && iteration.getStartDate().before(i.getEndDate())) {
 					issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
 				}
