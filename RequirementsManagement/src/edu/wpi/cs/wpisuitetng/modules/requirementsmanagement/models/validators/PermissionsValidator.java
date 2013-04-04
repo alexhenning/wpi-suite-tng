@@ -148,7 +148,7 @@ public class PermissionsValidator {
 			return issues;
 		}
 
-		System.out.println("validate this : " + permissions.getUsername());
+		System.out.println("validate this (" + mode.toString() + ") : " + permissions.getUsername());
 		Permissions oldPermissions = null;
 		
 		//check if user is in the db

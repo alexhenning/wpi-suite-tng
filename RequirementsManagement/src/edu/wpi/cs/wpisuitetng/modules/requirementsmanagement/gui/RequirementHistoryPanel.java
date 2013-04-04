@@ -43,6 +43,7 @@ public class RequirementHistoryPanel extends JPanel {
 	String author;
 	Date date;
 	
+	//TODO change this to show the creation events
 	/**
 	 * Constructs a panel for a single note
 	 * 
@@ -58,6 +59,7 @@ public class RequirementHistoryPanel extends JPanel {
 		String eol = System.getProperty("line.separator");
 		String message = "";
 		for (Entry <String,FieldChange<?>> change: map.entrySet()) {
+			System.out.println(change.getKey()+": "+change.getValue().getClass());
 			if (message.compareTo("") != 0) {
 				message = message + eol + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
 			}

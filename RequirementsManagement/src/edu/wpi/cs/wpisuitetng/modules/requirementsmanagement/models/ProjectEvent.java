@@ -192,15 +192,14 @@ public class ProjectEvent extends AbstractModel {
 		this.id = id;
 	}
 	
-//	/**
-//	 * Given a builder, add anything to it that's necessary for Gson to interact with this class.
-//	 * 
-//	 * @param builder The builder to modify
-//	 */
-//	public static void addGsonDependencies(GsonBuilder builder) {
-//		builder.registerTypeAdapter(ProjectEvent.class, new RequirementEventDeserializer());
-//		builder.registerTypeAdapter(RequirementChangeset.class, new RequirementChangesetDeserializer());
-//	}
+	/**
+	 * Given a builder, add anything to it that's necessary for Gson to interact with this class.
+	 * 
+	 * @param builder The builder to modify
+	 */
+	public static void addGsonDependencies(GsonBuilder builder) {
+		builder.registerTypeAdapter(ProjectEvent.class, new ProjectEventDeserializer());
+	}
 	
 	@Override
 	public String toJSON() {
@@ -221,22 +220,12 @@ public class ProjectEvent extends AbstractModel {
 	}
 	
 	/**
-	 * Given a builder, add anything to it that's necessary for Gson to interact with this class.
-	 * 
-	 * @param builder The builder to modify
-	 */
-	public static void addGsonDependencies(GsonBuilder builder) {
-//		builder.registerTypeAdapter(RequirementEvent.class, new RequirementEventDeserializer());
-//		builder.registerTypeAdapter(RequirementChangeset.class, new RequirementChangesetDeserializer());
-	}
-	
-	/**
 	 * @param json Json string to parse containing ProjectEvent
 	 * @return The ProjectEvent given by json
 	 */
 	public static ProjectEvent fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
+		addGsonDependencies(builder);
 		return builder.create().fromJson(json, ProjectEvent.class);
 	}
 	
@@ -246,7 +235,7 @@ public class ProjectEvent extends AbstractModel {
 	 */
 	public static ProjectEvent[] fromJSONArray(String json) {
 		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
+		addGsonDependencies(builder);
 		return builder.create().fromJson(json, ProjectEvent[].class);
 	}
 

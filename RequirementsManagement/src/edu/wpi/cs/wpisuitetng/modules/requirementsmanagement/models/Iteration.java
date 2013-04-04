@@ -173,7 +173,7 @@ public class Iteration extends AbstractModel {
 	
 	@Override
 	public String toString() {
-		return toJSON();
+		return getIterationNumber();
 	}
 
 	/**

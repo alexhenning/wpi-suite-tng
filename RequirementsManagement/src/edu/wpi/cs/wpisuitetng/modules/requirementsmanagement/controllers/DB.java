@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditItera
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveProjectEventsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
@@ -65,8 +66,8 @@ public class DB {
 		request.send();
 	}
 
-	public static void getSinglePermission(String id, SinglePermissionCallback callback) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + id, HttpMethod.GET);
+	public static void getSinglePermission(String username, SinglePermissionCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + username, HttpMethod.GET);
 		request.addObserver(new RetrieveSinglePermissionRequestObserver(callback));
 		request.send();
 	}
@@ -87,6 +88,13 @@ public class DB {
 	public static void getAllProjectEventsFor(ProjectEventsCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
 		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
+		request.send();
+	}
+	
+	public static void getAllPermissions(PermissionsCallback updateTableCallback) {
+		System.out.println("get all permissions");
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions", HttpMethod.GET);
+		request.addObserver(new RetrievePermissionsRequestObserver(updateTableCallback));
 		request.send();
 	}
 

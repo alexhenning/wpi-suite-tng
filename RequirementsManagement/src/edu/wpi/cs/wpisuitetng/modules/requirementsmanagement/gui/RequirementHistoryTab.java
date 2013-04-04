@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEventObjectType;
 
 
 /**
@@ -85,7 +86,7 @@ public class RequirementHistoryTab extends JPanel {
 		noteViewer.removeAll();
 		
 		for (ProjectEvent event : events) {
-			if (event != null) {
+			if (event != null && event.getObjectType() == ProjectEventObjectType.REQUIREMENT) {
 				int id = Integer.parseInt(event.getObjectId());
 				if (id == this.parent.model.getId()) {
 					noteViewer.add(new RequirementHistoryPanel(event), c);

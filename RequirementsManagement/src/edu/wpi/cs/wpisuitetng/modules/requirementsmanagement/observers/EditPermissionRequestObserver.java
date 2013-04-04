@@ -8,29 +8,28 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *   David Modica
- *   Tim Calvert
  *   vpatara
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditPermissionController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
+
 /**
- * This observer is called when a response is received from a request 
- * to the server to create (assign) a permission.
- * 
+ * This observer is called when a response is received from a request
+ * to the server to update (edit) a permission.
+ *
  * @author vpatara
  *
  */
-public class CreatePermissionRequestObserver implements RequestObserver {
+public class EditPermissionRequestObserver implements RequestObserver {
 
-	private AddPermissionController controller;
-	
-	public CreatePermissionRequestObserver(AddPermissionController controller){
+	private EditPermissionController controller;
+
+	public EditPermissionRequestObserver(EditPermissionController controller){
 		this.controller = controller;
 	}
 
@@ -38,19 +37,16 @@ public class CreatePermissionRequestObserver implements RequestObserver {
 	public void responseSuccess(IRequest iReq) {
 		// Get the response to the given request
 		final ResponseModel response = iReq.getResponse();
-		
+
 		// Parse the message out of the response body
 		final Permissions permission = Permissions.fromJSON(response.getBody());
-		
+
 		// Pass the messages back to the controller
-		controller.receivedAddConfirmation(permission);
+		controller.receivedEditConfirmation(permission);
 	}
 
 	@Override
 	public void responseError(IRequest iReq) {
-		// Tells the controller that an error occurred
-		controller.receivedAddError();
-
 		System.err.println("The request to create a permission had an error.");
 		System.err.println("\tResponse: "+iReq.getResponse().getStatusCode()+" --- "
 							+iReq.getResponse().getBody());
@@ -60,5 +56,5 @@ public class CreatePermissionRequestObserver implements RequestObserver {
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to create a permission has failed.");
 	}
-	
+
 }
