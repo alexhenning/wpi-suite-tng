@@ -372,15 +372,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		estimateField.setText(model.getEstimate()+"");
 		actualEffortField.setText(model.getActualEffort()+"");
-		if(this.editMode == Mode.CREATE) {
+		if(this.editMode == Mode.CREATE || model.getStatus() == RequirementStatus.DELETED || model.getStatus() == RequirementStatus.COMPLETE) {
 			estimateField.setEditable(false);
 			actualEffortField.setEditable(false);
 		} else {
 			estimateField.setEditable(true);
-			if (model.getStatus() == RequirementStatus.COMPLETE)
-				actualEffortField.setEditable(true);
-			else
-				actualEffortField.setEditable(false);
+			actualEffortField.setEditable(true);
 		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
@@ -422,11 +419,19 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
+//			actualEffortField.setEnabled(false);
+//			submit.setEnabled(false);
+//			iteration.setEnabled(false);
+//			nt.setInputEnabled(false);
+//		}else if(namefield.getText().length() < 1 || namefield.getText().length() < 1){
+//			namefield.setEnabled(true);
+//			type.setEnabled(true);
 			type.setBackground(Color.WHITE);
 			priority.setEnabled(false);
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(false);
 			iteration.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(false);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
@@ -443,6 +448,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+//=======
+//			actualEffortField.setEnabled(true);
+//			submit.setEnabled(true);
+//			iteration.setEnabled(true);
+//			nt.setInputEnabled(true);
+//>>>>>>> origin/dev-fix#31
 		}
 		System.out.println("namefield: "+namefield.getText());
 		System.out.println("submit good: "+!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
@@ -627,11 +638,18 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	}
 	//check if key is pressed. Doesn't really do anything now, but needs to be included 
 	public void keyPressed ( KeyEvent e){  
-		//l1.setText ( "Key Pressed" ) ; 
+
 	}  
 	//check if key is released. Doesn't really do anything now, but needs to be included 
 	public void keyReleased ( KeyEvent e ){  
 		//l1.setText( "Key Released" ) ; 
+		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
+			submit.setEnabled(true);
+		}
+		if((namefield.getText().length()==0)
+				|| ( descriptionfield.getText().length()==0)){
+			submit.setEnabled(false);
+		}
 	}  
 
 }
