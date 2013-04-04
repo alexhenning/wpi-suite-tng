@@ -148,7 +148,6 @@ public class Permissions extends AbstractModel {
 	}
 
 	public Date getLastModifiedDate() {
-		// TODO Auto-generated method stub
 		return date;
 	}
 

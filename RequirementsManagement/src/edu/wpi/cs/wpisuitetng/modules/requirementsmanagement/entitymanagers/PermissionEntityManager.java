@@ -12,6 +12,8 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
+import java.io.PrintStream;
+import java.util.Date;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -21,8 +23,12 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionsChangeset;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementChangeset;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.PermissionsValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
@@ -61,6 +67,9 @@ public class PermissionEntityManager implements
 		
 		List<ValidationIssue> issues = validator.validate(s, newPermission, Mode.CREATE);
 		if(issues.size() > 0) {
+			for (ValidationIssue issue : issues) {
+				System.out.println("Validation issue: " + issue.getMessage());
+			}
 			throw new BadRequestException();
 		}
 		
@@ -121,10 +130,20 @@ public class PermissionEntityManager implements
 		
 		List<ValidationIssue> issues = validator.validate(s, updatedPermissions, Mode.EDIT);
 		if(issues.size() > 0) {
+			for(ValidationIssue issue : issues){
+				System.out.println("Validation issue: "+issue.getMessage());
+			}
 			throw new BadRequestException();
+			
 		}
 		
 		Permissions existingPermissions = validator.getLastExistingPermissions();
+		Date originalLastModified = existingPermissions.getLastModifiedDate();
+		
+		PermissionsChangeset changeset = new PermissionsChangeset();
+		// make sure the user exists
+		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
+		PermissionsChangesetCallback callback = new PermissionsChangesetCallback(changeset);
 		
 		updateMapper.map(updatedPermissions, existingPermissions);
 		

@@ -93,7 +93,7 @@ public class PermissionsPanel extends JPanel {
 		
 		lbl1 = new JLabel("Add ");
 		lbl2 = new JLabel(" to project with ");
-		lbl3 = new JLabel(" privilege");
+		lbl3 = new JLabel(" priveleges.     ");
 		lblprofile = new JLabel("Selected Profile");
 		lblname = new JLabel("Name: ");
 		lblusername = new JLabel("Username: ");
