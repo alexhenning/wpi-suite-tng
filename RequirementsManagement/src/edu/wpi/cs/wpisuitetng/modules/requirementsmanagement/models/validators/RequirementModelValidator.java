@@ -261,6 +261,7 @@ public class RequirementModelValidator {
 			ReleaseNumber[] existingReleaseNumbers = getAllExistingReleaseNumbers(session.getProject(), issues);
 			boolean isExistingReleaseNumber = false;
 			for(ReleaseNumber existingReleaseNumber : existingReleaseNumbers) {
+				//TODO change to .equals()
 				if(requirement.getReleaseNumber().getReleaseNumber() == existingReleaseNumber.getReleaseNumber()) {
 					isExistingReleaseNumber = true;
 				}
@@ -278,7 +279,7 @@ public class RequirementModelValidator {
 			Iteration[] existingIterations = getAllExistingIterations(session.getProject(), issues);
 			boolean isExistingIteration = false;
 			for(Iteration existingIteration : existingIterations) {
-				if(requirement.getIteration().getIterationNumber() == existingIteration.getIterationNumber()) {
+				if(requirement.getIteration().getIterationNumber().equals(existingIteration.getIterationNumber())) {
 					isExistingIteration = true;
 				}
 			}
