@@ -32,6 +32,7 @@ public class Permissions extends AbstractModel {
 	
 	private PermissionLevel permissionLevel;
 	private String username;
+	private Date date;
 
 	/**
 	 * Constructs an empty user permission
@@ -49,6 +50,7 @@ public class Permissions extends AbstractModel {
 	public Permissions(String username, PermissionLevel permissionLevel) {
 		this.username = username;
 		this.permissionLevel = permissionLevel;
+		this.date = new Date();
 	}
 
 	/**
@@ -143,6 +145,11 @@ public class Permissions extends AbstractModel {
 	public static Permissions[] fromJSONArray(String body) {
 		GsonBuilder builder = new GsonBuilder();
 		return builder.create().fromJson(body, Permissions[].class);
+	}
+
+	public Date getLastModifiedDate() {
+		// TODO Auto-generated method stub
+		return date;
 	}
 
 }
