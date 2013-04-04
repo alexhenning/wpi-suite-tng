@@ -172,7 +172,8 @@ public class ListRequirementsPanel extends JPanel {
 		editPanel.revalidate();
 		editPanel.repaint();
 		
-		setUpColumns();
+		setUpColumns(); // TODO disable status except for delete and complete, just display the correct one
+		                // TODO set up cell editors to limit what can be typed
 	}
 	
 	/**
@@ -297,7 +298,14 @@ public class ListRequirementsPanel extends JPanel {
 								break;
 							}
 						}
-						req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
+						// update status according to iteration if necessary, otherwise use the user selected data
+						if(req.getIteration() != null && (req.getStatus() != RequirementStatus.COMPLETE || req.getStatus() != RequirementStatus.DELETED)) {
+							req.setStatus(RequirementStatus.IN_PROGRESS);
+						} else if(req.getIteration() == null && req.getStatus() == RequirementStatus.IN_PROGRESS) {
+							req.setStatus(RequirementStatus.OPEN);
+						} else {
+							req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
+						}
 						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
 						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
 						break;
@@ -343,9 +351,12 @@ public class ListRequirementsPanel extends JPanel {
 	 * @param reqs List of requirements to update
 	 */
 	public void sendRequirementsToDatabase(List<RequirementModel> reqs) {
-		for(RequirementModel req : reqs) { // TODO (with updateModels) Only update those that need to be updated
-			DB.updateRequirements(req, new UpdateRequirementCallback());
+		// TODO (with updateModels) Only update those that need to be updated
+		for(RequirementModel req : reqs.subList(0, reqs.size() - 1)) {  // update all but the last requirement
+			DB.updateRequirements(req, new UpdateRequirementCallback(false));
 		}
+		// now update the last requirement with the provision that the callback updates the table
+		DB.updateRequirements(reqs.get(reqs.size() - 1), new UpdateRequirementCallback(true));
 	}
 	
 	/**
@@ -356,6 +367,12 @@ public class ListRequirementsPanel extends JPanel {
 	 *
 	 */
 	class UpdateRequirementCallback implements SingleRequirementCallback {
+		
+		boolean lastReq = false;
+		
+		public UpdateRequirementCallback(boolean lastReq) {
+			this.lastReq = lastReq;
+		}
 
 		/**
 		 * Required callback, does nothing
@@ -364,7 +381,10 @@ public class ListRequirementsPanel extends JPanel {
 		 */
 		@Override
 		public void callback(RequirementModel req) {
-			// nothing to do
+			if(lastReq) {  // this should be the callback from the last requirement (or close enough)
+				           // so go ahead and update the list again
+				updateAllRequirementList();
+			}
 		}
 		
 	}
