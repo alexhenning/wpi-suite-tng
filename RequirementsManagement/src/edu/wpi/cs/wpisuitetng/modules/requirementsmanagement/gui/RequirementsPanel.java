@@ -156,6 +156,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
 		updateFields();
+		System.out.println("loaded: "+requirement.toJSON());
 	}
 
 	/**
@@ -405,7 +406,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
-			submit.setEnabled((namefield.getText().length() < 1 || namefield.getText().length() < 1));
+			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		} else if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
@@ -441,11 +442,17 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
-			submit.setEnabled((namefield.getText().length() < 1 || namefield.getText().length() < 1));
+			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		}
-		
+		System.out.println("namefield: "+namefield.getText());
+		System.out.println("submit good: "+!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		nt.setNotes(Arrays.asList(model.getNotes()));
 		DB.getAllProjectEvents(new ListProjectEvents());
+		updateSubmitButton();
+	}
+	
+	public void updateSubmitButton() {
+		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && !(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 	}
 	
 	/**
@@ -484,7 +491,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		model.setDescription(descriptionfield.getText());
 		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
-		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
+		if (model.getStatus() == RequirementStatus.COMPLETE) {
+			
+		} else if (model.getStatus() == RequirementStatus.DELETED) {
+			
+		} else if (model.getIteration() != null && (model.getStatus() == RequirementStatus.OPEN || model.getStatus() == RequirementStatus.NEW)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
 			parent.buttonGroup.update(editMode, model);
 			updateStatusField();
@@ -582,7 +593,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		if(Integer.parseInt(actualEffortField.getText()) < 0){
 			actualEffortField.setBackground(Color.RED);
 			setStatus("Actual Effort must be a non-negative integer.");
-			System.out.println("Estimate value is " + estimateField.getText());
+			System.out.println("Actual Effort value is " + actualEffortField.getText());
 			return false;
 		} else {
 			actualEffortField.setBackground(Color.WHITE);
@@ -605,14 +616,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	//checked for input from keyboard
 	public void keyTyped ( KeyEvent e ){  
 		//check to see if name and description fields are empty or not
-		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
-			submit.setEnabled(true);
-		}
-		if((namefield.getText().length()==0)
-				|| ( descriptionfield.getText().length()==0)){
-			submit.setEnabled(false);
-		}
-	
+//		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
+//			submit.setEnabled(true);
+//		}
+//		if((namefield.getText().length()==0)
+//				|| ( descriptionfield.getText().length()==0)){
+//			submit.setEnabled(false);
+//		}
+		updateSubmitButton();
 	}
 	//check if key is pressed. Doesn't really do anything now, but needs to be included 
 	public void keyPressed ( KeyEvent e){  
