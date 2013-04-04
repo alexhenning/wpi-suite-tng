@@ -67,7 +67,7 @@ public class RequirementHistoryTab extends JPanel {
 		noteScrollPane = new JScrollPane(noteViewer);
 		noteScrollPane.setPreferredSize(new Dimension(300, 300));
 		noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		// Add elements to the main panel
 		add(noteScrollPane, BorderLayout.CENTER);
@@ -79,8 +79,8 @@ public class RequirementHistoryTab extends JPanel {
 		c.insets = new Insets(3, 0, 3, 0);
 		c.gridx = 0;
 		c.gridy = events.size();
-		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weightx = 0.5;
+		c.weighty = 0.5;
 		
 		noteViewer.removeAll();
 		
