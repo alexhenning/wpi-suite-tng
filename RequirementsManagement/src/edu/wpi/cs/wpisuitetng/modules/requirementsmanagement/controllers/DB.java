@@ -30,20 +30,43 @@ import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
+/**
+ *
+ * Handels retriving and updating data in the database
+ * @author TODO
+ *
+ */
 public class DB {
 	
+	/**
+	 * Retrieves a single requirement from the database and runs the callback function in the class passed
+	 *
+	 * @param id the id of the requirement
+	 * @param callback the class that has the callback function to be run on the requirement
+	 */
 	public static void getSingleRequirement(String id, SingleRequirementCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + id, HttpMethod.GET);
 		request.addObserver(new RetrieveSingleRequirementRequestObserver(callback));
 		request.send();
 	}
 	
+	/**
+	 * Retrieves all the requirements from the databse and runs the callback function in the class passed
+	 *
+	 * @param callback the class that has the callback function to be run on the list of requirements
+	 */
 	public static void getAllRequirements(RequirementsCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.GET);
 		request.addObserver(new RetrieveRequirementModelRequestObserver(callback));
 		request.send();
 	}
 	
+	/**
+	 * Updates a single requirement in the database and calls the callback function in the class passed on it
+	 *
+	 * @param req The requirement to be updated
+	 * @param callback The class that the callback function will be called from
+	 */
 	public static void updateRequirements(RequirementModel req, SingleRequirementCallback callback) {
 		System.out.println(req.toJSON());
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + req.getId(),  HttpMethod.POST);
@@ -52,12 +75,23 @@ public class DB {
 		request.send();
 	}
 
+	/**
+	 * Retrieve all the iterations from the database and run the callback function in the class passed
+	 *
+	 * @param callback The class that has the callback function to be run
+	 */
 	public static void getAllIterations(IterationCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration",  HttpMethod.GET);
 		request.addObserver(new RetrieveIterationsRequestObserver(callback));
 		request.send();
 	}
 	
+	/**
+	 * Update an iteration in the database and run the callback function in the class passed
+	 *
+	 * @param iteration the iteration to be updated
+	 * @param callback
+	 */
 	public static void updateIteration(Iteration iteration, SingleIterationCallback callback) {
 		System.out.println(iteration.toJSON());
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration/" + iteration.getId(),  HttpMethod.POST);
@@ -66,6 +100,12 @@ public class DB {
 		request.send();
 	}
 
+	/**
+	 * Get a single permission from the database run the callback function from the class passed
+	 *
+	 * @param username the name of the user that the permission is wanted for
+	 * @param callback the class with the callback function to be run
+	 */
 	public static void getSinglePermission(String username, SinglePermissionCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + username, HttpMethod.GET);
 		request.addObserver(new RetrieveSinglePermissionRequestObserver(callback));
@@ -79,18 +119,33 @@ public class DB {
 //		request.send();
 //	}
 	
+	/**
+	 * retrieves all project events from the database and runs the callback function on them in the class passed
+	 *
+	 * @param callback the class with the callback function
+	 */
 	public static void getAllProjectEvents(ProjectEventsCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
 		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
 		request.send();
 	}
 	
+	/**
+	 * Retrieves all the project events from the database and runs the callback function on the in the class passed
+	 *
+	 * @param callback the class with the callback function to run
+	 */
 	public static void getAllProjectEventsFor(ProjectEventsCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
 		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
 		request.send();
 	}
 	
+	/**
+	 * Retrieve all the permissions from the database and run the callback function in the class passed
+	 *
+	 * @param updateTableCallback the class with the callback function to run
+	 */
 	public static void getAllPermissions(PermissionsCallback updateTableCallback) {
 		System.out.println("get all permissions");
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions", HttpMethod.GET);

@@ -32,15 +32,23 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  */
 public class EditPermissionController implements ActionListener {
 
+	/** The permissions panel */
 	private final PermissionsPanel panel;
 
+	/**
+	 * Constructor
+	 * @param panel the permissions panel
+	 */
 	public EditPermissionController(PermissionsPanel panel) {
 		this.panel = panel;
 	}
 
-	/*
+	/**
 	 * This will be called when the user clicks an add button
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * Edit the user permission in the server
+	 *
+	 * @param e the action that called this
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -50,6 +58,11 @@ public class EditPermissionController implements ActionListener {
 		request.send();
 	}
 
+	/**
+	 * confirm that the permission was edited
+	 *
+	 * @param profile
+	 */
 	public void receivedEditConfirmation(Permissions profile) {
 		DB.getSinglePermission(profile.getUsername(), new SinglePermissionCallback() {
 			@Override

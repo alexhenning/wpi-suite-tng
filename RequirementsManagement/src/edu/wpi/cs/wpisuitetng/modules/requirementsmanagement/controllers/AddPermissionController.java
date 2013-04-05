@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import java.awt.event.ActionEvent;
@@ -12,17 +24,32 @@ import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
+/**
+ *
+ * Handles saving permissions to the server
+ * @author TODO
+ *
+ */
 public class AddPermissionController implements ActionListener {
 
+	/** The permissions panel */
 	private final PermissionsPanel panel;
 
+	/**
+	 * constructor
+	 * @param panel the permissions panel
+	 */
 	public AddPermissionController(PermissionsPanel panel) {
 		this.panel = panel;
 	}
 
-	/*
+
+	/**
 	 * This will be called when the user clicks an add button
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * Saves the permissions to the server
+	 *
+	 * @param e the action that called this
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -33,6 +60,11 @@ public class AddPermissionController implements ActionListener {
 		request.send();
 	}
 
+	/**
+	 * Response if everything worked
+	 *
+	 * @param profile
+	 */
 	public void receivedAddConfirmation(Permissions profile) {
 		DB.getSinglePermission(profile.getUsername(), new SinglePermissionCallback() {
 			@Override
@@ -46,6 +78,10 @@ public class AddPermissionController implements ActionListener {
 				+ profile.getPermissionLevel().toString());
 	}
 
+	/**
+	 * Response if there was a problem
+	 *
+	 */
 	public void receivedAddError() {
 		panel.setAddPermissionStatus("Invalid username, username already exists, or an internal error occurred");
 	}
