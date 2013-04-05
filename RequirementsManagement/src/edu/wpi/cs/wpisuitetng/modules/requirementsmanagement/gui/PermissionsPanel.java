@@ -185,7 +185,10 @@ public class PermissionsPanel extends JPanel {
 		updateButton = new JButton("Update");
 		updateButton.addActionListener(new EditPermissionController(this));
 		updateButton.setEnabled(false);
-		
+
+		lblname.setVisible(false);
+		lblID.setVisible(false);
+
 		profilePanel =new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
