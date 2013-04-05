@@ -8,12 +8,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -35,8 +37,8 @@ public class IterationValidatorTest {
 	private IterationValidator validator;
 	
 	Project testproject;
-	Date sDate;
-	Date eDate;
+	Date startDate;
+	Date endDate;
 	
 	Iteration firstIteration;
 	Iteration goodIteration;
@@ -46,32 +48,40 @@ public class IterationValidatorTest {
 	Session defaultSession;
 	User bobUser;
 	String mockSsid;
-	
+
 	Data db;
 	
 	@Before
 	public void setUp() throws Exception {
+		// Dates
+		startDate = newDate(10);
+		endDate = newDate(20);		
+		
 		bobUser = new User("bob", "bob", "1234", 1);
 		
 		mockSsid = "abc123";
-		//Project(String name, String idNum)
 		testproject = new Project("TestProject", "1");
 		defaultSession = new Session(bobUser, testproject, mockSsid);
 		
-		//Iteration (int id, Date startDate, Date endDate, String iterationNumber,Project project);
-		firstIteration = new Iteration(1, new Date(1), new Date(1000), "1", testproject);
-		goodIteration = new Iteration(100, new Date(1001), new Date(2000), "100", testproject);
-		lastIteration = new Iteration(2, new Date(2001), new Date(3000), "2", testproject);
+		firstIteration = new Iteration(1, newDate(1), newDate(9), "1", testproject);
+		goodIteration = new Iteration(100, startDate, endDate, "100", testproject);
+		lastIteration = new Iteration(2, newDate(21), newDate(30), "2", testproject);
 		
 		db = new MockData(new HashSet<Object>());
 		db.save(firstIteration);
-		//db.save(goodIteration);
 		db.save(lastIteration);
 		validator = new IterationValidator(db);
 	}
 	
 	@After
 	public void tearDown() throws Exception {
+	}
+	
+	public Date newDate(int day){
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.add(Calendar.DATE, day);
+		return calendar.getTime();
 	}
 
 	public List<ValidationIssue> checkNumIssues(int num, Session session, Iteration iteration, Mode mode) {
@@ -123,18 +133,34 @@ public class IterationValidatorTest {
 	@Test
 	public void testNullStartDate(){
 		goodIteration.setStartDate(null);
-		checkNumIssues(3, defaultSession, goodIteration, Mode.CREATE);
+		checkNumIssues(1, defaultSession, goodIteration, Mode.CREATE);
 	}
 	
 	@Test
 	public void testNullEndDate(){
 		goodIteration.setEndDate(null);
-		checkNumIssues(3, defaultSession, goodIteration, Mode.CREATE);
+		checkNumIssues(1, defaultSession, goodIteration, Mode.CREATE);
 	}
 	@Test
-	public void testNullEndDateGreaderStartDate(){
-		goodIteration.setStartDate(new Date(1900));
-		goodIteration.setEndDate(new Date(1100));
+	public void testEndDateGreaderStartDate(){
+		goodIteration.setStartDate(endDate);
+		goodIteration.setEndDate(startDate);
 		checkNumIssues(1, defaultSession, goodIteration, Mode.CREATE);
+	}
+	@Test
+	public void testDatesOverlapsUp(){
+		goodIteration.setEndDate(newDate(25));
+		checkNumIssues(2, defaultSession, goodIteration, Mode.CREATE);
+	}
+	@Test
+	public void testDatesOverlapsDown(){
+		goodIteration.setStartDate(newDate(5));
+		checkNumIssues(2, defaultSession, goodIteration, Mode.CREATE);
+	}
+	@Test
+	public void testDatesOverlaps(){
+		goodIteration.setStartDate(newDate(5));
+		goodIteration.setEndDate(newDate(25));
+		checkNumIssues(4, defaultSession, goodIteration, Mode.CREATE);
 	}
 }
