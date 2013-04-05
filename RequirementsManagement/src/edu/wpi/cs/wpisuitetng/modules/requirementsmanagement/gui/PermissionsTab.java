@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    William Terry
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
@@ -11,19 +23,30 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
 /**
- * 
+ * Tab for permissions
  * @author William Terry
  *
  */
 @SuppressWarnings("serial")
 public class PermissionsTab extends JPanel implements IToolbarGroupProvider {
+	/** the main tab controller */
 	MainTabController tabController;
+	/** tab that contains this*/
 	Tab containingTab;
+	/** permissions model */
 	Permissions permission;
+	/** scroll pane */
 	JScrollPane mainPanelScrollPane;
+	/** the main panel */
 	PermissionsPanel mainPanel;
 	
 
+	/**
+	 * Constructor
+	 * @param tabController the main tab controller
+	 * @param permission a permissions model
+	 * @param tab the tab that contains this
+	 */
 	public PermissionsTab(MainTabController tabController, Permissions permission, Tab tab) {
 		this.tabController = tabController;
 		this.permission = permission;

@@ -32,11 +32,17 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
 @SuppressWarnings("serial")
 public class NotePanel extends JPanel {
 
+	/** text area to put message */
 	JTextArea messageArea;
+	/** text field for info */
 	JTextField infoText;
+	/** text field for the author */
 	JTextField authorText;
+	/** the message */
 	String message;
+	/** the aurthor */
 	String author;
+	/** the date */
 	Date date;
 	
 	/**

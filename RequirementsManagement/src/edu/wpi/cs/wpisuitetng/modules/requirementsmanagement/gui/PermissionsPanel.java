@@ -52,26 +52,43 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  */
 @SuppressWarnings("serial")
 public class PermissionsPanel extends JPanel {
+	/** a permissions model */
 	Permissions newModel;
+	/** a permissions model */
 	Permissions editModel;
 	
+	/** the tab that made this */
 	PermissionsTab parent;
 //	private GridBagLayout panelLayout;
+	/** labels */
 	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
+	/** a text area */
 	HintedTextArea usernameTextArea;
+	/** a text field */
 	JTextField addStatus;
+	/** the buttons */
 	JButton submitButton, updateButton;
+	/** the dropdown menus */
 	JComboBox permissionSelectNew, permissionSelectExisting;
+	/** the panel for the profiles */
 	JPanel profilePanel;
+	/** a scroll pane */
 	JScrollPane tablePane;
+	/** the table for the profiles */
 	JTable profileTable;
+	/** the model for the table */
 	ViewPermissionsTable tableModel;
 //	String sName, sUsername, sID;
+	/** the top panel */
 	JPanel topPanel;
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
 
+	/**
+	 * constructor
+	 * @param permissionsTab the tab that created this
+	 */
 	public PermissionsPanel(PermissionsTab permissionsTab){
 		this.parent = permissionsTab;
 		newModel = null;
@@ -87,6 +104,10 @@ public class PermissionsPanel extends JPanel {
 		updateFields();
 	}
 
+	/**
+	 *add the components to the view
+	 *
+	 */
 	private void addComponents() {
 		setLayout(new BorderLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -176,6 +197,10 @@ public class PermissionsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * create the profile panel
+	 *
+	 */
 	private void instantiateProfilePanel() {
 		lblprofile = new JLabel("Selected Profile");
 		lblname = new JLabel("Name: ");
@@ -218,6 +243,10 @@ public class PermissionsPanel extends JPanel {
 		
 	}
 
+	/**
+	 *update the labels for the profiles
+	 *
+	 */
 	public void updateProfileLabels() {
 		System.out.println("update profile labels");
 		
@@ -244,6 +273,10 @@ public class PermissionsPanel extends JPanel {
 		profilePanel.repaint();
 	}
 
+	/**
+	 *create the table
+	 *
+	 */
 	private void instantiateTable() {
 		
 		tableModel = new ViewPermissionsTable();
@@ -273,10 +306,18 @@ public class PermissionsPanel extends JPanel {
 		});
 	}
 
+	/**
+	 *populate the table with permissions
+	 *
+	 */
 	public void updateAllPermissionsList() {
 		DB.getAllPermissions(new UpdateTableCallback());
 	}
 	
+	/**
+	 * close the tab
+	 *
+	 */
 	public void close() {
 		parent.tabController.closeCurrentTab();
 	}
@@ -333,9 +374,9 @@ public class PermissionsPanel extends JPanel {
 	}
 
 	/**
-	 * Returns a boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * Returns a boolean representing whether or not input is enabled for the PermissionsPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * @return	A boolean representing whether or not input is enabled for the PermissionsPanel and its children.
 	 */
 	public boolean getInputEnabled() {
 		return inputEnabled;
@@ -390,7 +431,18 @@ public class PermissionsPanel extends JPanel {
 		updateModel(null);
 	}
 	
+	/**
+	 *
+	 * Callback class to update the permissions table
+	 * @author 
+	 *
+	 */
 	class UpdateTableCallback implements PermissionsCallback {
+		/**
+		 * callback to update the permissions table
+		 *
+		 * @param profiles list of permissions
+		 */
 		@Override
 		public void callback(List<Permissions> profiles) {
 			System.out.println("profile count : " + profiles.size());

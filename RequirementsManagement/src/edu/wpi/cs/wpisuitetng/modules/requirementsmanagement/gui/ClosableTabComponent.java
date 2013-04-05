@@ -29,6 +29,7 @@ import javax.swing.JTabbedPane;
 @SuppressWarnings("serial")
 public class ClosableTabComponent extends JPanel implements ActionListener {
 	
+	/** the tabbed pane */
 	private final JTabbedPane tabbedPane;
 	
 	/**
@@ -60,6 +61,11 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 		add(closeButton);
 	}
 
+	/**
+	 * Close the tab when the action happened
+	 *
+	 * @param arg0 the action that happened, usually clikcing the close button
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// close this tab when close button is clicked

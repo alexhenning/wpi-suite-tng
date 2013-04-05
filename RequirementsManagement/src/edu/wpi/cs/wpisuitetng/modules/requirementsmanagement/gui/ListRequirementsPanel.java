@@ -8,6 +8,8 @@
  *
  * Contributors:
  *    //Josh
+ *    //Tim C
+ *    //James
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -40,18 +42,38 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
+/**
+ *
+ * Panel to list all of the requirements, and have an option to edit them in the list
+ * @author Josh
+ * @author Tim C
+ * @author James
+ *
+ */
 @SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel {
 	
+	/** the tab that created this*/
 	ListRequirementsTab parent;
+	/** is inpute enabled*/
 	boolean inputEnabled;
+	/** the table that displays the requirements*/
 	JTable table;
+	/** the model for the table*/
 	ViewReqTable tableModel;
+	/** button to bring the table into edit mode*/
 	JButton editButton;
+	/** button to save edits*/
 	JButton saveButton;
+	/** button to cancel edits */
 	JButton cancelButton;
+	/** panel to display the edit/save and cancel buttons */
 	JPanel editPanel;
 	
+	/**
+	 * Constructor
+	 * @param parent the tab that made this
+	 */
 	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
 		
@@ -158,10 +180,19 @@ public class ListRequirementsPanel extends JPanel {
 		// TODO: implement
 	}
 
+	/**
+	 * updates the list of requirements in the table
+	 *
+	 */
 	public void updateAllRequirementList() {
 		DB.getAllRequirements(new UpdateTableCallback());
 	}
 	
+	/**
+	 * the the table model
+	 *
+	 * @return the table model
+	 */
 	public ViewReqTable getTable(){
 		return this.tableModel;
 	}
@@ -184,8 +215,9 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
-	 * Function to turn the table into view mode
+	 * turn the table into view mode
 	 *
+	 * @param cancelled if the changes made in edit mode should be cancelled
 	 */
 	public void setViewTable(boolean cancelled) {
 		boolean noErrors = true;
@@ -273,6 +305,13 @@ public class ListRequirementsPanel extends JPanel {
 		priorityColumn.setCellRenderer(renderer);
 	}
 	
+	/**
+	 * update the requirements models so that they can be sent to the database to update them there
+	 *
+	 * @param reqs the list of requirements
+	 * @param iterations the list of all iterations
+	 * @return the updated list of requirements
+	 */
 	public List<RequirementModel> updateModels(List<RequirementModel> reqs, List<Iteration> iterations) {
 
 		if(reqs != null && reqs.size() >= 1) {
@@ -301,6 +340,11 @@ public class ListRequirementsPanel extends JPanel {
 		return reqs;
 	}
 	
+	/**
+	 * checks to see if all the changes made in the table are valid
+	 *
+	 * @return true if the changes made were all good, false otherwise
+	 */
 	public boolean validateModels() {
 		boolean noErrors = true;
 		
@@ -322,14 +366,31 @@ public class ListRequirementsPanel extends JPanel {
 		return noErrors;
 	}
 	
+	/**
+	 * updates all the requirements in the database to match those in reqs
+	 *
+	 * @param reqs a list of all the requirements
+	 */
 	public void sendRequirementsToDatabase(List<RequirementModel> reqs) {
 		for(RequirementModel req : reqs) {
 			DB.updateRequirements(req, new UpdateRequirementCallback());
 		}
 	}
 	
+	/**
+	 *
+	 * Callback to update a requiremenet in the database
+	 * @author Tim C
+	 * @author James
+	 *
+	 */
 	class UpdateRequirementCallback implements SingleRequirementCallback {
 
+		/**
+		 * Mandatory callback function, does nothing
+		 *
+		 * @param req a requirments model
+		 */
 		@Override
 		public void callback(RequirementModel req) {
 			// nothing to do
@@ -337,8 +398,20 @@ public class ListRequirementsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 *
+	 * gets a list of all the requirements and creates a RetrieveAllIterationsCallback to update them and send them to the database
+	 * @author Tim C
+	 * @author James
+	 *
+	 */
 	class RetrieveAllRequirementsCallback implements RequirementsCallback {
 		
+		/**
+		 * Create RetrieveallIteratoinsCallback to update the requirments and send the to the database
+		 *
+		 * @param reqs a list of all requirements
+		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
 			DB.getAllIterations(new RetrieveAllIterationsCallback(reqs));
@@ -346,14 +419,31 @@ public class ListRequirementsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 *
+	 * Callback which updates all the requirements and sends them to the database
+	 * @author Tim C
+	 * @author James
+	 *
+	 */
 	class RetrieveAllIterationsCallback implements IterationCallback {
 		
+		/** a list of all the requirements */
 		List<RequirementModel> reqs;
 		
+		/**
+		 * Constructor
+		 * @param reqs a list of all the requirmeents
+		 */
 		public RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
 			this.reqs = reqs;
 		}
 
+		/**
+		 * Callback function to update all the requirements and send them to the database
+		 *
+		 * @param iterationss a list of all the iterations
+		 */
 		@Override
 		public void callback(List<Iteration> iterationss) {
 			List<RequirementModel> requirements = updateModels(reqs, iterationss);
@@ -363,7 +453,18 @@ public class ListRequirementsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 *
+	 * Callback to populate the table with all the requirements
+	 * @author Josh
+	 *
+	 */
 	class UpdateTableCallback implements RequirementsCallback {
+		/**
+		 * Callback function to populate the table with all the requirements
+		 *
+		 * @param reqs a list of all requirements
+		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
 			if (reqs.size() > 0) {
@@ -421,6 +522,7 @@ public class ListRequirementsPanel extends JPanel {
 	/**
 	 *
 	 * Class to take the list of iterations from the database and fill in a combobox with their names
+	 * @author Tim C
 	 * @author James
 	 *
 	 */
@@ -442,6 +544,7 @@ public class ListRequirementsPanel extends JPanel {
 
 		/**
 		 * Go through the list of iterations and add their name to the combobox
+		 * it does not add iterations that are already over as it would be invalid to set a project to those iterations
 		 *
 		 * @param iterationss the list of iterations
 		 */

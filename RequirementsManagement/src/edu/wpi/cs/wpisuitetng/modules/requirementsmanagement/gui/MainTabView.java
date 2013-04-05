@@ -27,6 +27,9 @@ import javax.swing.JTabbedPane;
 @SuppressWarnings("serial")
 public class MainTabView extends JTabbedPane {
 	
+	/**
+	 * Constructor
+	 */
 	public MainTabView() {
 		setTabPlacement(TOP);
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
@@ -35,6 +38,15 @@ public class MainTabView extends JTabbedPane {
 //		       "Your Dashboard - notifications, etc.");
 	}
 	
+	/**
+	 * insert a tab
+	 *
+	 * @param title title of the tab
+	 * @param icon icon of the tab
+	 * @param component the tab's component
+	 * @param tip the tooltip for the tab
+	 * @param index the tab's index
+	 */
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		super.insertTab(title, icon, component, tip, index);
@@ -45,6 +57,11 @@ public class MainTabView extends JTabbedPane {
 		}
 	}
 	
+	/**
+	 *remove a tab
+	 *
+	 * @param index the index of the tab to be removed
+	 */
 	@Override
 	public void removeTabAt(int index) {
 		// if a tab does not have the close button UI, it cannot be removed
@@ -53,6 +70,12 @@ public class MainTabView extends JTabbedPane {
 		}
 	}
 	
+	/**
+	 * set the component of a tab
+	 *
+	 * @param index the index of the tab
+	 * @param component what the tab's component should be set to
+	 */
 	@Override
 	public void setComponentAt(int index, Component component) {
 		super.setComponentAt(index, component);

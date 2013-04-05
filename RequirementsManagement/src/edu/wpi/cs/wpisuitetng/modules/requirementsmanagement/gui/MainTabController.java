@@ -41,7 +41,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  */
 public class MainTabController {
 	
+	/** the main tab view */
 	private final MainTabView view;
+	/** a list requirements tab */
 	private ListRequirementsTab listReqsView = null;
 	
 	/**
@@ -81,8 +83,8 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Adds a tab that displays the given defect in the given mode
-	 * @param defect The defect to display
+	 * Adds a tab that displays the given requirement in the given mode
+	 * @param requirement The requirement to display
 	 * @param mode The Mode to use
 	 */
 	private Tab addRequirementTab(RequirementModel requirement, Mode mode) {
@@ -93,6 +95,11 @@ public class MainTabController {
 		return tab;
 	}
 	
+	/**
+	 * create a tab for adding an iteration
+	 *
+	 * @return the tab created
+	 */
 	public Tab addCreateIterationTab() {
 		Iteration iteration = new Iteration();
 		Tab tab = addTab();
@@ -103,9 +110,9 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Description goes here
+	 * create a tab for editing permissions
 	 *
-	 * @return
+	 * @return the tab created
 	 */
 	public Tab addPermissionTab() {
 		// If the tab is already opened, switch to that tab.
@@ -129,8 +136,8 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Adds a tab that displays the given defect
-	 * @param defect the defect to display
+	 * Adds a tab that displays the given requirement
+	 * @param requirement the requirement to display
 	 * @return The created Tab 
 	 */
 	public Tab addEditRequirementTab(RequirementModel requirement) {
@@ -144,7 +151,7 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Adds a tab that allows the user to create a new Defect
+	 * Adds a tab that allows the user to create a new requirement
 	 * @return The created Tab
 	 */
 	public Tab addCreateRequirementTab() {
@@ -214,6 +221,11 @@ public class MainTabController {
 		}
 	}
 
+	/**
+	 * add a tab that lists all the requirements
+	 *
+	 * @return the created tab
+	 */
 	public Tab addListRequirementsTab() {
 		if(listReqsView != null) {
 			for (int i=0; i<view.getTabCount(); i++) {

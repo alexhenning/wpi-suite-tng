@@ -66,7 +66,7 @@ class RequirementChangesetCallback implements MapCallback {
 			if(!objectsEqual(sourceValue, destinationValue)) {
 				/*
 				 * this field has changed - indicate the change in the changeset
-				 * remember that fields from updated defect are being copied to old one
+				 * remember that fields from updated model are being copied to old one
 				 * destinationValue is the old value
 				 */
 				changeset.getChanges().put(fieldName, new FieldChange<Object>(destinationValue, sourceValue));

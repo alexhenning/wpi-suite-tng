@@ -30,15 +30,19 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
 
 
 /**
- * Main panel for notes viewing and editing
+ * Main panel for history viewing
  * @author Josh
  * @author Deniz
  */
 @SuppressWarnings("serial")
 public class RequirementHistoryTab extends JPanel {
+	/** the panel this is shown in */
 	RequirementsPanel parent;
+	/** panel to display this */
 	JPanel noteViewer;
+	/** scroll pane */
 	JScrollPane noteScrollPane;
+	/** list of project events*/
 	List<ProjectEvent> notes;
 
 	/**
@@ -74,6 +78,11 @@ public class RequirementHistoryTab extends JPanel {
 		add(noteScrollPane, BorderLayout.CENTER);
 	}
 	
+	/**
+	 *add the events to the history tab
+	 *
+	 * @param events the list of events
+	 */
 	public void setNotes(List<ProjectEvent> events) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;

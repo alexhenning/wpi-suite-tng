@@ -170,9 +170,9 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 			throws WPISuiteException, NotFoundException {		
 		
 		/* [This comment is from DefectManager.  The problem still applies, so it must be worked around]
-		 * Because of the disconnected objects problem in db4o, we can't just save updatedDefect.
-		 * We have to get the original defect from db4o, copy properties from updatedDefect,
-		 * then save the original defect again.
+		 * Because of the disconnected objects problem in db4o, we can't just save updatedRequirement
+		 * We have to get the original requirement from db4o, copy properties from updatedRequirement,
+		 * then save the original requirement again.
 		 */
 		
 		RequirementModel updatedRequirement = RequirementModel.fromJSON(content);

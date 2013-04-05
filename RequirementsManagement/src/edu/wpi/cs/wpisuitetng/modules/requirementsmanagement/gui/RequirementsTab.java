@@ -34,14 +34,19 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.Requirement
 @SuppressWarnings("serial")
 public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 
+	/** group of buttons to show */
 	RequirementToolbarView buttonGroup;
+	/** the save button */
 	private JButton saveButton;
+	/** the main panel */
 	private RequirementsPanel mainPanel;
+	/** the containing tab*/
 	private Tab containingTab;
+	/** is input enabled*/
 	private boolean inputEnabled = true;
 
 	/**
-	 * Constructs a new CreateRequirementView where the user can enter the data for a new defect.
+	 * Constructs a new CreateRequirementView where the user can enter the data for a new requirement.
 	 */
 	public RequirementsTab(MainTabController tabController) {
 		this(tabController, new RequirementModel(), Mode.CREATE, null);
@@ -52,9 +57,9 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	 * 
 	 *TODO: Fix the documentation of this method
 	 * 
-	 * @param defect	The defect to show.
-	 * @param editMode	The editMode for editing the Defect
-	 * @param tab		The Tab holding this DefectView (can be null)
+	 * @param requirement	The Requirement to show.
+	 * @param editMode	The editMode for editing the Requirement
+	 * @param tab		The Tab holding this RequirementView (can be null)
 	 */
 	public RequirementsTab(MainTabController tabController, RequirementModel requirement, Mode editMode, Tab tab) {
 		containingTab = tab;
@@ -122,6 +127,11 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		return mainPanel;
 	}
 	
+	/**
+	 * get the button group
+	 *
+	 * @return the button group
+	 */
 	@Override
 	public ToolbarGroupView getGroup() {
 		return buttonGroup;
@@ -132,7 +142,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	 */
 	public void setEditModeDescriptors(RequirementModel requirement) {
 		containingTab.setTitle("Requirement #" + requirement.getId());
-		// TODO: containingTab.setToolTipText("View defect " + requirement.getTitle());
+		// TODO: containingTab.setToolTipText("View Requirement " + requirement.getTitle());
 		buttonGroup.setName("Edit Requirement");
 	}
 
