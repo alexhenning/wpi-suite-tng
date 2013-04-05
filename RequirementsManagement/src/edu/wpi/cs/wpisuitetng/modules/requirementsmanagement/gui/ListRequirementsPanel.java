@@ -181,6 +181,7 @@ public class ListRequirementsPanel extends JPanel {
 	 *
 	 */
 	public void setViewTable(boolean cancelled) {
+		table.getCellEditor().stopCellEditing();
 		boolean noErrors = true;
 		if(cancelled) {
 			updateAllRequirementList();
