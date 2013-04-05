@@ -76,9 +76,9 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		
 		List<ValidationIssue> issues = validator.validate(s, newRequirementModel, Mode.CREATE);
 		if(issues.size() > 0) {
-			for (ValidationIssue issue : issues) {
-				System.out.println("Validation issue: " + issue.getMessage());
-			}
+//			for (ValidationIssue issue : issues) {
+//				System.out.println("Validation issue: " + issue.getMessage());
+//			}
 			throw new BadRequestException();
 		}
 		

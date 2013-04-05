@@ -47,7 +47,6 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	@Override
 	public ProjectEvent makeEntity(Session s, String content) throws BadRequestException,
 			ConflictException, WPISuiteException {
-		System.out.println("ProjectEventEntityManager.makeEntity: "+content);
 		ProjectEvent newProjectEvent = ProjectEvent.fromJSON(content);
 		
 		newProjectEvent.setId(Count() + 1);
