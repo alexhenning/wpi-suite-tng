@@ -24,8 +24,16 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 
+/**
+ *
+ * Validator for Release Numbers
+ * @author TODO
+ *
+ */
 public class ReleaseNumberValidator {
+	/** the database */
 	private Data data;
+	/** the last existing release number */
 	private ReleaseNumber lastExistingReleaseNumber;
 	
 	/**
@@ -75,7 +83,7 @@ public class ReleaseNumberValidator {
 	 * Return all ReleaseNumbers of the specified project.
 	 * 
 	 * @param project the project this ReleaseNumber belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if release number doesn't exist
 	 * @return all ReleaseNumbers in the project
 	 * @throws WPISuiteException 
 	 */
@@ -91,7 +99,7 @@ public class ReleaseNumberValidator {
 	 * 
 	 * @param id the id of the ReleaseNumber
 	 * @param project the project this ReleaseNumber belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if release number doesn't exist
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The ReleaseNumber with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
@@ -112,7 +120,7 @@ public class ReleaseNumberValidator {
 	 * from the Data given in the constructor.
 	 * 
 	 * @param session The session to validate against
-	 * @param defect The defect model to validate
+	 * @param ReleaseNumber The release number model to validate
 	 * @param mode The mode to validate for
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException 
@@ -219,7 +227,7 @@ public class ReleaseNumberValidator {
 //		if(oldRequirement != null) {
 //			requirement.setEvents(oldRequirement.getEvents());
 //		} else {
-//			// new defects should never have any events
+//			// new release numbers should never have any events
 //			requirement.setEvents(new ArrayList<RequirementEvent>());
 //		}
 		
