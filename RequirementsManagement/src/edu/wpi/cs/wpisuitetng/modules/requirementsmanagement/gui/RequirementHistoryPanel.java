@@ -27,11 +27,13 @@ import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent.ProjectEventType;
 
 /**
  * Displays a single posted note
  * 
  * @author Josh
+ * @author Jacob Palnick
  *
  */
 @SuppressWarnings("serial")
@@ -73,8 +75,32 @@ public class RequirementHistoryPanel extends JPanel {
 		addComponents();
 	}
 
+	/**
+	 * Constructs a panel for a single note
+	 * 
+	 * @param event a ProjectEvent for the viewed requirement
+	 */
 	public RequirementHistoryPanel(ProjectEvent event) {
-		this(event.getChanges(), event.getUser().getName(), event.getDate());
+		this.author = event.getUser().getName();
+		this.date = event.getDate();
+		String eol = System.getProperty("line.separator");
+		String message = "";
+		if (event.getType() == ProjectEventType.CHANGES) {
+			for (Entry <String,FieldChange<?>> change: event.getChanges().entrySet()) {
+				if (message.compareTo("") != 0) {
+					message = message + eol + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
+				}
+				else {
+					message = message + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
+				}
+			}
+		} else {
+			message = "Created";
+		}
+		this.message = message;
+
+		// Add all components to this panel
+		addComponents();
 	}
 
 	/**
