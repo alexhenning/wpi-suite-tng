@@ -7,7 +7,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //Josh
+ *    Josh Morse
+ *    James Megin
+ *    Tim Calvert
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -115,8 +117,6 @@ public class ListRequirementsPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO THIS NEEDS TO MAKES SURE ALL CHANGES ARE VALID AND THEN SAVE THEM, THEN BRING THE TABLE BACK TO VIEW MODE
-				// After everything else is done, call setViewTable()
 				setViewTable(false);
 			}
 			
@@ -126,8 +126,6 @@ public class ListRequirementsPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO THIS NEEDS TO REMOVE ALL CHANGES MADE AND BRING THE TABLE BACK TO VIEW MODE
-				// After everything else is done, call setViewTable()
 				setViewTable(true);
 				
 			}
@@ -135,10 +133,6 @@ public class ListRequirementsPanel extends JPanel {
 		});
 		
 		editPanel.add(editButton);
-		
-		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
-		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
-		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
 		
 		//Add the table to a scrollpane and add it
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -177,10 +171,9 @@ public class ListRequirementsPanel extends JPanel {
 		editPanel.add(cancelButton);
 		editPanel.revalidate();
 		editPanel.repaint();
-		//TODO: SET THE TABLE INTO A MODE WHERE ALL THE FIELDS CAN BE EDITED
-		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
-		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
-		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
+		
+		setUpColumns(); // TODO disable status except for delete and complete, just display the correct one
+		                // TODO set up cell editors to limit what can be typed
 	}
 	
 	/**
@@ -188,6 +181,9 @@ public class ListRequirementsPanel extends JPanel {
 	 *
 	 */
 	public void setViewTable(boolean cancelled) {
+		if(table.isEditing()) {
+			table.getCellEditor().stopCellEditing();
+		}
 		boolean noErrors = true;
 		if(cancelled) {
 			updateAllRequirementList();
@@ -198,8 +194,7 @@ public class ListRequirementsPanel extends JPanel {
 				// get all models from data base and continue from callback
 				RetrieveAllRequirementsCallback cb = new RetrieveAllRequirementsCallback();
 				DB.getAllRequirements(cb);
-			}
-			
+			}	
 		}
 		if(noErrors) { // no errors (or cancelled), so go back to view
 			tableModel.setMode(Mode.VIEW);
@@ -209,7 +204,16 @@ public class ListRequirementsPanel extends JPanel {
 			editPanel.revalidate();
 			editPanel.repaint();
 		}
-		//TODO: MAKE THE FIELDS NOT EDITABLE ANYMORE
+	}
+	
+	/**
+	 * Helper function to call other functions to set up individual columns
+	 *
+	 */
+	public void setUpColumns() {
+		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
+		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
+		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
 	}
 	
 	/**
@@ -218,7 +222,7 @@ public class ListRequirementsPanel extends JPanel {
 	 * @param table the JTable that has the column
 	 * @param iterColumn the iteration column
 	 */
-	public void setUpIterationColumn(JTable table, TableColumn iterColumn) {
+	private void setUpIterationColumn(JTable table, TableColumn iterColumn) {
 		JComboBox iterationBox = new JComboBox();
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
@@ -235,7 +239,7 @@ public class ListRequirementsPanel extends JPanel {
 	 * @param table the JTable that has the column
 	 * @param statusColumn the status column
 	 */
-	public void setUpStatusColumn(JTable table, TableColumn statusColumn) {
+	private void setUpStatusColumn(JTable table, TableColumn statusColumn) {
 
 		JComboBox statusBox = new JComboBox();
 		statusBox.addItem("NEW");
@@ -258,7 +262,7 @@ public class ListRequirementsPanel extends JPanel {
 	 * @param table the JTable that hs the column
 	 * @param priorityColumn the priority column
 	 */
-	public void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
+	private void setUpPriorityColumn(JTable table, TableColumn priorityColumn) {
 		JComboBox priorityBox = new JComboBox();
 		priorityBox.addItem("NONE");
 		priorityBox.addItem("LOW");
@@ -273,8 +277,16 @@ public class ListRequirementsPanel extends JPanel {
 		priorityColumn.setCellRenderer(renderer);
 	}
 	
+	/**
+	 * Takes a list of all models in the database and applies updates that the user
+	 * made in the table to them so they match the edited table
+	 *
+	 * @param reqs List of requirements from the database
+	 * @param iterations List of iterations from the database
+	 * @return Updated list of requirements to be sent back to the database
+	 */
 	public List<RequirementModel> updateModels(List<RequirementModel> reqs, List<Iteration> iterations) {
-
+		// TODO prune out unchanged requirements and just return those that need to be updated
 		if(reqs != null && reqs.size() >= 1) {
 			for(int i = 0; i < tableModel.getRowCount(); i++) {
 				for(RequirementModel req : reqs) {
@@ -289,7 +301,14 @@ public class ListRequirementsPanel extends JPanel {
 								break;
 							}
 						}
-						req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
+						// update status according to iteration if necessary, otherwise use the user selected data
+						if(req.getIteration() != null && (req.getStatus() != RequirementStatus.COMPLETE || req.getStatus() != RequirementStatus.DELETED)) {
+							req.setStatus(RequirementStatus.IN_PROGRESS);
+						} else if(req.getIteration() == null && req.getStatus() == RequirementStatus.IN_PROGRESS) {
+							req.setStatus(RequirementStatus.OPEN);
+						} else {
+							req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
+						}
 						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
 						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
 						break;
@@ -301,9 +320,16 @@ public class ListRequirementsPanel extends JPanel {
 		return reqs;
 	}
 	
+	/**
+	 * Makes sure that there is no invalid input in the panels
+	 *
+	 * @return True if there are no errors in the table, false otherwise
+	 */
 	public boolean validateModels() {
 		boolean noErrors = true;
-		
+		// TODO add more robust validating
+		// no real need to check iterations, status, or priority because the
+		// user can't select invalid things from the JComboBox
 		for(int i = 0; i < tableModel.getRowCount(); i++) {
 			// check name
 			if(((String)tableModel.getValueAt(i, 1)).length() < 1) {
@@ -322,23 +348,66 @@ public class ListRequirementsPanel extends JPanel {
 		return noErrors;
 	}
 	
+	/**
+	 * Sends all the requirements back to the database
+	 *
+	 * @param reqs List of requirements to update
+	 */
 	public void sendRequirementsToDatabase(List<RequirementModel> reqs) {
-		for(RequirementModel req : reqs) {
-			DB.updateRequirements(req, new UpdateRequirementCallback());
+		// TODO (with updateModels) Only update those that need to be updated
+		for(RequirementModel req : reqs.subList(0, reqs.size() - 1)) {  // update all but the last requirement
+			DB.updateRequirements(req, new UpdateRequirementCallback(false));
 		}
+		// now update the last requirement with the provision that the callback updates the table
+		DB.updateRequirements(reqs.get(reqs.size() - 1), new UpdateRequirementCallback(true));
 	}
 	
+	/**
+	 * Callback for updating a requirement in the database
+	 * 
+	 * @author Tim Calvert
+	 * @author James Megin
+	 *
+	 */
 	class UpdateRequirementCallback implements SingleRequirementCallback {
+		
+		boolean lastReq = false;
+		
+		public UpdateRequirementCallback(boolean lastReq) {
+			this.lastReq = lastReq;
+		}
 
+		/**
+		 * Required callback, does nothing
+		 *
+		 * @param req Requirement returned from database
+		 */
 		@Override
 		public void callback(RequirementModel req) {
-			// nothing to do
+			if(lastReq) {  // this should be the callback from the last requirement (or close enough)
+				           // so go ahead and update the list again
+				updateAllRequirementList();
+			}
 		}
 		
 	}
 	
+	/**
+	 *
+	 * Retrieves all requirements from the database
+	 * Couldn't use the one already in place because it does a lot of extra things
+	 * @author Tim Calvert
+	 * @author James Megin
+	 *
+	 */
 	class RetrieveAllRequirementsCallback implements RequirementsCallback {
 		
+		/**
+		 * Requests the list of iterations from the db and continues
+		 * from that callback
+		 *
+		 * @param reqs List of requirements returned from the db
+		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
 			DB.getAllIterations(new RetrieveAllIterationsCallback(reqs));
@@ -346,14 +415,31 @@ public class ListRequirementsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 *
+	 * Retrieves all iterations from the database
+	 * @author Tim Calvert
+	 * @author James Megin
+	 *
+	 */
 	class RetrieveAllIterationsCallback implements IterationCallback {
 		
 		List<RequirementModel> reqs;
 		
+		/**
+		 * Constructor for the class
+		 * @param reqs List of requirements just retrieved from the db
+		 */
 		public RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
 			this.reqs = reqs;
 		}
 
+		/**
+		 * Updates the requirements to what the user edited and then
+		 * sends them to the database
+		 *
+		 * @param iterationss Iterations retrieved from the database
+		 */
 		@Override
 		public void callback(List<Iteration> iterationss) {
 			List<RequirementModel> requirements = updateModels(reqs, iterationss);
