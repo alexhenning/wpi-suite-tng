@@ -235,18 +235,20 @@ public class IterationValidator {
 		
 		//TODO make sure this works. I think it should but I've been wrong before....
 		//check if dates overlap with other iterations
-		for (Iteration i : allIterations) {
-			if(i != null && i.getId() != iteration.getId()) {
-				if(iteration.getStartDate().after(i.getStartDate()) && iteration.getStartDate().before(i.getEndDate())) {
-					issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
-				}
-				if(iteration.getEndDate().after(i.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
-					issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
-				}
-				if((i.getStartDate().after(iteration.getStartDate()) && i.getStartDate().before(iteration.getEndDate())) ||
-						(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate())) ||
-						(i.getStartDate().equals(iteration.getStartDate()) || i.getEndDate().equals(iteration.getEndDate()))) {
-					issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
+		if(iteration.getStartDate() != null && iteration.getEndDate() != null){
+			for (Iteration i : allIterations) {
+				if(i != null && i.getId() != iteration.getId()) {
+					if(iteration.getStartDate().after(i.getStartDate()) && iteration.getStartDate().before(i.getEndDate())) {
+						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
+					}
+					if(iteration.getEndDate().after(i.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
+						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
+					}
+					if((i.getStartDate().after(iteration.getStartDate()) && i.getStartDate().before(iteration.getEndDate())) ||
+							(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate())) ||
+							(i.getStartDate().equals(iteration.getStartDate()) || i.getEndDate().equals(iteration.getEndDate()))) {
+						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
+					}
 				}
 			}
 		}
