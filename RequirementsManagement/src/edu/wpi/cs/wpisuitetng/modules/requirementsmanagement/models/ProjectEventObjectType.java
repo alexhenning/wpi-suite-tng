@@ -11,8 +11,8 @@ public enum ProjectEventObjectType {
         this.idFieldName = idFieldName;
         this.modelName = modelName;
     }
-    private String modelName() { return modelName; }
-    private String idFieldName() { return idFieldName; }
+    public String modelName() { return modelName; }
+    public String idFieldName() { return idFieldName; }
 
 //	REQUIREMENT ("requirementmodel", RequirementModel.class);
 //

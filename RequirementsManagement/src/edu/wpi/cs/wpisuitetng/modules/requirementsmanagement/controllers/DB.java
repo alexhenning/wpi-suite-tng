@@ -14,10 +14,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateIterationRequestObserver;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateProjectEventRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;

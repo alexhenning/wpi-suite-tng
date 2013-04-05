@@ -13,9 +13,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;

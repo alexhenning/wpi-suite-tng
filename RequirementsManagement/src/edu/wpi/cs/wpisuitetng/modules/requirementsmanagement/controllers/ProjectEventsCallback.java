@@ -2,7 +2,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import java.util.List;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 
 public interface ProjectEventsCallback {

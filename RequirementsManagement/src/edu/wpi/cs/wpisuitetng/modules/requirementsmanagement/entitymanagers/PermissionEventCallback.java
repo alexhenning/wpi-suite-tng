@@ -13,7 +13,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,10 +20,7 @@ import java.util.Set;
 import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers.ModelMapper.MapCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.FieldChange;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementChangeset;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * Responsible for filling in a changeset after being passed to

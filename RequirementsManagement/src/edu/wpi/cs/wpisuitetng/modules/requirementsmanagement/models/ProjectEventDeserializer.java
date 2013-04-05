@@ -3,9 +3,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-
-import javax.jws.Oneway;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

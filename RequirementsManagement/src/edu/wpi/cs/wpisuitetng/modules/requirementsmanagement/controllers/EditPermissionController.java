@@ -14,11 +14,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreatePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditPermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
