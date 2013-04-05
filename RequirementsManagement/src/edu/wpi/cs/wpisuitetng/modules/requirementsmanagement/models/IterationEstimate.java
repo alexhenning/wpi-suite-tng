@@ -33,6 +33,10 @@ public class IterationEstimate implements RequirementsCallback {
 	 */
 	private int estimate;
 	
+	/**
+	 * Constructor
+	 * @param iteration the iteration
+	 */
 	public IterationEstimate(Iteration iteration) {
 		this.iteration = iteration;
 		estimate = 0;

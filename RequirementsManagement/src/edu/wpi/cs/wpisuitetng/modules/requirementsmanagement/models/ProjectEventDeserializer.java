@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import java.lang.reflect.Type;
@@ -19,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
 
 /**
  * Responsible for deserializing a RequirementEvent.
+ * TODO: DOCUMENT THIS CLASS
  */
 class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 	public static <T> void addFieldChange(String fieldName, Class<T> fieldClass, JsonObject changes, JsonDeserializationContext context, HashMap<String, FieldChange<?>> changesMap) {
