@@ -14,7 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.*;
