@@ -617,6 +617,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		@Override
 		public void callback(List<ProjectEvent> projectEvents) {
+			for(ProjectEvent event : projectEvents) {
+				System.out.println("project event: "+event.toJSON());
+			}
 			setHistory(projectEvents);
 		}
 
