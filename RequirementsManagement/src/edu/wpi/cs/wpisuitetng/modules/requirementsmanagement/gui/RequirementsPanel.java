@@ -558,6 +558,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 						}
 					}
 				});
+				updateModel(model);
 			}}
 	}
 	
