@@ -17,6 +17,12 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JTable;
 
+/**
+ *
+ * Listeners for the JTable, I don't know if this is even used
+ * @author TODO
+ *
+ */
 public class JTableListeners implements MouseListener{
 
 	//myJTable.addMouseListener(
@@ -33,30 +39,55 @@ public class JTableListeners implements MouseListener{
 		}
 	}*/
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param e a mouse event
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	/**
+	 * This is not implemented
+	 *
+	 * @param e a mouse event
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param e a mouse event
+	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param e a mouse event
+	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * What to do if the mouse is clicked, not sure if this is used
+	 *
+	 * @param e a mouse event
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() == 2) {
