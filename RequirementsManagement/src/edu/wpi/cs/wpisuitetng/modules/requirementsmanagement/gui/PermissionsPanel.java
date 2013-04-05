@@ -34,6 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
@@ -58,7 +59,7 @@ public class PermissionsPanel extends JPanel {
 	PermissionsTab parent;
 //	private GridBagLayout panelLayout;
 	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
-	HintedTextArea usernameTextArea;
+	JPlaceholderTextField usernameTextArea;
 	JTextField addStatus;
 	JButton submitButton, updateButton;
 	JComboBox permissionSelectNew, permissionSelectExisting;
@@ -98,7 +99,7 @@ public class PermissionsPanel extends JPanel {
 		lblname = new JLabel("Name: ");
 		lblusername = new JLabel("Username: ");
 		
-		usernameTextArea = new HintedTextArea(1, 20, "Username");
+		usernameTextArea =  new JPlaceholderTextField("Username", 20);//new HintedTextArea(1, 20, "Username");
 		usernameTextArea.addMouseListener(new MouseListener() {
 			@Override public void mousePressed(MouseEvent arg0) {}
 			@Override public void mouseReleased(MouseEvent arg0) {}
