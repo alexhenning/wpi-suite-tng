@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
  */
 class PermissionEventCallback implements MapCallback {
 	
+	/** The changeset to be filled in */
 	private final ProjectEvent changeset;
 	private boolean wasCalled = false;
 	
@@ -43,6 +44,16 @@ class PermissionEventCallback implements MapCallback {
 		this.changeset = changeset;
 	}
 	
+	/**
+	 *TODO: DOCUMENT THIS
+	 *
+	 * @param source
+	 * @param destination
+	 * @param fieldName
+	 * @param sourceValue
+	 * @param destinationValue
+	 * @return
+	 */
 	@Override
 	public Object call(Model source, Model destination, String fieldName,
 			Object sourceValue, Object destinationValue) {
@@ -54,7 +65,7 @@ class PermissionEventCallback implements MapCallback {
 			if(!objectsEqual(sourceValue, destinationValue)) {
 				/*
 				 * this field has changed - indicate the change in the changeset
-				 * remember that fields from updated defect are being copied to old one
+				 * remember that fields from updated model are being copied to old one
 				 * destinationValue is the old value
 				 */
 				changeset.getChanges().put(fieldName, new FieldChange<Object>(destinationValue, sourceValue));
@@ -63,6 +74,13 @@ class PermissionEventCallback implements MapCallback {
 		return sourceValue;
 	}
 	
+	/**
+	 * checks to see if two objects are equal
+	 *
+	 * @param a one object
+	 * @param b the other object
+	 * @return if a and b are equal
+	 */
 	private boolean objectsEqual(Object a, Object b) {
 		// Java 7 has Objects.equals... we're on Java 6
 		if(a == b) {

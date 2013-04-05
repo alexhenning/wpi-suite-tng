@@ -63,6 +63,11 @@ public class FieldChange<T> {
 		return newValue;
 	}
 	
+	/**
+	 * sets type if it is null
+	 *
+	 * @return type
+	 */
 	public Class<T> getPersistentClass() {
         if (type == null) {
             this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];

@@ -27,12 +27,22 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrievePermissionsRequestObserver implements RequestObserver {
 	
+	/** Callback paired with this */
 	private PermissionsCallback callback;
 	
+	/**
+	 * Constructor
+	 * @param callback callback paired with this
+	 */
 	public RetrievePermissionsRequestObserver(PermissionsCallback callback) {
 		this.callback = callback;
 	}
 
+	/**
+	 * Indicate a successful response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
@@ -40,11 +50,22 @@ public class RetrievePermissionsRequestObserver implements RequestObserver {
 		callback.callback(Arrays.asList(perms));
 	}
 
+	/**
+	 * indicate an error in the response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to retrieve Permissions failed.");	
 	}
 
+	/**
+	 *indicate the response failed
+	 *
+	 * @param iReq a request
+	 * @param exception the exception
+	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to retrieve Permissions failed.");

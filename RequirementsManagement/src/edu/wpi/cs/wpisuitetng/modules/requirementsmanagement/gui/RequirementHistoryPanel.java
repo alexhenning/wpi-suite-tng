@@ -27,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent.ProjectEventType;
 
 /**
- * Displays a single posted note
+ * Displays a single posted history
  * 
  * @author Josh
  * @author Jacob Palnick
@@ -36,10 +36,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
 @SuppressWarnings("serial")
 public class RequirementHistoryPanel extends JPanel {
 
+	/** text area for the messages */
 	JTextArea messageArea;
+	/** text area for the info */
 	JTextField infoText;
+	/** the message */
 	String message;
+	/** the aurthor */
 	String author;
+	/**the date*/
 	Date date;
 	
 	//TODO change this to show the creation events

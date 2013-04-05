@@ -21,16 +21,33 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvide
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 
+/**
+ *
+ * The tab for iterations
+ * @author TODO
+ *
+ */
 @SuppressWarnings("serial")
 public class IterationTab extends JPanel implements IToolbarGroupProvider{
 	
+	/** the main tab controller*/
 	MainTabController tabController;
+	/** tab that this tab resides*/
 	Tab containingTab;
+	/** the iteration */
 	Iteration iteration;
+	/** the main scroll pane */
 	JScrollPane mainPanelScrollPane;
+	/** The main panel */
 	IterationPanel mainPanel;
 	
 
+	/**
+	 * Constructor
+	 * @param tabController the main tab controller
+	 * @param iteration an iteration
+	 * @param tab the containing tab
+	 */
 	public IterationTab(MainTabController tabController, Iteration iteration, Tab tab) {
 		this.tabController = tabController;
 		this.iteration = iteration;
@@ -62,6 +79,11 @@ public class IterationTab extends JPanel implements IToolbarGroupProvider{
 	}
 
 
+	/**
+	 * This does not appear to be implemented
+	 *
+	 * @return
+	 */
 	@Override
 	public ToolbarGroupView getGroup() {
 		// TODO Auto-generated method stub

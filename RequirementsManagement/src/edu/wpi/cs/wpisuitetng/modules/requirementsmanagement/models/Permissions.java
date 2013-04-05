@@ -25,7 +25,9 @@ public class Permissions extends AbstractModel {
 	
 	// TODO: Do we want a transaction log for the Permissions data?
 	
+	/** the permission level*/
 	private PermissionLevel permissionLevel;
+	/**the user name */
 	private String username;
 
 	/**
@@ -84,8 +86,9 @@ public class Permissions extends AbstractModel {
 		this.username = username;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
+	 *
 	 */
 	@Override
 	public void save() {
@@ -93,8 +96,9 @@ public class Permissions extends AbstractModel {
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#delete()
+	 *
 	 */
 	@Override
 	public void delete() {
@@ -102,8 +106,10 @@ public class Permissions extends AbstractModel {
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
+	 *
+	 * @return the string from JSON
 	 */
 	@Override
 	public String toJSON() {
@@ -113,6 +119,11 @@ public class Permissions extends AbstractModel {
 		return json;
 	}
 	
+	/**
+	 * toSting method
+	 *
+	 * @return the JSON string
+	 */
 	@Override
 	public String toString() {
 		return toJSON();
@@ -127,8 +138,11 @@ public class Permissions extends AbstractModel {
 		return builder.create().fromJson(json, Permissions.class);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object)
+	 *
+	 * @param o
+	 * @return
 	 */
 	@Override
 	public Boolean identify(Object o) {

@@ -32,7 +32,7 @@ public class ListRequirementsAction extends AbstractAction {
 	private final MainTabController controller;
 	
 	/**
-	 * Create a CreateDefectAction
+	 * Create a ListRequirementsAction
 	 * @param controller When the action is performed, controller.addListRequirementsTab() is called
 	 */
 	public ListRequirementsAction(MainTabController controller) {

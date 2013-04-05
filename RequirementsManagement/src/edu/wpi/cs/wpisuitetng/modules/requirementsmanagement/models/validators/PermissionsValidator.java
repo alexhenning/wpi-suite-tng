@@ -32,11 +32,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  *
  */
 public class PermissionsValidator {
+	/** the database */
 	private Data data;
+	/** the last existing permissions model */
 	private Permissions lastExistingPermissions;
 	
 	/**
-	 * Create a IterationValidator
+	 * Create a Permissions Validator
 	 * 
 	 * @param data The Data implementation to use
 	 */
@@ -120,7 +122,7 @@ public class PermissionsValidator {
 	/**
 	 * Return all Permissions of the specified project.
 	 * 
-	 * @param project the project this Iteration belongs to
+	 * @param project the project this Permission belongs to
 	 * @return all Permissions in the project
 	 * @throws WPISuiteException 
 	 */
@@ -203,7 +205,7 @@ public class PermissionsValidator {
 	}
 
 	/**
-	 * @return The last existing Iteration the validator fetched if in edit mode
+	 * @return The last existing Permissions the validator fetched if in edit mode
 	 */
 	public Permissions getLastExistingPermissions() {
 		return lastExistingPermissions;

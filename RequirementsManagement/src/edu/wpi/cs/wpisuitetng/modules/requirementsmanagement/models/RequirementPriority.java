@@ -12,6 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
+/**
+ *
+ * the kinds of requirement priority
+ *
+ */
 public enum RequirementPriority {
 	NONE,
 	LOW,

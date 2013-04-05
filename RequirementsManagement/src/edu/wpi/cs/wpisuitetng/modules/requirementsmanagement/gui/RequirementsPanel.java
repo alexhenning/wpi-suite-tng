@@ -49,6 +49,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementP
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 
+/**
+ *
+ * Panel for editing/creating a requirement
+ * @author Josh
+ *
+ */
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JSplitPane implements KeyListener{
 
@@ -95,10 +101,18 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	protected static final int VERTICAL_PADDING = 15;
 	protected static final int LABEL_ALIGNMENT = JLabel.TRAILING;
 
+	/**
+	 *update the list of iterations
+	 *
+	 */
 	private void updateIterationList() {
 		DB.getAllIterations(new UpdateIterationListCallback());
 	}
 	
+	/**
+	 *update the iteration dropdown menu
+	 *
+	 */
 	private void updateIterationComboBox() {
 		DefaultComboBoxModel comboboxModel = new DefaultComboBoxModel();
 		for(Iteration it : iterations) {
@@ -124,11 +138,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	}
 	
 	/**
-	 * Constructs a DefectPanel for creating or editing a given Defect.
+	 * Constructs a RequirementPanel for creating or editing a given Requirement.
 	 * 
-	 * @param parent	The parent DefectView.
-	 * @param defect	The Defect to edit.
-	 * @param mode		Whether or not the given Defect should be treated as if it already exists 
+	 * @param parent	The parent RequirmenetView.
+	 * @param requirement	The Requirement to edit.
+	 * @param mode		Whether or not the given Requirement should be treated as if it already exists 
 	 * 					on the server ({@link Mode#EDIT}) or not ({@link Mode#CREATE}).
 	 */
 	public RequirementsPanel(RequirementsTab parent, RequirementModel requirement, Mode mode) {
@@ -154,7 +168,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		// TODO: prevent tab key from inserting tab characters into the description field
 		
-		// Populate the form with the contents of the Defect model and update the TextUpdateListeners.
+		// Populate the form with the contents of the Requirement model and update the TextUpdateListeners.
 		updateFields();
 	}
 
@@ -288,29 +302,28 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	}
 	
 	/**
-	 * Updates the DefectPanel's model to contain the values of the given Defect and sets the 
-	 * DefectPanel's editMode to {@link Mode#EDIT}.
+	 * Updates the RequirementPanel's model to contain the values of the given Requirement and sets the 
+	 * RequirementPanel's editMode to {@link Mode#EDIT}.
 	 * 
-	 * @param defect	The Defect which contains the new values for the model.
 	 */
 	public void refreshModel() {
 		updateModel(model, Mode.EDIT);
 	}
 	
 	/**
-	 * Updates the DefectPanel's model to contain the values of the given Defect and sets the 
-	 * DefectPanel's editMode to {@link Mode#EDIT}.
+	 * Updates the RequirementPanel's model to contain the values of the given Requirement and sets the 
+	 * RequirementPanel's editMode to {@link Mode#EDIT}.
 	 * 
-	 * @param defect	The Defect which contains the new values for the model.
+	 * @param requirement	The Requirement which contains the new values for the model.
 	 */
 	public void updateModel(RequirementModel requirement) {
 		updateModel(requirement, Mode.EDIT);
 	}
 
 	/**
-	 * Updates the DefectPanel's model to contain the values of the given Defect.
+	 * Updates the RequirementPanel's model to contain the values of the given Requirement.
 	 * 
-	 * @param	defect	The Defect which contains the new values for the model.
+	 * @param	requirement	The Requirement which contains the new values for the model.
 	 * @param	mode	The new editMode.
 	 */
 	protected void updateModel(RequirementModel requirement, Mode mode) {
@@ -461,6 +474,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		updateSubmitButton();
 	}
 	
+	/**
+	 *updates the submit button
+	 *
+	 */
 	public void updateSubmitButton() {
 		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && !(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 	}
@@ -473,16 +490,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	}
 
 	/**
-	 * Returns a boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * Returns a boolean representing whether or not input is enabled for the RequirementPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * @return	A boolean representing whether or not input is enabled for the RequirementPanel and its children.
 	 */
 	public boolean getInputEnabled() {
 		return inputEnabled;
 	}
 
 	/**
-	 * Gets the DefectPanel's internal model.
+	 * Gets the RequirementPanel's internal model.
 	 * @return
 	 */
 	public RequirementModel getModel() {
@@ -520,27 +537,38 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	}
 	
 	/**
-	 * Returns the parent DefectView.
+	 * Returns the parent RequirementView.
 	 * 
-	 * @return the parent DefectView.
+	 * @return the parent RequirementView.
 	 */
 	public RequirementsTab getParent() {
 		return parent;
 	}
 
 	/**
-	 * Returns the edit {@link Mode} for this DefectPanel.
+	 * Returns the edit {@link Mode} for this RequirementPanel.
 	 * 
-	 * @return	The edit {@link Mode} for this DefectPanel.
+	 * @return	The edit {@link Mode} for this RequirementPanel.
 	 */
 	public Mode getEditMode() {
 		return editMode;
 	}
 
+	/**
+	 *set the status
+	 *
+	 * @param string the status
+	 */
 	public void setStatus(String string) {
 		results.setText(string);
 	}
 	
+	/**
+	 *
+	 * action to edit the requirement
+	 * @author TODO
+	 *
+	 */
 	class EditRequirementAction extends AbstractAction {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -562,6 +590,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			}}
 	}
 	
+	/**
+	 *
+	 * Callback to update the list of iterations
+	 * @author TODO
+	 *
+	 */
 	class UpdateIterationListCallback implements IterationCallback {
 		@Override
 		public void callback(List<Iteration> iterationList) {
@@ -578,6 +612,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 	}
 
+	/**
+	 * Checks to see if the fields are valid
+	 *
+	 * @return if the fields are valid
+	 */
 	public boolean validateFields() {
 		if(namefield.getText().length()<1) {
 			namefield.setBackground(Color.RED);
@@ -613,6 +652,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 
 		return true;
 	}
+	/**
+	 *
+	 * List the history of the requirement
+	 * @author TODO
+	 *
+	 */
 	class ListProjectEvents implements ProjectEventsCallback {
 		
 		@Override
@@ -627,7 +672,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 	}
 	
-	//checked for input from keyboard
+	/**
+	 * checked for input from keyboard
+	 *
+	 * @param e a key event
+	 */
 	public void keyTyped ( KeyEvent e ){  
 		//check to see if name and description fields are empty or not
 //		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
@@ -639,11 +688,19 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 //		}
 		updateSubmitButton();
 	}
-	//check if key is pressed. Doesn't really do anything now, but needs to be included 
+	/**
+	 * check if key is pressed. Doesn't really do anything now, but needs to be included 
+	 *
+	 * @param e a key event
+	 */
 	public void keyPressed ( KeyEvent e){  
 
 	}  
-	//check if key is released. Doesn't really do anything now, but needs to be included 
+	/**
+	 * check if key is released. Doesn't really do anything now, but needs to be included 
+	 *
+	 * @param e a key event
+	 */
 	public void keyReleased ( KeyEvent e ){  
 		//l1.setText( "Key Released" ) ; 
 		updateSubmitButton();

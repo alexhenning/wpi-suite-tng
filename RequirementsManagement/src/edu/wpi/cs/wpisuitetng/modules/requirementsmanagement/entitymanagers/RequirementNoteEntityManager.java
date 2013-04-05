@@ -39,16 +39,33 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 public class RequirementNoteEntityManager implements
 		EntityManager<RequirementNote> {
 	
+	/** the database */
 	private final Data db;
+	/** the Gson */
 	private final Gson gson;
+	/** validator for notses */
 	private final RequirementNoteValidator validator;
 	
+	/**
+	 * constructor
+	 * @param data the database
+	 */
 	public RequirementNoteEntityManager(Data data) {
 		db = data;
 		gson = new Gson();
 		validator = new RequirementNoteValidator(data);
 	}
 
+	/**
+	 * TODO: DOCUMENT THIS
+	 *
+	 * @param s
+	 * @param content
+	 * @return
+	 * @throws BadRequestException
+	 * @throws ConflictException
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public RequirementNote makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
@@ -67,6 +84,7 @@ public class RequirementNoteEntityManager implements
 		return newNote;
 	}
 
+	// THE REST OF THESE METHODS ARE NOT IMPLEMENTED
 	@Override
 	public RequirementNote[] getEntity(Session s, String id)
 			throws NotImplementedException {

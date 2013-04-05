@@ -37,7 +37,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  */
 public class RequirementModelValidator {
 
+	/** the database */
 	private Data data;
+	/** last existing requirement model */
 	private RequirementModel lastExistingRequirement;
 	
 	/**
@@ -160,7 +162,7 @@ public class RequirementModelValidator {
 	 * 
 	 * @param id the id of the Requirement
 	 * @param project the project this requirement belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if requirement doesn't exist
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The Requirement with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
@@ -303,7 +305,7 @@ public class RequirementModelValidator {
 		if(oldRequirement != null) {
 			requirement.setEvents(oldRequirement.getEvents());
 		} else {
-			// new defects should never have any events
+			// new requirements should never have any events
 			requirement.setEvents(new ArrayList<RequirementEvent>());
 		}
 		

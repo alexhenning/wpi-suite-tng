@@ -38,13 +38,21 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  */
 @SuppressWarnings("serial")
 public class NoteMainPanel extends JPanel implements KeyListener {
+	/** the panel that this is shown in */
 	RequirementsPanel parent;
+	/** is input enabled */
 	boolean inputEnabled;
+	/** a text area */
 	public HintedTextArea ta;
+	/** a panel to view notes */
 	JPanel noteViewer;
+	/** a panel to add notes */
 	JPanel noteAdder;
+	/** a scroll pane */
 	JScrollPane noteScrollPane;
+	/** a button to add a note */
 	JButton addButton;
+	/** list of the requirements notes */
 	List<RequirementNote> notes;
 
 	/**
@@ -104,6 +112,11 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 		add(noteAdder, BorderLayout.PAGE_END);
 	}
 	
+	/**
+	 * put the notes into the view
+	 *
+	 * @param notes list of notes
+	 */
 	public void setNotes(List<RequirementNote> notes) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;

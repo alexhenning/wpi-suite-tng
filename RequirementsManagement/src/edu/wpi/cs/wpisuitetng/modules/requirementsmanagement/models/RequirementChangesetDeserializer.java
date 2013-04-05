@@ -26,9 +26,19 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 /**
  * Custom JSON deserializer for the RequirementChangesetChangeset class
+ * 
  */
 public class RequirementChangesetDeserializer implements JsonDeserializer<RequirementChangeset> {
 
+	/**
+	 * TODO:DOCUMENT THIS
+	 *
+	 * @param json
+	 * @param type
+	 * @param context
+	 * @return
+	 * @throws JsonParseException
+	 */
 	@Override
 	public RequirementChangeset deserialize(JsonElement json, Type type,
 			JsonDeserializationContext context) throws JsonParseException {

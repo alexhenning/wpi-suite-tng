@@ -22,12 +22,22 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 public class RetrieveIterationsRequestObserver implements RequestObserver {
 	
+	/** Callback paired with this */
 	private IterationCallback callback;
 	
+	/**
+	 * Constructor
+	 * @param callback callback paired with this
+	 */
 	public RetrieveIterationsRequestObserver(IterationCallback callback) {
 		this.callback = callback;
 	}
 
+	/**
+	 * Indicate a successful response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
@@ -37,11 +47,22 @@ public class RetrieveIterationsRequestObserver implements RequestObserver {
 
 	}
 
+	/**
+	 * indicate an error in the response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to retrieve Iterations failed.");	
 	}
 
+	/**
+	 *indicate the response failed
+	 *
+	 * @param iReq a request
+	 * @param exception the exception
+	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to retrieve Iterations failed.");

@@ -16,6 +16,12 @@ import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 
+/**
+ *
+ * Interface that all iteration callbacks must inherit in order to use the functions in DB
+ * @author TODO
+ *
+ */
 public interface IterationCallback {
 
 	/**

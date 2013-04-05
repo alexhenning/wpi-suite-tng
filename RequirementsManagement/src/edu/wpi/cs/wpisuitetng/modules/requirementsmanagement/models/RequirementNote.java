@@ -21,7 +21,9 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  */
 public class RequirementNote extends RequirementEvent {
 
+	/** the id of the requirement the note belongs to */
 	private int requirementId;
+	/** the text of the note */
 	private String body;
 	
 	/**

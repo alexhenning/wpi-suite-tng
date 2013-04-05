@@ -21,6 +21,9 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class DashboardView extends JPanel {
 	
+	/**
+	 * Constructor 
+	 */
 	public DashboardView() {
 		JLabel testLabel = new JLabel("This is the dashboard panel.");
 		this.add(testLabel);

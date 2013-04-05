@@ -18,12 +18,25 @@ import com.google.gson.GsonBuilder;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 
+/**
+ *
+ * Class for release numbers
+ *
+ */
 public class ReleaseNumber extends AbstractModel {
 
+	/** id */
 	private int id;
+	/** the release number */
 	private int releaseNumber;
 	//TODO add any addition fields for the ReleaseNumber
 
+	/**
+	 * Constructor
+	 * @param id the id number
+	 * @param releaseNumber the release number
+	 * @param project the project
+	 */
 	public ReleaseNumber(int id, int releaseNumber, Project project) {
 		super();
 		this.id = id;
@@ -31,6 +44,9 @@ public class ReleaseNumber extends AbstractModel {
 		this.setProject(project);
 	}
 
+	/**
+	 * Constructor
+	 */
 	public ReleaseNumber() {
 		super();
 		id = -1;
@@ -80,8 +96,10 @@ public class ReleaseNumber extends AbstractModel {
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
+	 *
+	 * @return
 	 */
 	@Override
 	public String toJSON() {
@@ -91,6 +109,11 @@ public class ReleaseNumber extends AbstractModel {
 		return json;
 	}
 	
+	/**
+	 *toString() method
+	 *
+	 * @return the JSON string
+	 */
 	@Override
 	public String toString() {
 		return toJSON();
@@ -116,8 +139,11 @@ public class ReleaseNumber extends AbstractModel {
 		return builder.create().fromJson(json, ReleaseNumber[].class);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object)
+	 *
+	 * @param o
+	 * @return
 	 */
 	@Override
 	public Boolean identify(Object o) {

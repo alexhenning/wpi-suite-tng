@@ -32,17 +32,20 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
- * The Defect tab's toolbar panel.
- * Always has a group of global commands (Create Defect, Search).
+ * The Requirements Management tab's toolbar panel.
+ * Always has a group of global commands (Create Requirement, Create Iteration, Search, List Requirements).
  */
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
 //	private JButton createRequirement;
+	/** search requirements button */
 	private JButton searchRequirements;
+	/** search field for searching requirements */
 	private JPlaceholderTextField searchField;
 	
 	/**
+	 * Constructor
 	 * Create a ToolbarView.
 	 * @param tabController The MainTabController this view should open tabs with
 	 */
