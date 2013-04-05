@@ -39,9 +39,9 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 @SuppressWarnings("serial")
 public class AddNoteController extends AbstractAction implements ActionListener{
 	
-	private NoteMainPanel view;
-	private RequirementModel model;
-	private RequirementsPanel parentView;
+	private final NoteMainPanel view;
+	private final RequirementModel model;
+	private final RequirementsPanel parentView;
 	
 	/**
 	 * Default constructor for Notes

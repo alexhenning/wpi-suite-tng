@@ -13,32 +13,37 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.FieldChange;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 
 /**
  * Displays a single posted note
  * 
- * @author vpatara
- * @author Sergey
  * @author Josh
+ *
  */
 @SuppressWarnings("serial")
-public class NotePanel extends JPanel {
+public class RequirementHistoryPanel extends JPanel {
 
 	JTextArea messageArea;
 	JTextField infoText;
-	JTextField authorText;
 	String message;
 	String author;
 	Date date;
 	
+	//TODO change this to show the creation events
 	/**
 	 * Constructs a panel for a single note
 	 * 
@@ -46,38 +51,42 @@ public class NotePanel extends JPanel {
 	 * @param author
 	 * @param date
 	 */
-	public NotePanel(String message, String author, Date date) {
+	public RequirementHistoryPanel(Map<String, FieldChange<?>> map, String author, Date date) {
 		
-		this.message = message;
+
 		this.author = author;
 		this.date = date;
+		String eol = System.getProperty("line.separator");
+		String message = "";
+		for (Entry <String,FieldChange<?>> change: map.entrySet()) {
+			System.out.println(change.getKey()+": "+change.getValue().getClass());
+			if (message.compareTo("") != 0) {
+				message = message + eol + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
+			}
+			else {
+				message = message + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
+			}
+		}
+		this.message = message;
 
 		// Add all components to this panel
 		addComponents();
 	}
 
-	/**
-	 * Calls first constructor given a note
-	 */
-	public NotePanel(RequirementNote note) {
-		this(note.getBody(), note.getUser().getName(), note.getDate());
+	public RequirementHistoryPanel(ProjectEvent event) {
+		this(event.getChanges(), event.getUser().getName(), event.getDate());
 	}
 
 	/**
 	 * Adds GUI components to display a note (including a message, an author,
 	 * and a date)
+	 * 
 	 */
 	protected void addComponents() {
 		
 		//set layout
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		setLayout(new BorderLayout());
-		
-		authorText = new JTextField(author);
-		authorText.setEditable(false);
-		authorText.setFocusable(false);
-		authorText.setOpaque(false);
-		add(authorText, BorderLayout.PAGE_START);
 
 		//creates area for message and adds to note panel
 		messageArea = new JTextArea(message);
@@ -88,7 +97,7 @@ public class NotePanel extends JPanel {
 		add(messageArea, BorderLayout.CENTER);
 		
 		//creates area for creation information and adds to note panel
-		infoText = new JTextField("added note on " + date.toString());
+		infoText = new JTextField(author + " changed on " + date.toString());
 		infoText.setEditable(false);
 		infoText.setFocusable(false);
 		infoText.setOpaque(false);

@@ -14,11 +14,17 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateIterationRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateProjectEventRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveProjectEventsRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -57,6 +63,38 @@ public class DB {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration/" + iteration.getId(),  HttpMethod.POST);
 		request.setBody(iteration.toJSON());
 		request.addObserver(new EditIterationRequestObserver(callback));
+		request.send();
+	}
+
+	public static void getSinglePermission(String username, SinglePermissionCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + username, HttpMethod.GET);
+		request.addObserver(new RetrieveSinglePermissionRequestObserver(callback));
+		request.send();
+	}
+
+//	public static void createProjectEvent(ProjectEvent projectEvent, AddProjectEventController callback) {
+//		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.PUT);
+//		request.setBody(projectEvent.toJSON());
+//		request.addObserver(new CreateProjectEventRequestObserver(callback));
+//		request.send();
+//	}
+	
+	public static void getAllProjectEvents(ProjectEventsCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
+		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
+		request.send();
+	}
+	
+	public static void getAllProjectEventsFor(ProjectEventsCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.GET);
+		request.addObserver(new RetrieveProjectEventsRequestObserver(callback));
+		request.send();
+	}
+	
+	public static void getAllPermissions(PermissionsCallback updateTableCallback) {
+		System.out.println("get all permissions");
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions", HttpMethod.GET);
+		request.addObserver(new RetrievePermissionsRequestObserver(updateTableCallback));
 		request.send();
 	}
 

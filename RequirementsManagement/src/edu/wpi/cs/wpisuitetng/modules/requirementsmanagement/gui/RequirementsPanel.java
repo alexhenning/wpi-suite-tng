@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //TODO
+ *    //Josh
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -18,6 +18,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,16 +38,19 @@ import javax.swing.JTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ProjectEventsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+//import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.ListProjectEvents;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 
 @SuppressWarnings("serial")
-public class RequirementsPanel extends JSplitPane {
+public class RequirementsPanel extends JSplitPane implements KeyListener{
 
 	/** The parent view **/
 	protected RequirementsTab parent;
@@ -72,6 +77,7 @@ public class RequirementsPanel extends JSplitPane {
 	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
+	private RequirementHistoryTab hs;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
@@ -178,13 +184,13 @@ public class RequirementsPanel extends JSplitPane {
 		//estimate field
 		JLabel estimateArea = new JLabel("Estimate:");
 		JLabel actualEffortArea = new JLabel("Actual Effort:");
-		if(this.editMode == Mode.CREATE) {
-			estimateField.setEditable(false);
-			actualEffortField.setEditable(false);
-		} else {
-			estimateField.setEditable(true);
-			actualEffortField.setEditable(true);
-		}
+//		if(this.editMode == Mode.CREATE) {
+//			estimateField.setEnabled(false);
+//			actualEffortField.setEnabled(false);
+//		} else {
+//			estimateField.setEnabled(true);
+//			actualEffortField.setEnabled(true);
+//		}
 	
 		//submit panel
 		if(this.editMode == Mode.CREATE) { 
@@ -196,11 +202,15 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		
 		// Supplement Pane (i.e., notes, history, attachments)
-//		if(this.editMode == Mode.EDIT) {
 		nt = new NoteMainPanel(this);
+		hs = new RequirementHistoryTab(this);
 		supplementPane.add("Notes", nt);
-		supplementPane.add("History", new JPanel());
-//		}
+		supplementPane.add("History", hs);
+		if(this.editMode == Mode.CREATE) {
+			nt.setInputEnabled(false);
+		} else {
+			nt.setInputEnabled(true);
+		}
 		
 		// Add subpanels to main panel
 		// Left side (gridx = 0) and aligned right (east)
@@ -259,9 +269,9 @@ public class RequirementsPanel extends JSplitPane {
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
 		//sets the minimum size that the user can reduce the window to manually
-		leftside.setMinimumSize(new Dimension(600,700));
-		leftScrollPane.setMinimumSize(new Dimension(600,700));
-		supplementPane.setMinimumSize(new Dimension(525,700));
+		leftside.setMinimumSize(new Dimension(500,700));
+		leftScrollPane.setMinimumSize(new Dimension(500,700));
+		supplementPane.setMinimumSize(new Dimension(500,700));
 		
 	}
 
@@ -304,21 +314,6 @@ public class RequirementsPanel extends JSplitPane {
 	 * @param	mode	The new editMode.
 	 */
 	protected void updateModel(RequirementModel requirement, Mode mode) {
-		if(editMode == Mode.CREATE && mode == Mode.EDIT) {
-			nt = new NoteMainPanel(this);
-			for(int i=0; i< supplementPane.getTabCount(); i++){
-				if(supplementPane.getTitleAt(i).equals("Notes")) {
-					supplementPane.remove(i);
-					nt = null;
-					nt = new NoteMainPanel(this);
-					supplementPane.add(nt, i);
-					supplementPane.setTitleAt(i, "Notes");
-					supplementPane.setSelectedIndex(i);
-				}
-			}
-//			supplementPane.ge
-//			supplementPane.add("Notes", nt);
-		}
 		this.revalidate();
 		editMode = mode;
 		model = requirement;
@@ -343,7 +338,9 @@ public class RequirementsPanel extends JSplitPane {
 	 *
 	 */
 	private void updateFields() {
-		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
+		namefield.addKeyListener(this);
+		descriptionfield.addKeyListener(this);
+		if(model.getIteration() != null && !(model.getStatus() == RequirementStatus.COMPLETE || model.getStatus() == RequirementStatus.DELETED)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
 		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
 			model.setStatus(RequirementStatus.OPEN);
@@ -364,7 +361,7 @@ public class RequirementsPanel extends JSplitPane {
 		if (iteration.getItemCount() > 1){
 			iteration.setSelectedIndex(0);
 			if(model.getIteration() != null) {
-				String modelItStr = new Integer(model.getIteration().getIterationNumber()).toString();
+				String modelItStr = model.getIteration().getIterationNumber().toString();
 				for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
 					if(modelItStr.equals(iteration.getItemAt(i).toString())) {
 						iteration.setSelectedIndex(i);
@@ -374,16 +371,13 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		estimateField.setText(model.getEstimate()+"");
 		actualEffortField.setText(model.getActualEffort()+"");
-		if(this.editMode == Mode.CREATE) {
-			estimateField.setEditable(false);
-			actualEffortField.setEditable(false);
-		} else {
-			estimateField.setEditable(true);
-			if (model.getStatus() == RequirementStatus.COMPLETE)
-				actualEffortField.setEditable(true);
-			else
-				actualEffortField.setEditable(false);
-		}
+//		if(this.editMode == Mode.CREATE || model.getStatus() == RequirementStatus.DELETED || model.getStatus() == RequirementStatus.COMPLETE) {
+//			estimateField.setEditable(false);
+//			actualEffortField.setEditable(false);
+//		} else {
+//			estimateField.setEditable(true);
+//			actualEffortField.setEditable(true);
+//		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
@@ -397,51 +391,85 @@ public class RequirementsPanel extends JSplitPane {
 		}
 		parent.buttonGroup.update(editMode, model);
 		
-		if (editMode.equals(Mode.EDIT))  {
-			if (model.getStatus().equals(RequirementStatus.COMPLETE)){
-				namefield.setEnabled(false);
-				type.setEnabled(false);
-				priority.setEnabled(false);
-				descriptionfield.setEnabled(false);
-				estimateField.setEnabled(false);
-				actualEffortField.setEnabled(true);
-				submit.setEnabled(true);
-				iteration.setEnabled(false);
-				nt.setInputEnabled(true);
-			} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
-				namefield.setEnabled(false);
-				type.setEnabled(false);
-				priority.setEnabled(false);
-				descriptionfield.setEnabled(false);
-				estimateField.setEnabled(false);
-				actualEffortField.setEnabled(false);
-				submit.setEnabled(false);
-				iteration.setEnabled(false);
-				nt.setInputEnabled(false);
-			} else {
-				namefield.setEnabled(true);
-				type.setEnabled(true);
-				priority.setEnabled(true);
-				descriptionfield.setEnabled(true);
-				estimateField.setEnabled(true);
-				actualEffortField.setEnabled(false);
-				submit.setEnabled(true);
-				iteration.setEnabled(true);
-				nt.setInputEnabled(true);
-			}
-		} else {
+		if(editMode == Mode.CREATE) {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
 			priority.setEnabled(true);
+			priority.setBackground(Color.WHITE);
+			iteration.setEnabled(true);
+			iteration.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
+			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+		} else if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
+			namefield.setEnabled(false);
+			type.setEnabled(false);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(false);
+			priority.setBackground(Color.WHITE);
+			iteration.setEnabled(false);
+			iteration.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(false);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(true);
 			submit.setEnabled(true);
+		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
+			namefield.setEnabled(false);
+			type.setEnabled(false);
+//			actualEffortField.setEnabled(false);
+//			submit.setEnabled(false);
+//			iteration.setEnabled(false);
+//			nt.setInputEnabled(false);
+//		}else if(namefield.getText().length() < 1 || namefield.getText().length() < 1){
+//			namefield.setEnabled(true);
+//			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(false);
+			priority.setBackground(Color.WHITE);
+			iteration.setEnabled(false);
+			iteration.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(false);
+			descriptionfield.setEnabled(false);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(false);
+			submit.setEnabled(false);
+		} else {
+			namefield.setEnabled(true);
+			type.setEnabled(true);
+			type.setBackground(Color.WHITE);
+			priority.setEnabled(true);
+			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(true);
-			nt.setInputEnabled(true);
+			iteration.setBackground(Color.WHITE);
+			descriptionfield.setEnabled(true);
+			estimateField.setEnabled(true);
+			actualEffortField.setEnabled(false);
+			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+//=======
+//			actualEffortField.setEnabled(true);
+//			submit.setEnabled(true);
+//			iteration.setEnabled(true);
+//			nt.setInputEnabled(true);
+//>>>>>>> origin/dev-fix#31
 		}
-		
+		System.out.println("namefield: "+namefield.getText());
+		System.out.println("submit good: "+!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		nt.setNotes(Arrays.asList(model.getNotes()));
+		DB.getAllProjectEvents(new ListProjectEvents());
+		updateSubmitButton();
+	}
+	
+	public void updateSubmitButton() {
+		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && !(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+	}
+	
+	/**
+	 * Sets the transaction log in the history tab
+	 */
+	public void setHistory(List<ProjectEvent> projectEvents) {
+		hs.setNotes(projectEvents);
 	}
 
 	/**
@@ -466,14 +494,18 @@ public class RequirementsPanel extends JSplitPane {
 		} else {
 			String selected = iteration.getSelectedItem().toString();
 			for(Iteration it : iterations) {  // Same as above
-				if(it != null && it.getIterationNumber() == selected) {
+				if(it != null && it.getIterationNumber().equals(selected)) {
 					model.setIteration(it);
 				}
 			}
 		}
 		model.setDescription(descriptionfield.getText());
 		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
-		if(model.getIteration() != null && (model.getStatus() != RequirementStatus.COMPLETE || model.getStatus() != RequirementStatus.DELETED)) {
+		if (model.getStatus() == RequirementStatus.COMPLETE) {
+			
+		} else if (model.getStatus() == RequirementStatus.DELETED) {
+			
+		} else if (model.getIteration() != null && (model.getStatus() == RequirementStatus.OPEN || model.getStatus() == RequirementStatus.NEW)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
 			parent.buttonGroup.update(editMode, model);
 			updateStatusField();
@@ -571,7 +603,7 @@ public class RequirementsPanel extends JSplitPane {
 		if(Integer.parseInt(actualEffortField.getText()) < 0){
 			actualEffortField.setBackground(Color.RED);
 			setStatus("Actual Effort must be a non-negative integer.");
-			System.out.println("Estimate value is " + estimateField.getText());
+			System.out.println("Actual Effort value is " + actualEffortField.getText());
 			return false;
 		} else {
 			actualEffortField.setBackground(Color.WHITE);
@@ -580,5 +612,43 @@ public class RequirementsPanel extends JSplitPane {
 
 		return true;
 	}
+	class ListProjectEvents implements ProjectEventsCallback {
+		
+		@Override
+		public void callback(List<ProjectEvent> projectEvents) {
+			setHistory(projectEvents);
+		}
+
+
+		
+	}
+	
+	//checked for input from keyboard
+	public void keyTyped ( KeyEvent e ){  
+		//check to see if name and description fields are empty or not
+//		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
+//			submit.setEnabled(true);
+//		}
+//		if((namefield.getText().length()==0)
+//				|| ( descriptionfield.getText().length()==0)){
+//			submit.setEnabled(false);
+//		}
+		updateSubmitButton();
+	}
+	//check if key is pressed. Doesn't really do anything now, but needs to be included 
+	public void keyPressed ( KeyEvent e){  
+
+	}  
+	//check if key is released. Doesn't really do anything now, but needs to be included 
+	public void keyReleased ( KeyEvent e ){  
+		//l1.setText( "Key Released" ) ; 
+		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
+			submit.setEnabled(true);
+		}
+		if((namefield.getText().length()==0)
+				|| ( descriptionfield.getText().length()==0)){
+			submit.setEnabled(false);
+		}
+	}  
 
 }

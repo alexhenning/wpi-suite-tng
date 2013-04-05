@@ -1,14 +1,33 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    //Josh
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class ViewReqTable extends AbstractTableModel {
+	
+	public enum Mode {
+		VIEW,
+		EDIT
+	};
 
-    private String[] columnNames = { "ID", "Name", "Status", "Priority", "Estimate"};
+    private String[] columnNames = { "ID", "Name", "Iteration", "Status", "Priority", "Estimate"};
     //first list is row, second list is column data
     
     private Object[][] data = {};
+    
+    private Mode editMode;
     
     public int getColumnCount() {
         return columnNames.length;
@@ -30,18 +49,15 @@ public class ViewReqTable extends AbstractTableModel {
         return getValueAt(0, c).getClass();
     }
 
-    /*
-     * Don't need to implement this method unless your table's
-     * editable.
-     */
     public boolean isCellEditable(int row, int col) {
-       return false; //Cells should not be editable in table, should be able to double click and open edit tab
+    	if(editMode == Mode.VIEW || col == 0 || col == 3 || (getValueAt(row, 3) == "COMPLETE" && col != 3)
+    			|| (getValueAt(row,3) == "DELETED" && col != 3)) { // Id cell should not be editable, even in edit mode
+    		return false;                                          
+    	} else {
+    		return true;
+    	}
     }
 
-    /*
-     * Don't need to implement this method unless your table's
-     * data can change.
-     */
     public void setValueAt(Object value, int row, int col) {
         data[row][col] = value;
         fireTableCellUpdated(row, col);
@@ -49,6 +65,14 @@ public class ViewReqTable extends AbstractTableModel {
     
     public void setData(Object[][] data){
     	this.data = data;
+    }
+    
+    public void setMode(Mode editMode) {
+    	this.editMode = editMode;
+    }
+    
+    public Mode getMode() {
+    	return editMode;
     }
     
      

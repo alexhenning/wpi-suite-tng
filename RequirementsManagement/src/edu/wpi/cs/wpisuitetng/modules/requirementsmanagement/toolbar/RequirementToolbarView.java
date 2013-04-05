@@ -40,7 +40,6 @@ public class RequirementToolbarView extends ToolbarGroupView {
 	private JButton cancelButton;
 	private JButton closeButton;
 	private JButton deleteButton;
-//	private JButton restoreButton;
 	private RequirementsTab tab;
 	
 	/**
@@ -63,11 +62,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		cancelButton.setAction(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//if (tab.getRequirementPanel().getEditMode() == Mode.CREATE) {
-					tabController.closeCurrentTab();
-				//} else {
-				//	tab.getRequirementPanel().refreshModel();
-				//}
+				tabController.closeCurrentTab();
 			}
 		});
 		cancelButton.setText("Cancel");
@@ -125,9 +120,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 					DB.updateRequirements(model, new SingleRequirementCallback() {
 						@Override
 						public void callback(RequirementModel req) {
-//							tabController.closeCurrentTab();
 							tab.getRequirementPanel().updateModel(req);
-//							tabController.addEditRequirementTab(req);
 						}
 					});
 				}
@@ -136,28 +129,6 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		c.gridy = 2;
 		deleteButton.setText("Delete");
 		content.add(deleteButton, c);
-		
-//		// Add delete button
-//		restoreButton = new JButton("Restore");
-//		restoreButton.setAction(new AbstractAction() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				RequirementModel model = tab.getRequirementPanel().getModel();
-////				if (model.getStatus().equals(RequirementStatus.IN_PROGRESS)) return;
-//				model.setStatus(RequirementStatus.OPEN);
-//				DB.updateRequirements(model, new SingleRequirementCallback() {
-//					@Override
-//					public void callback(RequirementModel req) {
-////						tabController.closeCurrentTab();
-////						tabController.addListRequirementsTab();
-//						tab.getRequirementPanel().updateModel(req);
-//					}
-//				});
-//			}
-//		});
-//		c.gridy = 3;
-//		restoreButton.setText("Restore");
-//		content.add(restoreButton, c);
 
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
@@ -171,26 +142,26 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		if (mode.equals(Mode.EDIT)) {
 			closeButton.setEnabled(true);
 			deleteButton.setEnabled(true);
+			if (req.getStatus().equals(RequirementStatus.IN_PROGRESS)) {
+				deleteButton.setEnabled(false);
+			} else {
+				deleteButton.setEnabled(true);
+			}
+			if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
+				closeButton.setText("Reopen");
+			} else {
+				closeButton.setText("Complete!");
+			}
+			if (req.getStatus().equals(RequirementStatus.DELETED)) {
+				deleteButton.setText("Restore");
+				closeButton.setEnabled(false);
+			} else {
+				deleteButton.setText("Delete");
+				closeButton.setEnabled(true);
+			}
 		} else {
 			closeButton.setEnabled(false);
 			deleteButton.setEnabled(false);
-		}
-		if (req.getStatus().equals(RequirementStatus.IN_PROGRESS)) {
-			deleteButton.setEnabled(false);
-		} else {
-			deleteButton.setEnabled(true);
-		}
-		if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
-			closeButton.setText("Reopen");
-		} else {
-			closeButton.setText("Complete!");
-		}
-		if (req.getStatus().equals(RequirementStatus.DELETED)) {
-			deleteButton.setText("Restore");
-			closeButton.setEnabled(false);
-		} else {
-			deleteButton.setText("Delete");
-			closeButton.setEnabled(true);
 		}
 	}
 

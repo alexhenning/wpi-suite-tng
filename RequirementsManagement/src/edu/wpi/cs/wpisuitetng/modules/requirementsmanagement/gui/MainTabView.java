@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 
 /**
- * This tabbed pane will appear as the main content of the Defects tab.
+ * This tabbed pane will appear as the main content of the Requirements tab.
  * It starts out showing the single Dashboard tab.
  */
 @SuppressWarnings("serial")
@@ -31,8 +31,8 @@ public class MainTabView extends JTabbedPane {
 		setTabPlacement(TOP);
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
 		setBorder(BorderFactory.createEmptyBorder(5, 3, 3, 3));
-		addTab("Dashboard", new ImageIcon(), new DashboardView(),
-		       "Your Dashboard - notifications, etc.");
+//		addTab("Dashboard", new ImageIcon(), new DashboardView(),
+//		       "Your Dashboard - notifications, etc.");
 	}
 	
 	@Override

@@ -9,6 +9,7 @@
  * Contributors:
  *    vpatara
  *    Sergey
+ *    Josh
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
@@ -24,7 +25,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddNoteController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
@@ -34,12 +34,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  * 
  * @author vpatara
  * @author Sergey
+ * @author Josh
  */
 @SuppressWarnings("serial")
 public class NoteMainPanel extends JPanel {
 	RequirementsPanel parent;
 	boolean inputEnabled;
-	public JTextArea ta;
+	public HintedTextArea ta;
 	JPanel noteViewer;
 	JPanel noteAdder;
 	JScrollPane noteScrollPane;
@@ -73,9 +74,10 @@ public class NoteMainPanel extends JPanel {
 	protected void addComponents() {
 		setLayout(new BorderLayout());
 
-		ta = new JTextArea(5, 40);
-		ta.setLineWrap(true);
-		ta.setText("New note");		
+		ta = new HintedTextArea(5, 40, "New note");
+		ta.setLineWrap(true);	
+		ta.setEditable(inputEnabled);
+		
 		JScrollPane textPane = new JScrollPane(ta);
 		textPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		textPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -88,6 +90,7 @@ public class NoteMainPanel extends JPanel {
 		
 		addButton = new JButton("Add note");
 		addButton.addActionListener(new AddNoteController(this, parent.model, parent));
+		addButton.setEnabled(inputEnabled);
 		
 		// Add elements to the main panel
 		add(noteScrollPane, BorderLayout.CENTER);
@@ -102,7 +105,7 @@ public class NoteMainPanel extends JPanel {
 	public void setNotes(List<RequirementNote> notes) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 0, 5, 0);
+		c.insets = new Insets(3, 0, 3, 0);
 		c.gridx = 0;
 		c.gridy = notes.size();
 		c.weightx = 1.0;
@@ -128,9 +131,10 @@ public class NoteMainPanel extends JPanel {
 	 * 
 	 * @param enabled	Whether or not input is enabled.
 	 */
-	protected void setInputEnabled(boolean enabled) {
+	public void setInputEnabled(boolean enabled) {
 		inputEnabled = enabled;
 
+		ta.setEditable(enabled);
 		ta.setEnabled(enabled);
 		addButton.setEnabled(enabled);
 		// TODO: implement

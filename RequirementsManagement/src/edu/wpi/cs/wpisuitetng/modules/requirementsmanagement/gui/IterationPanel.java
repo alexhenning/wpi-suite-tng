@@ -190,17 +190,20 @@ public class IterationPanel extends JPanel{
 //		System.out.println("getting model from panel");
 		model.setIterationNumber(iterationNumber.getText());
 
+		//TODO handle the exceptions better
 		try {
 			Date start = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(startDate.getText());
 			model.setStartDate(start);
 		} catch (ParseException e) {
 			e.printStackTrace();
+			model.setStartDate(null);
 		}
 		try {
 			Date end = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(endDate.getText());
 			model.setEndDate(end);
 		} catch (ParseException e) {
 			e.printStackTrace();
+			model.setEndDate(null);
 		}
 		
 		return model;
