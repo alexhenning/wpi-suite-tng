@@ -42,6 +42,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 public class MainTabController {
 	
 	private final MainTabView view;
+	private ListRequirementsTab listReqsView = null;
 	
 	/**
 	 * @param view Create a controller that controls this MainTabView
@@ -213,27 +214,33 @@ public class MainTabController {
 		}
 	}
 
-	private int listIndex = -1;
-	ListRequirementsTab listReqsView;
 	public Tab addListRequirementsTab() {
-		if (listIndex == -1) {
-			listReqsView = new ListRequirementsTab(null, this);
-			Tab tab = addTab("All Requirements", new ImageIcon(), listReqsView,
-								"List of requirements");
-			tab.setComponent(listReqsView);
-			listReqsView.requestFocus();
-			listIndex = view.getTabCount() - 1;
-			view.addChangeListener(new ChangeListener() {				
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					listReqsView.mainPanel.updateAllRequirementList();
+		if(listReqsView != null) {
+			for (int i=0; i<view.getTabCount(); i++) {
+				// TODO: If the tab name changes, will need to change the string
+				// to match the tab name
+				if (view.getTitleAt(i).equals("All Requirements")) {
+					switchToTab(i);
+					view.requestFocus();
+					return null;
 				}
-			});
-			return tab;
-		} else {
-			view.setSelectedIndex(listIndex);
-			view.requestFocus();
-			return null;
+			}
+
+			// Should not reach here, but if so, let it create another tab
 		}
+
+		listReqsView = new ListRequirementsTab(null, this);
+		Tab tab = addTab("All Requirements", new ImageIcon(), listReqsView,
+							"List of requirements");
+		tab.setComponent(listReqsView);
+		listReqsView.requestFocus();
+		view.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				listReqsView.mainPanel.updateAllRequirementList();
+			}
+		});
+
+		return tab;
 	}
 }
