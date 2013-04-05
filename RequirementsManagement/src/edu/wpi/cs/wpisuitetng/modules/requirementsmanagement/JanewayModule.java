@@ -28,18 +28,30 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ManagementT
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarView;
 
+/**
+ * Tab for requirements management
+ * 
+ * @author Joshua Morse
+ *
+ */
 public class JanewayModule implements IJanewayModule {
 	
 	/** The tabs used by this module */
 	private ArrayList<JanewayTabModel> tabs;
 	
+	/** The panel for Requirements management */
 	public JPanel buttonPanel = new JPanel();
 	
+	/** The main tab controller for this tab */
 	private MainTabController mainTabController;
+	/** The toolbar controller for this tab */
 	private ToolbarController toolbarController;
 	
 	JTabbedPane tabPane = new JTabbedPane();
 	
+	/**
+	 * The Constructor
+	 */
 	public JanewayModule() {
 		MainTabView mainTabView = new MainTabView();
 		mainTabController = new MainTabController(mainTabView);
@@ -57,11 +69,21 @@ public class JanewayModule implements IJanewayModule {
 		tabs.add(tab);
 	}
 
+	/**
+	 * returns the name of the tab
+	 *
+	 * @return RequirementsManagment, the name of the tab
+	 */
 	@Override
 	public String getName() {
 		return "RequirementsManagement";
 	}
 
+	/**
+	 * Return a list of tabs in this tab
+	 *
+	 * @return a list of the tabs in this tab
+	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {
 		return tabs;
