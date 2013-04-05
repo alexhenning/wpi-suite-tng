@@ -643,13 +643,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	//check if key is released. Doesn't really do anything now, but needs to be included 
 	public void keyReleased ( KeyEvent e ){  
 		//l1.setText( "Key Released" ) ; 
-		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
-			submit.setEnabled(true);
-		}
-		if((namefield.getText().length()==0)
-				|| ( descriptionfield.getText().length()==0)){
-			submit.setEnabled(false);
-		}
+		updateSubmitButton();
 	}  
 
 }

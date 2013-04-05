@@ -18,6 +18,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  * @author Josh
  */
 @SuppressWarnings("serial")
-public class NoteMainPanel extends JPanel {
+public class NoteMainPanel extends JPanel implements KeyListener {
 	RequirementsPanel parent;
 	boolean inputEnabled;
 	public HintedTextArea ta;
@@ -77,6 +79,7 @@ public class NoteMainPanel extends JPanel {
 		ta = new HintedTextArea(5, 40, "New note");
 		ta.setLineWrap(true);	
 		ta.setEditable(inputEnabled);
+		ta.addKeyListener(this);
 		
 		JScrollPane textPane = new JScrollPane(ta);
 		textPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -90,7 +93,8 @@ public class NoteMainPanel extends JPanel {
 		
 		addButton = new JButton("Add note");
 		addButton.addActionListener(new AddNoteController(this, parent.model, parent));
-		addButton.setEnabled(inputEnabled);
+//		addButton.setEnabled(inputEnabled);
+		addButton.setEnabled(false);
 		
 		// Add elements to the main panel
 		add(noteScrollPane, BorderLayout.CENTER);
@@ -136,7 +140,21 @@ public class NoteMainPanel extends JPanel {
 
 		ta.setEditable(enabled);
 		ta.setEnabled(enabled);
-		addButton.setEnabled(enabled);
+		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note") && enabled);
 		// TODO: implement
 	}
+	
+	//checked for input from keyboard
+	public void keyTyped ( KeyEvent e ){
+		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note"));
+	}
+	//check if key is pressed. Doesn't really do anything now, but needs to be included 
+	public void keyPressed ( KeyEvent e){  
+
+	}  
+	//check if key is released. Doesn't really do anything now, but needs to be included 
+	public void keyReleased ( KeyEvent e ){  
+		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note"));
+	}  
+
 }
