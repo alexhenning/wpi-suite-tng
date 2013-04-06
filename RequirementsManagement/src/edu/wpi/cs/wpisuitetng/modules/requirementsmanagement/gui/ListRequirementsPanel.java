@@ -321,7 +321,6 @@ public class ListRequirementsPanel extends JPanel {
 						req.setName((String)tableModel.getValueAt(i, 1));
 						req.setDescription((String)tableModel.getValueAt(i, 2));
 						// Find the right iteration from the list
-						req.setDescription((String)tableModel.getValueAt(i, 2));
 						req.setIteration(null);  // assume iteration is null, then find the correct one
 						for(Iteration iteration : iterations) {
 							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 3))) {
