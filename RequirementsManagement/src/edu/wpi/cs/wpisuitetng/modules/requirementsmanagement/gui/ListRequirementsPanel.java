@@ -15,6 +15,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
@@ -116,7 +119,15 @@ public class ListRequirementsPanel extends JPanel {
 		//create the table part of the GUI
 		tableModel = new ViewReqTable();
 		tableModel.setMode(Mode.VIEW);
-		table = new JTable(tableModel);
+		table = new JTable(tableModel) {
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				if(column == 1 || column == 2 || column == 6) {
+					return new CustomCellRenderer();
+				}
+				return super.getCellRenderer(row, column);
+			}
+		};
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -257,10 +268,6 @@ public class ListRequirementsPanel extends JPanel {
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
 		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox));
-		
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change iteration");
-		iterColumn.setCellRenderer(renderer);
 	}
 	
 	/**
@@ -279,11 +286,6 @@ public class ListRequirementsPanel extends JPanel {
 		statusBox.addItem("DELETED");
 		
 		statusColumn.setCellEditor(new DefaultCellEditor(statusBox));
-		
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change status");
-		statusColumn.setCellRenderer(renderer);
-		
 	}
 	
 	/**
@@ -300,11 +302,6 @@ public class ListRequirementsPanel extends JPanel {
 		priorityBox.addItem("HIGH");
 		
 		priorityColumn.setCellEditor(new DefaultCellEditor(priorityBox));
-		
-
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change priority");
-		priorityColumn.setCellRenderer(renderer);
 	}
 	
 	/**
@@ -323,6 +320,7 @@ public class ListRequirementsPanel extends JPanel {
 						// we have the correct requirement, update values
 						req.setName((String)tableModel.getValueAt(i, 1));
 						// Find the right iteration from the list
+						req.setDescription((String)tableModel.getValueAt(i, 2));
 						req.setIteration(null);  // assume iteration is null, then find the correct one
 						for(Iteration iteration : iterations) {
 							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 3))) {
@@ -587,6 +585,49 @@ public class ListRequirementsPanel extends JPanel {
 					}
 				}
 			}
+		}
+		
+	}
+	
+	/**
+	 *
+	 * A custom cell renderer to allow for changing the background color
+	 * when a cell has an error in it
+	 * @author Tim Calvert
+	 * @author James Megin
+	 *
+	 */
+	class CustomCellRenderer extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			
+			if(tableModel.getMode() == Mode.EDIT) {
+				if(column == 1) {
+					if(((String)value).length() < 1) {
+						c.setBackground(Color.YELLOW);
+						setToolTipText("There must be a name");
+					}
+				} else if(column == 2) {
+					if(((String)value).length() < 1) {
+						c.setBackground(Color.YELLOW);
+						setToolTipText("There must be a description");
+					}
+				} else if(column == 6) {
+					if(((Integer.valueOf((String)value) < 0))) {
+						c.setBackground(Color.YELLOW);
+						setToolTipText("The estimate must be non-zero");
+					}
+				}
+			} else {
+				c.setBackground(Color.WHITE);
+				setToolTipText("");
+			}
+			
+			return c;
 		}
 		
 	}
