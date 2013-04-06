@@ -241,9 +241,9 @@ public class ListRequirementsPanel extends JPanel {
 	 *
 	 */
 	public void setUpColumns() {
-		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
-		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
-		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
+		setUpPriorityColumn(table, table.getColumnModel().getColumn(5));
+		setUpStatusColumn(table, table.getColumnModel().getColumn(4));
+		setUpIterationColumn(table, table.getColumnModel().getColumn(3));
 	}
 	
 	/**
@@ -325,7 +325,7 @@ public class ListRequirementsPanel extends JPanel {
 						// Find the right iteration from the list
 						req.setIteration(null);  // assume iteration is null, then find the correct one
 						for(Iteration iteration : iterations) {
-							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 2))) {
+							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 3))) {
 								req.setIteration(iteration);
 								break;
 							}
@@ -336,10 +336,10 @@ public class ListRequirementsPanel extends JPanel {
 						} else if(req.getIteration() == null && req.getStatus() == RequirementStatus.IN_PROGRESS) {
 							req.setStatus(RequirementStatus.OPEN);
 						} else {
-							req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
+							req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 4)));
 						}
-						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
-						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
+						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 5)));
+						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 6)));
 						break;
 					}
 				}
@@ -367,7 +367,7 @@ public class ListRequirementsPanel extends JPanel {
 				noErrors = false;
 			}
 			// check estimate
-			if((Integer.valueOf((String)tableModel.getValueAt(i, 5))) < 0) {
+			if((Integer.valueOf((String)tableModel.getValueAt(i, 6))) < 0) {
 				// highlight field
 				System.out.println("Error in estimate for Requirement in row " + i);
 				noErrors = false;
@@ -493,30 +493,31 @@ public class ListRequirementsPanel extends JPanel {
 		public void callback(List<RequirementModel> reqs) {
 			if (reqs.size() > 0) {
 				// put the data in the table
-				Object[][] entries = new Object[reqs.size()][6];
+				Object[][] entries = new Object[reqs.size()][7];
 				int i = 0;
 				for(RequirementModel req : reqs) {
 					entries[i][0] = String.valueOf(req.getId());
 					entries[i][1] = req.getName();
+					entries[i][2] = req.getDescription();
 					if (req.getIteration() != null) {
-						entries[i][2] = req.getIteration().getIterationNumber().toString();	
+						entries[i][3] = req.getIteration().getIterationNumber().toString();	
 					}
 					else {
-						entries[i][2] = "Backlog";
+						entries[i][3] = "Backlog";
 					}
 					if (req.getStatus() != null) {
-						entries[i][3] = req.getStatus().toString();
+						entries[i][4] = req.getStatus().toString();
 					}
 					else {
-						entries[i][3] = "Error: Status set to null";
+						entries[i][4] = "Error: Status set to null";
 					}
 					if (req.getPriority() != null) {
-						entries[i][4] = req.getPriority().toString();
+						entries[i][5] = req.getPriority().toString();
 					}
 					else {
-						entries[i][4] = "";
+						entries[i][5] = "";
 					}
-					entries[i][5] = req.getEstimate()+"";
+					entries[i][6] = req.getEstimate()+"";
 					i++;
 				}
 				getTable().setData(entries);
@@ -527,12 +528,15 @@ public class ListRequirementsPanel extends JPanel {
 			}
 		
 			TableColumn column = null;
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 7; i++) {
 				column = table.getColumnModel().getColumn(i);
 				if (i == 0) {
-					column.setPreferredWidth(25); //third column is bigger
+					column.setPreferredWidth(30); //third column is bigger
 				}
 				else if (i == 1) {
+					column.setPreferredWidth(500);
+				}
+				else if (i == 2) {
 					column.setPreferredWidth(700);
 				}
 				else {

@@ -38,7 +38,7 @@ public class ViewReqTable extends AbstractTableModel {
 	};
 
     /** name of the columns */
-    private String[] columnNames = { "ID", "Name", "Iteration", "Status", "Priority", "Estimate"};
+    private String[] columnNames = { "ID", "Name", "Description", "Iteration", "Status", "Priority", "Estimate"};
     //first list is row, second list is column data
     
     /** data in each cell*/
@@ -104,8 +104,8 @@ public class ViewReqTable extends AbstractTableModel {
      * @return true if the cell is editable, false otherwise
      */
     public boolean isCellEditable(int row, int col) {
-    	if(editMode == Mode.VIEW || col == 0 || col == 3 || (getValueAt(row, 3) == "COMPLETE" && col != 3)
-    			|| (getValueAt(row,3) == "DELETED" && col != 3)) { // Id cell should not be editable, even in edit mode
+    	if(editMode == Mode.VIEW || col == 0 || col == 4 || (getValueAt(row, 4) == "COMPLETE" && col != 4)
+    			|| (getValueAt(row,4) == "DELETED" && col != 4)) { // Id cell should not be editable, even in edit mode
     		return false;                                          
     	} else {
     		return true;
