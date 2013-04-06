@@ -76,6 +76,7 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	 */
 	public void saveNote() {
 		final String noteText = view.ta.getText();
+		view.ta.setText("");
 		if (noteText.length() > 0) {
 			final Request request = Network.getInstance().makeRequest(
 					"requirementsmanagement/requirementnote", HttpMethod.PUT);
