@@ -8,5 +8,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/WPISuite-Interfaces"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container/WPISuite"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/Janeway/swingx/swingx-all-1.6.4.jar" sourcepath="/Janeway/swingx/swingx-all-1.6.4-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Janeway/swingx/swingx-all-1.6.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
