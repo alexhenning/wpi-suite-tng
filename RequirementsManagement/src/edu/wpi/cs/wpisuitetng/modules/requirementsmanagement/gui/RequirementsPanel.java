@@ -118,7 +118,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		DefaultComboBoxModel comboboxModel = new DefaultComboBoxModel();
 		for(Iteration it : iterations) {
 			if (it == null) {
-				comboboxModel.addElement("");
+				comboboxModel.addElement("Backlog");
 			} else if (it.getEndDate().after(new Date())) {
 				comboboxModel.addElement(""+it.getIterationNumber());
 			}

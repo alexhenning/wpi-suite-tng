@@ -12,6 +12,9 @@
 		<fileset dir="${core-lib}">
 			<include name="gson-*.jar"/>
 		</fileset>
+		<fileset dir="../Janeway/swingx">
+			<include name="swingx*.jar"/>
+		</fileset>
 		<pathelement path="build"/>
 	</path>
 
