@@ -14,12 +14,12 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+//import java.text.ParseException;
+//import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+//import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -55,6 +55,8 @@ public class IterationPanel extends JPanel{
 	JLabel lbl1, lbl2, lbl3;
 	/** text fields for the iteration's data to be entered into */
 	JTextField iterationNumber;
+	/** text field that displays if the iteration was saved or not */
+	JTextField result;
 	/** button to submit the iteration */
 	JButton submit;
 	
@@ -107,12 +109,15 @@ public class IterationPanel extends JPanel{
 		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
 		lbl3 = new JLabel ("Iteration Number");
 		
+
 //		startDate = new JTextField();
 //		endDate = new JTextField();
 		Date startDate = model.getStartDate();
 		Date endDate = model.getEndDate();
 		startDatePicker = new JXDatePicker(startDate != null ? startDate : new Date());
 		endDatePicker = new JXDatePicker(endDate != null ? endDate : new Date());
+
+		result = new JTextField();
 		iterationNumber = new JTextField();
 		
 		if(editMode == Mode.CREATE) {
@@ -140,6 +145,10 @@ public class IterationPanel extends JPanel{
 		add(iterationNumber, c);
 		c.gridy = 3;
 		add(submit, c);
+		c.gridy = 4;
+		add(result, c);
+		
+		result.setEditable(false);
 	}
 	
 	/**
@@ -253,9 +262,9 @@ public class IterationPanel extends JPanel{
 		return editMode;
 	}
 
-//	public void setStatus(String string) {
-//		results.setText(string);
-//	}
+	public void setStatus(String string) {
+		result.setText(string);
+	}
 	
 //	class EditRequirementAction extends AbstractAction {
 //		@Override
