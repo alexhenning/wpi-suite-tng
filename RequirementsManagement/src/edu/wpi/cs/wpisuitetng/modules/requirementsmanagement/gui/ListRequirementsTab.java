@@ -20,17 +20,27 @@ import javax.swing.JScrollPane;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 
+/**
+ *
+ * tab for listing all the requirements
+ * @author TODO
+ *
+ */
 @SuppressWarnings("serial")
 public class ListRequirementsTab extends JPanel implements IToolbarGroupProvider {
 	
+	/** tab that contains this */
 	Tab containingTab;
+	/** the main tab controller*/
 	MainTabController tabController;
+	/** the main panel*/
 	ListRequirementsPanel mainPanel;
+	/** a panel scroll pane*/
 	JScrollPane mainPanelScrollPane;
 
-	/**
-	 * Constructs a new DefectView where the user can view (and edit) a defect.
-	 * 
+	/** Constructor
+	 * @param tab the tab that contains this
+	 * @param tabController the main tab controller
 	 */
 	public ListRequirementsTab(Tab tab, MainTabController tabController) {
 		containingTab = tab;
@@ -41,7 +51,7 @@ public class ListRequirementsTab extends JPanel implements IToolbarGroupProvider
 		
 		this.tabController = tabController; 
 		
-		// Instantiate the main create defect panel
+		// Instantiate the main create requirement panel
 		mainPanel = new ListRequirementsPanel(this);
 		this.setLayout(new BorderLayout());
 		mainPanelScrollPane = new JScrollPane(mainPanel);

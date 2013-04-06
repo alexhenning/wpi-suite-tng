@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  */
 public class AddNoteObserver implements RequestObserver {
 	
+	/** the controller that created the observer */
 	private final AddNoteController controller;
 	
 	/**

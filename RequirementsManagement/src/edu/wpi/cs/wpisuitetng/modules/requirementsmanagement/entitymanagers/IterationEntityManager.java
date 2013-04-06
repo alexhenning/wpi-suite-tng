@@ -35,8 +35,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  */
 public class IterationEntityManager implements EntityManager<Iteration> {
+	/** the database */
 	private final Data db;
+	/** an iteration validator */
 	private final IterationValidator validator;
+	/** model mapper for copying properties */
 	private final ModelMapper updateMapper;
 	
 	/**
@@ -200,18 +203,44 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		return db.retrieveAll(new Iteration()).size();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param string
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)
 			throws NotImplementedException {

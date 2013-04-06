@@ -12,12 +12,6 @@
  ******************************************************************************/
 
 
-/**
- * Contributors:
- * AHurle
- * JPage
- */
-
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions;
 
 import java.awt.event.ActionEvent;
@@ -28,16 +22,21 @@ import javax.swing.AbstractAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 
 /**
- * Action that calls {@link MainTabController#addCreateRequirementTab()}, default mnemonic key is C. 
+ *
+ * Action that calls {@link MainTabController#addCreateRequirementTab()}, default mnemonic key is C
+ * adds the create Requirement tab
+ * @author TODO
+ *
  */
 @SuppressWarnings("serial")
 public class CreateRequirementAction extends AbstractAction {
 
+	/** The main tab controller */
 	private final MainTabController controller;
 	
 	/**
 	 * Create a CreateRequirementAction
-	 * @param controller When the action is performed, controller.addCreateDefectTab() is called
+	 * @param controller When the action is performed, controller.addCreateRequirementTab() is called
 	 */
 	public CreateRequirementAction(MainTabController controller) {
 		super("Create Requirement");
@@ -45,6 +44,11 @@ public class CreateRequirementAction extends AbstractAction {
 		putValue(MNEMONIC_KEY, KeyEvent.VK_C);
 	}
 	
+	/**
+	 * Add the create requirement tab to the main tab controller
+	 *
+	 * @param e The action event that occured
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		controller.addCreateRequirementTab();

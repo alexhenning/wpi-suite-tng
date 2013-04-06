@@ -21,8 +21,11 @@ import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
 import edu.wpi.cs.wpisuitetng.exceptions.NotImplementedException;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.EntityManager;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEventObjectType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.PermissionsValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
@@ -35,10 +38,17 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 public class PermissionEntityManager implements
 		EntityManager<Permissions> {
 	
+	/** database */
 	private final Data db;
+	/** validator for permissions */
 	private final PermissionsValidator validator;
+	/** model mapper for copying properties */
 	private final ModelMapper updateMapper;
 	
+	/**
+	 * Constructor
+	 * @param data dataabase
+	 */
 	public PermissionEntityManager(Data data) {
 		db = data;
 		validator = new PermissionsValidator(data);
@@ -64,7 +74,12 @@ public class PermissionEntityManager implements
 			throw new BadRequestException();
 		}
 		
-		if(!db.save(newPermission, s.getProject())) {
+		ProjectEvent creation = ProjectEvent.createProjectCreationEvent(ProjectEventObjectType.PERMISIONS, newPermission.getUsername()+"");
+		// make sure the user exists
+		creation.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
+		creation.setId(CountEvents() + 1);
+
+		if(!db.save(newPermission, s.getProject()) || !db.save(creation, s.getProject())) {
 			throw new WPISuiteException();
 		}
 
@@ -126,9 +141,15 @@ public class PermissionEntityManager implements
 		
 		Permissions existingPermissions = validator.getLastExistingPermissions();
 		
-		updateMapper.map(updatedPermissions, existingPermissions);
+		ProjectEvent changeset = ProjectEvent.createProjectChangesetEvent(ProjectEventObjectType.PERMISIONS, existingPermissions.getUsername()+"");
+		// make sure the user exists
+		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
+		changeset.setId(CountEvents() + 1);
+		PermissionEventCallback callback = new PermissionEventCallback(changeset);
+
+		updateMapper.map(updatedPermissions, existingPermissions, callback);
 		
-		if(!db.save(existingPermissions, s.getProject())) {
+		if(!db.save(existingPermissions, s.getProject()) || !db.save(changeset, s.getProject())) {
 			throw new WPISuiteException();
 		}
 		
@@ -182,18 +203,54 @@ public class PermissionEntityManager implements
 		return db.retrieveAll(new Permissions()).size();
 	}
 
+	/**
+	 * return the number of permissions in the database
+	 *
+	 * @return the number of permissions in the database
+	 * @throws WPISuiteException
+	 */
+	public int CountEvents() throws WPISuiteException {
+		return db.retrieveAll(new ProjectEvent()).size();
+	}
+	
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param string
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)
 			throws NotImplementedException {

@@ -39,16 +39,19 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 @SuppressWarnings("serial")
 public class AddNoteController extends AbstractAction implements ActionListener{
 	
-	private NoteMainPanel view;
-	private RequirementModel model;
-	private RequirementsPanel parentView;
+	/** The note panel */
+	private final NoteMainPanel view;
+	/** The requirement containing the notes */
+	private final RequirementModel model;
+	/** The requirement panel that has the note panel in it */
+	private final RequirementsPanel parentView;
 	
 	/**
 	 * Default constructor for Notes
 	 *
 	 * @param view The NewNotePanel containing the comment field
 	 * @param model The Requirement model being commented on
-	 * @param parentView The RequirementPanel displaying the defect
+	 * @param parentView The RequirementPanel displaying the requirment
 	 */
 	public AddNoteController(final NoteMainPanel view, final RequirementModel model, final RequirementsPanel parentView) {
 		this.view = view;
@@ -73,11 +76,13 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	 */
 	public void saveNote() {
 		final String noteText = view.ta.getText();
-		final Request request = Network.getInstance().makeRequest(
-				"requirementsmanagement/requirementnote", HttpMethod.PUT);
-		request.setBody((new RequirementNote(model.getId(), model.getCreator(), noteText)).toJSON());
-		request.addObserver(new AddNoteObserver(this));
-		request.send();
+		if (noteText.length() > 0) {
+			final Request request = Network.getInstance().makeRequest(
+					"requirementsmanagement/requirementnote", HttpMethod.PUT);
+			request.setBody((new RequirementNote(model.getId(), model.getCreator(), noteText)).toJSON());
+			request.addObserver(new AddNoteObserver(this));
+			request.send();
+		} 
 	}
 	
 	

@@ -12,6 +12,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
+import java.lang.reflect.ParameterizedType;
+
 /**
  * Model that holds and old and new value for some field.
  * Doesn't implement Model since it will see no use outside of RequirementChangesets.
@@ -21,6 +23,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 public class FieldChange<T> {
 	private final T oldValue;
 	private final T newValue;
+	private transient Class<T> type;
 	
 	/**
 	 * Constructor
@@ -31,6 +34,19 @@ public class FieldChange<T> {
 	public FieldChange(T oldValue, T newValue) {
 		this.oldValue = oldValue;
 		this.newValue = newValue;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param type the class of the field
+	 * @param oldValue the old value of a field before it was changed
+	 * @param newValue the new value of a field after it was changed
+	 */
+	public FieldChange(Class<T> type, T oldValue, T newValue) {
+		this.oldValue = oldValue;
+		this.newValue = newValue;
+		this.type = type;
 	}
 
 	/**
@@ -47,4 +63,16 @@ public class FieldChange<T> {
 		return newValue;
 	}
 	
+	/**
+	 * sets type if it is null
+	 *
+	 * @return type
+	 */
+	public Class<T> getPersistentClass() {
+        if (type == null) {
+            this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        }
+        return type;
+    }
+
 }

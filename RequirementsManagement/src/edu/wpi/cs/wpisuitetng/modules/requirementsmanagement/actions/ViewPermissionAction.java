@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
 @SuppressWarnings("serial")
 public class ViewPermissionAction extends AbstractAction {
 	
+	/** the main tab controller */
 	private final MainTabController controller;
 	
 	/**
@@ -37,6 +38,11 @@ public class ViewPermissionAction extends AbstractAction {
 		putValue(MNEMONIC_KEY, KeyEvent.VK_P);
 	}
 	
+	/**
+	 * Add the permissions tab to the main tab controller
+	 *
+	 * @param e the action performed
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		controller.addPermissionTab();

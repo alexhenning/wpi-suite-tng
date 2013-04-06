@@ -18,7 +18,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,18 +25,23 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEventObjectType;
 
 
 /**
- * Main panel for notes viewing and editing
+ * Main panel for history viewing
  * @author Josh
  * @author Deniz
  */
 @SuppressWarnings("serial")
 public class RequirementHistoryTab extends JPanel {
+	/** the panel this is shown in */
 	RequirementsPanel parent;
+	/** panel to display this */
 	JPanel noteViewer;
+	/** scroll pane */
 	JScrollPane noteScrollPane;
+	/** list of project events*/
 	List<ProjectEvent> notes;
 
 	/**
@@ -67,25 +71,30 @@ public class RequirementHistoryTab extends JPanel {
 		noteScrollPane = new JScrollPane(noteViewer);
 		noteScrollPane.setPreferredSize(new Dimension(300, 300));
 		noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		// Add elements to the main panel
 		add(noteScrollPane, BorderLayout.CENTER);
 	}
 	
+	/**
+	 *add the events to the history tab
+	 *
+	 * @param events the list of events
+	 */
 	public void setNotes(List<ProjectEvent> events) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(3, 0, 3, 0);
 		c.gridx = 0;
 		c.gridy = events.size();
-		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weightx = 0.5;
+		c.weighty = 0.5;
 		
 		noteViewer.removeAll();
 		
 		for (ProjectEvent event : events) {
-			if (event != null) {
+			if (event != null && event.getObjectType() == ProjectEventObjectType.REQUIREMENT) {
 				int id = Integer.parseInt(event.getObjectId());
 				if (id == this.parent.model.getId()) {
 					noteViewer.add(new RequirementHistoryPanel(event), c);

@@ -29,12 +29,22 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrieveRequirementModelRequestObserver implements RequestObserver {
 
+	/** Callback paired with this */
 	private RequirementsCallback callback;
 	
+	/**
+	 * Constructor
+	 * @param callback callback paired with this
+	 */
 	public RetrieveRequirementModelRequestObserver(RequirementsCallback callback){
 		this.callback = callback;
 	}
 	
+	/**
+	 * Indicate a successful response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		// Get the response to the given request
@@ -47,11 +57,22 @@ public class RetrieveRequirementModelRequestObserver implements RequestObserver 
 		callback.callback(Arrays.asList(requirements));
 	}
 
+	/**
+	 * indicate an error in the response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to retrieve requirements failed.");		
 	}
 
+	/**
+	 *indicate the response failed
+	 *
+	 * @param iReq a request
+	 * @param exception the exception
+	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to retrieve requirements failed.");

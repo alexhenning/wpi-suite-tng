@@ -11,6 +11,8 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
+import javax.swing.JOptionPane;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
@@ -25,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrieveSingleRequirementRequestObserver implements RequestObserver {
 	
+	/** Callback paired with this */
 	private SingleRequirementCallback callback;
 	
 	/**
@@ -55,6 +58,7 @@ public class RetrieveSingleRequirementRequestObserver implements RequestObserver
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to get a requirement failed.");
+		JOptionPane.showMessageDialog(null, "Invalid ID.");
 	}
 
 	/**

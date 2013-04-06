@@ -25,12 +25,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 
 /**
+ * validator for iterations
  * @author jpalnick
  *
  */
 public class IterationValidator {
 
+	/** the database */
 	private Data data;
+	/** the last existing iteration model */
 	private Iteration lastExistingIteration;
 	
 	/**
@@ -80,7 +83,7 @@ public class IterationValidator {
 	 * Return all Iterations of the specified project.
 	 * 
 	 * @param project the project this Iteration belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if iteration doesn't exist
 	 * @return all Iterations in the project
 	 * @throws WPISuiteException 
 	 */
@@ -96,7 +99,7 @@ public class IterationValidator {
 	 * 
 	 * @param id the id of the Iteration
 	 * @param project the project this Iteration belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if iteration doesn't exist
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The Iteration with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
@@ -117,7 +120,7 @@ public class IterationValidator {
 	 * from the Data given in the constructor.
 	 * 
 	 * @param session The session to validate against
-	 * @param defect The defect model to validate
+	 * @param iteration The iteration model to validate
 	 * @param mode The mode to validate for
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException 
@@ -235,18 +238,20 @@ public class IterationValidator {
 		
 		//TODO make sure this works. I think it should but I've been wrong before....
 		//check if dates overlap with other iterations
-		for (Iteration i : allIterations) {
-			if(i.getId() != iteration.getId()) {
-				if(iteration.getStartDate().after(i.getStartDate()) && iteration.getStartDate().before(i.getEndDate())) {
-					issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
-				}
-				if(iteration.getEndDate().after(i.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
-					issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
-				}
-				if((i.getStartDate().after(iteration.getStartDate()) && i.getStartDate().before(iteration.getEndDate())) ||
-						(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate())) ||
-						(i.getStartDate().equals(iteration.getStartDate()) || i.getEndDate().equals(iteration.getEndDate()))) {
-					issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
+		if(iteration.getStartDate() != null && iteration.getEndDate() != null){
+			for (Iteration i : allIterations) {
+				if(i != null && i.getId() != iteration.getId()) {
+					if(iteration.getStartDate().after(i.getStartDate()) && iteration.getStartDate().before(i.getEndDate())) {
+						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
+					}
+					if(iteration.getEndDate().after(i.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
+						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
+					}
+					if((i.getStartDate().after(iteration.getStartDate()) && i.getStartDate().before(iteration.getEndDate())) ||
+							(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate())) ||
+							(i.getStartDate().equals(iteration.getStartDate()) || i.getEndDate().equals(iteration.getEndDate()))) {
+						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
+					}
 				}
 			}
 		}
@@ -263,7 +268,7 @@ public class IterationValidator {
 //		if(oldRequirement != null) {
 //			requirement.setEvents(oldRequirement.getEvents());
 //		} else {
-//			// new defects should never have any events
+//			// new iterations should never have any events
 //			requirement.setEvents(new ArrayList<RequirementEvent>());
 //		}
 		

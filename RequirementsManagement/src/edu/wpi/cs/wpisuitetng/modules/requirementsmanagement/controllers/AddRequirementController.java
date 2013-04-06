@@ -34,16 +34,25 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 @SuppressWarnings("serial")
 public class AddRequirementController extends AbstractAction implements ActionListener {
 	
+	/** The requirements panel */
 	private final RequirementsPanel panel;
 	//private final JPanel buttonPanel;
 
+	/**
+	 * Constructor
+	 * @param panel The requirement panel that contains the requirement being sent to the server
+	 */
 	public AddRequirementController(RequirementsPanel panel) {
 		this.panel = panel;
 	}
 	
-	/* 
+
+	/**
 	 * This will be called when the user clicks an add button
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * sends the requirement to the server
+	 *
+	 * @param e Action that called this
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -55,6 +64,11 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 		}
 	}
 	
+	/**
+	 * Receives confirmation that server got the requirement
+	 *
+	 * @param req the requirement model sent
+	 */
 	public void receivedAddConfirmation(RequirementModel req) {
 		DB.getSingleRequirement(""+req.getId(), new SingleRequirementCallback() {
 			@Override public void callback(RequirementModel req) {

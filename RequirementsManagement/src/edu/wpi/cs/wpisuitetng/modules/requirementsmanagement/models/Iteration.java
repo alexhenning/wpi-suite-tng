@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 
 /**
+ * The iteration model
  * @author jpalnick
  *
  */
@@ -30,11 +31,23 @@ public class Iteration extends AbstractModel {
 	
 	//TODO Do we want a transaction log for the iteration data?
 	
+	/** The id */
 	private int id;
+	/** the start date */
 	private Date startDate;
+	/** the end date */
 	private Date endDate;
+	/** the name */
 	private String iterationNumber;
 
+	/**
+	 * Constructor
+	 * @param id the id
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @param iterationNumber the iteration's name
+	 * @param project the project
+	 */
 	public Iteration(int id, Date startDate, Date endDate, String iterationNumber,
 			Project project) {
 		super();
@@ -45,6 +58,9 @@ public class Iteration extends AbstractModel {
 		this.setProject(project);
 	}
 
+	/**
+	 * Constructor
+	 */
 	public Iteration() {
 		super();
 		id = -1;
@@ -141,9 +157,9 @@ public class Iteration extends AbstractModel {
 		this.iterationNumber = iterationNumber;
 	}
 
-	
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
+	 *
 	 */
 	@Override
 	public void save() {
@@ -151,8 +167,9 @@ public class Iteration extends AbstractModel {
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#delete()
+	 *
 	 */
 	@Override
 	public void delete() {
@@ -160,8 +177,10 @@ public class Iteration extends AbstractModel {
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
+	 *
+	 * @return
 	 */
 	@Override
 	public String toJSON() {
@@ -171,9 +190,14 @@ public class Iteration extends AbstractModel {
 		return json;
 	}
 	
+	/**
+	 * The toSting method, returns the iteration's name, or iterationNumber
+	 *
+	 * @return the iteration's name
+	 */
 	@Override
 	public String toString() {
-		return toJSON();
+		return getIterationNumber();
 	}
 
 	/**
@@ -196,8 +220,11 @@ public class Iteration extends AbstractModel {
 		return builder.create().fromJson(json, Iteration[].class);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object)
+	 *
+	 * @param o
+	 * @return
 	 */
 	@Override
 	public Boolean identify(Object o) {

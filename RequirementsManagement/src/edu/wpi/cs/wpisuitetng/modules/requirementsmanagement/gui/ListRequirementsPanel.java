@@ -42,18 +42,38 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
+/**
+ *
+ * Panel to list all of the requirements, and have an option to edit them in the list
+ * @author Josh
+ * @author Tim C
+ * @author James
+ *
+ */
 @SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel {
 	
+	/** the tab that created this*/
 	ListRequirementsTab parent;
+	/** is inpute enabled*/
 	boolean inputEnabled;
+	/** the table that displays the requirements*/
 	JTable table;
+	/** the model for the table*/
 	ViewReqTable tableModel;
+	/** button to bring the table into edit mode*/
 	JButton editButton;
+	/** button to save edits*/
 	JButton saveButton;
+	/** button to cancel edits */
 	JButton cancelButton;
+	/** panel to display the edit/save and cancel buttons */
 	JPanel editPanel;
 	
+	/**
+	 * Constructor
+	 * @param parent the tab that made this
+	 */
 	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
 		
@@ -152,10 +172,19 @@ public class ListRequirementsPanel extends JPanel {
 		// TODO: implement
 	}
 
+	/**
+	 * updates the list of requirements in the table
+	 *
+	 */
 	public void updateAllRequirementList() {
 		DB.getAllRequirements(new UpdateTableCallback());
 	}
 	
+	/**
+	 * the the table model
+	 *
+	 * @return the table model
+	 */
 	public ViewReqTable getTable(){
 		return this.tableModel;
 	}
@@ -177,8 +206,9 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
-	 * Function to turn the table into view mode
+	 * turn the table into view mode
 	 *
+	 * @param cancelled if the changes made in edit mode should be cancelled
 	 */
 	public void setViewTable(boolean cancelled) {
 		if(table.isEditing()) {
@@ -278,12 +308,11 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
-	 * Takes a list of all models in the database and applies updates that the user
-	 * made in the table to them so they match the edited table
+	 * update the requirements models so that they can be sent to the database to update them there
 	 *
-	 * @param reqs List of requirements from the database
-	 * @param iterations List of iterations from the database
-	 * @return Updated list of requirements to be sent back to the database
+	 * @param reqs the list of requirements
+	 * @param iterations the list of all iterations
+	 * @return the updated list of requirements
 	 */
 	public List<RequirementModel> updateModels(List<RequirementModel> reqs, List<Iteration> iterations) {
 		// TODO prune out unchanged requirements and just return those that need to be updated
@@ -321,9 +350,9 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
-	 * Makes sure that there is no invalid input in the panels
+	 * checks to see if all the changes made in the table are valid
 	 *
-	 * @return True if there are no errors in the table, false otherwise
+	 * @return true if the changes made were all good, false otherwise
 	 */
 	public boolean validateModels() {
 		boolean noErrors = true;
@@ -349,9 +378,9 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
-	 * Sends all the requirements back to the database
+	 * updates all the requirements in the database to match those in reqs
 	 *
-	 * @param reqs List of requirements to update
+	 * @param reqs a list of all the requirements
 	 */
 	public void sendRequirementsToDatabase(List<RequirementModel> reqs) {
 		// TODO (with updateModels) Only update those that need to be updated
@@ -394,8 +423,7 @@ public class ListRequirementsPanel extends JPanel {
 	
 	/**
 	 *
-	 * Retrieves all requirements from the database
-	 * Couldn't use the one already in place because it does a lot of extra things
+	 * gets a list of all the requirements and creates a RetrieveAllIterationsCallback to update them and send them to the database
 	 * @author Tim Calvert
 	 * @author James Megin
 	 *
@@ -403,10 +431,9 @@ public class ListRequirementsPanel extends JPanel {
 	class RetrieveAllRequirementsCallback implements RequirementsCallback {
 		
 		/**
-		 * Requests the list of iterations from the db and continues
-		 * from that callback
+		 * Create RetrieveallIteratoinsCallback to update the requirments and send the to the database
 		 *
-		 * @param reqs List of requirements returned from the db
+		 * @param reqs a list of all requirements
 		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
@@ -424,6 +451,7 @@ public class ListRequirementsPanel extends JPanel {
 	 */
 	class RetrieveAllIterationsCallback implements IterationCallback {
 		
+		/** a list of all the requirements */
 		List<RequirementModel> reqs;
 		
 		/**
@@ -449,7 +477,18 @@ public class ListRequirementsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 *
+	 * Callback to populate the table with all the requirements
+	 * @author Josh
+	 *
+	 */
 	class UpdateTableCallback implements RequirementsCallback {
+		/**
+		 * Callback function to populate the table with all the requirements
+		 *
+		 * @param reqs a list of all requirements
+		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
 			if (reqs.size() > 0) {
@@ -507,6 +546,7 @@ public class ListRequirementsPanel extends JPanel {
 	/**
 	 *
 	 * Class to take the list of iterations from the database and fill in a combobox with their names
+	 * @author Tim C
 	 * @author James
 	 *
 	 */
@@ -528,6 +568,7 @@ public class ListRequirementsPanel extends JPanel {
 
 		/**
 		 * Go through the list of iterations and add their name to the combobox
+		 * it does not add iterations that are already over as it would be invalid to set a project to those iterations
 		 *
 		 * @param iterationss the list of iterations
 		 */

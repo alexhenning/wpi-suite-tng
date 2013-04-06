@@ -22,7 +22,9 @@ import javax.swing.Icon;
  */
 public class Tab {
 
+	/** the main tab view */
 	private final MainTabView view;
+	/** the tab's component */
 	private final Component tabComponent;
 
 	/**
@@ -36,10 +38,20 @@ public class Tab {
 		this.tabComponent = tabComponent;
 	}
 	
+	/**
+	 * get the tab's index
+	 *
+	 * @return the tab's index
+	 */
 	private int getIndex() {
 		return view.indexOfTabComponent(tabComponent);
 	}
 	
+	/**
+	 * get the tab's title
+	 *
+	 * @return the tab's title
+	 */
 	public String getTitle() {
 		return view.getTitleAt(getIndex());
 	}
@@ -52,6 +64,11 @@ public class Tab {
 		tabComponent.invalidate(); // needed to make tab shrink with smaller title
 	}
 	
+	/**
+	 * get the tab's icon
+	 *
+	 * @return the tab's icon
+	 */
 	public Icon getIcon() {
 		return view.getIconAt(getIndex());
 	}
@@ -63,6 +80,11 @@ public class Tab {
 		view.setIconAt(getIndex(), icon);
 	}
 	
+	/**
+	 * get the tab's tooltiptext
+	 * 
+	 * @return the tab's tooltiptext
+	 */
 	public String getToolTipText() {
 		return view.getToolTipTextAt(getIndex());
 	}
@@ -74,6 +96,11 @@ public class Tab {
 		view.setToolTipTextAt(getIndex(), toolTipText);
 	}
 	
+	/**
+	 * get the tab's component
+	 *
+	 * @return the tab's component
+	 */
 	public Component getComponent() {
 		return view.getComponentAt(getIndex());
 	}
