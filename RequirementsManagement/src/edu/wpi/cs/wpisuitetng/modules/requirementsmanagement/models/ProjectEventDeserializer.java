@@ -34,19 +34,7 @@ class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 	public static <T> void addFieldChange(String fieldName, Class<T> fieldClass, JsonObject changes, JsonDeserializationContext context, HashMap<String, FieldChange<?>> changesMap) {
 		if (changes.has(fieldName)) {
 			JsonObject titleObj = changes.get(fieldName).getAsJsonObject();
-//			T oldValue;
-//			T newValue;
-//			try {
-//				oldValue = fieldClass.newInstance();
-//				newValue = fieldClass.newInstance();
-//				oldValue = context.deserialize(titleObj.get("oldValue"), fieldClass);
-//				newValue = context.deserialize(titleObj.get("newValue"), fieldClass);
-				changesMap.put(fieldName, new FieldChange<T>(fieldClass.cast(context.deserialize(titleObj.get("oldValue"), fieldClass)), fieldClass.cast(context.deserialize(titleObj.get("newValue"), fieldClass))));
-//			} catch (InstantiationException e) {
-//				e.printStackTrace();
-//			} catch (IllegalAccessException e) {
-//				e.printStackTrace();
-//			}
+			changesMap.put(fieldName, new FieldChange<T>(fieldClass.cast(context.deserialize(titleObj.get("oldValue"), fieldClass)), fieldClass.cast(context.deserialize(titleObj.get("newValue"), fieldClass))));
 		}
 	}
 	
@@ -115,6 +103,7 @@ class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 						addFieldChange("estimate", Integer.class, changes, context, changesMap);
 						addFieldChange("actualEffort", Integer.class, changes, context, changesMap);
 						addFieldChange("iteration", Iteration.class, changes, context, changesMap);
+						addFieldChange("type", RequirementType.class, changes, context, changesMap);
 //						if (changes.has("tags")) {
 //						JsonObject tagsObj = changes.get("tags").getAsJsonObject();
 //						Tag[] oldTags = context.deserialize(tagsObj.get("oldValue"), Tag[].class);
