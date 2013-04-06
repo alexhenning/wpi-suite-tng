@@ -321,8 +321,9 @@ public class ListRequirementsPanel extends JPanel {
 				for(RequirementModel req : reqs) {
 					if(req.getId() == Integer.valueOf((String)tableModel.getValueAt(i, 0))) {
 						// we have the correct requirement, update values
-						req.setName((String)tableModel.getValueAt(i, 1));
-						req.setDescription((String)tableModel.getValueAt(i, 2));
+						req.setName((String) tableModel.getValueAt(i, 1));
+						req.setDescription((String) tableModel.getValueAt(i, 2));
+
 						// Find the right iteration from the list
 						req.setIteration(null);  // assume iteration is null, then find the correct one
 						for(Iteration iteration : iterations) {

@@ -20,6 +20,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -118,7 +119,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		for(Iteration it : iterations) {
 			if (it == null) {
 				comboboxModel.addElement("Backlog");
-			} else {
+			} else if (it.getEndDate().after(new Date())) {
 				comboboxModel.addElement(""+it.getIterationNumber());
 			}
 		}
