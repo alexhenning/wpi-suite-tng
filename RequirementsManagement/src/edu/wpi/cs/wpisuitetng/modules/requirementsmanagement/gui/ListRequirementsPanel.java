@@ -322,6 +322,7 @@ public class ListRequirementsPanel extends JPanel {
 					if(req.getId() == Integer.valueOf((String)tableModel.getValueAt(i, 0))) {
 						// we have the correct requirement, update values
 						req.setName((String)tableModel.getValueAt(i, 1));
+						req.setDescription((String)tableModel.getValueAt(i, 2));
 						// Find the right iteration from the list
 						req.setIteration(null);  // assume iteration is null, then find the correct one
 						for(Iteration iteration : iterations) {
@@ -364,6 +365,10 @@ public class ListRequirementsPanel extends JPanel {
 			if(((String)tableModel.getValueAt(i, 1)).length() < 1) {
 				// highlight field
 				System.out.println("Error in name for Requirement in row " + i);
+				noErrors = false;
+			}
+			if(((String)tableModel.getValueAt(i, 2)).length() < 1){
+				System.out.println("Error in description for Requirement in row " + i);
 				noErrors = false;
 			}
 			// check estimate
