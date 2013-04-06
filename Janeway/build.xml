@@ -8,6 +8,9 @@
 		<fileset dir="${core-lib}">
 			<include name="commons-codec-1.7.jar"/>
 		</fileset>
+		<fileset dir="./swingx">
+			<include name="swingx*.jar"/>
+		</fileset>
 		<pathelement path="build"/>
 	</path>
 
