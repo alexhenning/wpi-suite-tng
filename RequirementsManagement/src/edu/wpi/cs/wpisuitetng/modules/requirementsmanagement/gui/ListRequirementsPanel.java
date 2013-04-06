@@ -32,6 +32,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -72,6 +76,8 @@ public class ListRequirementsPanel extends JPanel {
 	JButton cancelButton;
 	/** panel to display the edit/save and cancel buttons */
 	JPanel editPanel;
+	/** Old data used to compare changes */
+	Object[][] data;
 	
 	/**
 	 * Constructor
@@ -123,7 +129,7 @@ public class ListRequirementsPanel extends JPanel {
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
 				if(column == 1 || column == 2 || column == 6) {
-					return new CustomCellRenderer();
+					return new CustomErrorCellRenderer();
 				}
 				return super.getCellRenderer(row, column);
 			}
@@ -212,8 +218,22 @@ public class ListRequirementsPanel extends JPanel {
 		editPanel.revalidate();
 		editPanel.repaint();
 		
+		// save copy of current data
+		data = tableModel.getData();
+		
 		setUpColumns(); // TODO disable status except for delete and complete, just display the correct one
 		                // TODO set up cell editors to limit what can be typed
+		
+		tableModel.addTableModelListener(new TableModelListener() {
+
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if(!tableModel.getData()[e.getFirstRow()][e.getColumn()].equals(data[e.getFirstRow()][e.getColumn()])) {
+					
+				}
+			}
+			
+		});
 	}
 	
 	/**
@@ -244,6 +264,9 @@ public class ListRequirementsPanel extends JPanel {
 			editPanel.add(editButton);
 			editPanel.revalidate();
 			editPanel.repaint();
+			
+			// dump saved data
+			data = null;
 		}
 	}
 	
@@ -360,7 +383,6 @@ public class ListRequirementsPanel extends JPanel {
 		for(int i = 0; i < tableModel.getRowCount(); i++) {
 			// check name
 			if(((String)tableModel.getValueAt(i, 1)).length() < 1) {
-				// highlight field
 				System.out.println("Error in name for Requirement in row " + i);
 				noErrors = false;
 			}
@@ -370,7 +392,6 @@ public class ListRequirementsPanel extends JPanel {
 			}
 			// check estimate
 			if((Integer.valueOf((String)tableModel.getValueAt(i, 6))) < 0) {
-				// highlight field
 				System.out.println("Error in estimate for Requirement in row " + i);
 				noErrors = false;
 			}
@@ -601,7 +622,7 @@ public class ListRequirementsPanel extends JPanel {
 	 * @author James Megin
 	 *
 	 */
-	class CustomCellRenderer extends DefaultTableCellRenderer {
+	class CustomErrorCellRenderer extends DefaultTableCellRenderer {
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table,
@@ -625,15 +646,27 @@ public class ListRequirementsPanel extends JPanel {
 						c.setBackground(Color.YELLOW);
 						setToolTipText("The estimate must be non-zero");
 					}
-				}
-			} else {
-				c.setBackground(Color.WHITE);
-				setToolTipText("");
+				} 
 			}
 			
 			return c;
 		}
 		
+	}
+	
+	class CustomChangedCellRengerer extends DefaultTableCellRenderer {
+		
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			c.setBackground(Color.BLACK);
+			
+			return c;
+			
+		}
 	}
 
 }
