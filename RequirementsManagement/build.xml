@@ -15,6 +15,9 @@
 		<fileset dir="../Janeway/swingx">
 			<include name="swingx*.jar"/>
 		</fileset>
+		<fileset dir="../Janeway/jfreechart">
+			<include name="*.jar"/>
+		</fileset>
 		<pathelement path="build"/>
 	</path>
 
