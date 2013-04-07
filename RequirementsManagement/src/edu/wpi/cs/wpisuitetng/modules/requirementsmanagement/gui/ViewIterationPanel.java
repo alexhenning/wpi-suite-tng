@@ -14,12 +14,20 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.CustomCellRenderer;
 
 /**
  * GUI for a project manager to manage user permissions 
@@ -30,10 +38,18 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class ViewIterationPanel extends JPanel {
 	
+	public static final int NAME = 0;
+	public static final int STARTDATE = 1;
+	public static final int ENDDATE = 2;
+	public static final int ESTIMATE = 3;
+	public static final int REQUIREMENTS = 4;
+	public static final int ROWS = 5;
+	
 	/** the tab that made this */
 	ViewIterationTab parent;
 	JPanel topPanel;
-	JLabel lbl1;
+	JTable table;
+	ViewIterTable tableModel;
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -45,11 +61,15 @@ public class ViewIterationPanel extends JPanel {
 	public ViewIterationPanel(ViewIterationTab iterTab){
 		this.parent = iterTab;
 		
+		tableModel = new ViewIterTable();
+		table = new JTable(tableModel);
+		
 		// Indicate that input is enabled
 		inputEnabled = true;
 		
 		// Add all components to this panel
 		addComponents();
+		updateTable();
 		
 		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
 		//updateFields();
@@ -61,20 +81,14 @@ public class ViewIterationPanel extends JPanel {
 	 */
 	private void addComponents() {
 		setLayout(new BorderLayout());
-		GridBagConstraints c = new GridBagConstraints();
 		
-		lbl1 = new JLabel("Add ");
-		
-		topPanel = new JPanel();
-		topPanel.setLayout(new GridBagLayout());
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(3, 3, 3, 3);
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weighty = 0.1;
-		topPanel.add(lbl1, c);
+		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
+		table.setFillsViewportHeight(true);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		add(topPanel, BorderLayout.PAGE_START);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setPreferredSize(new Dimension(200, 100));
+		add(scrollPane, BorderLayout.CENTER);
 
 	}
 	
@@ -105,6 +119,55 @@ public class ViewIterationPanel extends JPanel {
 	 */
 	public boolean getInputEnabled() {
 		return inputEnabled;
+	}
+	
+	   /**
+     * updates table
+     *TODO DYNAMICALLY UPDATE
+     * @return data
+     */
+    public void updateTable() {
+    	
+    	Object[][] entries = {{1,2,3,4,5},{6,7,8,9,10}};
+		int i = 0;
+		int temp = 0;
+		for(Object iter : entries) {
+			entries[i][NAME] = temp++;
+			entries[i][STARTDATE] = temp++;
+			entries[i][ENDDATE] = temp++;
+			entries[i][ESTIMATE] = temp++;
+			entries[i][REQUIREMENTS] = temp++;
+			i++;
+		}
+		getTable().setData(entries);
+		getTable().fireTableStructureChanged();
+
+
+		TableColumn column = null;
+		for (i = 0; i < ROWS; i++) {
+			column = table.getColumnModel().getColumn(i);
+			if (i == NAME) {
+				column.setPreferredWidth(300); //third column is bigger
+			}
+			else if (i == ESTIMATE) {
+				column.setPreferredWidth(500);
+			}
+			else if (i == ENDDATE) {
+				column.setPreferredWidth(700);
+			}
+			else {
+				column.setPreferredWidth(200);
+			}
+		}
+    }
+    
+	/**
+	 * the table model
+	 *
+	 * @return the table model
+	 */
+	public ViewIterTable getTable(){
+		return this.tableModel;
 	}
 
 }
