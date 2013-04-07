@@ -15,6 +15,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +32,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
@@ -69,6 +76,8 @@ public class ListRequirementsPanel extends JPanel {
 	JButton cancelButton;
 	/** panel to display the edit/save and cancel buttons */
 	JPanel editPanel;
+	/** Old data used to compare changes */
+	Object[][] data;
 	
 	/**
 	 * Constructor
@@ -116,7 +125,15 @@ public class ListRequirementsPanel extends JPanel {
 		//create the table part of the GUI
 		tableModel = new ViewReqTable();
 		tableModel.setMode(Mode.VIEW);
-		table = new JTable(tableModel);
+		table = new JTable(tableModel) {
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				// Just return the custom renderer
+				// This somehow works differently than setDefaultRenderer, but I'm not sure how
+				//   other than the fact that this works and default renderer certainly does not
+				return new CustomCellRenderer();
+			}
+		};
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -190,6 +207,25 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
+	 * Copies data over to a new structure
+	 * clone() didn't seem to work correctly
+	 *
+	 * @param data data to copy
+	 * @return
+	 */
+	private Object[][] copyData(Object[][] data) {
+		Object[][] copy = new Object[tableModel.getRowCount()][tableModel.getColumnCount()];
+		
+		for(int i = 0; i < tableModel.getRowCount(); ++i) {
+			for(int j = 0; j < tableModel.getColumnCount(); ++j) {
+				copy[i][j] = data[i][j];
+			}
+		}
+		
+		return copy;
+	}
+	
+	/**
 	 * Function to turn the table into edit mode
 	 *
 	 */
@@ -200,6 +236,9 @@ public class ListRequirementsPanel extends JPanel {
 		editPanel.add(cancelButton);
 		editPanel.revalidate();
 		editPanel.repaint();
+		
+		// save copy of current data (clone() didn't seem to work)
+		data = copyData(tableModel.getData());
 		
 		setUpColumns(); // TODO disable status except for delete and complete, just display the correct one
 		                // TODO set up cell editors to limit what can be typed
@@ -233,6 +272,9 @@ public class ListRequirementsPanel extends JPanel {
 			editPanel.add(editButton);
 			editPanel.revalidate();
 			editPanel.repaint();
+			
+			// dump saved data
+			data = null;
 		}
 	}
 	
@@ -257,10 +299,6 @@ public class ListRequirementsPanel extends JPanel {
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
 		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox));
-		
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change iteration");
-		iterColumn.setCellRenderer(renderer);
 	}
 	
 	/**
@@ -279,11 +317,6 @@ public class ListRequirementsPanel extends JPanel {
 		statusBox.addItem("DELETED");
 		
 		statusColumn.setCellEditor(new DefaultCellEditor(statusBox));
-		
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change status");
-		statusColumn.setCellRenderer(renderer);
-		
 	}
 	
 	/**
@@ -300,11 +333,6 @@ public class ListRequirementsPanel extends JPanel {
 		priorityBox.addItem("HIGH");
 		
 		priorityColumn.setCellEditor(new DefaultCellEditor(priorityBox));
-		
-
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change priority");
-		priorityColumn.setCellRenderer(renderer);
 	}
 	
 	/**
@@ -364,7 +392,6 @@ public class ListRequirementsPanel extends JPanel {
 		for(int i = 0; i < tableModel.getRowCount(); i++) {
 			// check name
 			if(((String)tableModel.getValueAt(i, 1)).length() < 1) {
-				// highlight field
 				System.out.println("Error in name for Requirement in row " + i);
 				noErrors = false;
 			}
@@ -373,8 +400,13 @@ public class ListRequirementsPanel extends JPanel {
 				noErrors = false;
 			}
 			// check estimate
-			if((Integer.valueOf((String)tableModel.getValueAt(i, 6))) < 0) {
-				// highlight field
+			try {
+				if((Integer.valueOf((String)tableModel.getValueAt(i, 6))) < 0) {
+					System.out.println("Error in estimate for Requirement in row " + i);
+					noErrors = false;
+				}
+			} catch (NumberFormatException e) {
+				// still an error
 				System.out.println("Error in estimate for Requirement in row " + i);
 				noErrors = false;
 			}
@@ -596,5 +628,59 @@ public class ListRequirementsPanel extends JPanel {
 		}
 		
 	}
+	
+	/**
+	 *
+	 * A custom cell renderer to allow for changing the background color
+	 * when a cell has an error in it
+	 * @author Tim Calvert
+	 * @author James Megin
+	 *
+	 */
+	class CustomCellRenderer extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			
+			if(tableModel.getMode() == Mode.EDIT) {
+				if(!value.equals(data[row][column])) {
+					c.setBackground(Color.YELLOW);
+					setToolTipText("This cell has been changed from: " + (data[row][column]).toString());
+				} else {
+					c.setBackground(Color.WHITE);
+					setToolTipText(null);
+				}
+				if(column == 1) {
+					if(((String)value).length() < 1) {
+						c.setBackground(Color.RED);
+						setToolTipText("A requirement must have a name.");
+					}
+				} else if(column == 2) {
+					if(((String)value).length() < 1) {
+						c.setBackground(Color.RED);
+						setToolTipText("A requirement must have a description.");
+					}
+				} else if(column == 6) {
+					try {
+						if(((Integer.valueOf((String)value) < 0))) {
+							c.setBackground(Color.RED);
+							setToolTipText("A requirement estimate must be a positive number.");
+						}
+					} catch (NumberFormatException e) {
+						// still an error
+						c.setBackground(Color.RED);
+						setToolTipText("A requirement estimate must be a positive number.");
+					}
+				}
+			}
+			
+			return c;
+		}
+		
+	}
+
 
 }

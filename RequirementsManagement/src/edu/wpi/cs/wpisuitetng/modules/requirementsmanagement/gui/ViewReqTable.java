@@ -134,6 +134,15 @@ public class ViewReqTable extends AbstractTableModel {
     }
     
     /**
+     * Returns the data representation
+     *
+     * @return data
+     */
+    public Object[][] getData() {
+    	return data;
+    }
+    
+    /**
      * set the mode of the table
      *
      * @param editMode the mode to set the table to, either view or edit
