@@ -28,7 +28,7 @@ public class ReleaseNumber extends AbstractModel {
 	/** id */
 	private int id;
 	/** the release number */
-	private int releaseNumber;
+	private String releaseNumber;
 	//TODO add any addition fields for the ReleaseNumber
 
 	/**
@@ -37,7 +37,7 @@ public class ReleaseNumber extends AbstractModel {
 	 * @param releaseNumber the release number
 	 * @param project the project
 	 */
-	public ReleaseNumber(int id, int releaseNumber, Project project) {
+	public ReleaseNumber(int id, String releaseNumber, Project project) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
@@ -50,7 +50,7 @@ public class ReleaseNumber extends AbstractModel {
 	public ReleaseNumber() {
 		super();
 		id = -1;
-		releaseNumber = -1;
+		releaseNumber = "";
 		
 		this.setProject(new Project("", "-1"));
 		// TODO Auto-generated constructor stub
@@ -73,14 +73,14 @@ public class ReleaseNumber extends AbstractModel {
 	/**
 	 * @return the releaseNumber
 	 */
-	public int getReleaseNumber() {
+	public String getReleaseNumber() {
 		return releaseNumber;
 	}
 
 	/**
 	 * @param releaseNumber the releaseNumber to set
 	 */
-	public void setReleaseNumber(int releaseNumber) {
+	public void setReleaseNumber(String releaseNumber) {
 		this.releaseNumber = releaseNumber;
 	}
 	
