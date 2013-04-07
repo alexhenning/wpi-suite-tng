@@ -316,6 +316,15 @@ public class RequirementModelValidator {
 			}
 		}
 		
+		ArrayList<RequirementModel> subRequirements = new ArrayList<RequirementModel>();
+		for(RequirementModel subRequirement : requirement.getSubRequirements()) {
+			RequirementModel tmp = getExistingRequirement(subRequirement.getId(), session.getProject(), issues, "id");
+			if (tmp != null) {
+				subRequirements.add(subRequirement);
+			}
+		}
+		requirement.setSubRequirementIDs(subRequirements);
+		
 		return issues;
 	}
 
