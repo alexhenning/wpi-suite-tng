@@ -32,6 +32,7 @@ import javax.swing.event.ChangeListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -104,6 +105,15 @@ public class MainTabController {
 		Iteration iteration = new Iteration();
 		Tab tab = addTab();
 		IterationTab view = new IterationTab(this, iteration, tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
+	public Tab addCreateReleaseNumberTab() {
+		ReleaseNumber rn = new ReleaseNumber();
+		Tab tab = addTab();
+		ReleaseNumberTab view = new ReleaseNumberTab(this, rn, tab);
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
