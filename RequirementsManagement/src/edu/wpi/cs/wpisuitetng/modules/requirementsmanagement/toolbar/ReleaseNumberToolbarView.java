@@ -30,13 +30,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
  *
  */
 @SuppressWarnings("serial")
-public class ReleaseNumberToolbarView extends DefaultToolbarView {
+public class ReleaseNumberToolbarView extends ToolbarGroupView {
 	
 	/** Create or Edit ReleaseNumber button */
 	private JButton CrtReleaseNumber;
 	
 	public ReleaseNumberToolbarView(final MainTabController tabController) {
-		
+		super("Release Number");
 		// Construct the content panel
 		JPanel content = new JPanel();
 		GridBagLayout layout = new GridBagLayout();
@@ -53,11 +53,9 @@ public class ReleaseNumberToolbarView extends DefaultToolbarView {
 		c.gridwidth = 2;
 		content.add(CrtReleaseNumber, c);
 		
-		// Construct a new toolbar group to be added to the end of the toolbar
-		ToolbarGroupView toolbarGroup = new ToolbarGroupView("Release Numbers", content);
+		add(content);
 		
 		Double toolbarGroupWidth = CrtReleaseNumber.getPreferredSize().getWidth() + 40;
-		toolbarGroup.setPreferredWidth(toolbarGroupWidth.intValue());
-		addGroup(toolbarGroup);
+		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
 }

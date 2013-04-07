@@ -51,7 +51,7 @@ public class ReleaseNumberTab extends JPanel implements IToolbarGroupProvider {
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
-		containingTab.setTitle("Create/Edit Release Numbers");
+		containingTab.setTitle("Release Number");
 		
 		// Instantiate the main create iteration panel
 		mainPanel = new ReleaseNumberPanel(this);
