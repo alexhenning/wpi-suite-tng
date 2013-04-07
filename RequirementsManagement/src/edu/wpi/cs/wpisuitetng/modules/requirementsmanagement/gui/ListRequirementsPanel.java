@@ -654,9 +654,9 @@ public class ListRequirementsPanel extends JPanel {
 					setToolTipText(null);
 				}
 				if(column == 1) {
-					if(((String)value).length() < 1) {
+					if(((String)value).length() < 1 || ((String)value).length() > 100) {
 						c.setBackground(Color.RED);
-						setToolTipText("A requirement must have a name.");
+						setToolTipText("A requirement must have a name between 1 and 100 charecters.");
 					}
 				} else if(column == 2) {
 					if(((String)value).length() < 1) {
