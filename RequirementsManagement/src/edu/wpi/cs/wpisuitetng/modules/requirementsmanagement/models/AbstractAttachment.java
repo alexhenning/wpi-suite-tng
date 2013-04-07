@@ -17,6 +17,12 @@ import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
+/**
+ *
+ * Abstract class for attachments
+ * @author TODO
+ *
+ */
 public abstract class AbstractAttachment extends AbstractModel {
 
 	/**

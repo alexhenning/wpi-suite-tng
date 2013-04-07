@@ -13,9 +13,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddProjectEventController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -30,12 +28,22 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class CreateProjectEventRequestObserver implements RequestObserver {
 
+	/** the controller that created the observer */
 	private AddProjectEventController controller;
 	
+	/**
+	 * Constructor 
+	 * @param controller the controller that created the observer
+	 */
 	public CreateProjectEventRequestObserver(AddProjectEventController controller){
 		this.controller = controller;
 	}
 
+	/**
+	 * Indicate a successful response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		// Get the response to the given request
@@ -48,6 +56,11 @@ public class CreateProjectEventRequestObserver implements RequestObserver {
 		controller.receivedAddConfirmation(projectEvent);
 	}
 
+	/**
+	 * indicate an error in the response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to create a ProjectEvent had an error.");
@@ -55,6 +68,12 @@ public class CreateProjectEventRequestObserver implements RequestObserver {
 							+iReq.getResponse().getBody());
 	}
 
+	/**
+	 *indicate the response failed
+	 *
+	 * @param iReq a request
+	 * @param exception the exception
+	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to create a ProjectEvent has failed.");

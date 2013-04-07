@@ -24,25 +24,47 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent.EventType;
 
+/**
+ *
+ * The requirment model
+ * @author TODO
+ *
+ */
 public class RequirementModel extends AbstractModel {
 
+	/** the id */
 	private int id;
+	/** the release number*/
 	private ReleaseNumber releaseNumber;
+	/** the status*/
 	private RequirementStatus status;
+	/** the priority*/
 	private RequirementPriority priority;
+	/** the name*/
 	private String name;
+	/** the description*/
 	private String description;
+	/** the estimate*/
 	private int estimate;
+	/** the actual effort*/
 	private int actualEffort;
+	/** the date of creation*/
 	private Date creationDate;
+	/** the date this was last modified*/
 	private Date lastModifiedDate;
+	/** the events that happened to this requirement*/
 	private List<RequirementEvent> events;
+	/** who made this requirement*/
 	private User creator;
+	/** who is assigned to this*/
 	private List<User> assignees;
+	/** the iteration*/
 	private Iteration iteration;
+	/** the type or requirement*/
 	private RequirementType type;
 
 	//TODO Validation Classes for Database retrieval
+	/** the sub requirements*/
 	private List<RequirementModel> subRequirements;
 	//TODO add attachments
 	//TODO add tasks
@@ -119,6 +141,13 @@ public class RequirementModel extends AbstractModel {
 		
 	}
 	
+	/**
+	 *add a note to the requirement
+	 *
+	 * @param user the user that added the note
+	 * @param body what the note says
+	 * @param date the date the note was added
+	 */
 	public void addNote(User user, String body, Date date) {
 		RequirementNote note = new RequirementNote(id, user, body);
 		note.setDate(date);
@@ -126,6 +155,12 @@ public class RequirementModel extends AbstractModel {
 		this.lastModifiedDate = date;
 	}
 
+	/**
+	 *add a note to the requirement
+	 *
+	 * @param user the user that added the note
+	 * @param body what the note says
+	 */
 	public void addNote(User user, String body) {
 		RequirementNote note = new RequirementNote(id, user, body);
 		note.setDate(new Date());
@@ -133,6 +168,11 @@ public class RequirementModel extends AbstractModel {
 		this.lastModifiedDate = new Date();
 	}
 	
+	/**
+	 * get the requirement's notes
+	 *
+	 * @return an array of the requirement's notes
+	 */
 	public RequirementNote[] getNotes() {
 		ArrayList<RequirementEvent> noteList = new ArrayList<RequirementEvent>();
 		for (RequirementEvent event : events) {
@@ -158,106 +198,236 @@ public class RequirementModel extends AbstractModel {
 		this.iteration = iteration;
 	}
 
+	/**
+	 * get the list of events
+	 *
+	 * @return the list of events
+	 */
 	public List<RequirementEvent> getEvents() {
 		return events;
 	}
 
+	/**
+	 * set the list of events
+	 *
+	 * @param events the list of events to set to this
+	 */
 	public void setEvents(List<RequirementEvent> events) {
 		this.events = events;
 	}
 
+	/**
+	 * get the date this was made
+	 *
+	 * @return the date this requirement was made
+	 */
 	public Date getCreationDate() {
 		return creationDate;
 	}
 
+	/**
+	 * set the creation date
+	 *
+	 * @param creationDate the creation date to set
+	 */
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 
+	/**
+	 * get the date this was last modified
+	 *
+	 * @return the date this was last modified
+	 */
 	public Date getLastModifiedDate() {
 		return lastModifiedDate;
 	}
 
+	/**
+	 * set the date this was last modified
+	 *
+	 * @param lastModifiedDate the date this was last modified
+	 */
 	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	
+	/**
+	 *set the creator
+	 *
+	 * @param creator the creator of this
+	 */
 	public void setCreator(User creator) {
 		this.creator = creator;
 	}
 	
+	/**
+	 * get the creator
+	 *
+	 * @return the creator
+	 */
 	public User getCreator() {
 		return creator;
 	}
 	
+	/**
+	 * set the requirement's assignees
+	 *
+	 * @param assignees the assignees to set to this requirement
+	 */
 	public void setAssignees(List<User> assignees) {
 		this.assignees = assignees;
 	}
 	
+	/**
+	 * get this requirement's assignees
+	 *
+	 * @return this requirement's assignees
+	 */
 	public List<User> getAssignees() {
 		return assignees;
 	}
 		
+	/**
+	 * get the release number
+	 *
+	 * @return the realse number
+	 */
 	public ReleaseNumber getReleaseNumber() {
 		return releaseNumber;
 	}
 
+	/**
+	 * set the release number
+	 *
+	 * @param the release number
+	 */
 	public void setReleaseNumber(ReleaseNumber releaseNumber) {
 		this.releaseNumber = releaseNumber;
 	}
 
+	/**
+	 *get the id
+	 *
+	 * @return the id
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 *set the id
+	 *
+	 * @param id the id
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
 
+	/**
+	 *get the status
+	 *
+	 * @return the status
+	 */
 	public RequirementStatus getStatus() {
 		return status;
 	}
 
+	/**
+	 *set the status
+	 *
+	 * @param status the status
+	 */
 	public void setStatus(RequirementStatus status) {
 		this.status = status;
 	}
 
+	/**
+	 *get the priority
+	 *
+	 * @return the priority
+	 */
 	public RequirementPriority getPriority() {
 		return priority;
 	}
 
+	/**
+	 *set the priority
+	 *
+	 * @param priority the priority
+	 */
 	public void setPriority(RequirementPriority priority) {
 		this.priority = priority;
 	}
 
+	/**
+	 *get the name
+	 *
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 *set the name
+	 *
+	 * @param name the name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/**
+	 *get the description
+	 *
+	 * @return the description
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 *set the description
+	 *
+	 * @param description the description
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
+	/**
+	 *get the estimate
+	 *
+	 * @return the estimate
+	 */
 	public int getEstimate() {
 		return estimate;
 	}
 
+	/**
+	 *set the estimate
+	 *
+	 * @param estimate the estimate
+	 */
 	public void setEstimate(int estimate) {
 		this.estimate = estimate;
 	}
 
+	/**
+	 *get the actual effort
+	 *
+	 * @return the actual effort
+	 */
 	public int getActualEffort() {
 		return actualEffort;
 	}
 
+	/**
+	 *set the actual effort
+	 *
+	 * @param actualEffort the actual effort
+	 */
 	public void setActualEffort(int actualEffort) {
 		this.actualEffort = actualEffort;
 	}
@@ -275,7 +445,7 @@ public class RequirementModel extends AbstractModel {
 
 	/**
 	 * Converts this Requirement to a JSON string
-	 * @return a string in JSON representing this Defect
+	 * @return a string in JSON representing this Requirement
 	 */
 	@Override
 	public String toJSON() {
@@ -325,9 +495,14 @@ public class RequirementModel extends AbstractModel {
 //		Note.addGsonDependencies(builder);
 //		AbstractAttachment.addGsonDependencies(builder);
 	}
-	
-	// interface documentation says this is necessary for the mock database
-	// not sure if this is still needed otherwise
+
+	/**
+	 *interface documentation says this is necessary for the mock database
+	 *not sure if this is still needed otherwise
+	 *
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public Boolean identify(Object o) {
 		Boolean returnValue = false;
@@ -340,6 +515,11 @@ public class RequirementModel extends AbstractModel {
 		return returnValue;
 	}
 
+	/**
+	 *toString() method
+	 *
+	 * @return the JSON string
+	 */
 	@Override
 	public String toString() {
 		return toJSON();

@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrieveSingleIterationRequestObserver implements RequestObserver {
 	
+	/** Callback paired with this */
 	private SingleIterationCallback callback;
 	
 	/**

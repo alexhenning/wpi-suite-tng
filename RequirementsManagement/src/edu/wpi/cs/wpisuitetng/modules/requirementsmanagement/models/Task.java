@@ -18,6 +18,12 @@ import com.google.gson.GsonBuilder;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
 
+/**
+ *
+ * NOT REALLY SURE WHAT THIS IS
+ * @author TODO
+ *
+ */
 public class Task extends AbstractModel {
 	
 	//TODO Add fields to Tasks

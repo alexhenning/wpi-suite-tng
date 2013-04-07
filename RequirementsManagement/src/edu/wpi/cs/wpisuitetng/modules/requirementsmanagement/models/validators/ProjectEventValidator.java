@@ -12,17 +12,19 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 
 /**
+ * Validator for project events
  * @author jpalnick
  *
  */
 public class ProjectEventValidator {
 
+	/** the database */
 	private Data data;
+	/** the last existing project event model */
 	private ProjectEvent lastExistingProjectEvent;
 	
 	/**
@@ -87,7 +89,7 @@ public class ProjectEventValidator {
 //	 * 
 //	 * @param id the id of the Iteration
 //	 * @param project the project this Iteration belongs to
-//	 * @param issues list of errors to add to if defect doesn't exist
+//	 * @param issues list of errors to add to if project event doesn't exist
 //	 * @param fieldName name of field to use in error if necessary
 //	 * @return The Iteration with the given id, or null if it doesn't exist
 //	 * @throws WPISuiteException 

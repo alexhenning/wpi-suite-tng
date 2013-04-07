@@ -41,7 +41,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  */
 public class MainTabController {
 	
+	/** the main tab view */
 	private final MainTabView view;
+	/** a list requirements tab */
+	private ListRequirementsTab listReqsView = null;
 	
 	/**
 	 * @param view Create a controller that controls this MainTabView
@@ -80,8 +83,8 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Adds a tab that displays the given defect in the given mode
-	 * @param defect The defect to display
+	 * Adds a tab that displays the given requirement in the given mode
+	 * @param requirement The requirement to display
 	 * @param mode The Mode to use
 	 */
 	private Tab addRequirementTab(RequirementModel requirement, Mode mode) {
@@ -92,6 +95,11 @@ public class MainTabController {
 		return tab;
 	}
 	
+	/**
+	 * create a tab for adding an iteration
+	 *
+	 * @return the tab created
+	 */
 	public Tab addCreateIterationTab() {
 		Iteration iteration = new Iteration();
 		Tab tab = addTab();
@@ -102,9 +110,9 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Description goes here
+	 * create a tab for editing permissions
 	 *
-	 * @return
+	 * @return the tab created
 	 */
 	public Tab addPermissionTab() {
 		// If the tab is already opened, switch to that tab.
@@ -128,8 +136,8 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Adds a tab that displays the given defect
-	 * @param defect the defect to display
+	 * Adds a tab that displays the given requirement
+	 * @param requirement the requirement to display
 	 * @return The created Tab 
 	 */
 	public Tab addEditRequirementTab(RequirementModel requirement) {
@@ -143,7 +151,7 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Adds a tab that allows the user to create a new Defect
+	 * Adds a tab that allows the user to create a new requirement
 	 * @return The created Tab
 	 */
 	public Tab addCreateRequirementTab() {
@@ -213,31 +221,38 @@ public class MainTabController {
 		}
 	}
 
-	private int listIndex = -1;
-	ListRequirementsTab listReqsView;
+	/**
+	 * add a tab that lists all the requirements
+	 *
+	 * @return the created tab
+	 */
 	public Tab addListRequirementsTab() {
-		if (listIndex == -1) {
-			listReqsView = new ListRequirementsTab(null, this);
-			Tab tab = addTab("All Requirements", new ImageIcon(), listReqsView,
-								"List of requirements");
-			tab.setComponent(listReqsView);
-			listReqsView.requestFocus();
-			listIndex = view.getTabCount() - 1;
-			view.addChangeListener(new ChangeListener() {				
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					listReqsView.mainPanel.updateAllRequirementList();
+		if(listReqsView != null) {
+			for (int i=0; i<view.getTabCount(); i++) {
+				// TODO: If the tab name changes, will need to change the string
+				// to match the tab name
+				if (view.getTitleAt(i).equals("All Requirements")) {
+					switchToTab(i);
+					view.requestFocus();
+					return null;
 				}
-			});
-			return tab;
-		} else {
-			view.setSelectedIndex(listIndex);
-			view.requestFocus();
-			return null;
-		}
-	}
+			}
 
-	public void addEditPermissionsTab(Permissions profile) {
-		System.out.println("addEditPermissionsTab called (NYI)");
+			// Should not reach here, but if so, let it create another tab
+		}
+
+		listReqsView = new ListRequirementsTab(null, this);
+		Tab tab = addTab("All Requirements", new ImageIcon(), listReqsView,
+							"List of requirements");
+		tab.setComponent(listReqsView);
+		listReqsView.requestFocus();
+		view.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				listReqsView.mainPanel.updateAllRequirementList();
+			}
+		});
+
+		return tab;
 	}
 }

@@ -20,14 +20,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
- *
- * Description goes here
+ * Action to add the edit requirement tab
+ * 
  * @author Tim
  *
  */
 @SuppressWarnings("serial")
 public class EditRequirementAction extends AbstractAction {
 
+	/** the main tab controller */
 	private final MainTabController controller;
 	
 	/**
@@ -40,6 +41,11 @@ public class EditRequirementAction extends AbstractAction {
 		putValue(MNEMONIC_KEY, KeyEvent.VK_L);
 	}
 	
+	/**
+	 * Add the Edit requirement tab to the main tab controller
+	 *
+	 * @param arg0 The action that happened
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		controller.addEditRequirementTab(new RequirementModel());

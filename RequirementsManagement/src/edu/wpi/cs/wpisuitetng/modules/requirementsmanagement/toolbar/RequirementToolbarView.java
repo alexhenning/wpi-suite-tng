@@ -31,19 +31,23 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 /**
- * The Defect tab's toolbar panel.
- * Always has a group of global commands (Create Defect, Search).
+ * The Requirements Management tab's toolbar panel. Provides cancel, close, and delete buttons for creating and/or editing requirements
+ * Always has a group of global commands (Create Requirement, Create Iteration, Search, List Requirements).
  */
 @SuppressWarnings("serial")
 public class RequirementToolbarView extends ToolbarGroupView {
 
+	/** cancel button */
 	private JButton cancelButton;
+	/** close button */
 	private JButton closeButton;
+	/** delete button */
 	private JButton deleteButton;
-//	private JButton restoreButton;
+	/** the coresponding requirement's tab */
 	private RequirementsTab tab;
 	
 	/**
+	 * Constructor
 	 * Create a ToolbarView.
 	 * @param tabController The MainTabController this view should open tabs with
 	 */
@@ -63,11 +67,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		cancelButton.setAction(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//if (tab.getRequirementPanel().getEditMode() == Mode.CREATE) {
-					tabController.closeCurrentTab();
-				//} else {
-				//	tab.getRequirementPanel().refreshModel();
-				//}
+				tabController.closeCurrentTab();
 			}
 		});
 		cancelButton.setText("Cancel");
@@ -125,9 +125,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 					DB.updateRequirements(model, new SingleRequirementCallback() {
 						@Override
 						public void callback(RequirementModel req) {
-//							tabController.closeCurrentTab();
 							tab.getRequirementPanel().updateModel(req);
-//							tabController.addEditRequirementTab(req);
 						}
 					});
 				}
@@ -136,28 +134,6 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		c.gridy = 2;
 		deleteButton.setText("Delete");
 		content.add(deleteButton, c);
-		
-//		// Add delete button
-//		restoreButton = new JButton("Restore");
-//		restoreButton.setAction(new AbstractAction() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				RequirementModel model = tab.getRequirementPanel().getModel();
-////				if (model.getStatus().equals(RequirementStatus.IN_PROGRESS)) return;
-//				model.setStatus(RequirementStatus.OPEN);
-//				DB.updateRequirements(model, new SingleRequirementCallback() {
-//					@Override
-//					public void callback(RequirementModel req) {
-////						tabController.closeCurrentTab();
-////						tabController.addListRequirementsTab();
-//						tab.getRequirementPanel().updateModel(req);
-//					}
-//				});
-//			}
-//		});
-//		c.gridy = 3;
-//		restoreButton.setText("Restore");
-//		content.add(restoreButton, c);
 
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
@@ -167,30 +143,36 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
 	
+	/**
+	 * update buttons displayed based on the mode
+	 *
+	 * @param mode the mode to set the buttons off of
+	 * @param req the requirement being created/editied
+	 */
 	public void update(Mode mode, RequirementModel req) {
 		if (mode.equals(Mode.EDIT)) {
 			closeButton.setEnabled(true);
 			deleteButton.setEnabled(true);
+			if (req.getStatus().equals(RequirementStatus.IN_PROGRESS)) {
+				deleteButton.setEnabled(false);
+			} else {
+				deleteButton.setEnabled(true);
+			}
+			if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
+				closeButton.setText("Reopen");
+			} else {
+				closeButton.setText("Complete!");
+			}
+			if (req.getStatus().equals(RequirementStatus.DELETED)) {
+				deleteButton.setText("Restore");
+				closeButton.setEnabled(false);
+			} else {
+				deleteButton.setText("Delete");
+				closeButton.setEnabled(true);
+			}
 		} else {
 			closeButton.setEnabled(false);
 			deleteButton.setEnabled(false);
-		}
-		if (req.getStatus().equals(RequirementStatus.IN_PROGRESS)) {
-			deleteButton.setEnabled(false);
-		} else {
-			deleteButton.setEnabled(true);
-		}
-		if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
-			closeButton.setText("Reopen");
-		} else {
-			closeButton.setText("Complete!");
-		}
-		if (req.getStatus().equals(RequirementStatus.DELETED)) {
-			deleteButton.setText("Restore");
-			closeButton.setEnabled(false);
-		} else {
-			deleteButton.setText("Delete");
-			closeButton.setEnabled(true);
 		}
 	}
 

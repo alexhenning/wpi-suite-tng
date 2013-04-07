@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    
+ ******************************************************************************/
+
 /**
  * @author www.how2java.com
  */
@@ -11,6 +23,12 @@ import java.awt.event.FocusEvent;
 
 import javax.swing.JTextArea;
 
+/**
+ *
+ * TODO: DOCUMENT THIS
+ * @author TODO
+ *
+ */
 @SuppressWarnings("serial")
 public class HintedTextArea extends JTextArea {
 
@@ -28,6 +46,11 @@ public class HintedTextArea extends JTextArea {
 
 		this.addFocusListener(new FocusAdapter() {
 
+			/**
+			 * what to do if focus is gained
+			 *
+			 * @param e the event that caused focus to be gained
+			 */
 			@Override
 			public void focusGained(FocusEvent e) {
 				if (getText().equals(hint)) {
@@ -40,6 +63,11 @@ public class HintedTextArea extends JTextArea {
 				}
 			}
 
+			/**
+			 * what to do if focus is lost
+			 *
+			 * @param e the event that caused focus to be lost
+			 */
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (getText().equals(hint) || getText().length() == 0) {

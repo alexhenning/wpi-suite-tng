@@ -25,12 +25,19 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  */
 public abstract class RequirementEvent extends AbstractModel {
 	
+	/**
+	 *
+	 * the kinds of events
+	 *
+	 */
 	public enum EventType {
 		NOTE,
 		CHANGESET
 	};
 	
+	/** the date */
 	protected Date date = new Date();
+	/** the user */
 	protected User user = new User("", "", "", -1);
 	
 	/**
@@ -66,6 +73,11 @@ public abstract class RequirementEvent extends AbstractModel {
 		this.user = user;
 	}
 	
+	/**
+	 *get the type of event
+	 *
+	 * @return the events type
+	 */
 	public EventType getEventType() {
 		return type;
 	}
@@ -90,8 +102,13 @@ public abstract class RequirementEvent extends AbstractModel {
 		// TODO Auto-generated method stub
 	}
 	
-	// this model will only be created server side and then retrieved as part of a RequirementEvent in the future
-	// so I'm not sure if this is necessary
+	/**
+	 * this model will only be created server side and then retrieved as part of a RequirementEvent in the future
+	 * so I'm not sure if this is necessary
+	 *
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public Boolean identify(Object o) {
 		// TODO Auto-generated method stub

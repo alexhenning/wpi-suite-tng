@@ -14,11 +14,11 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Date;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,14 +37,22 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  * @author Josh
  */
 @SuppressWarnings("serial")
-public class NoteMainPanel extends JPanel {
+public class NoteMainPanel extends JPanel implements KeyListener {
+	/** the panel that this is shown in */
 	RequirementsPanel parent;
+	/** is input enabled */
 	boolean inputEnabled;
+	/** a text area */
 	public HintedTextArea ta;
+	/** a panel to view notes */
 	JPanel noteViewer;
+	/** a panel to add notes */
 	JPanel noteAdder;
+	/** a scroll pane */
 	JScrollPane noteScrollPane;
+	/** a button to add a note */
 	JButton addButton;
+	/** list of the requirements notes */
 	List<RequirementNote> notes;
 
 	/**
@@ -76,6 +84,9 @@ public class NoteMainPanel extends JPanel {
 
 		ta = new HintedTextArea(5, 40, "New note");
 		ta.setLineWrap(true);	
+		ta.setEditable(inputEnabled);
+		ta.addKeyListener(this);
+		
 		JScrollPane textPane = new JScrollPane(ta);
 		textPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		textPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -88,6 +99,8 @@ public class NoteMainPanel extends JPanel {
 		
 		addButton = new JButton("Add note");
 		addButton.addActionListener(new AddNoteController(this, parent.model, parent));
+//		addButton.setEnabled(inputEnabled);
+		addButton.setEnabled(false);
 		
 		// Add elements to the main panel
 		add(noteScrollPane, BorderLayout.CENTER);
@@ -99,6 +112,11 @@ public class NoteMainPanel extends JPanel {
 		add(noteAdder, BorderLayout.PAGE_END);
 	}
 	
+	/**
+	 * put the notes into the view
+	 *
+	 * @param notes list of notes
+	 */
 	public void setNotes(List<RequirementNote> notes) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -128,11 +146,26 @@ public class NoteMainPanel extends JPanel {
 	 * 
 	 * @param enabled	Whether or not input is enabled.
 	 */
-	protected void setInputEnabled(boolean enabled) {
+	public void setInputEnabled(boolean enabled) {
 		inputEnabled = enabled;
 
+		ta.setEditable(enabled);
 		ta.setEnabled(enabled);
-		addButton.setEnabled(enabled);
+		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note") && enabled);
 		// TODO: implement
 	}
+	
+	//checked for input from keyboard
+	public void keyTyped ( KeyEvent e ){
+		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note"));
+	}
+	//check if key is pressed. Doesn't really do anything now, but needs to be included 
+	public void keyPressed ( KeyEvent e){  
+
+	}  
+	//check if key is released. Doesn't really do anything now, but needs to be included 
+	public void keyReleased ( KeyEvent e ){  
+		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note"));
+	}  
+
 }

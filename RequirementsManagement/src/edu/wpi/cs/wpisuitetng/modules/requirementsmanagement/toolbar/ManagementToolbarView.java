@@ -31,9 +31,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
 @SuppressWarnings("serial")
 public class ManagementToolbarView extends ToolbarGroupView {
 
+	/** button to view permissions */
 	private JButton permissionButton;
 
 	/**
+	 * Constructor
 	 * Create a ToolbarView for management.
 	 *
 	 * @param tabController The MainTabController this view should open tabs with

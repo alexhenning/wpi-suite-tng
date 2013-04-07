@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  * Controller responds to a click of an add button to create a new
- * Requirement to send to the server
+ * Iteartion to send to the server
  * @author Tim Calvert
  * @author Jacob Palnick
  *
@@ -36,16 +36,24 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 @SuppressWarnings("serial")
 public class AddIterationController extends AbstractAction implements ActionListener {
 	
+	/** The panel for iterations */
 	private final IterationPanel panel;
 	//private final JPanel buttonPanel;
 
+	/**
+	 * Constructor
+	 * @param panel the iteration panel being created
+	 */
 	public AddIterationController(IterationPanel panel) {
 		this.panel = panel;
 	}
 	
-	/* 
+	
+	/**
 	 * This will be called when the user clicks an add button
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 *
+	 * @param e the action performed
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -55,6 +63,11 @@ public class AddIterationController extends AbstractAction implements ActionList
 		request.send();
 	}
 	
+	/**
+	 * Confirm that the iteration was added, closes the panel
+	 *
+	 * @param req
+	 */
 	public void receivedAddConfirmation(Iteration req) {
 //		DB.getSingleRequirement(""+req.getId(), new SingleIterationCallback() {
 //			@Override public void callback(Iteration req) {

@@ -34,16 +34,24 @@ public class DeleteRequirementController extends AbstractAction implements Actio
 	// TODO This system currently does not have enough information to function properly
 	//      I'd suggest that we don't try and demonstrate this yet
 	
+	/** The requirements panel that has the requirement */
 	private final RequirementsPanel panel;
 	//private final JPanel buttonPanel;
 	
+	/**
+	 * Constructor
+	 * @param panel The requirements panel that has the requirement
+	 */
 	public DeleteRequirementController(RequirementsPanel panel) {
 		//this.buttonPanel = buttonPanel;  /* not needed at the moment */
 		this.panel = panel;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * Delete the requirement from the server
+	 *
+	 * @param e the action that happened
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -53,6 +61,11 @@ public class DeleteRequirementController extends AbstractAction implements Actio
 		request.send();
 	}
 	
+	/**
+	 * Confirm that it was deleted
+	 *
+	 * @param Id
+	 */
 	public void receivedDeleteConfirmation(int Id) {
 		// TODO: mainBoard.deleteRequirement(Id);
 	}

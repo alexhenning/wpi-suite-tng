@@ -33,15 +33,27 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
+/**
+ *
+ * The view for creating an iteration
+ * @author TODO
+ *
+ */
 @SuppressWarnings("serial")
 public class IterationPanel extends JPanel{
 	
+	/** the model to hold the iteration */
 	Iteration model;
 	
+	/** the tab that created this panel */
 	IterationTab parent;
+	/** the layout for this panel */
 	private GridBagLayout panelLayout;
+	/** labels to describe the text fields */
 	JLabel lbl1, lbl2, lbl3;
+	/** text fields for the iteration's data to be entered into */
 	JTextField startDate, endDate, iterationNumber;
+	/** button to submit the iteration */
 	JButton submit;
 
 	/** An enum indicating if the form is in create mode or edit mode */
@@ -50,6 +62,10 @@ public class IterationPanel extends JPanel{
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
 
+	/**
+	 * Constructor
+	 * @param iterationTab the tab that created this panel
+	 */
 	public IterationPanel(IterationTab iterationTab){
 		this.parent = iterationTab;
 		model = parent.iteration;
@@ -73,6 +89,10 @@ public class IterationPanel extends JPanel{
 	}
 
 	
+	/**
+	 * add all the components (labels, text fields, buttons) to this panel's view
+	 *
+	 */
 	private void addComponents(){
 		panelLayout =new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -113,6 +133,10 @@ public class IterationPanel extends JPanel{
 		add(submit, c);
 	}
 	
+	/**
+	 * close this tab/panel
+	 *
+	 */
 	public void close() {
 		parent.tabController.closeCurrentTab();
 	}
@@ -129,6 +153,12 @@ public class IterationPanel extends JPanel{
 		// TODO: implement
 	}
 	
+	/**
+	 * Check if dates overlap
+	 * TODO: IS THIS WHAT WE REALLY WANT THIS TO DO? DO WE WE EVEN USE THIS?
+	 *
+	 * @return if dates overlap
+	 */
 	public boolean doDatesOverlap() {
 		return false;
 	}
@@ -174,9 +204,9 @@ public class IterationPanel extends JPanel{
 	}
 
 	/**
-	 * Returns a boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * Returns a boolean representing whether or not input is enabled for the IterationPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * @return	A boolean representing whether or not input is enabled for the IterationPanel and its children.
 	 */
 	public boolean getInputEnabled() {
 		return inputEnabled;
@@ -184,7 +214,7 @@ public class IterationPanel extends JPanel{
 
 	/**
 	 * Gets the IterationPanel's internal model.
-	 * @return
+	 * @return the iteration model
 	 */
 	public Iteration getModel() {
 //		System.out.println("getting model from panel");
@@ -244,6 +274,12 @@ public class IterationPanel extends JPanel{
 //	}
 	
 	
+	/**
+	 *
+	 * callback class to update the iteration's id
+	 * @author TODO
+	 *
+	 */
 	class UpdateIterationIdCallback implements IterationCallback {
 		@Override
 		public void callback(List<Iteration> iterationList) {
@@ -251,6 +287,12 @@ public class IterationPanel extends JPanel{
 		}
 	}
 
+	/**
+	 *
+	 * Callback class to make sure that the iterations dates don't overlap with other dates
+	 * @author TODO
+	 *
+	 */
 	class CheckDateOvelapCallback implements IterationCallback {
 		@Override
 		public void callback(List<Iteration> iterationList) {

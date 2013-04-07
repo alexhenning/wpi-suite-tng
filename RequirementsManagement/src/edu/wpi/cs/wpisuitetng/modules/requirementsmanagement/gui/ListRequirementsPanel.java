@@ -15,6 +15,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +32,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
@@ -42,18 +49,40 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
+/**
+ *
+ * Panel to list all of the requirements, and have an option to edit them in the list
+ * @author Josh
+ * @author Tim C
+ * @author James
+ *
+ */
 @SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel {
 	
+	/** the tab that created this*/
 	ListRequirementsTab parent;
+	/** is inpute enabled*/
 	boolean inputEnabled;
+	/** the table that displays the requirements*/
 	JTable table;
+	/** the model for the table*/
 	ViewReqTable tableModel;
+	/** button to bring the table into edit mode*/
 	JButton editButton;
+	/** button to save edits*/
 	JButton saveButton;
+	/** button to cancel edits */
 	JButton cancelButton;
+	/** panel to display the edit/save and cancel buttons */
 	JPanel editPanel;
+	/** Old data used to compare changes */
+	Object[][] data;
 	
+	/**
+	 * Constructor
+	 * @param parent the tab that made this
+	 */
 	public ListRequirementsPanel(final ListRequirementsTab parent) {
 		this.parent = parent;
 		
@@ -96,7 +125,15 @@ public class ListRequirementsPanel extends JPanel {
 		//create the table part of the GUI
 		tableModel = new ViewReqTable();
 		tableModel.setMode(Mode.VIEW);
-		table = new JTable(tableModel);
+		table = new JTable(tableModel) {
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				// Just return the custom renderer
+				// This somehow works differently than setDefaultRenderer, but I'm not sure how
+				//   other than the fact that this works and default renderer certainly does not
+				return new CustomCellRenderer();
+			}
+		};
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -152,12 +189,40 @@ public class ListRequirementsPanel extends JPanel {
 		// TODO: implement
 	}
 
+	/**
+	 * updates the list of requirements in the table
+	 *
+	 */
 	public void updateAllRequirementList() {
 		DB.getAllRequirements(new UpdateTableCallback());
 	}
 	
+	/**
+	 * the the table model
+	 *
+	 * @return the table model
+	 */
 	public ViewReqTable getTable(){
 		return this.tableModel;
+	}
+	
+	/**
+	 * Copies data over to a new structure
+	 * clone() didn't seem to work correctly
+	 *
+	 * @param data data to copy
+	 * @return
+	 */
+	private Object[][] copyData(Object[][] data) {
+		Object[][] copy = new Object[tableModel.getRowCount()][tableModel.getColumnCount()];
+		
+		for(int i = 0; i < tableModel.getRowCount(); ++i) {
+			for(int j = 0; j < tableModel.getColumnCount(); ++j) {
+				copy[i][j] = data[i][j];
+			}
+		}
+		
+		return copy;
 	}
 	
 	/**
@@ -172,13 +237,17 @@ public class ListRequirementsPanel extends JPanel {
 		editPanel.revalidate();
 		editPanel.repaint();
 		
+		// save copy of current data (clone() didn't seem to work)
+		data = copyData(tableModel.getData());
+		
 		setUpColumns(); // TODO disable status except for delete and complete, just display the correct one
 		                // TODO set up cell editors to limit what can be typed
 	}
 	
 	/**
-	 * Function to turn the table into view mode
+	 * turn the table into view mode
 	 *
+	 * @param cancelled if the changes made in edit mode should be cancelled
 	 */
 	public void setViewTable(boolean cancelled) {
 		if(table.isEditing()) {
@@ -203,6 +272,9 @@ public class ListRequirementsPanel extends JPanel {
 			editPanel.add(editButton);
 			editPanel.revalidate();
 			editPanel.repaint();
+			
+			// dump saved data
+			data = null;
 		}
 	}
 	
@@ -211,9 +283,9 @@ public class ListRequirementsPanel extends JPanel {
 	 *
 	 */
 	public void setUpColumns() {
-		setUpPriorityColumn(table, table.getColumnModel().getColumn(4));
-		setUpStatusColumn(table, table.getColumnModel().getColumn(3));
-		setUpIterationColumn(table, table.getColumnModel().getColumn(2));
+		setUpPriorityColumn(table, table.getColumnModel().getColumn(5));
+		setUpStatusColumn(table, table.getColumnModel().getColumn(4));
+		setUpIterationColumn(table, table.getColumnModel().getColumn(3));
 	}
 	
 	/**
@@ -227,10 +299,6 @@ public class ListRequirementsPanel extends JPanel {
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
 		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox));
-		
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change iteration");
-		iterColumn.setCellRenderer(renderer);
 	}
 	
 	/**
@@ -249,11 +317,6 @@ public class ListRequirementsPanel extends JPanel {
 		statusBox.addItem("DELETED");
 		
 		statusColumn.setCellEditor(new DefaultCellEditor(statusBox));
-		
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change status");
-		statusColumn.setCellRenderer(renderer);
-		
 	}
 	
 	/**
@@ -270,20 +333,14 @@ public class ListRequirementsPanel extends JPanel {
 		priorityBox.addItem("HIGH");
 		
 		priorityColumn.setCellEditor(new DefaultCellEditor(priorityBox));
-		
-
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setToolTipText("Click to change priority");
-		priorityColumn.setCellRenderer(renderer);
 	}
 	
 	/**
-	 * Takes a list of all models in the database and applies updates that the user
-	 * made in the table to them so they match the edited table
+	 * update the requirements models so that they can be sent to the database to update them there
 	 *
-	 * @param reqs List of requirements from the database
-	 * @param iterations List of iterations from the database
-	 * @return Updated list of requirements to be sent back to the database
+	 * @param reqs the list of requirements
+	 * @param iterations the list of all iterations
+	 * @return the updated list of requirements
 	 */
 	public List<RequirementModel> updateModels(List<RequirementModel> reqs, List<Iteration> iterations) {
 		// TODO prune out unchanged requirements and just return those that need to be updated
@@ -293,10 +350,11 @@ public class ListRequirementsPanel extends JPanel {
 					if(req.getId() == Integer.valueOf((String)tableModel.getValueAt(i, 0))) {
 						// we have the correct requirement, update values
 						req.setName((String)tableModel.getValueAt(i, 1));
+						req.setDescription((String)tableModel.getValueAt(i, 2));
 						// Find the right iteration from the list
 						req.setIteration(null);  // assume iteration is null, then find the correct one
 						for(Iteration iteration : iterations) {
-							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 2))) {
+							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 3))) {
 								req.setIteration(iteration);
 								break;
 							}
@@ -307,10 +365,10 @@ public class ListRequirementsPanel extends JPanel {
 						} else if(req.getIteration() == null && req.getStatus() == RequirementStatus.IN_PROGRESS) {
 							req.setStatus(RequirementStatus.OPEN);
 						} else {
-							req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 3)));
+							req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 4)));
 						}
-						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 4)));
-						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 5)));
+						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 5)));
+						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 6)));
 						break;
 					}
 				}
@@ -321,9 +379,9 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
-	 * Makes sure that there is no invalid input in the panels
+	 * checks to see if all the changes made in the table are valid
 	 *
-	 * @return True if there are no errors in the table, false otherwise
+	 * @return true if the changes made were all good, false otherwise
 	 */
 	public boolean validateModels() {
 		boolean noErrors = true;
@@ -333,13 +391,21 @@ public class ListRequirementsPanel extends JPanel {
 		for(int i = 0; i < tableModel.getRowCount(); i++) {
 			// check name
 			if(((String)tableModel.getValueAt(i, 1)).length() < 1) {
-				// highlight field
 				System.out.println("Error in name for Requirement in row " + i);
 				noErrors = false;
 			}
+			if(((String)tableModel.getValueAt(i, 2)).length() < 1){
+				System.out.println("Error in description for Requirement in row " + i);
+				noErrors = false;
+			}
 			// check estimate
-			if((Integer.valueOf((String)tableModel.getValueAt(i, 5))) < 0) {
-				// highlight field
+			try {
+				if((Integer.valueOf((String)tableModel.getValueAt(i, 6))) < 0) {
+					System.out.println("Error in estimate for Requirement in row " + i);
+					noErrors = false;
+				}
+			} catch (NumberFormatException e) {
+				// still an error
 				System.out.println("Error in estimate for Requirement in row " + i);
 				noErrors = false;
 			}
@@ -349,9 +415,9 @@ public class ListRequirementsPanel extends JPanel {
 	}
 	
 	/**
-	 * Sends all the requirements back to the database
+	 * updates all the requirements in the database to match those in reqs
 	 *
-	 * @param reqs List of requirements to update
+	 * @param reqs a list of all the requirements
 	 */
 	public void sendRequirementsToDatabase(List<RequirementModel> reqs) {
 		// TODO (with updateModels) Only update those that need to be updated
@@ -394,8 +460,7 @@ public class ListRequirementsPanel extends JPanel {
 	
 	/**
 	 *
-	 * Retrieves all requirements from the database
-	 * Couldn't use the one already in place because it does a lot of extra things
+	 * gets a list of all the requirements and creates a RetrieveAllIterationsCallback to update them and send them to the database
 	 * @author Tim Calvert
 	 * @author James Megin
 	 *
@@ -403,10 +468,9 @@ public class ListRequirementsPanel extends JPanel {
 	class RetrieveAllRequirementsCallback implements RequirementsCallback {
 		
 		/**
-		 * Requests the list of iterations from the db and continues
-		 * from that callback
+		 * Create RetrieveallIteratoinsCallback to update the requirments and send the to the database
 		 *
-		 * @param reqs List of requirements returned from the db
+		 * @param reqs a list of all requirements
 		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
@@ -424,6 +488,7 @@ public class ListRequirementsPanel extends JPanel {
 	 */
 	class RetrieveAllIterationsCallback implements IterationCallback {
 		
+		/** a list of all the requirements */
 		List<RequirementModel> reqs;
 		
 		/**
@@ -449,35 +514,47 @@ public class ListRequirementsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 *
+	 * Callback to populate the table with all the requirements
+	 * @author Josh
+	 *
+	 */
 	class UpdateTableCallback implements RequirementsCallback {
+		/**
+		 * Callback function to populate the table with all the requirements
+		 *
+		 * @param reqs a list of all requirements
+		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
 			if (reqs.size() > 0) {
 				// put the data in the table
-				Object[][] entries = new Object[reqs.size()][6];
+				Object[][] entries = new Object[reqs.size()][7];
 				int i = 0;
 				for(RequirementModel req : reqs) {
 					entries[i][0] = String.valueOf(req.getId());
 					entries[i][1] = req.getName();
+					entries[i][2] = req.getDescription();
 					if (req.getIteration() != null) {
-						entries[i][2] = req.getIteration().getIterationNumber().toString();	
+						entries[i][3] = req.getIteration().getIterationNumber().toString();	
 					}
 					else {
-						entries[i][2] = "Backlog";
+						entries[i][3] = "Backlog";
 					}
 					if (req.getStatus() != null) {
-						entries[i][3] = req.getStatus().toString();
+						entries[i][4] = req.getStatus().toString();
 					}
 					else {
-						entries[i][3] = "Error: Status set to null";
+						entries[i][4] = "Error: Status set to null";
 					}
 					if (req.getPriority() != null) {
-						entries[i][4] = req.getPriority().toString();
+						entries[i][5] = req.getPriority().toString();
 					}
 					else {
-						entries[i][4] = "";
+						entries[i][5] = "";
 					}
-					entries[i][5] = req.getEstimate()+"";
+					entries[i][6] = req.getEstimate()+"";
 					i++;
 				}
 				getTable().setData(entries);
@@ -488,12 +565,15 @@ public class ListRequirementsPanel extends JPanel {
 			}
 		
 			TableColumn column = null;
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 7; i++) {
 				column = table.getColumnModel().getColumn(i);
 				if (i == 0) {
-					column.setPreferredWidth(25); //third column is bigger
+					column.setPreferredWidth(30); //third column is bigger
 				}
 				else if (i == 1) {
+					column.setPreferredWidth(500);
+				}
+				else if (i == 2) {
 					column.setPreferredWidth(700);
 				}
 				else {
@@ -507,6 +587,7 @@ public class ListRequirementsPanel extends JPanel {
 	/**
 	 *
 	 * Class to take the list of iterations from the database and fill in a combobox with their names
+	 * @author Tim C
 	 * @author James
 	 *
 	 */
@@ -528,6 +609,7 @@ public class ListRequirementsPanel extends JPanel {
 
 		/**
 		 * Go through the list of iterations and add their name to the combobox
+		 * it does not add iterations that are already over as it would be invalid to set a project to those iterations
 		 *
 		 * @param iterationss the list of iterations
 		 */
@@ -545,5 +627,59 @@ public class ListRequirementsPanel extends JPanel {
 		}
 		
 	}
+	
+	/**
+	 *
+	 * A custom cell renderer to allow for changing the background color
+	 * when a cell has an error in it
+	 * @author Tim Calvert
+	 * @author James Megin
+	 *
+	 */
+	class CustomCellRenderer extends DefaultTableCellRenderer {
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			
+			if(tableModel.getMode() == Mode.EDIT) {
+				if(!value.equals(data[row][column])) {
+					c.setBackground(Color.YELLOW);
+					setToolTipText("This cell has been changed from: " + (data[row][column]).toString());
+				} else {
+					c.setBackground(Color.WHITE);
+					setToolTipText(null);
+				}
+				if(column == 1) {
+					if(((String)value).length() < 1) {
+						c.setBackground(Color.RED);
+						setToolTipText("A requirement must have a name.");
+					}
+				} else if(column == 2) {
+					if(((String)value).length() < 1) {
+						c.setBackground(Color.RED);
+						setToolTipText("A requirement must have a description.");
+					}
+				} else if(column == 6) {
+					try {
+						if(((Integer.valueOf((String)value) < 0))) {
+							c.setBackground(Color.RED);
+							setToolTipText("A requirement estimate must be a positive number.");
+						}
+					} catch (NumberFormatException e) {
+						// still an error
+						c.setBackground(Color.RED);
+						setToolTipText("A requirement estimate must be a positive number.");
+					}
+				}
+			}
+			
+			return c;
+		}
+		
+	}
+
 
 }
