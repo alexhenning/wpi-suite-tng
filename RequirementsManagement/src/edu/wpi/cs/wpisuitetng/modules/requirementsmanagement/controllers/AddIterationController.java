@@ -57,10 +57,12 @@ public class AddIterationController extends AbstractAction implements ActionList
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration",  HttpMethod.PUT);
-		request.setBody(panel.getModel().toJSON());
-		request.addObserver(new CreateIterationRequestObserver(this));
-		request.send();
+		if(panel.validateFields()) {
+			final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration",  HttpMethod.PUT);
+			request.setBody(panel.getModel().toJSON());
+			request.addObserver(new CreateIterationRequestObserver(this));
+			request.send();
+		}
 	}
 	
 	/**

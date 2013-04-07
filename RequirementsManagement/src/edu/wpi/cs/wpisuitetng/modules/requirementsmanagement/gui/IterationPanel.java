@@ -324,4 +324,9 @@ public class IterationPanel extends JPanel{
 		}
 	}
 
+	public boolean validateFields() {
+		//TODO validate the values
+		return true;
+	}
+	
 }
