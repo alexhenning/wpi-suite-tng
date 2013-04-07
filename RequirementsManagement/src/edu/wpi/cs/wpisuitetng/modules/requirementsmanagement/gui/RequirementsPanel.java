@@ -707,4 +707,57 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		updateSubmitButton();
 	}  
 
+	public void addToParent(int parentId) {
+		DB.getSingleRequirement(parentId+"", new SingleRequirementCallback() {
+			@Override
+			public void callback(RequirementModel req) {
+				req.getSubRequirements().add(model);
+				DB.updateRequirements(req, new SingleRequirementCallback() {
+					@Override
+					public void callback(RequirementModel req) {
+						if (req.getSubRequirements().contains(model)) {
+							setStatus("added to parent");
+						} else {
+							setStatus("faield to add to parent");
+						}
+						
+					}
+				});
+			}
+    	});
+	}
+	
+	public void addChild(int childId) {
+		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
+			@Override
+			public void callback(RequirementModel child) {
+				model.getSubRequirements().add(child);
+				DB.updateRequirements(model, new AddChildRequirementCallback(child));
+
+			}
+    	});
+	}
+	
+	
+	public void addChild(RequirementModel child) {
+		model.getSubRequirements().add(child);
+		DB.updateRequirements(model, new AddChildRequirementCallback(child));
+	}
+	
+	class AddChildRequirementCallback implements SingleRequirementCallback {
+		private RequirementModel childReq;
+		
+		public AddChildRequirementCallback(RequirementModel childReq) {
+			this.childReq = childReq;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			if (currentReq.getSubRequirements().contains(childReq)) {
+				setStatus("added child");
+			} else {
+				setStatus("faield to add child");
+			}
+		}
+	}
 }
