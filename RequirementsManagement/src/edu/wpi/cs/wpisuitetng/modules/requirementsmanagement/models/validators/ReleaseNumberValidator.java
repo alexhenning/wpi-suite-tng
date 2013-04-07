@@ -97,16 +97,16 @@ public class ReleaseNumberValidator {
 	/**
 	 * Return the ReleaseNumber with the given id if it already exists in the database.
 	 * 
-	 * @param id the id of the ReleaseNumber
+	 * @param string the id of the ReleaseNumber
 	 * @param project the project this ReleaseNumber belongs to
 	 * @param issues list of errors to add to if release number doesn't exist
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The ReleaseNumber with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
 	 */
-	ReleaseNumber getExistingReleaseNumber(int id, Project project, List<ValidationIssue> issues, String fieldName)
+	ReleaseNumber getExistingReleaseNumber(String string, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
-		List<Model> oldReleases = data.retrieve(ReleaseNumber.class, "id", id, project);
+		List<Model> oldReleases = data.retrieve(ReleaseNumber.class, "id", string, project);
 		if(oldReleases.size() < 1 || oldReleases.get(0) == null) {
 			issues.add(new ValidationIssue("ReleaseNumber with id does not exist in project", fieldName));
 			return null;
@@ -134,9 +134,8 @@ public class ReleaseNumberValidator {
 		
 		//check if the id is unique
 		if(mode == Mode.CREATE) {
-			if(getExistingReleaseNumber(releaseNumber.getId(), session.getProject(), issues, "id") != null) {
+			if(getExistingReleaseNumber(releaseNumber.getId() + "", session.getProject(), issues, "id") != null) {
 				issues.add(new ValidationIssue("Unable to create an ReleaseNumber with the provided id ("+releaseNumber.getId()+") since there is already an ReleaseNumber with that id"));
-//				return issues;
 			}
 		}
 
@@ -144,92 +143,14 @@ public class ReleaseNumberValidator {
 		if(mode == Mode.CREATE) {
 			if(getExistingReleaseNumber(releaseNumber.getReleaseNumber(), session.getProject(), issues, "releaseNumber") != null) {
 				issues.add(new ValidationIssue("Unable to create an ReleaseNumber with the provided releaseNumber ("+releaseNumber.getReleaseNumber()+") since there is already an ReleaseNumber with that releaseNumber"));
-//				return issues;
 			}
 		}
 
 		ReleaseNumber oldReleaseNumber = null;
 		if(mode == Mode.EDIT) {
-			oldReleaseNumber = getExistingReleaseNumber(releaseNumber.getId(), session.getProject(), issues, "id");
+			oldReleaseNumber = getExistingReleaseNumber(releaseNumber.getId() + "", session.getProject(), issues, "id");
 		}
 		lastExistingReleaseNumber = oldReleaseNumber;
-		
-//		// make sure Name and description size are within constraints
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
-//		if(requirement.getDescription() == null) {
-//			// empty descriptions are okay
-//			requirement.setDescription("");
-//		} else if(requirement.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
-		
-//		// make sure the creator and assignee exist and aren't duplicated
-//		if(mode == Mode.EDIT) {
-//			if(oldRequirement != null) {
-//				requirement.setCreator(oldRequirement.getCreator());
-//			}
-//		} else if(requirement.getCreator() == null) {
-//			issues.add(new ValidationIssue("Required", "creator"));
-//		} else {
-//			User creator = getExistingUser(requirement.getCreator().getUsername(), issues, "creator");
-//			if(creator != null) {
-//				if(!creator.getUsername().equals(session.getUsername())) {
-//					issues.add(new ValidationIssue("Must match currently logged in user", "creator"));
-//				} else {
-//					requirement.setCreator(creator);
-//				}
-//			}
-//		}
-//		
-//		if(requirement.getAssignee() != null) { // requirements can be missing an assignee
-//			User assignee = getExistingUser(requirement.getAssignee().getUsername(), issues, "assignee");
-//			if(assignee != null) {
-//				requirement.setAssignee(assignee);
-//			}
-//		}
-		
-//		// make sure start/endDates are not null
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
-//		if(requirement.getDescription() == null) {
-//			// empty descriptions are okay
-//			requirement.setDescription("");
-//		} else if(requirement.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
-
-		
-//		// make sure we're not being spoofed with some weird dates
-//		final Date now = new Date();
-//		if(oldIteration != null) {
-//			iteration.setStartDate(oldIteration.getStartDate());
-//			iteration.setEndDate(oldIteration.getEndDate());
-//		} else {
-//			iteration.setStartDate(now);
-//			iteration.setEndDate(now);
-//		}
-
-
-//		// make sure we're not being spoofed with some weird date
-//		final Date now = new Date();
-//		if(oldRequirement != null) {
-//			requirement.setCreationDate(oldRequirement.getCreationDate());
-//		} else {
-//			requirement.setCreationDate(now);
-//		}
-//		requirement.setLastModifiedDate((Date)now.clone());
-		
-//		if(oldRequirement != null) {
-//			requirement.setEvents(oldRequirement.getEvents());
-//		} else {
-//			// new release numbers should never have any events
-//			requirement.setEvents(new ArrayList<RequirementEvent>());
-//		}
 		
 		return issues;
 	}

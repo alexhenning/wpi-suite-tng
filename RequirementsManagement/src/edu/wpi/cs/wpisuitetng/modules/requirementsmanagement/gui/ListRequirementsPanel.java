@@ -450,6 +450,7 @@ public class ListRequirementsPanel extends JPanel {
 		
 		boolean lastReq = false;
 		
+		
 		public UpdateRequirementCallback(boolean lastReq) {
 			this.lastReq = lastReq;
 		}

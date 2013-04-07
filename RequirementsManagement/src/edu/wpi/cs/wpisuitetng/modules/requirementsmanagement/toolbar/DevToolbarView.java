@@ -42,9 +42,7 @@ public class DevToolbarView extends ToolbarGroupView {
 
 		// Construct the content panel
 		JPanel content = new JPanel();
-		GridBagLayout
-		
-		layout  = new GridBagLayout();
+		GridBagLayout layout  = new GridBagLayout();
 		content.setLayout(layout);
 		content.setOpaque(false);
 		
