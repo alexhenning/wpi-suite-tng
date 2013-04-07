@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 //import java.text.ParseException;
@@ -266,7 +267,7 @@ public class IterationPanel extends JPanel{
 		result.setText(string);
 	}
 	
-//	class EditRequirementAction extends AbstractAction {
+//	class EditIterationAction extends AbstractAction {
 //		@Override
 //		public void actionPerformed(ActionEvent arg0) {
 //			DB.updateIteration(model, new SingleIterationCallback() {
@@ -306,6 +307,8 @@ public class IterationPanel extends JPanel{
 				if(i.getId() != model.getId()) {
 					if(model.getStartDate().after(i.getStartDate()) && model.getStartDate().before(i.getEndDate())) {
 						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
+						setStatus("Start date overlaps with another iteration.");
+						startDatePicker.getEditor().setBackground(Color.RED);
 					}
 					if(model.getEndDate().after(i.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
 						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));

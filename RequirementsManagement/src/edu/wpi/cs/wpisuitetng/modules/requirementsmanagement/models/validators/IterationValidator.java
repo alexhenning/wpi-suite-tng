@@ -160,66 +160,6 @@ public class IterationValidator {
 		}
 		lastExistingIteration = oldIteration;
 		
-//		// make sure Name and description size are within constraints
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
-//		if(requirement.getDescription() == null) {
-//			// empty descriptions are okay
-//			requirement.setDescription("");
-//		} else if(requirement.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
-		
-//		// make sure the creator and assignee exist and aren't duplicated
-//		if(mode == Mode.EDIT) {
-//			if(oldRequirement != null) {
-//				requirement.setCreator(oldRequirement.getCreator());
-//			}
-//		} else if(requirement.getCreator() == null) {
-//			issues.add(new ValidationIssue("Required", "creator"));
-//		} else {
-//			User creator = getExistingUser(requirement.getCreator().getUsername(), issues, "creator");
-//			if(creator != null) {
-//				if(!creator.getUsername().equals(session.getUsername())) {
-//					issues.add(new ValidationIssue("Must match currently logged in user", "creator"));
-//				} else {
-//					requirement.setCreator(creator);
-//				}
-//			}
-//		}
-//		
-//		if(requirement.getAssignee() != null) { // requirements can be missing an assignee
-//			User assignee = getExistingUser(requirement.getAssignee().getUsername(), issues, "assignee");
-//			if(assignee != null) {
-//				requirement.setAssignee(assignee);
-//			}
-//		}
-		
-//		// make sure start/endDates are not null
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
-//		if(requirement.getDescription() == null) {
-//			// empty descriptions are okay
-//			requirement.setDescription("");
-//		} else if(requirement.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
-
-		
-//		// make sure we're not being spoofed with some weird dates
-//		final Date now = new Date();
-//		if(oldIteration != null) {
-//			iteration.setStartDate(oldIteration.getStartDate());
-//			iteration.setEndDate(oldIteration.getEndDate());
-//		} else {
-//			iteration.setStartDate(now);
-//			iteration.setEndDate(now);
-//		}
-
 		// make sure startDate is before the endDate
 		if(iteration.getStartDate() == null) {
 			issues.add(new ValidationIssue("Required, must not be null", "startDate"));

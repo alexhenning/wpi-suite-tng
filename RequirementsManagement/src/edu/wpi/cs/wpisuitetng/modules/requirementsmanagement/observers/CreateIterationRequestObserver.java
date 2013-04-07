@@ -66,6 +66,7 @@ public class CreateIterationRequestObserver implements RequestObserver {
 		System.err.println("The request to create an iteration had an error.");
 		System.err.println("\tResponse: "+iReq.getResponse().getStatusCode()+" --- "
 							+iReq.getResponse().getBody());
+		controller.getPanel().setStatus("Iteration failed to save.");
 	}
 
 	/**
