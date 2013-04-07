@@ -60,6 +60,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 @SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel {
 	
+	public static final int ID = 0;
+	public static final int NAME = 1;
+	public static final int DESCRIPTION = 2;
+	public static final int ITERATION = 3;
+	public static final int STATUS = 4;
+	public static final int PRIORITY = 5;
+	public static final int ESTIMATE = 6;
+	public static final int RELEASE = 7;
+	public static final int ROWS = 7;
+	
 	/** the tab that created this*/
 	ListRequirementsTab parent;
 	/** is inpute enabled*/
@@ -97,7 +107,7 @@ public class ListRequirementsPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 2 && tableModel.getMode() != Mode.EDIT) {
-                	DB.getSingleRequirement((String) table.getModel().getValueAt(table.getSelectedRow(), 0),
+                	DB.getSingleRequirement((String) table.getModel().getValueAt(table.getSelectedRow(), ID),
                 			new SingleRequirementCallback() {
 						@Override
 						public void callback(RequirementModel req) {
@@ -283,9 +293,9 @@ public class ListRequirementsPanel extends JPanel {
 	 *
 	 */
 	public void setUpColumns() {
-		setUpPriorityColumn(table, table.getColumnModel().getColumn(5));
-		setUpStatusColumn(table, table.getColumnModel().getColumn(4));
-		setUpIterationColumn(table, table.getColumnModel().getColumn(3));
+		setUpPriorityColumn(table, table.getColumnModel().getColumn(PRIORITY));
+		setUpStatusColumn(table, table.getColumnModel().getColumn(STATUS));
+		setUpIterationColumn(table, table.getColumnModel().getColumn(ITERATION));
 	}
 	
 	/**
@@ -347,15 +357,15 @@ public class ListRequirementsPanel extends JPanel {
 		if(reqs != null && reqs.size() >= 1) {
 			for(int i = 0; i < tableModel.getRowCount(); i++) {
 				for(RequirementModel req : reqs) {
-					if(req.getId() == Integer.valueOf((String)tableModel.getValueAt(i, 0))) {
+					if(req.getId() == Integer.valueOf((String)tableModel.getValueAt(i, ID))) {
 						// we have the correct requirement, update values
-						req.setName((String) tableModel.getValueAt(i, 1));
-						req.setDescription((String) tableModel.getValueAt(i, 2));
+						req.setName((String) tableModel.getValueAt(i, NAME));
+						req.setDescription((String) tableModel.getValueAt(i, DESCRIPTION));
 
 						// Find the right iteration from the list
 						req.setIteration(null);  // assume iteration is null, then find the correct one
 						for(Iteration iteration : iterations) {
-							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, 3))) {
+							if(iteration.getIterationNumber().equals((String)tableModel.getValueAt(i, ITERATION))) {
 								req.setIteration(iteration);
 								break;
 							}
@@ -366,10 +376,10 @@ public class ListRequirementsPanel extends JPanel {
 						} else if(req.getIteration() == null && req.getStatus() == RequirementStatus.IN_PROGRESS) {
 							req.setStatus(RequirementStatus.OPEN);
 						} else {
-							req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, 4)));
+							req.setStatus(RequirementStatus.valueOf((String)tableModel.getValueAt(i, STATUS)));
 						}
-						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, 5)));
-						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, 6)));
+						req.setPriority(RequirementPriority.valueOf((String)tableModel.getValueAt(i, PRIORITY)));
+						req.setEstimate(Integer.valueOf((String)tableModel.getValueAt(i, ESTIMATE)));
 						break;
 					}
 				}
@@ -391,17 +401,17 @@ public class ListRequirementsPanel extends JPanel {
 		// user can't select invalid things from the JComboBox
 		for(int i = 0; i < tableModel.getRowCount(); i++) {
 			// check name
-			if(((String)tableModel.getValueAt(i, 1)).length() < 1) {
+			if(((String)tableModel.getValueAt(i, NAME)).length() < 1) {
 				System.out.println("Error in name for Requirement in row " + i);
 				noErrors = false;
 			}
-			if(((String)tableModel.getValueAt(i, 2)).length() < 1){
+			if(((String)tableModel.getValueAt(i, DESCRIPTION)).length() < 1){
 				System.out.println("Error in description for Requirement in row " + i);
 				noErrors = false;
 			}
 			// check estimate
 			try {
-				if((Integer.valueOf((String)tableModel.getValueAt(i, 6))) < 0) {
+				if((Integer.valueOf((String)tableModel.getValueAt(i, ESTIMATE))) < 0) {
 					System.out.println("Error in estimate for Requirement in row " + i);
 					noErrors = false;
 				}
@@ -531,31 +541,31 @@ public class ListRequirementsPanel extends JPanel {
 		public void callback(List<RequirementModel> reqs) {
 			if (reqs.size() > 0) {
 				// put the data in the table
-				Object[][] entries = new Object[reqs.size()][7];
+				Object[][] entries = new Object[reqs.size()][ROWS];
 				int i = 0;
 				for(RequirementModel req : reqs) {
-					entries[i][0] = String.valueOf(req.getId());
-					entries[i][1] = req.getName();
-					entries[i][2] = req.getDescription();
+					entries[i][ID] = String.valueOf(req.getId());
+					entries[i][NAME] = req.getName();
+					entries[i][DESCRIPTION] = req.getDescription();
 					if (req.getIteration() != null) {
-						entries[i][3] = req.getIteration().getIterationNumber().toString();	
+						entries[i][ITERATION] = req.getIteration().getIterationNumber().toString();	
 					}
 					else {
-						entries[i][3] = "Backlog";
+						entries[i][ITERATION] = "Backlog";
 					}
 					if (req.getStatus() != null) {
-						entries[i][4] = req.getStatus().toString();
+						entries[i][STATUS] = req.getStatus().toString();
 					}
 					else {
-						entries[i][4] = "Error: Status set to null";
+						entries[i][STATUS] = "Error: Status set to null";
 					}
 					if (req.getPriority() != null) {
-						entries[i][5] = req.getPriority().toString();
+						entries[i][PRIORITY] = req.getPriority().toString();
 					}
 					else {
-						entries[i][5] = "";
+						entries[i][PRIORITY] = "";
 					}
-					entries[i][6] = req.getEstimate()+"";
+					entries[i][ESTIMATE] = req.getEstimate()+"";
 					i++;
 				}
 				getTable().setData(entries);
@@ -566,15 +576,15 @@ public class ListRequirementsPanel extends JPanel {
 			}
 		
 			TableColumn column = null;
-			for (int i = 0; i < 7; i++) {
+			for (int i = 0; i < ROWS; i++) {
 				column = table.getColumnModel().getColumn(i);
-				if (i == 0) {
+				if (i == ID) {
 					column.setPreferredWidth(30); //third column is bigger
 				}
-				else if (i == 1) {
+				else if (i == NAME) {
 					column.setPreferredWidth(500);
 				}
-				else if (i == 2) {
+				else if (i == DESCRIPTION) {
 					column.setPreferredWidth(700);
 				}
 				else {
@@ -653,17 +663,17 @@ public class ListRequirementsPanel extends JPanel {
 					c.setBackground(Color.WHITE);
 					setToolTipText(null);
 				}
-				if(column == 1) {
+				if(column == NAME) {
 					if(((String)value).length() < 1) {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a name.");
 					}
-				} else if(column == 2) {
+				} else if(column == DESCRIPTION) {
 					if(((String)value).length() < 1) {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a description.");
 					}
-				} else if(column == 6) {
+				} else if(column == ESTIMATE) {
 					try {
 						if(((Integer.valueOf((String)value) < 0))) {
 							c.setBackground(Color.RED);
