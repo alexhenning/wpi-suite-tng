@@ -54,11 +54,14 @@ public class AddReleaseNumberController extends AbstractAction implements
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/releasenumber",  HttpMethod.PUT);
-		request.setBody(panel.getModel().toJSON());
-		request.addObserver(new CreateReleaseNumberRequestObserver(this));
-		request.send();
-
+		if(panel.validateFields()) {
+			final Request request = Network.getInstance().makeRequest("requirementsmanagement/releasenumber",  HttpMethod.PUT);
+			request.setBody(panel.getModel().toJSON());
+			request.addObserver(new CreateReleaseNumberRequestObserver(this));
+			request.send();
+		} else {
+			panel.setStatus("The Release Number Name cannot be blank");
+		}
 	}
 	
 	/**
@@ -67,6 +70,7 @@ public class AddReleaseNumberController extends AbstractAction implements
 	 * @param rnum Release Number that was added
 	 */
 	public void receivedAddConfirmation(ReleaseNumber rnum) {
+		panel.updateModel(rnum);
 		panel.setStatus("Release Number saved");
 	}
 

@@ -201,9 +201,9 @@ public class ReleaseNumberPanel extends JPanel {
 	/**
 	 * Validates the fields
 	 *
-	 * @return True if there were no errors in the field, false otherwise
+	 * @return if the fields are valid
 	 */
-	private boolean validateFields() {
+	public boolean validateFields() {
 		boolean noErrors = true;
 		
 		if(numberField.getText().length() < 1 || numberField.getText().length() > 100) {
@@ -259,9 +259,7 @@ public class ReleaseNumberPanel extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(!validateFields()) {
-				
-			} else {
+			if(validateFields()) {
 				getModel();
 				DB.updateReleaseNumber(model, new SingleReleaseNumberCallback() {
 					@Override
