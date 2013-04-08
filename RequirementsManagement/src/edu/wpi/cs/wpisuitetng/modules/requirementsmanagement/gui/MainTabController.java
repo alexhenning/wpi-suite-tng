@@ -255,4 +255,31 @@ public class MainTabController {
 
 		return tab;
 	}
+
+	public void addShowReportsTab() {
+		for (int i=0; i<view.getTabCount(); i++) {
+			// TODO: If the tab name changes, will need to change the string
+			// to match the tab name
+			if (view.getTitleAt(i).equals("Reports")) {
+				switchToTab(i);
+				view.requestFocus();
+				return;
+			}
+		}
+
+		System.out.println("Adding reports");
+		Tab tab = addTab();
+		System.out.println("Tab created");
+		final ReportsTab reportsTab = new ReportsTab(this, tab);
+		System.out.println("Tab really created");
+		reportsTab.requestFocus();
+		System.out.println("Tab focused");
+		view.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				reportsTab.mainPanel.refresh();
+			}
+		});
+		System.out.println("Tab listening");
+	}
 }

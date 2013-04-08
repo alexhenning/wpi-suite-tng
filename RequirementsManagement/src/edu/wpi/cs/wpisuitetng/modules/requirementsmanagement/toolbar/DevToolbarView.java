@@ -13,8 +13,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar;
 
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -30,28 +33,40 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
 public class DevToolbarView extends ToolbarGroupView {
 
 	/** button to list requirements */
-	private JButton listReq;
+	private JButton listReq, showReports;
 	
 	/**
 	 * Constructor
 	 * Create a ToolbarView.
 	 * @param tabController The MainTabController this view should open tabs with
 	 */
-	public DevToolbarView(MainTabController tabController) {
+	public DevToolbarView(final MainTabController tabController) {
 		super("Development");
 
 		// Construct the content panel
 		JPanel content = new JPanel();
-		GridBagLayout
-		
-		layout  = new GridBagLayout();
+		GridBagLayout layout  = new GridBagLayout();
 		content.setLayout(layout);
 		content.setOpaque(false);
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
 		
 		// Setup button panel
 		listReq = new JButton("List Requirements");
 		listReq.setAction(new ListRequirementsAction(tabController));
-		content.add(listReq);
+		content.add(listReq, c);
+		
+		showReports = new JButton("Show Reports");
+		showReports.setAction(new AbstractAction() {
+			@Override public void actionPerformed(ActionEvent arg0) {
+				tabController.addShowReportsTab();
+			}
+		});
+		showReports.setText("Show Reports");
+		c.gridy = 1;
+		content.add(showReports, c);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
