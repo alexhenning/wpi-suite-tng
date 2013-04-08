@@ -61,8 +61,13 @@ public class AddReleaseNumberController extends AbstractAction implements
 
 	}
 	
-	public void recievedAddConfirmation(ReleaseNumber rnum) {
-		//TODO: should this do something?
+	/**
+	 * Called by observer when it receives a confirmation
+	 *
+	 * @param rnum Release Number that was added
+	 */
+	public void receivedAddConfirmation(ReleaseNumber rnum) {
+		panel.setStatus("Release Number saved");
 	}
 
 }
