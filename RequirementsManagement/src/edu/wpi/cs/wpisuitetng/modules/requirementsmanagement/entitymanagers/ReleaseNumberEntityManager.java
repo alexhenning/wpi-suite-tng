@@ -68,27 +68,22 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	@Override
 	public ReleaseNumber makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
-		// TODO get rid of the prints when the issue is resolved
-		System.out.println("** RN: " + content);
+		
 		ReleaseNumber newReleaseNumber = ReleaseNumber.fromJSON(content);
-		System.out.println("Got from JSON");
 
 		newReleaseNumber.setId(Count() + 1);
-		System.out.println("Set id: " + newReleaseNumber.getId());
 
 		List<ValidationIssue> issues = validator.validate(s, newReleaseNumber, Mode.CREATE);
 		if(issues.size() > 0) {
 			for(ValidationIssue issue : issues) {
-				System.out.println("Validation issue: " + issue.getMessage());
+				System.out.println("Validation issue: " + issue.getMessage() + "\n\tField name: " + issue.getFieldName());
 			}
 			throw new BadRequestException();
 		}
-		System.out.println("validated");
 
 		if(!db.save(newReleaseNumber, s.getProject())) {
 			throw new WPISuiteException();
 		}
-		System.out.println("saved");
 
 		return newReleaseNumber;
 	}
