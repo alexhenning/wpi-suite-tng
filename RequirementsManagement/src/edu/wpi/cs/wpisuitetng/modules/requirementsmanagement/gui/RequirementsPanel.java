@@ -85,9 +85,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
+	private RequirementSubrequirementTab subs;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
+	
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -219,8 +221,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		// Supplement Pane (i.e., notes, history, attachments)
 		nt = new NoteMainPanel(this);
 		hs = new RequirementHistoryTab(this);
+		subs = new RequirementSubrequirementTab(this);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("History", hs);
+		supplementPane.add("Sub-Requirements", subs);
 		if(this.editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
 		} else {
