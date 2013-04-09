@@ -38,6 +38,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.CustomCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
@@ -96,6 +97,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		// Add all components to this panel
 		addComponents();
 		
+		update();
 	}
 
 	/**
@@ -249,15 +251,12 @@ public class RequirementSubrequirementTab extends JPanel {
 		update(parent.model);
 	}
 	
-	private boolean gotUpdatedList;
-	private List<RequirementModel> allRequirements;
+//	private boolean gotUpdatedList;
 	public void update(RequirementModel model) {
 		subrequirements = model.getSubRequirements();
-		String selectedSubId = (String) subrequirementsTable.getModel().getValueAt(subrequirementsTable.getSelectedRow(), ID);
-		String selectedPossibleId = (String) possibleSubrequirementsTable.getModel().getValueAt(possibleSubrequirementsTable.getSelectedRow(), ID);
+		String selectedSubId = getSelectedSubId();
+		String selectedPossibleId = getSelectedPosId();
 		
-		allRequirements = new ArrayList<RequirementModel>();
-		gotUpdatedList = false;
 		//TODO figure out how to do sync network request.
 		addChildButton.setEnabled(false);
 		setParrentButton.setEnabled(false);
@@ -265,69 +264,67 @@ public class RequirementSubrequirementTab extends JPanel {
 		possibleSubrequirementTableScrollPane.setEnabled(false);
 		subrequirementsTable.setEnabled(false);
 		possibleSubrequirementsTable.setEnabled(false);
-		while(!gotUpdatedList) {}
-		
-		addChildButton.setEnabled(true);
-		setParrentButton.setEnabled(true);
-		subrequirementTableScrollPane.setEnabled(true);
-		possibleSubrequirementTableScrollPane.setEnabled(true);
-		subrequirementsTable.setEnabled(true);
-		possibleSubrequirementsTable.setEnabled(true);
-		
-		//reselect the previous selections if possible
-		subrequirementsTable.removeRowSelectionInterval(0, subrequirementsTable.getRowCount()-1);
-		possibleSubrequirementsTable.removeRowSelectionInterval(0, possibleSubrequirementsTable.getRowCount()-1);
-		for (int i = 0; i<subrequirementsTable.getRowCount(); i++) {
-			if(((String) subrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedSubId)) {
-				subrequirementsTable.setRowSelectionInterval(i, i);
-			}
-		}
-		for (int i = 0; i<possibleSubrequirementsTable.getRowCount(); i++) {
-			if(((String) possibleSubrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedPossibleId)) {
-				possibleSubrequirementsTable.setRowSelectionInterval(i, i);
-			}
-		}
-		updateSelectedPossible((String) possibleSubrequirementsTable.getModel().getValueAt(possibleSubrequirementsTable.getSelectedRow(), ID));
+		DB.getAllRequirements(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
+//		while(!gotUpdatedList) {}
+//		
+//		addChildButton.setEnabled(true);
+//		setParrentButton.setEnabled(true);
+//		subrequirementTableScrollPane.setEnabled(true);
+//		possibleSubrequirementTableScrollPane.setEnabled(true);
+//		subrequirementsTable.setEnabled(true);
+//		possibleSubrequirementsTable.setEnabled(true);
+//		
+//		//reselect the previous selections if possible
+//		subrequirementsTable.removeRowSelectionInterval(0, subrequirementsTable.getRowCount()-1);
+//		possibleSubrequirementsTable.removeRowSelectionInterval(0, possibleSubrequirementsTable.getRowCount()-1);
+//		for (int i = 0; i<subrequirementsTable.getRowCount(); i++) {
+//			if(((String) subrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedSubId)) {
+//				subrequirementsTable.setRowSelectionInterval(i, i);
+//			}
+//		}
+//		for (int i = 0; i<possibleSubrequirementsTable.getRowCount(); i++) {
+//			if(((String) possibleSubrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedPossibleId)) {
+//				possibleSubrequirementsTable.setRowSelectionInterval(i, i);
+//			}
+//		}
+//		updateSelectedPossible((String) possibleSubrequirementsTable.getModel().getValueAt(possibleSubrequirementsTable.getSelectedRow(), ID));
 	}
 	
-//	/**
-//	 *add the events to the history tab
-//	 *
-//	 * @param events the list of events
-//	 */
-//	public void setNotes(List<ProjectEvent> events) {
-//		GridBagConstraints c = new GridBagConstraints();
-//		c.fill = GridBagConstraints.HORIZONTAL;
-//		c.insets = new Insets(3, 0, 3, 0);
-//		c.gridx = 0;
-//		c.gridy = events.size();
-//		c.weightx = 0.5;
-//		c.weighty = 0.5;
-//		
-//		noteViewer.removeAll();
-//		
-//		for (ProjectEvent event : events) {
-//			if (event != null && event.getObjectType() == ProjectEventObjectType.REQUIREMENT) {
-//				int id = Integer.parseInt(event.getObjectId());
-//				if (id == this.parent.model.getId()) {
-//					noteViewer.add(new RequirementHistoryPanel(event), c);
-//					c.gridy -= 1;
-//				}
-//			}
-//			
-//		}
-//		
-//		this.revalidate();
-//		this.repaint();
-//	}
+	private String getSelectedSubId() {
+		int selectedRow = subrequirementsTable.getSelectedRow();
+		if (selectedRow >= 0 && selectedRow < subrequirementsTable.getRowCount()) {
+			return (String) subrequirementsTable.getModel().getValueAt(subrequirementsTable.getSelectedRow(), ID);
+		} else {
+			return "";
+		}
+	}
+	
+	private String getSelectedPosId() {
+		int selectedRow = possibleSubrequirementsTable.getSelectedRow();
+		if (selectedRow >= 0 && selectedRow < possibleSubrequirementsTable.getRowCount()) {
+			return (String) possibleSubrequirementsTable.getModel().getValueAt(possibleSubrequirementsTable.getSelectedRow(), ID);
+		} else {
+			return "";
+		}
+	}
 	
 	/**
 	 *
 	 * Callback to populate the table with all the requirements
 	 * @author Josh
-	 *
+	 * @author Jacob Palnick
 	 */
 	class UpdateTablesCallback implements RequirementsCallback {
+		
+		String selectedSub;
+		String selectedPos;
+		
+		public UpdateTablesCallback(String selectedSub, String selectedPos) {
+			super();
+			this.selectedSub = selectedSub;
+			this.selectedPos = selectedPos;
+		}
+
 		/**
 		 * Callback function to populate the tables with all the requirements
 		 *
@@ -405,7 +402,30 @@ public class RequirementSubrequirementTab extends JPanel {
 					column2.setPreferredWidth(200);
 				}
 			}
-			gotUpdatedList = true;
+//			gotUpdatedList = true;
+			addChildButton.setEnabled(true);
+			setParrentButton.setEnabled(true);
+			subrequirementTableScrollPane.setEnabled(true);
+			possibleSubrequirementTableScrollPane.setEnabled(true);
+			subrequirementsTable.setEnabled(true);
+			possibleSubrequirementsTable.setEnabled(true);
+			
+			//reselect the previous selections if possible
+//			subrequirementsTable.getr
+//			subrequirementsTable.removeRowSelectionInterval(0, subrequirementsTable.getRowCount()-1);
+//			possibleSubrequirementsTable.removeRowSelectionInterval(0, possibleSubrequirementsTable.getRowCount()-1);
+			for (int i = 0; i<subrequirementsTable.getRowCount(); i++) {
+				if(((String) subrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedSub)) {
+					subrequirementsTable.setRowSelectionInterval(i, i);
+				}
+			}
+			for (int i = 0; i<possibleSubrequirementsTable.getRowCount(); i++) {
+				if(((String) possibleSubrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedPos)) {
+					possibleSubrequirementsTable.setRowSelectionInterval(i, i);
+				}
+			}
+			updateSelectedPossible(getSelectedPosId());
+
 		}
 		
 	}
