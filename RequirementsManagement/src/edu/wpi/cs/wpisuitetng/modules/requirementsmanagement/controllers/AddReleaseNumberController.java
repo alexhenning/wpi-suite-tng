@@ -59,8 +59,6 @@ public class AddReleaseNumberController extends AbstractAction implements
 			request.setBody(panel.getModel().toJSON());
 			request.addObserver(new CreateReleaseNumberRequestObserver(this));
 			request.send();
-		} else {
-			panel.setStatus("The Release Number Name cannot be blank");
 		}
 	}
 	

@@ -11,6 +11,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -121,12 +122,7 @@ public class ReleaseNumberPanel extends JPanel {
 		nfLabel = new JLabel("Release Number Name   ");
 		
 		submit = new JButton("Create");
-		if(editMode == Mode.CREATE) {
-			submit.setAction(new AddReleaseNumberController(this));
-		} else {
-			submit.setText("Update");
-			submit.setAction(new UpdateReleaseNumber());
-		}
+		submit.setAction(new AddReleaseNumberController(this));
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
@@ -141,7 +137,9 @@ public class ReleaseNumberPanel extends JPanel {
 		add(numberField, c);
 		c.gridx = 0;
 		c.gridy = 2;
+		c.ipady = 20;
 		add(submit, c);
+		c.ipady = 0;
 		c.gridx = 1;
 		add(result, c);
 		
@@ -208,6 +206,12 @@ public class ReleaseNumberPanel extends JPanel {
 		
 		if(numberField.getText().length() < 1 || numberField.getText().length() > 100) {
 			noErrors = false;
+		}
+		
+		if(!noErrors) {
+			numberField.setBackground(Color.RED);
+		} else {
+			numberField.setBackground(Color.WHITE);
 		}
 		
 		return noErrors;
