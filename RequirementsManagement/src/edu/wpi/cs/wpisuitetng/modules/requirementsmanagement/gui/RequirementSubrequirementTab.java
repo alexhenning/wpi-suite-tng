@@ -45,6 +45,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mo
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEventObjectType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 
 /**
@@ -81,7 +82,7 @@ public class RequirementSubrequirementTab extends JPanel {
 	/** possible subrequirement list scroll pane */
 	JScrollPane possibleSubrequirementTableScrollPane;
 	/** list of subrequirements*/
-	List<RequirementModel> subrequirements;
+	List<String> subrequirements;
 	JButton addChildButton;
 	JButton setParrentButton;
 
@@ -92,7 +93,7 @@ public class RequirementSubrequirementTab extends JPanel {
 	 */
 	public RequirementSubrequirementTab(RequirementsPanel parent) {
 		this.parent = parent;
-		subrequirements = parent.getModel().getSubRequirements();
+		subrequirements = parent.model.getSubRequirements();
 
 		// Add all components to this panel
 		addComponents();
@@ -159,7 +160,7 @@ public class RequirementSubrequirementTab extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 1) {
-                	updateSelectedPossible((String) possibleSubrequirementsTable.getModel().getValueAt(possibleSubrequirementsTable.getSelectedRow(), ID));
+                	updateSelectedPossible(getSelectedPosId());
                 }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
@@ -232,14 +233,14 @@ public class RequirementSubrequirementTab extends JPanel {
 	 * @param selectedId the id of the selected requirement
 	 */
 	private void updateSelectedPossible(String selectedId) {
-		if (selectedId == null || selectedId.equals("")) {
+		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED) {
 			addChildButton.setEnabled(false);
 			setParrentButton.setEnabled(false);
 		} else {
 			addChildButton.setEnabled(true);
 			setParrentButton.setEnabled(true);
-			for (RequirementModel req : subrequirements) {
-				if((""+req.getId()).equals(selectedId)) {
+			for (String req : subrequirements) {
+				if(req.equals(selectedId)) {
 					addChildButton.setEnabled(false);
 					setParrentButton.setEnabled(false);
 				}
@@ -334,14 +335,16 @@ public class RequirementSubrequirementTab extends JPanel {
 		public void callback(List<RequirementModel> reqs) {
 			if (reqs.size() > 0) {
 				// put the data in the table
-				Object[][] subEntries = new Object[subrequirements.size()][ROWS];
-				Object[][] posEntries = new Object[reqs.size()-subrequirements.size()][ROWS];
+				ArrayList<Object[]> subEntriesList = new ArrayList<Object[]>();
+//				Object[][] subEntries = new Object[subrequirements.size()][ROWS];
+				ArrayList<Object[]> posEntriesList = new ArrayList<Object[]>();
+//				Object[][] posEntries = new Object[reqs.size()-subrequirements.size()][ROWS];
 				ArrayList<String> subIdStringList = new ArrayList<String>();
-				for(RequirementModel req : subrequirements) {
-					subIdStringList.add(String.valueOf(req.getId()));
+				for(String req : subrequirements) {
+					subIdStringList.add(String.valueOf(req));
 				}
 				int sub = 0;
-				int pos = 0;
+//				int pos = 0;
 				for(RequirementModel req : reqs) {
 					String id = String.valueOf(req.getId());
 					String name = req.getName();
@@ -351,26 +354,77 @@ public class RequirementSubrequirementTab extends JPanel {
 					String priority = (req.getPriority() == null ? "" : req.getPriority().toString());
 					String estimate = req.getEstimate()+"";
 					
+					System.out.println(id +", " +name +", " + description+", "+iteraton+", "+status+", "+priority+", "+estimate);
 					if (subIdStringList.contains(id)) {
-						subEntries[sub][ID] = id;
-						subEntries[sub][NAME] = name;
-						subEntries[sub][DESCRIPTION] = description;
-						subEntries[sub][ITERATION] = iteraton;	
-						subEntries[sub][STATUS] = status;
-						subEntries[sub][PRIORITY] = priority;
-						subEntries[sub][ESTIMATE] = estimate;
-						sub++;
+						Object[] subEntry = new Object[ROWS];
+						subEntry[ID] = id;
+						subEntry[NAME] = name;
+						subEntry[DESCRIPTION] = description;
+						subEntry[ITERATION] = iteraton;	
+						subEntry[STATUS] = status;
+						subEntry[PRIORITY] = priority;
+						subEntry[ESTIMATE] = estimate;
+						subEntriesList.add(subEntry);
 					} else {
-						posEntries[pos][ID] = id;
-						posEntries[pos][NAME] = name;
-						posEntries[pos][DESCRIPTION] = description;
-						posEntries[pos][ITERATION] = iteraton;	
-						posEntries[pos][STATUS] = status;
-						posEntries[pos][PRIORITY] = priority;
-						posEntries[pos][ESTIMATE] = estimate;
-						pos++;
+						//TODO make sure the requirement is a valid parent/child option before adding to list
+						if (req.getId() != parent.model.getId() && (req.getStatus() == RequirementStatus.NEW ||
+								req.getStatus() == RequirementStatus.OPEN ||
+								req.getStatus() == RequirementStatus.IN_PROGRESS)) {
+							Object[] posEntry = new Object[ROWS];
+							posEntry[ID] = id;
+							posEntry[NAME] = name;
+							posEntry[DESCRIPTION] = description;
+							posEntry[ITERATION] = iteraton;	
+							posEntry[STATUS] = status;
+							posEntry[PRIORITY] = priority;
+							posEntry[ESTIMATE] = estimate;
+							posEntriesList.add(posEntry);
+						}
 					}
 				}
+				for(Object[] req : subEntriesList) {
+					System.out.print("sub: ");
+					for(Object obj : req) {
+						System.out.print(obj +", ");
+					}
+					System.out.println("");
+				}
+				for(Object[] req : posEntriesList) {
+					System.out.print("pos: ");
+					for(Object obj : req) {
+						System.out.print(obj +", ");
+					}
+					System.out.println("");
+				}
+
+//				System.out.println(subEntriesList.size());
+//				System.out.println(posEntriesList.size());
+				Object[][] subEntries = {};
+				Object[][] posEntries = {};
+				if(subEntriesList.size()>0) {
+					subEntries = subEntriesList.toArray(new Object[1][1]);
+				}
+				if(posEntriesList.size()>0) {
+					posEntries = posEntriesList.toArray(new Object[1][1]);
+				}
+//				Object[][] subEntries = subEntriesList.toArray(new Object[1][1]);
+//				Object[][] posEntries = posEntriesList.toArray(new Object[1][1]);
+				System.out.println(subEntries.length);
+				System.out.println(posEntries.length);
+//				for(Object[] req : subEntries) {
+//					System.out.print("sub[][]: ");
+//					for(Object obj : req) {
+//						System.out.print(obj +", ");
+//					}
+//					System.out.println("");
+//				}
+//				for(Object[] req : posEntries) {
+//					System.out.print("pos[][]: ");
+//					for(Object obj : req) {
+//						System.out.print(obj +", ");
+//					}
+//					System.out.println("");
+//				}
 				subrequirementsTableModel.setData(subEntries);
 				subrequirementsTableModel.fireTableStructureChanged();
 				possibleSubrequirementsTableModel.setData(posEntries);
@@ -402,86 +456,27 @@ public class RequirementSubrequirementTab extends JPanel {
 					column2.setPreferredWidth(200);
 				}
 			}
-//			gotUpdatedList = true;
-			addChildButton.setEnabled(true);
-			setParrentButton.setEnabled(true);
 			subrequirementTableScrollPane.setEnabled(true);
 			possibleSubrequirementTableScrollPane.setEnabled(true);
 			subrequirementsTable.setEnabled(true);
 			possibleSubrequirementsTable.setEnabled(true);
 			
 			//reselect the previous selections if possible
-//			subrequirementsTable.getr
-//			subrequirementsTable.removeRowSelectionInterval(0, subrequirementsTable.getRowCount()-1);
-//			possibleSubrequirementsTable.removeRowSelectionInterval(0, possibleSubrequirementsTable.getRowCount()-1);
 			for (int i = 0; i<subrequirementsTable.getRowCount(); i++) {
-				if(((String) subrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedSub)) {
+				String tmp = (String) subrequirementsTable.getModel().getValueAt(i, ID);
+				if(tmp != null && tmp.equals(selectedSub)) {
 					subrequirementsTable.setRowSelectionInterval(i, i);
 				}
 			}
-			for (int i = 0; i<possibleSubrequirementsTable.getRowCount(); i++) {
-				if(((String) possibleSubrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedPos)) {
-					possibleSubrequirementsTable.setRowSelectionInterval(i, i);
-				}
-			}
+//			for (int i = 0; i<possibleSubrequirementsTable.getRowCount(); i++) {
+//				String tmp = (String) possibleSubrequirementsTable.getModel().getValueAt(i, ID);
+//				if(tmp != null && tmp.equals(selectedPos)) {
+//					possibleSubrequirementsTable.setRowSelectionInterval(i, i);
+//				}
+//			}
 			updateSelectedPossible(getSelectedPosId());
 
 		}
 		
 	}
-
-
-//	/**
-//	 *
-//	 * A custom cell renderer to allow for changing the background color
-//	 * when a cell has an error in it
-//	 * @author Tim Calvert
-//	 * @author James Megin
-//	 * @author Jacob Palnick
-//	 *
-//	 */
-//	class CustomCellRenderer extends DefaultTableCellRenderer {
-//
-//		@Override
-//		public Component getTableCellRendererComponent(JTable table,
-//				Object value, boolean isSelected, boolean hasFocus, int row,
-//				int column) {
-//			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//			
-//			if(tableModel.getMode() == Mode.EDIT) {
-//				if(!value.equals(data[row][column])) {
-//					c.setBackground(Color.YELLOW);
-//					setToolTipText("This cell has been changed from: " + (data[row][column]).toString());
-//				} else {
-//					c.setBackground(Color.WHITE);
-//					setToolTipText(null);
-//				}
-//				if(column == NAME) {
-//					if(((String)value).length() < 1 || ((String)value).length() > 100) {
-//						c.setBackground(Color.RED);
-//						setToolTipText("A requirement must have a name between 1 and 100 charecters.");
-//					}
-//				} else if(column == DESCRIPTION) {
-//					if(((String)value).length() < 1) {
-//						c.setBackground(Color.RED);
-//						setToolTipText("A requirement must have a description.");
-//					}
-//				} else if(column == ESTIMATE) {
-//					try {
-//						if(((Integer.valueOf((String)value) < 0))) {
-//							c.setBackground(Color.RED);
-//							setToolTipText("A requirement estimate must be a positive number.");
-//						}
-//					} catch (NumberFormatException e) {
-//						// still an error
-//						c.setBackground(Color.RED);
-//						setToolTipText("A requirement estimate must be a positive number.");
-//					}
-//				}
-//			}
-//			
-//			return c;
-//		}
-//		
-//	}
 }

@@ -715,14 +715,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		DB.getSingleRequirement(parentId+"", new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel req) {
-				req.getSubRequirements().add(model);
+				req.getSubRequirements().add(model.getId()+"");
 				DB.updateRequirements(req, new SingleRequirementCallback() {
 					@Override
 					public void callback(RequirementModel req) {
-						if (req.getSubRequirements().contains(model)) {
+						if (req.getSubRequirements().contains(model.getId()+"")) {
 							setStatus("added to parent");
 						} else {
-							setStatus("faield to add to parent");
+							setStatus("failed to add to parent");
 						}
 						
 					}
@@ -735,7 +735,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel child) {
-				model.getSubRequirements().add(child);
+				model.getSubRequirements().add(child.getId()+"");
 				DB.updateRequirements(model, new AddChildRequirementCallback(child));
 
 			}
@@ -744,7 +744,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	
 	
 	public void addChild(RequirementModel child) {
-		model.getSubRequirements().add(child);
+		model.getSubRequirements().add(child.getId()+"");
 		DB.updateRequirements(model, new AddChildRequirementCallback(child));
 	}
 	
@@ -757,10 +757,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		@Override
 		public void callback(RequirementModel currentReq) {
-			if (currentReq.getSubRequirements().contains(childReq)) {
+			boolean added = false;
+			for (String subReq : currentReq.getSubRequirements()) {
+				if(subReq.equals(childReq.getId()+"")) {
+					added = true;
+				}
+			}
+			if (added) {
 				setStatus("added child");
 			} else {
-				setStatus("faield to add child");
+				setStatus("failed to add child");
 			}
 		}
 	}
