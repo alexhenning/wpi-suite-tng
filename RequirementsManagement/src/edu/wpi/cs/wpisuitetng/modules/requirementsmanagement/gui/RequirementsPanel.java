@@ -389,13 +389,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		estimateField.setText(model.getEstimate()+"");
 		actualEffortField.setText(model.getActualEffort()+"");
-//		if(this.editMode == Mode.CREATE || model.getStatus() == RequirementStatus.DELETED || model.getStatus() == RequirementStatus.COMPLETE) {
-//			estimateField.setEditable(false);
-//			actualEffortField.setEditable(false);
-//		} else {
-//			estimateField.setEditable(true);
-//			actualEffortField.setEditable(true);
-//		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
@@ -436,13 +429,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
-//			actualEffortField.setEnabled(false);
-//			submit.setEnabled(false);
-//			iteration.setEnabled(false);
-//			nt.setInputEnabled(false);
-//		}else if(namefield.getText().length() < 1 || namefield.getText().length() < 1){
-//			namefield.setEnabled(true);
-//			type.setEnabled(true);
 			type.setBackground(Color.WHITE);
 			priority.setEnabled(false);
 			priority.setBackground(Color.WHITE);
@@ -465,18 +451,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
-//=======
-//			actualEffortField.setEnabled(true);
-//			submit.setEnabled(true);
-//			iteration.setEnabled(true);
-//			nt.setInputEnabled(true);
-//>>>>>>> origin/dev-fix#31
 		}
 		System.out.println("namefield: "+namefield.getText());
 		System.out.println("submit good: "+!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		nt.setNotes(Arrays.asList(model.getNotes()));
 		DB.getAllProjectEvents(new ListProjectEvents());
 		updateSubmitButton();
+		subs.update();
 	}
 	
 	/**
@@ -764,6 +745,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 				}
 			}
 			if (added) {
+				subs.update();
 				setStatus("added child");
 			} else {
 				setStatus("failed to add child");

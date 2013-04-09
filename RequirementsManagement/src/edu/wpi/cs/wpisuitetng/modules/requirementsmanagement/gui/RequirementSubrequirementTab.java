@@ -235,6 +235,21 @@ public class RequirementSubrequirementTab extends JPanel {
 			}
 		}
 	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		subrequirementTableScrollPane.setEnabled(enabled);
+		possibleSubrequirementTableScrollPane.setEnabled(enabled);
+		subrequirementsTable.setEnabled(enabled);
+		possibleSubrequirementsTable.setEnabled(enabled);
+		if (enabled) {
+			updateSelectedPossible(getSelectedPosId());
+		} else {
+			addChildButton.setEnabled(false);
+			setParrentButton.setEnabled(false);
+		}
+	}
 
 	public void update() {
 		update(parent.model);
