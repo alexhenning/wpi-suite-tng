@@ -56,21 +56,21 @@ public class ReportsPanel extends JPanel{
 	 * @param iterationTab the tab that created this panel
 	 */
 	public ReportsPanel(ReportsTab parent){
-		System.err.println("Constructing reports...");
+		System.out.println("Constructing reports...");
 		this.parent = parent;
-		model = new LinkedList<RequirementModel>();
-		dataset = new DefaultPieDataset();
-		chart = ChartFactory.createPieChart(
-            "Pie Chart Demo 1",  // chart title
-            dataset,             // data
-            true,               // include legend
-            true,
-            false
-        );
+//		model = new LinkedList<RequirementModel>();
+//		dataset = new DefaultPieDataset();
+//		chart = ChartFactory.createPieChart(
+//            "Pie Chart Demo 1",  // chart title
+//            dataset,             // data
+//            true,               // include legend
+//            true,
+//            false
+//        );
 		
 		addComponents();
 
-		refresh();
+		//refresh();
 	}
 
 	

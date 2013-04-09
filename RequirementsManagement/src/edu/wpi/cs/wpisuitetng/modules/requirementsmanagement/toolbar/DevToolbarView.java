@@ -59,12 +59,7 @@ public class DevToolbarView extends ToolbarGroupView {
 		content.add(listReq, c);
 		
 		showReports = new JButton("Show Reports");
-		showReports.setAction(new AbstractAction() {
-			@Override public void actionPerformed(ActionEvent arg0) {
-				tabController.addShowReportsTab();
-			}
-		});
-		showReports.setText("Show Reports");
+		showReports.setAction(new ShowReportsAction(tabController));
 		c.gridy = 1;
 		content.add(showReports, c);
 		
@@ -76,4 +71,14 @@ public class DevToolbarView extends ToolbarGroupView {
 		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
 
+	class ShowReportsAction extends AbstractAction {
+		MainTabController tabController;
+		public ShowReportsAction(MainTabController tabController){
+			super("Show Reports");
+			this.tabController = tabController;
+		}
+		@Override public void actionPerformed(ActionEvent arg0) {
+			tabController.addShowReportsTab();
+		}
+		}
 }

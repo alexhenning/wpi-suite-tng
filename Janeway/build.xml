@@ -11,7 +11,7 @@
 		<fileset dir="./swingx">
 			<include name="swingx*.jar"/>
 		</fileset>
-		<fileset dir="./jfreechart">
+		<fileset dir="./jfreechart/lib{{{">
 			<include name="*.jar"/>
 		</fileset>
 		<pathelement path="build"/>

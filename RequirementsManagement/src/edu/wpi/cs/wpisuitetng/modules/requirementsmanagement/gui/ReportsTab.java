@@ -48,6 +48,7 @@ public class ReportsTab extends JPanel implements IToolbarGroupProvider{
 	 * @param tab the containing tab
 	 */
 	public ReportsTab(MainTabController tabController, Tab tab) {
+		System.out.println("Constructing reports tap");
 		this.tabController = tabController;
 		containingTab = tab;
 		if(containingTab == null) {

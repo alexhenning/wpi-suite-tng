@@ -15,7 +15,7 @@
 		<fileset dir="../Janeway/swingx">
 			<include name="swingx*.jar"/>
 		</fileset>
-		<fileset dir="../Janeway/jfreechart">
+		<fileset dir="../Janeway/jfreechart/lib">
 			<include name="*.jar"/>
 		</fileset>
 		<pathelement path="build"/>
@@ -28,6 +28,9 @@
 	</path>
 
 	<target name="compile-base">
+	  <pathconvert property="classpathProp" refid="classpath"/>
+
+	  <echo>Classpath is ${classpathProp}</echo>
 		<mkdir dir="build"/>
 		<javac srcdir="src" destdir="build" includeJavaRuntime="yes" debug="true" target="1.6"
 				debuglevel="lines,vars,source">
