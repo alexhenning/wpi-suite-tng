@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
@@ -40,7 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 
 /**
  *
- * The view for creating an iteration
+ * The view for viewing reports.
  * @author TODO
  *
  */
@@ -55,7 +56,7 @@ public class ReportsPanel extends JPanel{
 	private JComboBox reports;
 
 	private List<RequirementModel> model;
-	private Chart type = Chart.STATUS;
+	private Report report = Report.STATUS;
 	private DefaultPieDataset dataset;
 	private JFreeChart chart;
 	private ChartPanel chartPanel;
@@ -65,15 +66,14 @@ public class ReportsPanel extends JPanel{
 	 * @param iterationTab the tab that created this panel
 	 */
 	public ReportsPanel(ReportsTab parent){
-		System.out.println("Constructing reports...");
 		this.parent = parent;
 		model = new LinkedList<RequirementModel>();
 		dataset = new DefaultPieDataset();
-		dataset.setValue("Test", 1.0);
+		dataset.setValue("Loading", 1.0);
 		chart = ChartFactory.createPieChart(
-            "Pie Chart Demo 1",  // chart title
+            "Loading",  // chart title
             dataset,             // data
-            true,               // include legend
+            false,               // include legend
             true,
             false
         );
@@ -94,10 +94,11 @@ public class ReportsPanel extends JPanel{
 		setLayout(panelLayout);
 		
 		chartPanel = new ChartPanel(chart);
-		reports = new JComboBox(Chart.values());
+		reports = new JComboBox(Report.values());
+		reports.setBackground(Color.white);
 		reports.addItemListener(new ItemListener() {
 			@Override public void itemStateChanged(ItemEvent e) {
-				type = (Chart) reports.getSelectedItem();
+				report = (Report) reports.getSelectedItem();
 				refreshChart();
 			}
 		});
@@ -129,7 +130,8 @@ public class ReportsPanel extends JPanel{
 	public void refreshChart() {
 		System.out.println("Refreshing chart");
 		dataset.clear();
-		type.updateDataset(model, dataset);
+		report.updateDataset(model, dataset);
+		chart.setTitle(report.toString());
 		chartPanel.repaint();
 		System.out.println("Repainting");
 	}
@@ -161,7 +163,7 @@ public class ReportsPanel extends JPanel{
 		return parent;
 	}
 	
-	public enum Chart {
+	public enum Report {
 		STATUS {
 			@Override public void updateDataset(List<RequirementModel> model, 
 					DefaultPieDataset dataset) {
