@@ -13,19 +13,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -34,16 +27,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.CustomCellRenderer;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEventObjectType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
@@ -266,29 +254,6 @@ public class RequirementSubrequirementTab extends JPanel {
 		subrequirementsTable.setEnabled(false);
 		possibleSubrequirementsTable.setEnabled(false);
 		DB.getAllRequirements(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
-//		while(!gotUpdatedList) {}
-//		
-//		addChildButton.setEnabled(true);
-//		setParrentButton.setEnabled(true);
-//		subrequirementTableScrollPane.setEnabled(true);
-//		possibleSubrequirementTableScrollPane.setEnabled(true);
-//		subrequirementsTable.setEnabled(true);
-//		possibleSubrequirementsTable.setEnabled(true);
-//		
-//		//reselect the previous selections if possible
-//		subrequirementsTable.removeRowSelectionInterval(0, subrequirementsTable.getRowCount()-1);
-//		possibleSubrequirementsTable.removeRowSelectionInterval(0, possibleSubrequirementsTable.getRowCount()-1);
-//		for (int i = 0; i<subrequirementsTable.getRowCount(); i++) {
-//			if(((String) subrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedSubId)) {
-//				subrequirementsTable.setRowSelectionInterval(i, i);
-//			}
-//		}
-//		for (int i = 0; i<possibleSubrequirementsTable.getRowCount(); i++) {
-//			if(((String) possibleSubrequirementsTable.getModel().getValueAt(i, ID)).equals(selectedPossibleId)) {
-//				possibleSubrequirementsTable.setRowSelectionInterval(i, i);
-//			}
-//		}
-//		updateSelectedPossible((String) possibleSubrequirementsTable.getModel().getValueAt(possibleSubrequirementsTable.getSelectedRow(), ID));
 	}
 	
 	private String getSelectedSubId() {
@@ -336,15 +301,7 @@ public class RequirementSubrequirementTab extends JPanel {
 			if (reqs.size() > 0) {
 				// put the data in the table
 				ArrayList<Object[]> subEntriesList = new ArrayList<Object[]>();
-//				Object[][] subEntries = new Object[subrequirements.size()][ROWS];
 				ArrayList<Object[]> posEntriesList = new ArrayList<Object[]>();
-//				Object[][] posEntries = new Object[reqs.size()-subrequirements.size()][ROWS];
-				ArrayList<String> subIdStringList = new ArrayList<String>();
-				for(String req : subrequirements) {
-					subIdStringList.add(String.valueOf(req));
-				}
-				int sub = 0;
-//				int pos = 0;
 				for(RequirementModel req : reqs) {
 					String id = String.valueOf(req.getId());
 					String name = req.getName();
@@ -354,8 +311,7 @@ public class RequirementSubrequirementTab extends JPanel {
 					String priority = (req.getPriority() == null ? "" : req.getPriority().toString());
 					String estimate = req.getEstimate()+"";
 					
-					System.out.println(id +", " +name +", " + description+", "+iteraton+", "+status+", "+priority+", "+estimate);
-					if (subIdStringList.contains(id)) {
+					if (subrequirements.contains(id)) {
 						Object[] subEntry = new Object[ROWS];
 						subEntry[ID] = id;
 						subEntry[NAME] = name;
@@ -366,7 +322,7 @@ public class RequirementSubrequirementTab extends JPanel {
 						subEntry[ESTIMATE] = estimate;
 						subEntriesList.add(subEntry);
 					} else {
-						//TODO make sure the requirement is a valid parent/child option before adding to list
+						//TODO make sure the requirement is not a parent of the current requirement
 						if (req.getId() != parent.model.getId() && (req.getStatus() == RequirementStatus.NEW ||
 								req.getStatus() == RequirementStatus.OPEN ||
 								req.getStatus() == RequirementStatus.IN_PROGRESS)) {
@@ -382,23 +338,7 @@ public class RequirementSubrequirementTab extends JPanel {
 						}
 					}
 				}
-				for(Object[] req : subEntriesList) {
-					System.out.print("sub: ");
-					for(Object obj : req) {
-						System.out.print(obj +", ");
-					}
-					System.out.println("");
-				}
-				for(Object[] req : posEntriesList) {
-					System.out.print("pos: ");
-					for(Object obj : req) {
-						System.out.print(obj +", ");
-					}
-					System.out.println("");
-				}
 
-//				System.out.println(subEntriesList.size());
-//				System.out.println(posEntriesList.size());
 				Object[][] subEntries = {};
 				Object[][] posEntries = {};
 				if(subEntriesList.size()>0) {
@@ -407,24 +347,7 @@ public class RequirementSubrequirementTab extends JPanel {
 				if(posEntriesList.size()>0) {
 					posEntries = posEntriesList.toArray(new Object[1][1]);
 				}
-//				Object[][] subEntries = subEntriesList.toArray(new Object[1][1]);
-//				Object[][] posEntries = posEntriesList.toArray(new Object[1][1]);
-				System.out.println(subEntries.length);
-				System.out.println(posEntries.length);
-//				for(Object[] req : subEntries) {
-//					System.out.print("sub[][]: ");
-//					for(Object obj : req) {
-//						System.out.print(obj +", ");
-//					}
-//					System.out.println("");
-//				}
-//				for(Object[] req : posEntries) {
-//					System.out.print("pos[][]: ");
-//					for(Object obj : req) {
-//						System.out.print(obj +", ");
-//					}
-//					System.out.println("");
-//				}
+
 				subrequirementsTableModel.setData(subEntries);
 				subrequirementsTableModel.fireTableStructureChanged();
 				possibleSubrequirementsTableModel.setData(posEntries);
@@ -468,12 +391,12 @@ public class RequirementSubrequirementTab extends JPanel {
 					subrequirementsTable.setRowSelectionInterval(i, i);
 				}
 			}
-//			for (int i = 0; i<possibleSubrequirementsTable.getRowCount(); i++) {
-//				String tmp = (String) possibleSubrequirementsTable.getModel().getValueAt(i, ID);
-//				if(tmp != null && tmp.equals(selectedPos)) {
-//					possibleSubrequirementsTable.setRowSelectionInterval(i, i);
-//				}
-//			}
+			for (int i = 0; i<possibleSubrequirementsTable.getRowCount(); i++) {
+				String tmp = (String) possibleSubrequirementsTable.getModel().getValueAt(i, ID);
+				if(tmp != null && tmp.equals(selectedPos)) {
+					possibleSubrequirementsTable.setRowSelectionInterval(i, i);
+				}
+			}
 			updateSelectedPossible(getSelectedPosId());
 
 		}
