@@ -31,6 +31,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
@@ -207,10 +208,10 @@ public class ReportsPanel extends JPanel{
 		ASSIGNED_TO {
 			@Override public void updateDataset(List<RequirementModel> model, 
 					DefaultPieDataset dataset) {
-				Map<RequirementStatus, Integer> map = new HashMap<RequirementStatus, Integer>();
+				Map<User, Integer> map = new HashMap<User, Integer>();
 			
 				for (RequirementModel req : model) {
-					RequirementStatus status = req.getStatus();
+					User status = req.getCreator(); // TODO: replace with assigned to
 					if (map.containsKey(status)) {
 						map.put(status, 1 + map.get(status));
 					} else {
@@ -218,9 +219,9 @@ public class ReportsPanel extends JPanel{
 					}
 				}
 				
-				for (RequirementStatus key : map.keySet()) {
+				for (User key : map.keySet()) {
 					System.out.println("\t"+key+": "+map.get(key));
-					dataset.setValue(key.toString(), new Double(map.get(key)));
+					dataset.setValue(key.getName(), new Double(map.get(key)));
 				}
 			}
 		};
