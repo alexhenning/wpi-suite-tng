@@ -194,14 +194,17 @@ public class RequirementSubrequirementTab extends JPanel {
 			
 		});
 		
-		addChildButton.setMinimumSize(addChildButton.getPreferredSize());
-		addChildButton.setMaximumSize(addChildButton.getPreferredSize());
+		int maxPreferedWidth = (addChildButton.getPreferredSize().width > setParrentButton.getPreferredSize().width ? addChildButton.getPreferredSize().width : setParrentButton.getPreferredSize().width);
 		
+		Dimension pref = new Dimension(maxPreferedWidth, addChildButton.getPreferredSize().height);
+		addChildButton.setPreferredSize(pref);
+		addChildButton.setMinimumSize(pref);
+		setParrentButton.setPreferredSize(pref);
+		setParrentButton.setMinimumSize(pref);
 		
-		//TODO add the subcomponents to the panel and manage the layout
-		
+		//layout the components
 		layout.putConstraint(SpringLayout.WEST, subrequirementTableScrollPane, 4, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.EAST, this, 4, SpringLayout.EAST, subrequirementTableScrollPane);
+		layout.putConstraint(SpringLayout.EAST, subrequirementTableScrollPane, -4, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.NORTH, subrequirementTableScrollPane, 4, SpringLayout.NORTH, this);
 		
 		layout.putConstraint(SpringLayout.WEST, possibleSubrequirementTableScrollPane, 4, SpringLayout.WEST, this);
@@ -209,29 +212,17 @@ public class RequirementSubrequirementTab extends JPanel {
 		layout.putConstraint(SpringLayout.NORTH, possibleSubrequirementTableScrollPane, 5, SpringLayout.SOUTH, subrequirementTableScrollPane);
 		layout.putConstraint(SpringLayout.SOUTH, this, 3 + 4 + addChildButton.getPreferredSize().height, SpringLayout.SOUTH, possibleSubrequirementTableScrollPane);
 		
-		layout.putConstraint(SpringLayout.WEST, addChildButton, 2, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.EAST, addChildButton, -2, SpringLayout.HORIZONTAL_CENTER, this);
 		layout.putConstraint(SpringLayout.NORTH, addChildButton, 5, SpringLayout.SOUTH, possibleSubrequirementTableScrollPane);
 		
-		layout.putConstraint(SpringLayout.WEST, setParrentButton, 2, SpringLayout.EAST, addChildButton);
+		layout.putConstraint(SpringLayout.WEST, setParrentButton, 2, SpringLayout.HORIZONTAL_CENTER, this);
 		layout.putConstraint(SpringLayout.NORTH, setParrentButton, 0, SpringLayout.NORTH, addChildButton);
 		
+		// Add elements to the main panel
 		add(subrequirementTableScrollPane);
 		add(possibleSubrequirementTableScrollPane);
 		add(addChildButton);
 		add(setParrentButton);
-		System.out.println(addChildButton.getPreferredSize().toString());
-		System.out.println(addChildButton.getSize().toString());
-		
-		
-//		noteViewer = new JPanel(new GridBagLayout());
-//
-//		noteScrollPane = new JScrollPane(noteViewer);
-//		noteScrollPane.setPreferredSize(new Dimension(300, 300));
-//		noteScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		// Add elements to the main panel
-//		add(noteScrollPane, BorderLayout.CENTER);
 	}
 	
 	/**
