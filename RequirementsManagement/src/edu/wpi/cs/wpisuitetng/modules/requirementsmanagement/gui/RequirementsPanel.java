@@ -85,9 +85,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
+	private RequirementSubrequirementTab subs;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
+	
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -219,8 +221,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		// Supplement Pane (i.e., notes, history, attachments)
 		nt = new NoteMainPanel(this);
 		hs = new RequirementHistoryTab(this);
+		subs = new RequirementSubrequirementTab(this);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("History", hs);
+		supplementPane.add("Sub-Requirements", subs);
 		if(this.editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
 		} else {
@@ -385,13 +389,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		estimateField.setText(model.getEstimate()+"");
 		actualEffortField.setText(model.getActualEffort()+"");
-//		if(this.editMode == Mode.CREATE || model.getStatus() == RequirementStatus.DELETED || model.getStatus() == RequirementStatus.COMPLETE) {
-//			estimateField.setEditable(false);
-//			actualEffortField.setEditable(false);
-//		} else {
-//			estimateField.setEditable(true);
-//			actualEffortField.setEditable(true);
-//		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
@@ -432,13 +429,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
-//			actualEffortField.setEnabled(false);
-//			submit.setEnabled(false);
-//			iteration.setEnabled(false);
-//			nt.setInputEnabled(false);
-//		}else if(namefield.getText().length() < 1 || namefield.getText().length() < 1){
-//			namefield.setEnabled(true);
-//			type.setEnabled(true);
 			type.setBackground(Color.WHITE);
 			priority.setEnabled(false);
 			priority.setBackground(Color.WHITE);
@@ -461,18 +451,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
-//=======
-//			actualEffortField.setEnabled(true);
-//			submit.setEnabled(true);
-//			iteration.setEnabled(true);
-//			nt.setInputEnabled(true);
-//>>>>>>> origin/dev-fix#31
 		}
 		System.out.println("namefield: "+namefield.getText());
 		System.out.println("submit good: "+!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		nt.setNotes(Arrays.asList(model.getNotes()));
 		DB.getAllProjectEvents(new ListProjectEvents());
 		updateSubmitButton();
+		subs.update();
 	}
 	
 	/**
@@ -711,14 +696,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		DB.getSingleRequirement(parentId+"", new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel req) {
-				req.getSubRequirements().add(model);
+				req.getSubRequirements().add(model.getId()+"");
 				DB.updateRequirements(req, new SingleRequirementCallback() {
 					@Override
 					public void callback(RequirementModel req) {
-						if (req.getSubRequirements().contains(model)) {
+						if (req.getSubRequirements().contains(model.getId()+"")) {
 							setStatus("added to parent");
 						} else {
-							setStatus("faield to add to parent");
+							setStatus("failed to add to parent");
 						}
 						
 					}
@@ -731,7 +716,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel child) {
-				model.getSubRequirements().add(child);
+				model.getSubRequirements().add(child.getId()+"");
 				DB.updateRequirements(model, new AddChildRequirementCallback(child));
 
 			}
@@ -740,7 +725,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	
 	
 	public void addChild(RequirementModel child) {
-		model.getSubRequirements().add(child);
+		model.getSubRequirements().add(child.getId()+"");
 		DB.updateRequirements(model, new AddChildRequirementCallback(child));
 	}
 	
@@ -753,10 +738,17 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		@Override
 		public void callback(RequirementModel currentReq) {
-			if (currentReq.getSubRequirements().contains(childReq)) {
+			boolean added = false;
+			for (String subReq : currentReq.getSubRequirements()) {
+				if(subReq.equals(childReq.getId()+"")) {
+					added = true;
+				}
+			}
+			if (added) {
+				subs.update();
 				setStatus("added child");
 			} else {
-				setStatus("faield to add child");
+				setStatus("failed to add child");
 			}
 		}
 	}
