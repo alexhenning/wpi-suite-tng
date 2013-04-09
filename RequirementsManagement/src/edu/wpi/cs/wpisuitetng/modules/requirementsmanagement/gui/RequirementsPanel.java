@@ -77,8 +77,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
 	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
-	RequirementStatus[] statusStrings = RequirementStatus.values();
-	public JComboBox statusfield = new JComboBox(statusStrings);
+//	RequirementStatus[] statusStrings = RequirementStatus.values();
+	public JTextField statusfield = new JTextField();//(statusStrings);
 	public JTextField estimateField = new JTextField("0", 35);
 	public JTextField actualEffortField = new JTextField("0", 35);
 	public JTextField results = new JTextField(35);
@@ -344,11 +344,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 *
 	 */
 	private void updateStatusField() {
-		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
-			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
-				statusfield.setSelectedIndex(i);
-			}
-		}
+//		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
+//			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
+//				statusfield.setSelectedIndex(i);
+//			}
+//		}
+		statusfield.setText(model.getStatus().toString());
 	}
 	
 	/**
@@ -365,6 +366,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		namefield.setText(model.getName());
 		descriptionfield.setText(model.getDescription());
+//		statusfield.setText(model.getStatus().toString());
 		updateStatusField();
 		for(int i = 0; i < priority.getItemCount(); i++) {  // Same as above
 			if(model.getPriority() == RequirementPriority.valueOf(priority.getItemAt(i).toString())) {
@@ -503,7 +505,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			}
 		}
 		model.setDescription(descriptionfield.getText());
-		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
+//		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
 		if (model.getStatus() == RequirementStatus.COMPLETE) {
 			
 		} else if (model.getStatus() == RequirementStatus.DELETED) {
