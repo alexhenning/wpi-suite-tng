@@ -100,7 +100,8 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	@Override
 	public ReleaseNumber[] getEntity(Session s, String id)
 			throws NotFoundException, WPISuiteException {
-		final int intId = Integer.parseInt(id);
+		
+		final int intId = Integer.parseInt(id);		
 		if(intId < 1) {
 			throw new NotFoundException();
 		}
@@ -155,7 +156,7 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 		if(!db.save(existingReleaseNumber, s.getProject())) {
 			throw new WPISuiteException();
 		}
-
+		
 		return existingReleaseNumber;
 	}
 

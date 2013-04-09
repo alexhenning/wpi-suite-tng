@@ -15,7 +15,10 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -38,6 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumbe
  * @author Tim
  *
  */
+@SuppressWarnings("serial")
 public class ReleaseNumberPanel extends JPanel {
 	
 	/** the model that holds the ReleaseNumber */
@@ -62,6 +66,8 @@ public class ReleaseNumberPanel extends JPanel {
 	JLabel cbLabel;
 	/** a label for field */
 	JLabel nfLabel;
+	/** a boolean flag to indicate that the combo box item was selected by code, not the user */
+	boolean autoSelected = false;
 	
 	/**
 	 * @param releaseTab
@@ -76,12 +82,7 @@ public class ReleaseNumberPanel extends JPanel {
 		
 		addComponents();
 		
-		DB.getAllReleaseNumbers(new ReleaseNumberCallback() {
-			@Override
-			public void callback(List<ReleaseNumber> releaseNumbers) {
-				updateComboBoxWithReleaseNumbers(releaseNumbers);
-			}
-		});
+		updateReleaseNumbers();
 		
 		updateFields();
 	}
@@ -97,29 +98,38 @@ public class ReleaseNumberPanel extends JPanel {
 		
 		releaseNumbersComboBox = new JComboBox();
 		
-		releaseNumbersComboBox.addActionListener(new ActionListener() {
+		releaseNumbersComboBox.addItemListener(new ItemListener() {
+
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				final String releaseNumberName = (String) releaseNumbersComboBox.getSelectedItem();
-				DB.getAllReleaseNumbers(new ReleaseNumberCallback() {
-					@Override
-					public void callback(List<ReleaseNumber> releaseNumbers) {
-						for(ReleaseNumber rn : releaseNumbers) {
-							if(rn.getReleaseNumber().equals(releaseNumberName)) {
-								updateModel(rn);
-								break;
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED && !autoSelected) {  // ignore deselects and auto selects
+					final String releaseNumberName = (String) releaseNumbersComboBox.getSelectedItem();
+					DB.getAllReleaseNumbers(new ReleaseNumberCallback() {
+						@Override
+						public void callback(List<ReleaseNumber> releaseNumbers) {
+							if(releaseNumberName.equals("New Release Number")) {
+								updateModel(new ReleaseNumber(), Mode.CREATE);
+							} else {
+								for(ReleaseNumber rn : releaseNumbers) {
+									if(rn.getReleaseNumber().equals(releaseNumberName)) {
+										updateModel(rn);
+										break;
+									}
+								}
 							}
 						}
-					}
-				});
-			}	
+					});
+				}
+				autoSelected = false;
+			}
+			
 		});
 		
 		numberField = new JTextField();
 		result = new JTextField();
 		
-		cbLabel = new JLabel("Release Numbers       ");
-		nfLabel = new JLabel("Release Number Name   ");
+		cbLabel = new JLabel("All Release Numbers       ");
+		nfLabel = new JLabel("Release Number (Name)     ");
 		
 		submit = new JButton("Create");
 		submit.setAction(new AddReleaseNumberController(this));
@@ -218,9 +228,15 @@ public class ReleaseNumberPanel extends JPanel {
 	}
 	
 	private void updateComboBoxWithReleaseNumbers(List<ReleaseNumber> releaseNumbers) {
+		releaseNumbersComboBox.removeAllItems();
 		releaseNumbersComboBox.addItem("New Release Number");
+		List<String> rns = new ArrayList<String>();
 		for(ReleaseNumber rn : releaseNumbers) {
-			releaseNumbersComboBox.addItem(rn.getReleaseNumber());
+			rns.add(rn.getReleaseNumber());
+		}
+		Collections.sort(rns);
+		for(String s : rns) {
+			releaseNumbersComboBox.addItem(s);
 		}
 	}
 	
@@ -229,7 +245,17 @@ public class ReleaseNumberPanel extends JPanel {
 	 *
 	 */
 	private void updateFields() {
+		// set text for release number
 		numberField.setText(model.getReleaseNumber());
+		
+		// set combo box to correct release number
+		for(int i = 0; i < releaseNumbersComboBox.getItemCount(); ++i) {
+			if(releaseNumbersComboBox.getItemAt(i).equals(model.getReleaseNumber())) {
+				autoSelected = true;
+				releaseNumbersComboBox.setSelectedIndex(i);
+				break;
+			}
+		}
 		
 		if(editMode == Mode.CREATE) {
 			submit.setText("Create");
@@ -238,6 +264,8 @@ public class ReleaseNumberPanel extends JPanel {
 			submit.setText("Update");
 			submit.setAction(new UpdateReleaseNumber());
 		}
+		
+		result.setText("");
 	}
 	
 	public ReleaseNumber getModel() {
@@ -255,23 +283,54 @@ public class ReleaseNumberPanel extends JPanel {
 		return editMode;
 	}
 	
+	/**
+	 * Sets some status message to the status box
+	 *
+	 * @param string Message to display
+	 */
 	public void setStatus(String string) {
 		result.setText(string);
 	}
 	
+	/**
+	 * Retrieves all the release numbers from the data base and
+	 * populates the combo box with them
+	 *
+	 */
+	public void updateReleaseNumbers() {
+		DB.getAllReleaseNumbers(new ReleaseNumberCallback() {
+			@Override
+			public void callback(List<ReleaseNumber> releaseNumbers) {
+				updateComboBoxWithReleaseNumbers(releaseNumbers);
+			}
+		});
+	}
+	
+	/**
+	 *
+	 * Updates a release number to the values currently displayed
+	 * @author Tim
+	 *
+	 */
 	class UpdateReleaseNumber extends AbstractAction {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(validateFields()) {
+			if(validateFields() && // no errors and the user actually changed something
+					(!numberField.getText().equals(model.getReleaseNumber()))) {
 				getModel();
 				DB.updateReleaseNumber(model, new SingleReleaseNumberCallback() {
 					@Override
 					public void callback(ReleaseNumber rn) {
 						setStatus("Release Number Updated");
+						updateReleaseNumbers();
 						updateModel(model);
 					}
 				});
+			} else {
+				if(model.getReleaseNumber().equals(model.getReleaseNumber())) {
+					setStatus("No changes");
+				}
 			}
 		}
 		
