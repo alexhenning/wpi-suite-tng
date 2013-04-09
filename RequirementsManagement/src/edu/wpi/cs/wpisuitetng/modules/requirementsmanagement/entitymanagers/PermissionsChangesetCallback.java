@@ -5,14 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu.wpi.cs.wpisuitetng.modules.Model;
-import edu.wpi.cs.wpisuitetng.modules.defecttracker.entitymanagers.ModelMapper.MapCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionsChangeset;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementChangeset;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
-public class PermissionsChangesetCallback implements MapCallback{
+public class PermissionsChangesetCallback implements ModelMapper.MapCallback{
 	
 	private final PermissionsChangeset changeset;
 	private boolean wasCalled = false;
