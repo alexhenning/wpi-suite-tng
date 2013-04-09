@@ -55,8 +55,9 @@ public class ReportsTab extends JPanel implements IToolbarGroupProvider{
 			containingTab = new DummyTab();
 		}
 		containingTab.setTitle("Reports");
+		containingTab.setComponent(this);
 		
-		// Instantiate the main create iteration panel
+		// Instantiate the main reports panel
 		mainPanel = new ReportsPanel(this);
 		this.setLayout(new BorderLayout());
 		mainPanelScrollPane = new JScrollPane(mainPanel);

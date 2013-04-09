@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
@@ -58,15 +59,16 @@ public class ReportsPanel extends JPanel{
 	public ReportsPanel(ReportsTab parent){
 		System.out.println("Constructing reports...");
 		this.parent = parent;
-//		model = new LinkedList<RequirementModel>();
-//		dataset = new DefaultPieDataset();
-//		chart = ChartFactory.createPieChart(
-//            "Pie Chart Demo 1",  // chart title
-//            dataset,             // data
-//            true,               // include legend
-//            true,
-//            false
-//        );
+		model = new LinkedList<RequirementModel>();
+		dataset = new DefaultPieDataset();
+		dataset.setValue("Test", 1.0);
+		chart = ChartFactory.createPieChart(
+            "Pie Chart Demo 1",  // chart title
+            dataset,             // data
+            true,               // include legend
+            true,
+            false
+        );
 		
 		addComponents();
 
@@ -84,11 +86,14 @@ public class ReportsPanel extends JPanel{
 		setLayout(panelLayout);
 		
 		chartPanel = new ChartPanel(chart);
+		JLabel lbl = new JLabel("Test");
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
 		add(chartPanel, c);
+		c.gridy = 1;
+		add(lbl, c);
 	}
 	
 	/**

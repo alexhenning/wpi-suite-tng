@@ -267,19 +267,14 @@ public class MainTabController {
 			}
 		}
 
-		System.out.println("Adding reports");
 		Tab tab = addTab();
-		System.out.println("Tab created");
 		final ReportsTab reportsTab = new ReportsTab(this, tab);
-		System.out.println("Tab really created");
 		reportsTab.requestFocus();
-		System.out.println("Tab focused");
 		view.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				reportsTab.mainPanel.refresh();
 			}
 		});
-		System.out.println("Tab listening");
 	}
 }
