@@ -14,11 +14,15 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -29,6 +33,7 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
@@ -45,12 +50,14 @@ public class ReportsPanel extends JPanel{
 	ReportsTab parent;
 	/** the layout for this panel */
 	private GridBagLayout panelLayout;
+	
+	private JComboBox reports;
 
-	List<RequirementModel> model;
+	private List<RequirementModel> model;
 	private Chart type = Chart.STATUS;
-	DefaultPieDataset dataset;
-	JFreeChart chart;
-	ChartPanel chartPanel;
+	private DefaultPieDataset dataset;
+	private JFreeChart chart;
+	private ChartPanel chartPanel;
 
 	/**
 	 * Constructor
@@ -72,7 +79,7 @@ public class ReportsPanel extends JPanel{
 		
 		addComponents();
 
-		//refresh();
+		refresh();
 	}
 
 	
@@ -86,14 +93,20 @@ public class ReportsPanel extends JPanel{
 		setLayout(panelLayout);
 		
 		chartPanel = new ChartPanel(chart);
-		JLabel lbl = new JLabel("Test");
+		reports = new JComboBox(Chart.values());
+		reports.addItemListener(new ItemListener() {
+			@Override public void itemStateChanged(ItemEvent e) {
+				type = (Chart) reports.getSelectedItem();
+				refreshChart();
+			}
+		});
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
 		add(chartPanel, c);
 		c.gridy = 1;
-		add(lbl, c);
+		add(reports, c);
 	}
 	
 	/**
@@ -113,27 +126,11 @@ public class ReportsPanel extends JPanel{
 	 * Update the charts to reflect the most up to date information.
 	 */
 	public void refreshChart() {
-		if (type == Chart.STATUS) {
-			Map<RequirementStatus, Integer> map = new HashMap<RequirementStatus, Integer>();
-			
-			for (RequirementModel req : model) {
-				RequirementStatus status = req.getStatus();
-				if (map.containsKey(status)) {
-					map.put(status, 1 + map.get(status));
-				} else {
-					map.put(status, 1);
-				}
-			}
-			
-			System.out.println("Refreshing chart");
-			dataset.clear();
-			for (RequirementStatus key : map.keySet()) {
-				System.out.println("\t"+key+": "+map.get(key));
-				dataset.setValue(key.toString(), new Double(map.get(key)));
-			}
-			chartPanel.repaint();
-			System.out.println("Repainting");
-		}
+		System.out.println("Refreshing chart");
+		dataset.clear();
+		type.updateDataset(model, dataset);
+		chartPanel.repaint();
+		System.out.println("Repainting");
 	}
 		
 	/**
@@ -164,6 +161,70 @@ public class ReportsPanel extends JPanel{
 	}
 	
 	public enum Chart {
-		STATUS, ITERATION, ASSIGNED_TO;
+		STATUS {
+			@Override public void updateDataset(List<RequirementModel> model, 
+					DefaultPieDataset dataset) {
+				Map<RequirementStatus, Integer> map = new HashMap<RequirementStatus, Integer>();
+			
+				for (RequirementModel req : model) {
+					RequirementStatus status = req.getStatus();
+					if (map.containsKey(status)) {
+						map.put(status, 1 + map.get(status));
+					} else {
+						map.put(status, 1);
+					}
+				}
+				
+				for (RequirementStatus key : map.keySet()) {
+					System.out.println("\t"+key+": "+map.get(key));
+					dataset.setValue(key.toString(), new Double(map.get(key)));
+				}
+			}
+		},
+		ITERATION {
+			@Override public void updateDataset(List<RequirementModel> model, 
+					DefaultPieDataset dataset) {
+				Map<Iteration, Integer> map = new HashMap<Iteration, Integer>();
+			
+				for (RequirementModel req : model) {
+					Iteration status = req.getIteration();
+					if (map.containsKey(status)) {
+						map.put(status, 1 + map.get(status));
+					} else {
+						map.put(status, 1);
+					}
+				}
+				
+				for (Iteration key : map.keySet()) {
+					System.out.println("\t"+key+": "+map.get(key));
+					if (key != null) 
+						dataset.setValue(key.toString(), new Double(map.get(key)));
+					else
+						dataset.setValue("Backlog", new Double(map.get(key)));
+				}
+			}
+		},
+		ASSIGNED_TO {
+			@Override public void updateDataset(List<RequirementModel> model, 
+					DefaultPieDataset dataset) {
+				Map<RequirementStatus, Integer> map = new HashMap<RequirementStatus, Integer>();
+			
+				for (RequirementModel req : model) {
+					RequirementStatus status = req.getStatus();
+					if (map.containsKey(status)) {
+						map.put(status, 1 + map.get(status));
+					} else {
+						map.put(status, 1);
+					}
+				}
+				
+				for (RequirementStatus key : map.keySet()) {
+					System.out.println("\t"+key+": "+map.get(key));
+					dataset.setValue(key.toString(), new Double(map.get(key)));
+				}
+			}
+		};
+		
+		public abstract void updateDataset(List<RequirementModel> model, DefaultPieDataset dataset);
 	}
 }
