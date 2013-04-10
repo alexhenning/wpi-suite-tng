@@ -411,6 +411,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+			nt.setInputEnabled(false);
 		} else if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
@@ -423,6 +424,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(true);
 			submit.setEnabled(true);
+			nt.setInputEnabled(true);
 		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
@@ -436,6 +438,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(false);
+			nt.setInputEnabled(false);
 		} else {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
@@ -448,6 +451,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+			nt.setInputEnabled(true);
 		}
 		validateEstimate();
 		System.out.println("namefield: "+namefield.getText());
