@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -106,7 +105,6 @@ public class ReleaseNumberPanel extends JPanel {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				System.out.println("autoSelected is " + autoSelected);
 				if(e.getStateChange() == ItemEvent.SELECTED && !autoSelected) {  // ignore deselects and auto selects
 					DB.getAllReleaseNumbers(new ReleaseNumberCallback() {
 						@Override
@@ -250,7 +248,6 @@ public class ReleaseNumberPanel extends JPanel {
 		}
 		Collections.sort(rns);
 		for(String s : rns) {
-			System.out.println("Adding to cb: " + s);
 			releaseNumbersComboBox.addItem(s);
 		}
 	}
@@ -265,11 +262,8 @@ public class ReleaseNumberPanel extends JPanel {
 		
 		// set combo box to correct release number
 		if(!autoSelected && !model.getReleaseNumber().equals(releaseNumbersComboBox.getSelectedItem())) {
-			System.out.println("Model rn: " + model.getReleaseNumber());
 			for(int i = 0; i < releaseNumbersComboBox.getItemCount(); ++i) {
-				System.out.println("Value in cb at " + i + ": " + releaseNumbersComboBox.getItemAt(i));
 				if(releaseNumbersComboBox.getItemAt(i).equals(model.getReleaseNumber())) {
-					System.out.println("Found One! " + i);
 					autoSelected = true;
 					releaseNumbersComboBox.setSelectedIndex(i);
 					break;
@@ -279,9 +273,11 @@ public class ReleaseNumberPanel extends JPanel {
 		
 		if(editMode == Mode.CREATE) {
 			submit.setText("Create");
+			removeAllActionListeners();
 			submit.addActionListener(new AddReleaseNumberController(this));
 		} else {
 			submit.setText("Update");
+			removeAllActionListeners();
 			submit.addActionListener(new ActionListener() {
 
 				@Override
@@ -291,6 +287,12 @@ public class ReleaseNumberPanel extends JPanel {
 				}
 				
 			});
+		}
+	}
+	
+	private void removeAllActionListeners() {
+		for(ActionListener al : submit.getActionListeners()) {
+			submit.removeActionListener(al);
 		}
 	}
 	
@@ -334,12 +336,10 @@ public class ReleaseNumberPanel extends JPanel {
 	public void UpdateReleaseNumber(ActionEvent e) {
 		if(validateFields() && // no errors and the user actually changed something
 				(!numberField.getText().equals(model.getReleaseNumber()))) {
-			System.out.println("Updating Model!");
 			getModel();
 			DB.updateReleaseNumber(model, new SingleReleaseNumberCallback() {
 				@Override
 				public void callback(ReleaseNumber rn) {
-					setStatus("Release Number Updated");
 					updateReleaseNumbers(rn);
 				}
 			});
