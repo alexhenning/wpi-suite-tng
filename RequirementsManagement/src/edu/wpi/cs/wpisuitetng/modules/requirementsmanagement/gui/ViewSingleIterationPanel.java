@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -33,8 +34,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.Iterati
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 /**
@@ -88,8 +87,6 @@ public class ViewSingleIterationPanel extends JPanel{
 		
 		// Add all components to this panel
 		addComponents();
-//		parent.buttonGroup.update(mode, model);
-
 		
 		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
 		updateFields();
@@ -105,59 +102,70 @@ public class ViewSingleIterationPanel extends JPanel{
 		GridBagConstraints c = new GridBagConstraints();
 		topPanel = new JPanel(new GridBagLayout());
 		
-		lbl1 = new JLabel("Start Date");
-		lbl2 = new JLabel("End Date");
-		lbl3 = new JLabel ("Iteration");
-		
-		Date startDate = model.getStartDate();
-		Date endDate = model.getEndDate();
-		Date currentDate = new Date();
-		startDatePicker = new JXDatePicker(startDate != null ? startDate : currentDate);
-		endDatePicker = new JXDatePicker(endDate != null ? endDate : currentDate);
-		
-		result = new JTextField();
-		iterationNumber = new JTextField(model.getIterationNumber());
-		
-		submit = new JButton("Update");
-		submit.addActionListener(new EditIterationAction());
-		
-		if(startDate.before(currentDate)){
-			startDatePicker.setEnabled(false);
+		/** iteration is null, this is the backlog */
+		if (model == null) {
+			iterationNumber = new JTextField("Backlog");
+			Font font = new Font("Verdana", Font.BOLD, 40);
+			iterationNumber.setFont(font);
+			iterationNumber.setEditable(false);
+			topPanel.add(iterationNumber);
 		}
-		if(endDate.before(currentDate)){
-			endDatePicker.setEnabled(false);
-			submit.setEnabled(false);
-			iterationNumber.setEnabled(false);
+		/** iteration is not null, retrieve and display iteration values */
+		else {
+			lbl1 = new JLabel("Start Date");
+			lbl2 = new JLabel("End Date");
+			lbl3 = new JLabel ("Iteration");
+			
+			Date startDate = model.getStartDate();
+			Date endDate = model.getEndDate();
+			Date currentDate = new Date();
+			startDatePicker = new JXDatePicker(startDate != null ? startDate : currentDate);
+			endDatePicker = new JXDatePicker(endDate != null ? endDate : currentDate);
+			
+			result = new JTextField();
+			
+			iterationNumber = new JTextField(model.getIterationNumber());
+			
+			submit = new JButton("Update");
+			submit.addActionListener(new EditIterationAction());
+			
+			if(startDate.before(currentDate)){
+				startDatePicker.setEnabled(false);
+			}
+			if(endDate.before(currentDate)){
+				endDatePicker.setEnabled(false);
+				submit.setEnabled(false);
+				iterationNumber.setEnabled(false);
+			}
+			
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridx = 0;
+			c.gridy = 0;
+			topPanel.add(lbl3, c);
+			c.gridx = 1;
+			topPanel.add(iterationNumber, c);
+			c.gridy = 1;
+			c.gridx = 0;
+			topPanel.add(lbl2, c);
+			c.gridx = 1;
+			topPanel.add(endDatePicker, c);
+			c.gridy = 2;
+			c.gridx = 0;
+			topPanel.add(lbl1, c);
+			c.gridx = 1;
+			topPanel.add(startDatePicker, c);
+			c.gridy = 3;
+			topPanel.add(submit, c);
+			c.gridy = 4;
+			topPanel.add(result, c);
+			result.setEditable(false);
 		}
 		
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		topPanel.add(lbl3, c);
-		c.gridx = 1;
-		topPanel.add(iterationNumber, c);
-		c.gridy = 1;
-		c.gridx = 0;
-		topPanel.add(lbl2, c);
-		c.gridx = 1;
-		topPanel.add(endDatePicker, c);
-		c.gridy = 2;
-		c.gridx = 0;
-		topPanel.add(lbl1, c);
-		c.gridx = 1;
-		topPanel.add(startDatePicker, c);
-		c.gridy = 3;
-		topPanel.add(submit, c);
-		c.gridy = 4;
-		topPanel.add(result, c);
-		c.gridy = 5;
 		add(topPanel, BorderLayout.PAGE_START);
 		
 		/** adding bottom panel */
 		bottomPanel = new ListFilteredRequirementsPanel(parent);
 		add(bottomPanel, BorderLayout.CENTER);
-		
-		result.setEditable(false);
 	}
 	
 	/**

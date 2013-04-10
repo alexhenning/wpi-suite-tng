@@ -13,9 +13,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * 

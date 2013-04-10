@@ -137,10 +137,20 @@ public class MainTabController {
 	 * @param mode The Mode to use
 	 */
 	public Tab addIterationTab(Iteration iteration, String title) {
-		for (int i=0; i<view.getTabCount(); i++) {
-			if (("Edit "+(iteration.getIterationNumber())).equals(view.getTitleAt(i))) {
-				switchToTab(i);
-				return null;//TODO figure out what to return
+		if (iteration == null) {
+			for (int i=0; i<view.getTabCount(); i++) {
+				if (("View Backlog").equals(view.getTitleAt(i))) {
+					switchToTab(i);
+					return null;//TODO figure out what to return
+				}
+			}
+		}
+		else {
+			for (int i=0; i<view.getTabCount(); i++) {
+				if (("Edit "+(iteration.getIterationNumber())).equals(view.getTitleAt(i))) {
+					switchToTab(i);
+					return null;//TODO figure out what to return
+				}
 			}
 		}
 		Tab tab = addTab();

@@ -15,36 +15,25 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.CustomCellRenderer;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.UpdateTableCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * GUI for a project manager to view and manage iterations 
  *
- * @author
+ * @author Josh
  * 
  */
 @SuppressWarnings("serial")
@@ -84,8 +73,6 @@ public class ViewIterationPanel extends JPanel {
 		addComponents();
 		updateAllIterationList();
 		
-		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
-		//updateFields();
 	}
 
 	/**
@@ -103,7 +90,10 @@ public class ViewIterationPanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 2 ) {
-                	DB.getSingleIteration(table.getModel().getValueAt(table.getSelectedRow(), ID).toString(),
+                	if (table.getModel().getValueAt(table.getSelectedRow(),ID).toString().equals("0")) {
+                		parent.tabController.addIterationTab(null, "View Backlog");
+                	}
+                	else DB.getSingleIteration(table.getModel().getValueAt(table.getSelectedRow(), ID).toString(),
                 			new SingleIterationCallback() {
 						@Override
 						public void callback(Iteration iter) {
@@ -167,8 +157,13 @@ public class ViewIterationPanel extends JPanel {
 		public void callback(List<Iteration> iterations) {
 			if (iterations.size() > 0) {
 				// put the data in the table
-				Object[][] entries = new Object[iterations.size()][ROWS];
-				int i = 0;
+				Object[][] entries = new Object[iterations.size() + 1][ROWS];
+				entries[0][ID] = 0;
+				entries[0][NAME] = "Backlog";
+				entries[0][STARTDATE] = "N/A";
+				entries[0][ENDDATE] = "N/A";
+				entries[0][ESTIMATE] = "N/A";
+				int i = 1;
 				for(Iteration iteration : iterations) {
 					entries[i][ID] = iteration.getId();
 					entries[i][NAME] = iteration.getIterationNumber();

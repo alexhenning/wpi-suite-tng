@@ -66,11 +66,7 @@ public class ViewSingleIterationTab extends JPanel implements IToolbarGroupProvi
 		// Prevent content of scroll pane from smearing (credit: https://gist.github.com/303464)
 		mainPanelScrollPane.getVerticalScrollBar().addAdjustmentListener(new java.awt.event.AdjustmentListener(){
 			public void adjustmentValueChanged(java.awt.event.AdjustmentEvent ae){
-				//SwingUtilities.invokeLater(new Runnable(){
-				//	public void run(){
-						mainPanelScrollPane.repaint();
-				//	}
-				//});
+				mainPanelScrollPane.repaint();
 			}
 		});
 		
