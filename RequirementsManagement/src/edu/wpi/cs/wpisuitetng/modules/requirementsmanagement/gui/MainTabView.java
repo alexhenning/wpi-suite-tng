@@ -66,16 +66,20 @@ public class MainTabView extends JTabbedPane {
 	public void removeTabAt(int index) {
 		// if a tab does not have the close button UI, it cannot be removed
 		if(getTabComponentAt(index) instanceof ClosableTabComponent) {
-			// Hacky fix, make an interface
+			// Hacky fix for requirements panel, make an interface and generalize
 			if (getComponentAt(index) instanceof RequirementsTab) {
 				System.out.println("Deleting requirement tab");
 				if (((RequirementsTab) getComponentAt(index)).getRequirementPanel().hasUnsavedChanges()) {
-					JOptionPane.showConfirmDialog(this,
-							"Do you want to lose these changes?", 
-							"Unsaved Changes", 
-							JOptionPane.WARNING_MESSAGE);
+					// 0 is OK, 2 is cancel
+					int input = JOptionPane.showConfirmDialog(this,
+															"Do you want to lose these changes?", 
+															"Unsaved Changes", 
+															JOptionPane.WARNING_MESSAGE);
+					System.out.println("Input to close: "+input);
+					if (input == 2) return;  
 				}
 			}
+			
 			super.removeTabAt(index);
 		}
 	}
