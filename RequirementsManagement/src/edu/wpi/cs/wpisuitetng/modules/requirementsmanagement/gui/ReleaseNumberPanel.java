@@ -138,7 +138,7 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 		});
 		
 		numberField = new JTextField();
-		result = new JTextField();
+		result = new JTextField(30);
 		
 		cbLabel = new JLabel("All Release Numbers       ");
 		nfLabel = new JLabel("Release Number (Name)     ");
@@ -363,13 +363,11 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 	 */
 	public void enableSubmitButton() {
 		boolean shouldEnable = true;
-		if(editMode == Mode.CREATE && numberField.getText().length() < 1) {
+		if(numberField.getText().length() < 1) {
 			shouldEnable = false;
 		}
-		else {
-			if(numberField.getText().equals(model.getReleaseNumber())) {
-				shouldEnable = false;
-			}
+		if(editMode == Mode.EDIT && numberField.getText().equals(model.getReleaseNumber())) {
+			shouldEnable = false;
 		}
 		submit.setEnabled(shouldEnable);
 	}
