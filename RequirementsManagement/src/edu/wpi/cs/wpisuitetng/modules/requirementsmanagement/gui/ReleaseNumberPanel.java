@@ -100,31 +100,37 @@ public class ReleaseNumberPanel extends JPanel {
 		//setLayout(panelLayout);
 		
 		releaseNumbersComboBox = new JComboBox();
+		releaseNumbersComboBox.setBackground(Color.WHITE);
 		
 		releaseNumbersComboBox.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange() == ItemEvent.SELECTED && !autoSelected) {  // ignore deselects and auto selects
-					DB.getAllReleaseNumbers(new ReleaseNumberCallback() {
-						@Override
-						public void callback(List<ReleaseNumber> releaseNumbers) {
-							String releaseNumberName = (String) releaseNumbersComboBox.getSelectedItem();
-							if(releaseNumberName.equals("New Release Number")) {
-								updateModel(new ReleaseNumber(), Mode.CREATE);
-							} else {
-								for(ReleaseNumber rn : releaseNumbers) {
-									if(rn.getReleaseNumber().equals(releaseNumberName)) {
-										updateModel(rn);
-										break;
+				System.out.println("autoSelected = " + autoSelected);
+				if(e.getStateChange() == ItemEvent.SELECTED) {  // ignore deselects
+					if(!autoSelected) {  // ignore auto selects
+						                 // these need to be separate if statements to avoid reseting
+						                 // autoSelect on deselect even
+						DB.getAllReleaseNumbers(new ReleaseNumberCallback() {
+							@Override
+							public void callback(List<ReleaseNumber> releaseNumbers) {
+								String releaseNumberName = (String) releaseNumbersComboBox.getSelectedItem();
+								if(releaseNumberName.equals("New Release Number")) {
+									updateModel(new ReleaseNumber(), Mode.CREATE);
+								} else {
+									for(ReleaseNumber rn : releaseNumbers) {
+										if(rn.getReleaseNumber().equals(releaseNumberName)) {
+											updateModel(rn);
+											break;
+										}
 									}
 								}
+								result.setText("");
 							}
-							result.setText("");
-						}
-					});
+						});
+					}
+					autoSelected = false;
 				}
-				autoSelected = false;
 			}
 			
 		});
@@ -225,13 +231,25 @@ public class ReleaseNumberPanel extends JPanel {
 	 */
 	public boolean validateFields() {
 		boolean noErrors = true;
+		String status = "";
 		
 		if(numberField.getText().length() < 1 || numberField.getText().length() > 100) {
 			noErrors = false;
+			status = "There must be a release number.";
+		}
+		
+		for(int i = 0; i < releaseNumbersComboBox.getItemCount(); ++i) {
+			if(numberField.getText().equals(releaseNumbersComboBox.getItemAt(i)) &&
+					!numberField.getText().equals(model.getReleaseNumber())) {
+				noErrors = false;
+				status = "A Release Number with the same number already exsists.";
+				break;
+			}
 		}
 		
 		if(!noErrors) {
 			numberField.setBackground(Color.RED);
+			setStatus(status);
 		} else {
 			numberField.setBackground(Color.WHITE);
 		}
@@ -344,7 +362,7 @@ public class ReleaseNumberPanel extends JPanel {
 				}
 			});
 		} else {
-			if(model.getReleaseNumber().equals(model.getReleaseNumber())) {
+			if(numberField.getText().equals(model.getReleaseNumber())) {
 				setStatus("No changes");
 			}
 		}
