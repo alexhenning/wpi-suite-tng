@@ -11,10 +11,12 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class ReleaseNumberPanel extends JPanel {
 	/** the tab that created this panel */
 	ReleaseNumberTab parent;
 	/** layout for this panel */
-	private GridBagLayout panelLayout;
+	//private GridBagLayout panelLayout;
 	/** combo box holding all release numbers */
 	JComboBox releaseNumbersComboBox;
 	/** field representing the name of the release number */
@@ -68,6 +70,7 @@ public class ReleaseNumberPanel extends JPanel {
 	JLabel nfLabel;
 	/** a boolean flag to indicate that the combo box item was selected by code, not the user */
 	boolean autoSelected = false;
+	JPanel displayPanel;
 	
 	/**
 	 * @param releaseTab
@@ -81,10 +84,11 @@ public class ReleaseNumberPanel extends JPanel {
 		inputEnabled = true;
 		
 		addComponents();
-		
+		System.out.println("\n" + submit.getText() + "\n");
 		updateReleaseNumbers();
-		
+		System.out.println("\n" + submit.getText() + "\n");
 		updateFields();
+		System.out.println("\n" + submit.getText() + "\n");
 	}
 	
 	/**
@@ -92,9 +96,12 @@ public class ReleaseNumberPanel extends JPanel {
 	 *
 	 */
 	private void addComponents() {
-		panelLayout = new GridBagLayout();
+		//panelLayout = new GridBagLayout();
+		//GridBagConstraints c = new GridBagConstraints();
+		displayPanel = new JPanel();
+		displayPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		setLayout(panelLayout);
+		//setLayout(panelLayout);
 		
 		releaseNumbersComboBox = new JComboBox();
 		
@@ -134,28 +141,40 @@ public class ReleaseNumberPanel extends JPanel {
 		nfLabel = new JLabel("Release Number (Name)     ");
 		
 		submit = new JButton("Create");
-		submit.setAction(new AddReleaseNumberController(this));
+		System.out.println("\n" + submit.getText() + "\n");
+		if(editMode == Mode.CREATE) {
+			submit.setText("Create");
+		}
+		else {
+			submit.setText("Submit");
+		}
+		System.out.println("\n" + submit.getText() + "\n");
+		submit.addActionListener(new AddReleaseNumberController(this));
+		System.out.println("\n" + submit.getText() + "\n");
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		add(cbLabel, c);
+		displayPanel.add(cbLabel, c);
 		c.gridx = 1;
-		add(releaseNumbersComboBox, c);
+		displayPanel.add(releaseNumbersComboBox, c);
 		c.gridx = 0;
 		c.gridy = 1;
-		add(nfLabel, c);
+		displayPanel.add(nfLabel, c);
 		c.gridx = 1;
-		add(numberField, c);
+		displayPanel.add(numberField, c);
 		c.gridx = 0;
 		c.gridy = 2;
 		c.ipady = 20;
-		add(submit, c);
+		displayPanel.add(submit, c);
 		c.ipady = 0;
 		c.gridx = 1;
-		add(result, c);
+		displayPanel.add(result, c);
+		
+		add(displayPanel, BorderLayout.CENTER);
 		
 		result.setEditable(false);
+		System.out.println("\n" + submit.getText() + "\n");
 	}
 	
 	/**
@@ -247,6 +266,7 @@ public class ReleaseNumberPanel extends JPanel {
 	 *
 	 */
 	private void updateFields() {
+		System.out.println("\n" + submit.getText() + "\n");
 		// set text for release number
 		numberField.setText(model.getReleaseNumber());
 		
@@ -263,16 +283,24 @@ public class ReleaseNumberPanel extends JPanel {
 		
 		if(editMode == Mode.CREATE) {
 			submit.setText("Create");
-			submit.setAction(new AddReleaseNumberController(this));
+			submit.addActionListener(new AddReleaseNumberController(this));
 		} else {
 			submit.setText("Update");
-			submit.setAction(new UpdateReleaseNumber());
+			submit.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					UpdateReleaseNumber(e);
+					
+				}
+				
+			});
 		}
 	}
 	
 	public ReleaseNumber getModel() {
 		model.setReleaseNumber(numberField.getText());
-		
+		System.out.println("\n" + submit.getText() + "\n");
 		return model;
 	}
 	
@@ -314,10 +342,8 @@ public class ReleaseNumberPanel extends JPanel {
 	 * @author Tim
 	 *
 	 */
-	class UpdateReleaseNumber extends AbstractAction {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
+	
+		public void UpdateReleaseNumber(ActionEvent e) {
 			if(validateFields() && // no errors and the user actually changed something
 					(!numberField.getText().equals(model.getReleaseNumber()))) {
 				getModel();
@@ -336,5 +362,5 @@ public class ReleaseNumberPanel extends JPanel {
 			}
 		}
 		
-	}
+	
 }
