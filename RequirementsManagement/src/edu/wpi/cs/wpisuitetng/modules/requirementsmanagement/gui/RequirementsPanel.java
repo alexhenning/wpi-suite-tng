@@ -18,6 +18,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Date;
@@ -200,14 +202,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		//estimate field
 		JLabel estimateArea = new JLabel("Estimate:");
+		estimateField.addFocusListener(new FocusListener() {
+			@Override public void focusLost(FocusEvent arg0) {
+				validateEstimate();
+			}
+			@Override public void focusGained(FocusEvent arg0) {}
+		});
 		JLabel actualEffortArea = new JLabel("Actual Effort:");
-//		if(this.editMode == Mode.CREATE) {
-//			estimateField.setEnabled(false);
-//			actualEffortField.setEnabled(false);
-//		} else {
-//			estimateField.setEnabled(true);
-//			actualEffortField.setEnabled(true);
-//		}
 	
 		//submit panel
 		if(this.editMode == Mode.CREATE) { 
@@ -454,6 +455,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		}
+		validateEstimate();
 		System.out.println("namefield: "+namefield.getText());
 		System.out.println("submit good: "+!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		nt.setNotes(Arrays.asList(model.getNotes()));
@@ -753,5 +755,27 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 				setStatus("failed to add child");
 			}
 		}
+	}
+	
+	/**
+	 * Validate the estimate and make the appropriate updates
+	 */
+	private boolean validateEstimate() {
+		int estimate;
+		try {
+			estimate = Integer.parseInt(estimateField.getText());
+		} catch (NumberFormatException e) {
+			iteration.setEnabled(false);
+			iteration.setBackground(Color.LIGHT_GRAY);
+			return false;
+		}
+		if (estimate <= 0 || editMode.equals(Mode.CREATE)) {
+			iteration.setEnabled(false);
+			iteration.setBackground(Color.LIGHT_GRAY);
+		} else {
+			iteration.setEnabled(true);
+			iteration.setBackground(Color.WHITE);
+		}
+		return estimate >= 0;
 	}
 }
