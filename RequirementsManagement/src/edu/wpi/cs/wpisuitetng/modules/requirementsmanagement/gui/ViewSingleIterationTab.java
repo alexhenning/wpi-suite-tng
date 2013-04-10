@@ -22,38 +22,43 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 
 /**
- * Tab for permissions
+ *
+ * The tab for iterations
  * @author Josh
  *
  */
 @SuppressWarnings("serial")
-public class ViewIterationTab extends JPanel implements IToolbarGroupProvider {
-	/** the main tab controller */
+public class ViewSingleIterationTab extends JPanel implements IToolbarGroupProvider{
+	
+	/** the main tab controller*/
 	MainTabController tabController;
-	/** tab that contains this*/
+	/** tab that this tab resides*/
 	Tab containingTab;
-	/** scroll pane */
+	/** the iteration */
+	Iteration iteration;
+	/** the main scroll pane */
 	JScrollPane mainPanelScrollPane;
-	/** the main panel */
-	ViewIterationPanel mainPanel;
+	/** The main panel */
+	ViewSingleIterationPanel mainPanel;
 	
 
 	/**
 	 * Constructor
 	 * @param tabController the main tab controller
-	 * @param permission a permissions model
-	 * @param tab the tab that contains this
+	 * @param iteration an iteration
+	 * @param tab the containing tab
 	 */
-	public ViewIterationTab(MainTabController tabController, Tab tab) {
+	public ViewSingleIterationTab(MainTabController tabController, Iteration iteration, Tab tab) {
 		this.tabController = tabController;
+		this.iteration = iteration;
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
-		containingTab.setTitle("View Iteration");
+		containingTab.setTitle("Add Iteration");
 		
 		// Instantiate the main create iteration panel
-		mainPanel = new ViewIterationPanel(this);
+		mainPanel = new ViewSingleIterationPanel(this);
 		this.setLayout(new BorderLayout());
 		mainPanelScrollPane = new JScrollPane(mainPanel);
 		mainPanelScrollPane.getVerticalScrollBar().setUnitIncrement(10);
@@ -74,9 +79,15 @@ public class ViewIterationTab extends JPanel implements IToolbarGroupProvider {
 	}
 
 
+	/**
+	 * This does not appear to be implemented
+	 *
+	 * @return
+	 */
 	@Override
 	public ToolbarGroupView getGroup() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

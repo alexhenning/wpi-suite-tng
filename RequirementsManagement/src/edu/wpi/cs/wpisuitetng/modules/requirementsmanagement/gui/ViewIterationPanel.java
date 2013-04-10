@@ -18,6 +18,9 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -27,7 +30,16 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.CustomCellRenderer;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.UpdateTableCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * GUI for a project manager to manage user permissions 
@@ -38,11 +50,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirement
 @SuppressWarnings("serial")
 public class ViewIterationPanel extends JPanel {
 	
-	public static final int NAME = 0;
-	public static final int STARTDATE = 1;
-	public static final int ENDDATE = 2;
-	public static final int ESTIMATE = 3;
-	public static final int REQUIREMENTS = 4;
+	public static final int ID = 0;
+	public static final int NAME = 1;
+	public static final int STARTDATE = 2;
+	public static final int ENDDATE = 3;
+	public static final int ESTIMATE = 4;
 	public static final int ROWS = 5;
 	
 	/** the tab that made this */
@@ -50,6 +62,7 @@ public class ViewIterationPanel extends JPanel {
 	JPanel topPanel;
 	JTable table;
 	ViewIterTable tableModel;
+	protected Iteration model;
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -69,7 +82,7 @@ public class ViewIterationPanel extends JPanel {
 		
 		// Add all components to this panel
 		addComponents();
-		updateTable();
+		updateAllIterationList();
 		
 		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
 		//updateFields();
@@ -85,11 +98,34 @@ public class ViewIterationPanel extends JPanel {
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+                if (e.getClickCount() == 2 ) {
+                	DB.getSingleIteration(table.getModel().getValueAt(table.getSelectedRow(), ID).toString(),
+                			new SingleIterationCallback() {
+						@Override
+						public void callback(Iteration iter) {
+							parent.tabController.addIterationTab(iter);
+						}
+                	});
+                }
+			}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent arg0) {}
+		});
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 100));
 		add(scrollPane, BorderLayout.CENTER);
 
+	}
+	
+	public void updateAllIterationList() {
+		DB.getAllIterations(new UpdateTableCallback());
 	}
 	
 	/**
@@ -121,46 +157,49 @@ public class ViewIterationPanel extends JPanel {
 		return inputEnabled;
 	}
 	
-	   /**
-     * updates table
-     *TODO DYNAMICALLY UPDATE
-     * @return data
-     */
-    public void updateTable() {
-    	
-    	Object[][] entries = {{1,2,3,4,5},{6,7,8,9,10}};
-		int i = 0;
-		int temp = 0;
-		for(Object iter : entries) {
-			entries[i][NAME] = temp++;
-			entries[i][STARTDATE] = temp++;
-			entries[i][ENDDATE] = temp++;
-			entries[i][ESTIMATE] = temp++;
-			entries[i][REQUIREMENTS] = temp++;
-			i++;
-		}
-		getTable().setData(entries);
-		getTable().fireTableStructureChanged();
-
-
-		TableColumn column = null;
-		for (i = 0; i < ROWS; i++) {
-			column = table.getColumnModel().getColumn(i);
-			if (i == NAME) {
-				column.setPreferredWidth(300); //third column is bigger
-			}
-			else if (i == ESTIMATE) {
-				column.setPreferredWidth(500);
-			}
-			else if (i == ENDDATE) {
-				column.setPreferredWidth(700);
+	class UpdateTableCallback implements IterationCallback {
+		/**
+		 * Callback function to populate the table with all the requirements
+		 *
+		 * @param reqs a list of all requirements
+		 */
+		@Override
+		public void callback(List<Iteration> iterations) {
+			if (iterations.size() > 0) {
+				// put the data in the table
+				Object[][] entries = new Object[iterations.size()][ROWS];
+				int i = 0;
+				for(Iteration iteration : iterations) {
+					entries[i][ID] = iteration.getId();
+					entries[i][NAME] = iteration.getIterationNumber();
+					entries[i][STARTDATE] = iteration.getStartDate();
+					entries[i][ENDDATE] = iteration.getEndDate();
+					entries[i][ESTIMATE] = iteration.getEstimate();					
+					i++;
+				}
+				getTable().setData(entries);
+				getTable().fireTableStructureChanged();
 			}
 			else {
-				column.setPreferredWidth(200);
+				// do nothing, there are no requirements
+			}
+		
+			TableColumn column = null;
+			for (int i = 0; i < ROWS; i++) {
+				column = table.getColumnModel().getColumn(i);
+				if (i == ID) {
+					column.setPreferredWidth(1); //third column is bigger
+				}
+				else if (i == NAME) {
+					column.setPreferredWidth(700); //third column is bigger
+				}
+				else {
+					column.setPreferredWidth(350);
+				}
 			}
 		}
-    }
-    
+	}
+	
 	/**
 	 * the table model
 	 *

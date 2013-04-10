@@ -112,6 +112,20 @@ public class MainTabController {
 	}
 	
 	/**
+	 * Adds a tab that displays the given requirement in the given mode
+	 * @param requirement The requirement to display
+	 * @param mode The Mode to use
+	 */
+	public Tab addIterationTab(Iteration iteration) {
+		Tab tab = addTab();
+		ViewSingleIterationTab view = new ViewSingleIterationTab(this, iteration, tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
+	
+	/**
 	 * create a tab for editing permissions
 	 *
 	 * @return the tab created

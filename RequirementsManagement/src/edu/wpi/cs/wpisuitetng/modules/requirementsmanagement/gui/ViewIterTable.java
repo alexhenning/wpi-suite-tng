@@ -29,7 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 public class ViewIterTable extends AbstractTableModel {
 	
     /** name of the columns */
-    private String[] columnNames = {"Name", "Start Date", "End Date", "Estimate", "Requirements"};
+    private String[] columnNames = {"ID", "Name", "Start Date", "End Date", "Estimate"};
     //first list is row, second list is column data
     
     /** data in each cell*/
