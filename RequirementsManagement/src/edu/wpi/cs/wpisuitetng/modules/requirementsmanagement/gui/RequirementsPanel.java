@@ -59,7 +59,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementT
  *
  */
 @SuppressWarnings("serial")
-public class RequirementsPanel extends JSplitPane implements KeyListener{
+public class RequirementsPanel extends JSplitPane implements KeyListener {
 
 	/** The parent view **/
 	protected RequirementsTab parent;
@@ -74,13 +74,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	public JTextArea descriptionfield = new JTextArea(6, 0);
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	RequirementType[] typeStrings = RequirementType.values();
-	Iteration[] iterations;// = new String() {""};//new String()[];
-	//releaseNumberStrings[0] = "";
+	Iteration[] iterations;
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
-	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
-//	RequirementStatus[] statusStrings = RequirementStatus.values();
-	public JTextField statusfield = new JTextField();//(statusStrings);
+	public JComboBox iteration = new JComboBox();
+	public JTextField statusfield = new JTextField();
 	public JTextField estimateField = new JTextField("0", 35);
 	public JTextField actualEffortField = new JTextField("0", 35);
 	public JTextField results = new JTextField(35);
@@ -91,6 +89,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
+	
+	private boolean unsavedChanges;
 	
 
 	/** A flag indicating if input is enabled on the form */
@@ -139,7 +139,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 				}
 			}
 		}
-//		leftside.revalidate();
 	}
 	
 	/**
@@ -164,6 +163,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
+		unsavedChanges = false;
 		
 		updateIterationList();
 
@@ -345,11 +345,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 *
 	 */
 	private void updateStatusField() {
-//		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
-//			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
-//				statusfield.setSelectedIndex(i);
-//			}
-//		}
 		statusfield.setText(model.getStatus().toString());
 	}
 	
@@ -367,7 +362,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		namefield.setText(model.getName());
 		descriptionfield.setText(model.getDescription());
-//		statusfield.setText(model.getStatus().toString());
 		updateStatusField();
 		for(int i = 0; i < priority.getItemCount(); i++) {  // Same as above
 			if(model.getPriority() == RequirementPriority.valueOf(priority.getItemAt(i).toString())) {
@@ -462,6 +456,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		DB.getAllProjectEvents(new ListProjectEvents());
 		updateSubmitButton();
 		subs.update();
+		unsavedChanges = false;
 	}
 	
 	/**
@@ -469,6 +464,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 *
 	 */
 	public void updateSubmitButton() {
+		unsavedChanges = true;
 		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && !(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 	}
 	
@@ -668,14 +664,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 * @param e a key event
 	 */
 	public void keyTyped ( KeyEvent e ){  
-		//check to see if name and description fields are empty or not
-//		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
-//			submit.setEnabled(true);
-//		}
-//		if((namefield.getText().length()==0)
-//				|| ( descriptionfield.getText().length()==0)){
-//			submit.setEnabled(false);
-//		}
 		updateSubmitButton();
 	}
 	/**
@@ -777,5 +765,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			iteration.setBackground(Color.WHITE);
 		}
 		return estimate >= 0;
+	}
+
+	public boolean hasUnsavedChanges() {
+		return unsavedChanges;
 	}
 }
