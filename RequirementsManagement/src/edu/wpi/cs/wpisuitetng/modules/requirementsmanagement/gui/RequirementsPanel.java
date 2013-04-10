@@ -42,11 +42,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequ
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ProjectEventsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.ListProjectEvents;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -74,11 +76,15 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	public JTextArea descriptionfield = new JTextArea(6, 0);
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	RequirementType[] typeStrings = RequirementType.values();
-	Iteration[] iterations;
+	Iteration[] iterations;// = new String() {""};//new String()[];
+	ReleaseNumber[] releaseNums;
+	//releaseNumberStrings[0] = "";
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
-	public JComboBox iteration = new JComboBox();
-	public JTextField statusfield = new JTextField();
+	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
+	public JComboBox releaseNumbers = new JComboBox();
+//	RequirementStatus[] statusStrings = RequirementStatus.values();
+	public JTextField statusfield = new JTextField();//(statusStrings);
 	public JTextField estimateField = new JTextField("0", 35);
 	public JTextField actualEffortField = new JTextField("0", 35);
 	public JTextField results = new JTextField(35);
@@ -141,6 +147,33 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		}
 	}
 	
+	private void updateReleaseNumberList() {
+		DB.getAllReleaseNumbers(new UpdateReleaseNumberListCallback());
+	}
+	
+	private void updateReleaseNumberComboBox() {
+		DefaultComboBoxModel comboboxModel = new DefaultComboBoxModel();
+		for(ReleaseNumber rn : releaseNums) {
+			if(rn == null) {
+				comboboxModel.addElement("None");
+			} else {
+				comboboxModel.addElement(rn.getReleaseNumber());
+			}
+		}
+		releaseNumbers.setModel(comboboxModel);
+		releaseNumbers.setSelectedIndex(0);
+		if(releaseNumbers.getItemCount() > 1) {
+			if(model.getReleaseNumber() != null) {
+				String modelRN = model.getReleaseNumber().getReleaseNumber();
+				for(int i = 0; i < releaseNumbers.getItemCount(); ++i) {
+					if(modelRN.equals(releaseNumbers.getItemAt(i).toString())) {
+						releaseNumbers.setSelectedIndex(i);
+					}
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Constructs a RequirementPanel for creating or editing a given Requirement.
 	 * 
@@ -166,6 +199,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		unsavedChanges = false;
 		
 		updateIterationList();
+		updateReleaseNumberList();
 
 		// Add all components to this panel
 		addComponents();
@@ -192,6 +226,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		JLabel priorityArea = new JLabel("Priority:");
 		JLabel iterationArea = new JLabel("Iteration:");
 		JLabel descriptionArea = new JLabel("Description:");
+		JLabel releaseNumberArea = new JLabel("Release Number: ");
 		descriptionfield.setLineWrap(true);
 		JScrollPane descScrollPane = new JScrollPane(descriptionfield);
 		descScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -247,14 +282,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		c.gridy = 3;
 		leftside.add(iterationArea, c);
 		c.gridy = 4;
-		leftside.add(descriptionArea, c);
+		leftside.add(releaseNumberArea, c);
 		c.gridy = 5;
-		leftside.add(statusArea, c);
+		leftside.add(descriptionArea, c);
 		c.gridy = 6;
-		leftside.add(estimateArea, c);
+		leftside.add(statusArea, c);
 		c.gridy = 7;
-		leftside.add(actualEffortArea, c);
+		leftside.add(estimateArea, c);
 		c.gridy = 8;
+		leftside.add(actualEffortArea, c);
+		c.gridy = 9;
 		// Make the save button taller
 		c.ipady = 20;
 		leftside.add(submit, c);
@@ -273,18 +310,20 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		leftside.add(priority, c);
 		c.gridy = 3;
 		leftside.add(iteration, c);
-		c.anchor = GridBagConstraints.CENTER;
 		c.gridy = 4;
+		leftside.add(releaseNumbers, c);
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridy = 5;
 		leftside.add(descScrollPane, c);
 		c.anchor = GridBagConstraints.WEST;
-		c.gridy = 5;
+		c.gridy = 6;
 		leftside.add(statusfield, c);
 		c.anchor = GridBagConstraints.CENTER;
-		c.gridy = 6;
-		leftside.add(estimateField, c);
 		c.gridy = 7;
-		leftside.add(actualEffortField, c);
+		leftside.add(estimateField, c);
 		c.gridy = 8;
+		leftside.add(actualEffortField, c);
+		c.gridy = 9;
 		leftside.add(results, c);
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
@@ -384,6 +423,17 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				}
 			}
 		}
+		if(releaseNumbers.getItemCount() > 1) {
+			releaseNumbers.setSelectedIndex(0);
+			if(model.getReleaseNumber() != null) {
+				String modelRN = model.getReleaseNumber().getReleaseNumber();
+				for(int i = 0; i < releaseNumbers.getItemCount(); ++i) {
+					if(modelRN.equals(releaseNumbers.getItemAt(i).toString())) {
+						releaseNumbers.setSelectedIndex(i);
+					}
+				}
+			}
+		}
 		estimateField.setText(model.getEstimate()+"");
 		actualEffortField.setText(model.getActualEffort()+"");
 		if(this.editMode == Mode.CREATE) { 
@@ -407,6 +457,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(true);
 			iteration.setBackground(Color.WHITE);
+			releaseNumbers.setEnabled(true);
+			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
@@ -420,6 +472,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(false);
 			iteration.setBackground(Color.WHITE);
+			releaseNumbers.setEnabled(false);
+			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(true);
@@ -433,6 +487,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(false);
 			iteration.setBackground(Color.WHITE);
+			releaseNumbers.setEnabled(false);
+			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
@@ -447,6 +503,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(true);
 			iteration.setBackground(Color.WHITE);
+			releaseNumbers.setEnabled(true);
+			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
@@ -503,6 +561,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			for(Iteration it : iterations) {  // Same as above
 				if(it != null && it.getIterationNumber().equals(selected)) {
 					model.setIteration(it);
+				}
+			}
+		}
+		if(releaseNumbers.getSelectedItem().toString().equals("None")) {
+			model.setReleaseNumber(null);
+		} else {
+			String selected = releaseNumbers.getSelectedItem().toString();
+			for(ReleaseNumber rn : releaseNums) {
+				if(rn != null && rn.getReleaseNumber().equals(selected)) {
+					model.setReleaseNumber(rn);
 				}
 			}
 		}
@@ -600,6 +668,20 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			updateIterationComboBox();
 		}
 		
+	}
+	
+	class UpdateReleaseNumberListCallback implements ReleaseNumberCallback {
+		@Override
+		public void callback(List<ReleaseNumber> releaseNumbers) {
+			releaseNums = new ReleaseNumber[releaseNumbers.size() + 1];
+			releaseNums[0] = null;
+			if(releaseNumbers.size() > 0) {
+				for(int i = 0; i < releaseNumbers.size(); ++i) {
+					releaseNums[i+1] = releaseNumbers.get(i);
+				}
+			}
+			updateReleaseNumberComboBox();
+		}
 	}
 
 	/**
