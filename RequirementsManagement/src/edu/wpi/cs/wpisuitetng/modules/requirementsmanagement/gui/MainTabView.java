@@ -17,6 +17,7 @@ import java.awt.Component;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 /**
@@ -65,6 +66,16 @@ public class MainTabView extends JTabbedPane {
 	public void removeTabAt(int index) {
 		// if a tab does not have the close button UI, it cannot be removed
 		if(getTabComponentAt(index) instanceof ClosableTabComponent) {
+			// Hacky fix, make an interface
+			if (getComponentAt(index) instanceof RequirementsTab) {
+				System.out.println("Deleting requirement tab");
+				if (((RequirementsTab) getComponentAt(index)).getRequirementPanel().hasUnsavedChanges()) {
+					JOptionPane.showConfirmDialog(this,
+							"Do you want to lose these changes?", 
+							"Unsaved Changes", 
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
 			super.removeTabAt(index);
 		}
 	}

@@ -778,4 +778,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		return estimate >= 0;
 	}
+
+	public boolean hasUnsavedChanges() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }
