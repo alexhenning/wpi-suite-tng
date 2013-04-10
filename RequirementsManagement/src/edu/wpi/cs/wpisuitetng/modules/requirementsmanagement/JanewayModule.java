@@ -12,16 +12,12 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
@@ -30,8 +26,6 @@ import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.NavToolbarView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.IterationToolbarView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ManagementToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarView;
 
