@@ -105,7 +105,7 @@ public class ReleaseNumber extends AbstractModel {
 	public String toJSON() {
 		String json;
 		Gson gson = new Gson();
-		json = gson.toJson(this, Iteration.class);
+		json = gson.toJson(this, ReleaseNumber.class);
 		return json;
 	}
 	

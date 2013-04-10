@@ -42,11 +42,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequ
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ProjectEventsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.ListProjectEvents;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -59,7 +61,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementT
  *
  */
 @SuppressWarnings("serial")
-public class RequirementsPanel extends JSplitPane implements KeyListener{
+public class RequirementsPanel extends JSplitPane implements KeyListener {
 
 	/** The parent view **/
 	protected RequirementsTab parent;
@@ -75,10 +77,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	RequirementType[] typeStrings = RequirementType.values();
 	Iteration[] iterations;// = new String() {""};//new String()[];
+	ReleaseNumber[] releaseNums;
 	//releaseNumberStrings[0] = "";
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
 	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
+	public JComboBox releaseNumbers = new JComboBox();
 //	RequirementStatus[] statusStrings = RequirementStatus.values();
 	public JTextField statusfield = new JTextField();//(statusStrings);
 	public JTextField estimateField = new JTextField("0", 35);
@@ -91,6 +95,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
+	
+	private boolean unsavedChanges;
 	
 
 	/** A flag indicating if input is enabled on the form */
@@ -139,7 +145,33 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 				}
 			}
 		}
-//		leftside.revalidate();
+	}
+	
+	private void updateReleaseNumberList() {
+		DB.getAllReleaseNumbers(new UpdateReleaseNumberListCallback());
+	}
+	
+	private void updateReleaseNumberComboBox() {
+		DefaultComboBoxModel comboboxModel = new DefaultComboBoxModel();
+		for(ReleaseNumber rn : releaseNums) {
+			if(rn == null) {
+				comboboxModel.addElement("None");
+			} else {
+				comboboxModel.addElement(rn.getReleaseNumber());
+			}
+		}
+		releaseNumbers.setModel(comboboxModel);
+		releaseNumbers.setSelectedIndex(0);
+		if(releaseNumbers.getItemCount() > 1) {
+			if(model.getReleaseNumber() != null) {
+				String modelRN = model.getReleaseNumber().getReleaseNumber();
+				for(int i = 0; i < releaseNumbers.getItemCount(); ++i) {
+					if(modelRN.equals(releaseNumbers.getItemAt(i).toString())) {
+						releaseNumbers.setSelectedIndex(i);
+					}
+				}
+			}
+		}
 	}
 	
 	/**
@@ -164,8 +196,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
+		unsavedChanges = false;
 		
 		updateIterationList();
+		updateReleaseNumberList();
 
 		// Add all components to this panel
 		addComponents();
@@ -192,6 +226,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		JLabel priorityArea = new JLabel("Priority:");
 		JLabel iterationArea = new JLabel("Iteration:");
 		JLabel descriptionArea = new JLabel("Description:");
+		JLabel releaseNumberArea = new JLabel("Release Number: ");
 		descriptionfield.setLineWrap(true);
 		JScrollPane descScrollPane = new JScrollPane(descriptionfield);
 		descScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -247,14 +282,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		c.gridy = 3;
 		leftside.add(iterationArea, c);
 		c.gridy = 4;
-		leftside.add(descriptionArea, c);
+		leftside.add(releaseNumberArea, c);
 		c.gridy = 5;
-		leftside.add(statusArea, c);
+		leftside.add(descriptionArea, c);
 		c.gridy = 6;
-		leftside.add(estimateArea, c);
+		leftside.add(statusArea, c);
 		c.gridy = 7;
-		leftside.add(actualEffortArea, c);
+		leftside.add(estimateArea, c);
 		c.gridy = 8;
+		leftside.add(actualEffortArea, c);
+		c.gridy = 9;
 		// Make the save button taller
 		c.ipady = 20;
 		leftside.add(submit, c);
@@ -273,18 +310,20 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		leftside.add(priority, c);
 		c.gridy = 3;
 		leftside.add(iteration, c);
-		c.anchor = GridBagConstraints.CENTER;
 		c.gridy = 4;
+		leftside.add(releaseNumbers, c);
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridy = 5;
 		leftside.add(descScrollPane, c);
 		c.anchor = GridBagConstraints.WEST;
-		c.gridy = 5;
+		c.gridy = 6;
 		leftside.add(statusfield, c);
 		c.anchor = GridBagConstraints.CENTER;
-		c.gridy = 6;
-		leftside.add(estimateField, c);
 		c.gridy = 7;
-		leftside.add(actualEffortField, c);
+		leftside.add(estimateField, c);
 		c.gridy = 8;
+		leftside.add(actualEffortField, c);
+		c.gridy = 9;
 		leftside.add(results, c);
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
@@ -345,11 +384,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 *
 	 */
 	private void updateStatusField() {
-//		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
-//			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
-//				statusfield.setSelectedIndex(i);
-//			}
-//		}
 		statusfield.setText(model.getStatus().toString());
 	}
 	
@@ -367,7 +401,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		namefield.setText(model.getName());
 		descriptionfield.setText(model.getDescription());
-//		statusfield.setText(model.getStatus().toString());
 		updateStatusField();
 		for(int i = 0; i < priority.getItemCount(); i++) {  // Same as above
 			if(model.getPriority() == RequirementPriority.valueOf(priority.getItemAt(i).toString())) {
@@ -386,6 +419,17 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 				for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
 					if(modelItStr.equals(iteration.getItemAt(i).toString())) {
 						iteration.setSelectedIndex(i);
+					}
+				}
+			}
+		}
+		if(releaseNumbers.getItemCount() > 1) {
+			releaseNumbers.setSelectedIndex(0);
+			if(model.getReleaseNumber() != null) {
+				String modelRN = model.getReleaseNumber().getReleaseNumber();
+				for(int i = 0; i < releaseNumbers.getItemCount(); ++i) {
+					if(modelRN.equals(releaseNumbers.getItemAt(i).toString())) {
+						releaseNumbers.setSelectedIndex(i);
 					}
 				}
 			}
@@ -413,10 +457,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(true);
 			iteration.setBackground(Color.WHITE);
+			releaseNumbers.setEnabled(true);
+			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+			nt.setInputEnabled(false);
 		} else if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
@@ -425,10 +472,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(false);
 			iteration.setBackground(Color.WHITE);
+			releaseNumbers.setEnabled(false);
+			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(true);
 			submit.setEnabled(true);
+			nt.setInputEnabled(true);
 		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
@@ -437,11 +487,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(false);
 			iteration.setBackground(Color.WHITE);
+			releaseNumbers.setEnabled(false);
+			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(false);
+			nt.setInputEnabled(false);
 		} else {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
@@ -450,10 +503,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(true);
 			iteration.setBackground(Color.WHITE);
+			releaseNumbers.setEnabled(true);
+			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+			nt.setInputEnabled(true);
 		}
 		validateEstimate();
 		System.out.println("namefield: "+namefield.getText());
@@ -462,6 +518,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		DB.getAllProjectEvents(new ListProjectEvents());
 		updateSubmitButton();
 		subs.update();
+		unsavedChanges = false;
 	}
 	
 	/**
@@ -469,6 +526,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 *
 	 */
 	public void updateSubmitButton() {
+		unsavedChanges = true;
 		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && !(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 	}
 	
@@ -503,6 +561,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			for(Iteration it : iterations) {  // Same as above
 				if(it != null && it.getIterationNumber().equals(selected)) {
 					model.setIteration(it);
+				}
+			}
+		}
+		if(releaseNumbers.getSelectedItem().toString().equals("None")) {
+			model.setReleaseNumber(null);
+		} else {
+			String selected = releaseNumbers.getSelectedItem().toString();
+			for(ReleaseNumber rn : releaseNums) {
+				if(rn != null && rn.getReleaseNumber().equals(selected)) {
+					model.setReleaseNumber(rn);
 				}
 			}
 		}
@@ -601,6 +669,20 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		
 	}
+	
+	class UpdateReleaseNumberListCallback implements ReleaseNumberCallback {
+		@Override
+		public void callback(List<ReleaseNumber> releaseNumbers) {
+			releaseNums = new ReleaseNumber[releaseNumbers.size() + 1];
+			releaseNums[0] = null;
+			if(releaseNumbers.size() > 0) {
+				for(int i = 0; i < releaseNumbers.size(); ++i) {
+					releaseNums[i+1] = releaseNumbers.get(i);
+				}
+			}
+			updateReleaseNumberComboBox();
+		}
+	}
 
 	/**
 	 * Checks to see if the fields are valid
@@ -668,14 +750,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 * @param e a key event
 	 */
 	public void keyTyped ( KeyEvent e ){  
-		//check to see if name and description fields are empty or not
-//		if(namefield.getText().length() != 0 && descriptionfield.getText().length() != 0){
-//			submit.setEnabled(true);
-//		}
-//		if((namefield.getText().length()==0)
-//				|| ( descriptionfield.getText().length()==0)){
-//			submit.setEnabled(false);
-//		}
 		updateSubmitButton();
 	}
 	/**
@@ -772,10 +846,15 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		if (estimate <= 0 || editMode.equals(Mode.CREATE)) {
 			iteration.setEnabled(false);
 			iteration.setBackground(Color.LIGHT_GRAY);
+			if (iteration.getModel().getSize() > 0) iteration.setSelectedIndex(0);
 		} else {
 			iteration.setEnabled(true);
 			iteration.setBackground(Color.WHITE);
 		}
 		return estimate >= 0;
+	}
+
+	public boolean hasUnsavedChanges() {
+		return unsavedChanges;
 	}
 }
