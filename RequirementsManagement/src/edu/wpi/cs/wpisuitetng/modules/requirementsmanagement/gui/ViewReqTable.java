@@ -24,8 +24,19 @@ import javax.swing.table.AbstractTableModel;
  * @author James
  *
  */
+
+
 @SuppressWarnings("serial")
 public class ViewReqTable extends AbstractTableModel {
+	
+	public static final int ID = 0;
+	public static final int NAME = 1;
+	public static final int DESCRIPTION = 2;
+	public static final int ITERATION = 3;
+	public static final int STATUS = 4;
+	public static final int PRIORITY = 5;
+	public static final int ESTIMATE = 6;
+	public static final int RELEASE = 7;
 	
 	/**
 	 *
@@ -104,8 +115,8 @@ public class ViewReqTable extends AbstractTableModel {
      * @return true if the cell is editable, false otherwise
      */
     public boolean isCellEditable(int row, int col) {
-    	if(editMode == Mode.VIEW || col == 0 || col == 4 || (getValueAt(row, 4) == "COMPLETE" && col != 4)
-    			|| (getValueAt(row,4) == "DELETED" && col != 4)) { // Id cell should not be editable, even in edit mode
+    	if(editMode == Mode.VIEW || col == ID || col == STATUS || (getValueAt(row, STATUS) == "COMPLETE" && col != STATUS)
+    			|| (getValueAt(row,STATUS) == "DELETED" && col != STATUS)) { // Id cell should not be editable, even in edit mode
     		return false;                                          
     	} else {
     		return true;

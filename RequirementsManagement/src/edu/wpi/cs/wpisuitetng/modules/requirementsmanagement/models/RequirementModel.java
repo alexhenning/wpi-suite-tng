@@ -65,7 +65,7 @@ public class RequirementModel extends AbstractModel {
 
 	//TODO Validation Classes for Database retrieval
 	/** the sub requirements*/
-	private List<RequirementModel> subRequirements;
+	private List<String> subRequirements;
 	//TODO add attachments
 	//TODO add tasks
 	//TODO add notes
@@ -87,7 +87,7 @@ public class RequirementModel extends AbstractModel {
 		creationDate = new Date();
 		lastModifiedDate = new Date();
 		events = new ArrayList<RequirementEvent>();
-		subRequirements = new ArrayList<RequirementModel>();
+		subRequirements = new ArrayList<String>();
 		iteration = null;
 		setType(null);
 		priority = null;
@@ -119,7 +119,7 @@ public class RequirementModel extends AbstractModel {
 			RequirementPriority priority, String name, String description,
 			int estimate, int actualEffort, User creator, List<User> assignees,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
-			List<RequirementModel> subRequirements, Iteration iteration, RequirementType type) {
+			List<String> subRequirements, Iteration iteration, RequirementType type) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
@@ -528,30 +528,32 @@ public class RequirementModel extends AbstractModel {
 	 * 
 	 * @return ArrayList of the sub-requirements
 	 */
-	public List<RequirementModel> getSubRequirements() {
+	public List<String> getSubRequirements() {
 		return subRequirements;
 	}
 	/**
 	 * Changes the list of sub-requirement IDs
 	 * @param subRequirements new list of requirements
 	 */
-	public void setSubRequirementIDs(ArrayList<RequirementModel> subRequirements) {
+	public void setSubRequirements(ArrayList<String> subRequirements) {
 		this.subRequirements = subRequirements;
 	}
 	/**
 	 * Adds a requirement ID to the list of sub-requirements
 	 * @param subreq Requirement to add to list of sub-requirements
 	 */
-	public void addSubRequirementID(RequirementModel subreq){
-		this.subRequirements.add(subreq);
+	public void addSubRequirement(String subreqID){
+		if (!this.subRequirements.contains(subreqID)) {
+			this.subRequirements.add(subreqID);
+		}
 	}
-	/**
-	 * Removes a sub requirement from this requirement
-	 * @param subreqID The ID of the requirement to be removed
-	 */
-	public void removeSubRequirementID(int subreqID){
-		this.subRequirements.remove(this.subRequirements.indexOf(subreqID));
-	}
+//	/**
+//	 * Removes a sub requirement from this requirement
+//	 * @param subreqID The ID of the requirement to be removed
+//	 */
+//	public void removeSubRequirement(int subreqID){
+//		this.subRequirements.remove(this.subRequirements.indexOf(subreqID));
+//	}
 
 	/**
 	 * @return the type

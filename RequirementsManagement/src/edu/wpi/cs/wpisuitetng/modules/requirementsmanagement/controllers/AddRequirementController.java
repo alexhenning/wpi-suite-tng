@@ -36,7 +36,6 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 	
 	/** The requirements panel */
 	private final RequirementsPanel panel;
-	//private final JPanel buttonPanel;
 
 	/**
 	 * Constructor

@@ -18,8 +18,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,17 +79,19 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
 	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
-	RequirementStatus[] statusStrings = RequirementStatus.values();
-	public JComboBox statusfield = new JComboBox(statusStrings);
+//	RequirementStatus[] statusStrings = RequirementStatus.values();
+	public JTextField statusfield = new JTextField();//(statusStrings);
 	public JTextField estimateField = new JTextField("0", 35);
 	public JTextField actualEffortField = new JTextField("0", 35);
 	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
+	private RequirementSubrequirementTab subs;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
+	
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -118,7 +123,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		for(Iteration it : iterations) {
 			if (it == null) {
 				comboboxModel.addElement("Backlog");
-			} else {
+			} else if (it.getEndDate().after(new Date())) {
 				comboboxModel.addElement(""+it.getIterationNumber());
 			}
 		}
@@ -197,14 +202,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		//estimate field
 		JLabel estimateArea = new JLabel("Estimate:");
+		estimateField.addFocusListener(new FocusListener() {
+			@Override public void focusLost(FocusEvent arg0) {
+				validateEstimate();
+			}
+			@Override public void focusGained(FocusEvent arg0) {}
+		});
 		JLabel actualEffortArea = new JLabel("Actual Effort:");
-//		if(this.editMode == Mode.CREATE) {
-//			estimateField.setEnabled(false);
-//			actualEffortField.setEnabled(false);
-//		} else {
-//			estimateField.setEnabled(true);
-//			actualEffortField.setEnabled(true);
-//		}
 	
 		//submit panel
 		if(this.editMode == Mode.CREATE) { 
@@ -218,8 +222,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		// Supplement Pane (i.e., notes, history, attachments)
 		nt = new NoteMainPanel(this);
 		hs = new RequirementHistoryTab(this);
+		subs = new RequirementSubrequirementTab(this);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("History", hs);
+		supplementPane.add("Sub-Requirements", subs);
 		if(this.editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
 		} else {
@@ -339,11 +345,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 *
 	 */
 	private void updateStatusField() {
-		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
-			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
-				statusfield.setSelectedIndex(i);
-			}
-		}
+//		for(int i = 0; i < statusfield.getItemCount(); i++) {  // This is really round about, but it didn't seem to work comparing RequirementStatuses
+//			if(model.getStatus() == RequirementStatus.valueOf(statusfield.getItemAt(i).toString())) {
+//				statusfield.setSelectedIndex(i);
+//			}
+//		}
+		statusfield.setText(model.getStatus().toString());
 	}
 	
 	/**
@@ -360,6 +367,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		namefield.setText(model.getName());
 		descriptionfield.setText(model.getDescription());
+//		statusfield.setText(model.getStatus().toString());
 		updateStatusField();
 		for(int i = 0; i < priority.getItemCount(); i++) {  // Same as above
 			if(model.getPriority() == RequirementPriority.valueOf(priority.getItemAt(i).toString())) {
@@ -384,13 +392,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		}
 		estimateField.setText(model.getEstimate()+"");
 		actualEffortField.setText(model.getActualEffort()+"");
-//		if(this.editMode == Mode.CREATE || model.getStatus() == RequirementStatus.DELETED || model.getStatus() == RequirementStatus.COMPLETE) {
-//			estimateField.setEditable(false);
-//			actualEffortField.setEditable(false);
-//		} else {
-//			estimateField.setEditable(true);
-//			actualEffortField.setEditable(true);
-//		}
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
@@ -431,13 +432,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
-//			actualEffortField.setEnabled(false);
-//			submit.setEnabled(false);
-//			iteration.setEnabled(false);
-//			nt.setInputEnabled(false);
-//		}else if(namefield.getText().length() < 1 || namefield.getText().length() < 1){
-//			namefield.setEnabled(true);
-//			type.setEnabled(true);
 			type.setBackground(Color.WHITE);
 			priority.setEnabled(false);
 			priority.setBackground(Color.WHITE);
@@ -460,18 +454,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
 			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
-//=======
-//			actualEffortField.setEnabled(true);
-//			submit.setEnabled(true);
-//			iteration.setEnabled(true);
-//			nt.setInputEnabled(true);
-//>>>>>>> origin/dev-fix#31
 		}
+		validateEstimate();
 		System.out.println("namefield: "+namefield.getText());
 		System.out.println("submit good: "+!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 		nt.setNotes(Arrays.asList(model.getNotes()));
 		DB.getAllProjectEvents(new ListProjectEvents());
 		updateSubmitButton();
+		subs.update();
 	}
 	
 	/**
@@ -517,7 +507,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 			}
 		}
 		model.setDescription(descriptionfield.getText());
-		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
+//		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
 		if (model.getStatus() == RequirementStatus.COMPLETE) {
 			
 		} else if (model.getStatus() == RequirementStatus.DELETED) {
@@ -706,4 +696,86 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		updateSubmitButton();
 	}  
 
+	public void addToParent(int parentId) {
+		DB.getSingleRequirement(parentId+"", new SingleRequirementCallback() {
+			@Override
+			public void callback(RequirementModel req) {
+				req.getSubRequirements().add(model.getId()+"");
+				DB.updateRequirements(req, new SingleRequirementCallback() {
+					@Override
+					public void callback(RequirementModel req) {
+						if (req.getSubRequirements().contains(model.getId()+"")) {
+							setStatus("added to parent");
+						} else {
+							setStatus("failed to add to parent");
+						}
+						
+					}
+				});
+			}
+    	});
+	}
+	
+	public void addChild(int childId) {
+		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
+			@Override
+			public void callback(RequirementModel child) {
+				model.getSubRequirements().add(child.getId()+"");
+				DB.updateRequirements(model, new AddChildRequirementCallback(child));
+
+			}
+    	});
+	}
+	
+	
+	public void addChild(RequirementModel child) {
+		model.getSubRequirements().add(child.getId()+"");
+		DB.updateRequirements(model, new AddChildRequirementCallback(child));
+	}
+	
+	class AddChildRequirementCallback implements SingleRequirementCallback {
+		private RequirementModel childReq;
+		
+		public AddChildRequirementCallback(RequirementModel childReq) {
+			this.childReq = childReq;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			boolean added = false;
+			for (String subReq : currentReq.getSubRequirements()) {
+				if(subReq.equals(childReq.getId()+"")) {
+					added = true;
+				}
+			}
+			if (added) {
+				subs.update();
+				setStatus("added child");
+			} else {
+				setStatus("failed to add child");
+			}
+		}
+	}
+	
+	/**
+	 * Validate the estimate and make the appropriate updates
+	 */
+	private boolean validateEstimate() {
+		int estimate;
+		try {
+			estimate = Integer.parseInt(estimateField.getText());
+		} catch (NumberFormatException e) {
+			iteration.setEnabled(false);
+			iteration.setBackground(Color.LIGHT_GRAY);
+			return false;
+		}
+		if (estimate <= 0 || editMode.equals(Mode.CREATE)) {
+			iteration.setEnabled(false);
+			iteration.setBackground(Color.LIGHT_GRAY);
+		} else {
+			iteration.setEnabled(true);
+			iteration.setBackground(Color.WHITE);
+		}
+		return estimate >= 0;
+	}
 }

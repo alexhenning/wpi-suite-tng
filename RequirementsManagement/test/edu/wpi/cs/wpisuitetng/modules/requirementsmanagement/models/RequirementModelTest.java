@@ -46,7 +46,7 @@ public class RequirementModelTest {
 	public void testAssigningReleaseNumber() {
 		rm.setReleaseNumber(null);
 		assertEquals(null, rm.getReleaseNumber());
-		ReleaseNumber tmp = new ReleaseNumber(1, 1, new Project("", "2"));
+		ReleaseNumber tmp = new ReleaseNumber(1, "1", new Project("", "2"));
 		rm.setReleaseNumber(tmp);
 		assertEquals(tmp.getId(), rm.getReleaseNumber().getId());
 		assertEquals(tmp.getReleaseNumber(), rm.getReleaseNumber().getReleaseNumber());
