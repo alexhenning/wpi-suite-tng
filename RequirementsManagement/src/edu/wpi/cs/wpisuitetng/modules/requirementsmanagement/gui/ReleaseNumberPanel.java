@@ -102,11 +102,12 @@ public class ReleaseNumberPanel extends JPanel {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
+				System.out.println("autoSelected is " + autoSelected);
 				if(e.getStateChange() == ItemEvent.SELECTED && !autoSelected) {  // ignore deselects and auto selects
-					final String releaseNumberName = (String) releaseNumbersComboBox.getSelectedItem();
 					DB.getAllReleaseNumbers(new ReleaseNumberCallback() {
 						@Override
 						public void callback(List<ReleaseNumber> releaseNumbers) {
+							String releaseNumberName = (String) releaseNumbersComboBox.getSelectedItem();
 							if(releaseNumberName.equals("New Release Number")) {
 								updateModel(new ReleaseNumber(), Mode.CREATE);
 							} else {
@@ -117,6 +118,7 @@ public class ReleaseNumberPanel extends JPanel {
 									}
 								}
 							}
+							result.setText("");
 						}
 					});
 				}
@@ -249,11 +251,13 @@ public class ReleaseNumberPanel extends JPanel {
 		numberField.setText(model.getReleaseNumber());
 		
 		// set combo box to correct release number
-		for(int i = 0; i < releaseNumbersComboBox.getItemCount(); ++i) {
-			if(releaseNumbersComboBox.getItemAt(i).equals(model.getReleaseNumber())) {
-				autoSelected = true;
-				releaseNumbersComboBox.setSelectedIndex(i);
-				break;
+		if(!autoSelected) {
+			for(int i = 0; i < releaseNumbersComboBox.getItemCount(); ++i) {
+				if(releaseNumbersComboBox.getItemAt(i).equals(model.getReleaseNumber())) {
+					autoSelected = true;
+					releaseNumbersComboBox.setSelectedIndex(i);
+					break;
+				}
 			}
 		}
 		
@@ -264,8 +268,6 @@ public class ReleaseNumberPanel extends JPanel {
 			submit.setText("Update");
 			submit.setAction(new UpdateReleaseNumber());
 		}
-		
-		result.setText("");
 	}
 	
 	public ReleaseNumber getModel() {
