@@ -160,11 +160,10 @@ public class IterationValidator {
 		}
 		lastExistingIteration = oldIteration;
 		
-//		// make sure Name and description size are within constraints
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
+		// make sure Name and description size are within constraints
+		if(iteration.getIterationNumber() == null || iteration.getIterationNumber().length() > 0) {
+			issues.add(new ValidationIssue("Required, must not be blank", "name"));
+		}
 //		if(requirement.getDescription() == null) {
 //			// empty descriptions are okay
 //			requirement.setDescription("");

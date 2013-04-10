@@ -54,6 +54,8 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 	JButton addButton;
 	/** list of the requirements notes */
 	List<RequirementNote> notes;
+	
+	AddNoteController noteListener;
 
 	/**
 	 * Constructs a panel for notes
@@ -98,7 +100,8 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 		noteScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		addButton = new JButton("Add note");
-		addButton.addActionListener(new AddNoteController(this, parent.model, parent));
+		noteListener = new AddNoteController(this, parent.model, parent);
+		addButton.addActionListener(noteListener);
 //		addButton.setEnabled(inputEnabled);
 		addButton.setEnabled(false);
 		
@@ -148,11 +151,14 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 	 */
 	public void setInputEnabled(boolean enabled) {
 		inputEnabled = enabled;
+		
+		addButton.removeActionListener(noteListener);
+		noteListener = new AddNoteController(this, parent.model, parent);
+		addButton.addActionListener(noteListener);
 
 		ta.setEditable(enabled);
 		ta.setEnabled(enabled);
 		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note") && enabled);
-		// TODO: implement
 	}
 	
 	//checked for input from keyboard

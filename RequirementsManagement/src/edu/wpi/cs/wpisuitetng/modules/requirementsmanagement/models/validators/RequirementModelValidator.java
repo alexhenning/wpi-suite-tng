@@ -264,7 +264,7 @@ public class RequirementModelValidator {
 			boolean isExistingReleaseNumber = false;
 			for(ReleaseNumber existingReleaseNumber : existingReleaseNumbers) {
 				//TODO change to .equals()
-				if(requirement.getReleaseNumber().getReleaseNumber() == existingReleaseNumber.getReleaseNumber()) {
+				if(requirement.getReleaseNumber().getReleaseNumber().equals(existingReleaseNumber.getReleaseNumber())) {
 					isExistingReleaseNumber = true;
 				}
 			}
