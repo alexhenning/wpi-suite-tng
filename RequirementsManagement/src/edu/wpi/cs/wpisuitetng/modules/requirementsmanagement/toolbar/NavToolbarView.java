@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewIterationAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewPermissionAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 
 /**
@@ -30,18 +32,18 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
  * Always has a group of global commands (Create Requirement, Create Iteration, Search, List Requirements).
  */
 @SuppressWarnings("serial")
-public class DevToolbarView extends ToolbarGroupView {
+public class NavToolbarView extends ToolbarGroupView {
 
 	/** button to list requirements */
-	private JButton showReports;
+	private JButton showReports, iterView, permissionButton;
 	
 	/**
 	 * Constructor
 	 * Create a ToolbarView.
 	 * @param tabController The MainTabController this view should open tabs with
 	 */
-	public DevToolbarView(final MainTabController tabController) {
-		super("Development");
+	public NavToolbarView(final MainTabController tabController) {
+		super("Navigation");
 
 		// Construct the content panel
 		JPanel content = new JPanel();
@@ -53,16 +55,26 @@ public class DevToolbarView extends ToolbarGroupView {
 		c.gridx = 0;
 		c.gridy = 0;
 		
-		// Show reports button
+		// Add button
 		showReports = new JButton("Show Reports");
 		showReports.setAction(new ShowReportsAction(tabController));
 		content.add(showReports, c);
+		
+		iterView = new JButton("View Iterations");
+		iterView.setAction(new ViewIterationAction(tabController));
+		c.gridy = 1;
+		content.add(iterView, c);
+		
+		permissionButton = new JButton("User Permissions");
+		permissionButton.setAction(new ViewPermissionAction(tabController));
+		c.gridy = 2;
+		content.add(permissionButton, c);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
 		
 		// Calculate the width of the toolbar
-		Double toolbarGroupWidth = showReports.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
+		Double toolbarGroupWidth = permissionButton.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
 
