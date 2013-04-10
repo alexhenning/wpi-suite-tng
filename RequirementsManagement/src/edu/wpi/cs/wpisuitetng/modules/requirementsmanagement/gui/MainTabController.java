@@ -10,6 +10,7 @@
  *    Andrew Hurle
  *    Chris Casola
  *    JPage
+ *    Josh
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -18,6 +19,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
  * Contributors:
  * AHurle
  * JPage
+ * Josh
  */
 
 import java.awt.Component;
@@ -108,6 +110,20 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
+	
+	/**
+	 * Adds a tab that displays the given requirement in the given mode
+	 * @param requirement The requirement to display
+	 * @param mode The Mode to use
+	 */
+	public Tab addIterationTab(Iteration iteration, String title) {
+		Tab tab = addTab();
+		ViewSingleIterationTab view = new ViewSingleIterationTab(this, iteration, tab, title);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
 	
 	/**
 	 * create a tab for editing permissions
@@ -276,5 +292,31 @@ public class MainTabController {
 				reportsTab.mainPanel.refresh();
 			}
 		});
+	}
+
+	
+	/**
+	 * add a tab that views iterations
+	 *
+	 * @return the created tab
+	 */
+
+	public Tab addViewIterationTab() {
+		// If the tab is already opened, switch to that tab.
+		for (int i = 0; i < this.view.getTabCount(); i++) {
+			// TODO: May have to refactor "View Iteration"
+			if (view.getTitleAt(i).equals("View Iteration")) {
+				switchToTab(i);
+				// TODO: figure out what to return
+				return null;
+			}
+		}
+
+		// Otherwise, create a new one.
+		Tab tab = addTab();
+		ViewIterationTab view = new ViewIterationTab(this, tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
 	}
 }

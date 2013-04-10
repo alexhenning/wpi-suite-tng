@@ -38,7 +38,6 @@ public class AddIterationController extends AbstractAction implements ActionList
 	
 	/** The panel for iterations */
 	private final IterationPanel panel;
-	//private final JPanel buttonPanel;
 
 	/**
 	 * Constructor
