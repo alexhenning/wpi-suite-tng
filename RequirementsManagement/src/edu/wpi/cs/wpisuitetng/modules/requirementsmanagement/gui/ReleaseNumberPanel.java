@@ -169,6 +169,7 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 		displayPanel.add(submit, c);
 		c.ipady = 0;
 		c.gridx = 1;
+		c.gridwidth = GridBagConstraints.REMAINDER;
 		displayPanel.add(result, c);
 		
 		submit.setEnabled(false);
@@ -437,6 +438,7 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 			if(rn != null) {
 				updateModel(rn);
 			}
+			enableSubmitButton();
 		}
 		
 	}
