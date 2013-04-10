@@ -108,7 +108,6 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				System.out.println("autoSelected = " + autoSelected);
 				if(e.getStateChange() == ItemEvent.SELECTED) {  // ignore deselects
 					if(!autoSelected) {  // ignore auto selects
 						                 // these need to be separate if statements to avoid reseting
@@ -127,6 +126,7 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 										}
 									}
 								}
+								numberField.setBackground(Color.WHITE);
 								result.setText("");
 							}
 						});
@@ -369,6 +369,11 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 		if(editMode == Mode.EDIT && numberField.getText().equals(model.getReleaseNumber())) {
 			shouldEnable = false;
 		}
+		
+		if(shouldEnable) {
+			numberField.setBackground(Color.WHITE);
+		}
+		
 		submit.setEnabled(shouldEnable);
 	}
 	
