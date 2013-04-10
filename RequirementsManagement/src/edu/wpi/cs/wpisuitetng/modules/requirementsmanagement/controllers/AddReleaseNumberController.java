@@ -68,8 +68,7 @@ public class AddReleaseNumberController extends AbstractAction implements
 	 * @param rnum Release Number that was added
 	 */
 	public void receivedAddConfirmation(ReleaseNumber rnum) {
-		panel.updateReleaseNumbers();
-		panel.updateModel(rnum);
+		panel.updateReleaseNumbers(rnum);
 		panel.setStatus("Release Number saved");
 	}
 
