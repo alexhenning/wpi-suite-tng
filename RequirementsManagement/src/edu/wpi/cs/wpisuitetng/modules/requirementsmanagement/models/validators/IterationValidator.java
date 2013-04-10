@@ -161,7 +161,7 @@ public class IterationValidator {
 		lastExistingIteration = oldIteration;
 		
 		// make sure Name and description size are within constraints
-		if(iteration.getIterationNumber() == null || iteration.getIterationNumber().length() > 0) {
+		if(iteration.getIterationNumber() == null || iteration.getIterationNumber().length() == 0) {
 			issues.add(new ValidationIssue("Required, must not be blank", "name"));
 		}
 //		if(requirement.getDescription() == null) {
