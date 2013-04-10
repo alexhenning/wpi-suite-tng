@@ -116,9 +116,9 @@ public class MainTabController {
 	 * @param requirement The requirement to display
 	 * @param mode The Mode to use
 	 */
-	public Tab addIterationTab(Iteration iteration) {
+	public Tab addIterationTab(Iteration iteration, String title) {
 		Tab tab = addTab();
-		ViewSingleIterationTab view = new ViewSingleIterationTab(this, iteration, tab);
+		ViewSingleIterationTab view = new ViewSingleIterationTab(this, iteration, tab, title);
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;

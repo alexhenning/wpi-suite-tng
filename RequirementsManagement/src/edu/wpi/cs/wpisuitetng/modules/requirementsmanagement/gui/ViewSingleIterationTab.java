@@ -48,14 +48,14 @@ public class ViewSingleIterationTab extends JPanel implements IToolbarGroupProvi
 	 * @param iteration an iteration
 	 * @param tab the containing tab
 	 */
-	public ViewSingleIterationTab(MainTabController tabController, Iteration iteration, Tab tab) {
+	public ViewSingleIterationTab(MainTabController tabController, Iteration iteration, Tab tab, String title) {
 		this.tabController = tabController;
 		this.iteration = iteration;
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
-		containingTab.setTitle("Add Iteration");
+		containingTab.setTitle(title);
 		
 		// Instantiate the main create iteration panel
 		mainPanel = new ViewSingleIterationPanel(this);

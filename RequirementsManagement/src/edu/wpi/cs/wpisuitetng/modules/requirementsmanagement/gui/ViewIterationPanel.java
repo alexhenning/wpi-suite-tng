@@ -107,7 +107,7 @@ public class ViewIterationPanel extends JPanel {
                 			new SingleIterationCallback() {
 						@Override
 						public void callback(Iteration iter) {
-							parent.tabController.addIterationTab(iter);
+							parent.tabController.addIterationTab(iter, "Edit " + iter.getIterationNumber());
 						}
                 	});
                 }
