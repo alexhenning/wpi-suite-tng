@@ -188,10 +188,10 @@ public class ViewIterationPanel extends JPanel {
 			for (int i = 0; i < ROWS; i++) {
 				column = table.getColumnModel().getColumn(i);
 				if (i == ID) {
-					column.setPreferredWidth(1); //third column is bigger
+					column.setPreferredWidth(1);
 				}
 				else if (i == NAME) {
-					column.setPreferredWidth(700); //third column is bigger
+					column.setPreferredWidth(700);
 				}
 				else {
 					column.setPreferredWidth(350);

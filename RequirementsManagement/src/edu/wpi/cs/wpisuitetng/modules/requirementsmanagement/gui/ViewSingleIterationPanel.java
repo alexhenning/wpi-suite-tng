@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
@@ -48,11 +49,14 @@ public class ViewSingleIterationPanel extends JPanel{
 	JLabel lbl1, lbl2, lbl3;
 	/** text fields for the iteration's data to be entered into */
 	JTextField iterationNumber;
-	JTextField date;
 	/** text field that displays if the iteration was saved or not */
 	JTextField result;
 	/** button to submit the iteration */
 	JButton submit;
+	/**top panel*/
+	JPanel topPanel;
+	/**bottom panel*/
+	ListFilteredRequirementsPanel bottomPanel;
 	
 	JXDatePicker startDatePicker;
 	JXDatePicker endDatePicker;
@@ -89,12 +93,13 @@ public class ViewSingleIterationPanel extends JPanel{
 	 *
 	 */
 	private void addComponents(){
+		setLayout(new BorderLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		setLayout(new GridBagLayout());
+		topPanel = new JPanel(new GridBagLayout());
 		
-		lbl1 = new JLabel("Start Date (mm/dd/yyyy)");
-		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
-		lbl3 = new JLabel ("Iteration Number");
+		lbl1 = new JLabel("Start Date");
+		lbl2 = new JLabel("End Date");
+		lbl3 = new JLabel ("Iteration");
 		
 		Date startDate = model.getStartDate();
 		Date endDate = model.getEndDate();
@@ -121,24 +126,29 @@ public class ViewSingleIterationPanel extends JPanel{
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		add(lbl1, c);
+		topPanel.add(lbl3, c);
 		c.gridx = 1;
-		add(startDatePicker, c);
+		topPanel.add(iterationNumber, c);
 		c.gridy = 1;
 		c.gridx = 0;
-		add(lbl2, c);
+		topPanel.add(lbl2, c);
 		c.gridx = 1;
-		add(endDatePicker, c);
+		topPanel.add(endDatePicker, c);
 		c.gridy = 2;
 		c.gridx = 0;
-		add(lbl3, c);
+		topPanel.add(lbl1, c);
 		c.gridx = 1;
-		add(iterationNumber, c);
+		topPanel.add(startDatePicker, c);
 		c.gridy = 3;
 		//add(submit, c);
 		c.gridy = 4;
-		add(result, c);
+		topPanel.add(result, c);
 		c.gridy = 5;
+		add(topPanel, BorderLayout.PAGE_START);
+		
+		/** adding bottom panel */
+		bottomPanel = new ListFilteredRequirementsPanel(parent);
+		add(bottomPanel, BorderLayout.CENTER);
 		
 		result.setEditable(false);
 	}
