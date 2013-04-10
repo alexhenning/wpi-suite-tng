@@ -114,18 +114,21 @@ public class ViewSingleIterationPanel extends JPanel{
 		Date currentDate = new Date();
 		startDatePicker = new JXDatePicker(startDate != null ? startDate : currentDate);
 		endDatePicker = new JXDatePicker(endDate != null ? endDate : currentDate);
-		if(startDate.before(currentDate)){
-			startDatePicker.setEnabled(false);
-		}
-		if(endDate.before(currentDate)){
-			endDatePicker.setEnabled(false);
-		}
 		
 		result = new JTextField();
 		iterationNumber = new JTextField(model.getIterationNumber());
 		
 		submit = new JButton("Update");
 		submit.addActionListener(new EditIterationAction());
+		
+		if(startDate.before(currentDate)){
+			startDatePicker.setEnabled(false);
+		}
+		if(endDate.before(currentDate)){
+			endDatePicker.setEnabled(false);
+			submit.setEnabled(false);
+			iterationNumber.setEnabled(false);
+		}
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
