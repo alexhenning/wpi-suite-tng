@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +45,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumbe
  *
  */
 @SuppressWarnings("serial")
-public class ReleaseNumberPanel extends JPanel {
+public class ReleaseNumberPanel extends JPanel implements KeyListener {
 	
 	/** the model that holds the ReleaseNumber */
 	ReleaseNumber model;
@@ -169,6 +171,9 @@ public class ReleaseNumberPanel extends JPanel {
 		c.gridx = 1;
 		displayPanel.add(result, c);
 		
+		submit.setEnabled(false);
+		numberField.addKeyListener(this);
+		
 		add(displayPanel, BorderLayout.CENTER);
 		
 		result.setEditable(false);
@@ -257,6 +262,11 @@ public class ReleaseNumberPanel extends JPanel {
 		return noErrors;
 	}
 	
+	/**
+	 * fills in the fields of the combobox
+	 *
+	 * @param releaseNumbers a list of release numbers
+	 */
 	private void updateComboBoxWithReleaseNumbers(List<ReleaseNumber> releaseNumbers) {
 		releaseNumbersComboBox.removeAllItems();
 		releaseNumbersComboBox.addItem("New Release Number");
@@ -347,6 +357,23 @@ public class ReleaseNumberPanel extends JPanel {
 	}
 	
 	/**
+	 *Determine if the submit button should be enabled
+	 *
+	 */
+	public void enableSubmitButton() {
+		boolean shouldEnable = true;
+		if(editMode == Mode.CREATE && numberField.getText().length() < 1) {
+			shouldEnable = false;
+		}
+		else {
+			if(numberField.getText().equals(model.getReleaseNumber())) {
+				shouldEnable = false;
+			}
+		}
+		submit.setEnabled(shouldEnable);
+	}
+	
+	/**
 	 *
 	 * Updates a release number to the values currently displayed
 	 *
@@ -368,6 +395,34 @@ public class ReleaseNumberPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * checked for input from keyboard and set the submit button accordingly
+	 *
+	 * @param e a key event
+	 */
+	public void keyTyped ( KeyEvent e ){  
+		enableSubmitButton();
+	}
+	
+	/**
+	 * check if key is released and set the submit button accordingly
+	 *
+	 * @param e a key event
+	 */
+	public void keyReleased ( KeyEvent e ){  
+		enableSubmitButton();
+	}
+	
+	/**
+	 * Doesn't really do anything
+	 *
+	 * @param e a key event
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		
+	}
+	
 	class UpdateReleaseNumbersInComboBoxCallback implements ReleaseNumberCallback {
 
 		ReleaseNumber rn;
@@ -385,6 +440,5 @@ public class ReleaseNumberPanel extends JPanel {
 		}
 		
 	}
-		
 	
 }
