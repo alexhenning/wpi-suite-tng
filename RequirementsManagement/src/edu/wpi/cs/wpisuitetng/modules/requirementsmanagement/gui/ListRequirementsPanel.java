@@ -479,7 +479,7 @@ public class ListRequirementsPanel extends JPanel {
 	class RetrieveAllRequirementsCallback implements RequirementsCallback {
 		
 		/**
-		 * Create RetrieveallIteratoinsCallback to update the requirments and send the to the database
+		 * Create RetrieveallIteratoinsCallback to update the requirements and send the to the database
 		 *
 		 * @param reqs a list of all requirements
 		 */

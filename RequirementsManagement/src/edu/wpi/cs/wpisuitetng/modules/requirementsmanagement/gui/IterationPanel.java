@@ -15,6 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 //import java.text.ParseException;
 //import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 //import java.util.Locale;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +34,7 @@ import org.jdesktop.swingx.JXDatePicker;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
@@ -267,17 +270,20 @@ public class IterationPanel extends JPanel{
 		result.setText(string);
 	}
 	
-//	class EditIterationAction extends AbstractAction {
-//		@Override
-//		public void actionPerformed(ActionEvent arg0) {
-//			DB.updateIteration(model, new SingleIterationCallback() {
-//				@Override
-//				public void callback(Iteration iteration) {
-//					setStatus("Iteration Updated");
-//				}
-//			});
-//		}
-//	}
+	class EditIterationAction extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(!validateFields()){
+				setStatus("Iteration is invalid");
+			}
+			DB.updateIteration(model, new SingleIterationCallback() {
+				@Override
+				public void callback(Iteration iteration) {
+					setStatus("Iteration Updated");
+				}
+			});
+		}
+	}
 	
 	
 	/**
@@ -299,7 +305,13 @@ public class IterationPanel extends JPanel{
 	 * @author TODO
 	 *
 	 */
-	class CheckDateOvelapCallback implements IterationCallback {
+	class CheckDateOverlapCallback implements IterationCallback {
+		List<Iteration> iters;
+		
+		public CheckDateOverlapCallback (List<Iteration> iters){
+			this.iters = iters;
+		}
+		
 		@Override
 		public void callback(List<Iteration> iterationList) {
 			List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
@@ -325,7 +337,12 @@ public class IterationPanel extends JPanel{
 	}
 
 	public boolean validateFields() {
-		//TODO validate the values
+		if(model.getStartDate().after(model.getEndDate())){
+			startDatePicker.getEditor().setBackground(Color.RED);
+			endDatePicker.getEditor().setBackground(Color.RED);
+			return false;
+		}
+		
 		return true;
 	}
 	
