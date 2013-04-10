@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateReleaseNumberAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewPermissionAction;
@@ -35,7 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
 public class NavToolbarView extends ToolbarGroupView {
 
 	/** button to list requirements */
-	private JButton showReports, iterView, permissionButton;
+	private JButton showReports, iterView, permissionButton, viewReleaseNumbers;
 	
 	/**
 	 * Constructor
@@ -70,11 +71,18 @@ public class NavToolbarView extends ToolbarGroupView {
 		c.gridy = 2;
 		content.add(permissionButton, c);
 		
+		viewReleaseNumbers = new JButton("View Release Numbers");
+		viewReleaseNumbers.setAction(new CreateReleaseNumberAction(tabController));
+		c.gridx = 1;
+		c.gridy = 0;
+		content.add(viewReleaseNumbers, c);
+		
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
 		
 		// Calculate the width of the toolbar
-		Double toolbarGroupWidth = permissionButton.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
+		Double toolbarGroupWidth = permissionButton.getPreferredSize().getWidth() + 
+				viewReleaseNumbers.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
 

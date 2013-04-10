@@ -34,7 +34,7 @@ public class CreateReleaseNumberAction extends AbstractAction {
 	 * @param controller When the action is performed, controller.addCreateReleaseNumberTab() is called
 	 */
 	public CreateReleaseNumberAction(MainTabController controller) {
-		super("Release Numbers");
+		super("View Release Numbers");
 		this.controller = controller;
 		putValue(MNEMONIC_KEY, KeyEvent.VK_I);
 	}
