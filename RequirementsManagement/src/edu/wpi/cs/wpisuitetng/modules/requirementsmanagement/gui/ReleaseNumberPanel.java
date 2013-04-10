@@ -127,7 +127,6 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 									}
 								}
 								numberField.setBackground(Color.WHITE);
-								result.setText("");
 							}
 						});
 					}
@@ -406,6 +405,7 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 	 */
 	public void keyTyped ( KeyEvent e ){  
 		enableSubmitButton();
+		setStatus("");
 	}
 	
 	/**
@@ -440,6 +440,7 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 			updateComboBoxWithReleaseNumbers(releaseNumbers);
 			if(rn != null) {
 				updateModel(rn);
+				setStatus("Release Number Saved");
 			}
 			enableSubmitButton();
 		}
