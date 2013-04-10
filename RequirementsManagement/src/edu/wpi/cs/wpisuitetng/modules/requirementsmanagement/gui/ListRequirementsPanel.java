@@ -398,6 +398,12 @@ public class ListRequirementsPanel extends JPanel {
 				System.out.println("Error in description for Requirement in row " + i);
 				noErrors = false;
 			}
+			// check iteration in regards to estimate
+			if(!(((String)tableModel.getValueAt(i, 3)).equals("Backlog")) &&
+					Integer.valueOf((String)tableModel.getValueAt(i, 6)) <= 0) {
+				System.out.println("Error in iteration for Requirement in row " + i);
+				noErrors = false;
+			}
 			// check estimate
 			try {
 				if((Integer.valueOf((String)tableModel.getValueAt(i, 6))) < 0) {
@@ -661,6 +667,18 @@ public class ListRequirementsPanel extends JPanel {
 					if(((String)value).length() < 1) {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a description.");
+					}
+				} else if(column == 3) {
+					try {
+						if(((Integer.valueOf((String)tableModel.getValueAt(row, 6)) <= 0) &&
+								!value.equals(data[row][column]) && !value.equals("Backlog"))) {
+							c.setBackground(Color.RED);
+							setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
+						}
+					} catch (NumberFormatException e) {
+						// still an error
+						c.setBackground(Color.RED);
+						setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
 					}
 				} else if(column == 6) {
 					try {
