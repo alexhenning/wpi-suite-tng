@@ -265,7 +265,9 @@ public class MainTabController {
 		view.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				listReqsView.mainPanel.updateAllRequirementList();
+				if(listReqsView.mainPanel.tableModel.getMode() == ViewReqTable.Mode.VIEW) {
+					listReqsView.mainPanel.updateAllRequirementList();
+				}
 			}
 		});
 
