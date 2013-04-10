@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveI
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveProjectEventsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.UpdateReleaseNumberObserver;
@@ -72,6 +73,18 @@ public class DB {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + req.getId(),  HttpMethod.POST);
 		request.setBody(req.toJSON());
 		request.addObserver(new EditRequirementModelRequestObserver(callback));
+		request.send();
+	}
+	
+	/**
+	 * Retrieves a single requirement from the database and runs the callback function in the class passed
+	 *
+	 * @param id the id of the requirement
+	 * @param callback the class that has the callback function to be run on the requirement
+	 */
+	public static void getSingleIteration(String id, SingleIterationCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration/" + id, HttpMethod.GET);
+		request.addObserver(new RetrieveSingleIterationRequestObserver(callback));
 		request.send();
 	}
 

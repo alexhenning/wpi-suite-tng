@@ -43,7 +43,6 @@ public class PermissionsValidator {
 	 * @param data The Data implementation to use
 	 */
 	public PermissionsValidator(Data data) {
-		//TODO: "strict" mode for returning *all* issues, rather than ignoring and overwriting?
 		this.data = data;
 	}
 	

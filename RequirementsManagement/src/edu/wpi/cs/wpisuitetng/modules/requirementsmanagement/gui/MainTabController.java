@@ -132,6 +132,26 @@ public class MainTabController {
 	}
 	
 	/**
+	 * Adds a tab that displays the given requirement in the given mode
+	 * @param requirement The requirement to display
+	 * @param mode The Mode to use
+	 */
+	public Tab addIterationTab(Iteration iteration, String title) {
+		for (int i=0; i<view.getTabCount(); i++) {
+			if (("Edit "+(iteration.getIterationNumber())).equals(view.getTitleAt(i))) {
+				switchToTab(i);
+				return null;//TODO figure out what to return
+			}
+		}
+		Tab tab = addTab();
+		ViewSingleIterationTab view = new ViewSingleIterationTab(this, iteration, tab, title);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
+	
+	/**
 	 * create a tab for editing permissions
 	 *
 	 * @return the tab created
@@ -271,12 +291,37 @@ public class MainTabController {
 		view.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				listReqsView.mainPanel.updateAllRequirementList();
+				if(listReqsView.mainPanel.tableModel.getMode() == ViewReqTable.Mode.VIEW) {
+					listReqsView.mainPanel.updateAllRequirementList();
+				}
 			}
 		});
 
 		return tab;
 	}
+
+	public void addShowReportsTab() {
+		for (int i=0; i<view.getTabCount(); i++) {
+			// TODO: If the tab name changes, will need to change the string
+			// to match the tab name
+			if (view.getTitleAt(i).equals("Reports")) {
+				switchToTab(i);
+				view.requestFocus();
+				return;
+			}
+		}
+
+		Tab tab = addTab();
+		final ReportsTab reportsTab = new ReportsTab(this, tab);
+		reportsTab.requestFocus();
+		view.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				reportsTab.mainPanel.refresh();
+			}
+		});
+	}
+
 	
 	/**
 	 * add a tab that views iterations
