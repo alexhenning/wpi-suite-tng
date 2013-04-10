@@ -98,9 +98,16 @@ public class ViewSingleIterationPanel extends JPanel{
 		
 		Date startDate = model.getStartDate();
 		Date endDate = model.getEndDate();
-		startDatePicker = new JXDatePicker(startDate != null ? startDate : new Date());
-		endDatePicker = new JXDatePicker(endDate != null ? endDate : new Date());
-
+		Date currentDate = new Date();
+		startDatePicker = new JXDatePicker(startDate != null ? startDate : currentDate);
+		endDatePicker = new JXDatePicker(endDate != null ? endDate : currentDate);
+		if(startDate.before(currentDate)){
+			startDatePicker.setEnabled(false);
+		}
+		if(endDate.before(currentDate)){
+			endDatePicker.setEnabled(false);
+		}
+		
 		result = new JTextField();
 		iterationNumber = new JTextField(model.getIterationNumber());
 		

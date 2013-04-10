@@ -42,10 +42,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
- * GUI for a project manager to manage user permissions 
+ * GUI for a project manager to view and manage iterations 
  *
- * @author William Terry
- *
+ * @author
+ * 
  */
 @SuppressWarnings("serial")
 public class ViewIterationPanel extends JPanel {
