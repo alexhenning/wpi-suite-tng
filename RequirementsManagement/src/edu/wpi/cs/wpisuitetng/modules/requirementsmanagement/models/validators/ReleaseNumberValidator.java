@@ -104,9 +104,9 @@ public class ReleaseNumberValidator {
 	 * @return The ReleaseNumber with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
 	 */
-	ReleaseNumber getExistingReleaseNumber(String string, Project project, List<ValidationIssue> issues, String fieldName)
+	ReleaseNumber getExistingReleaseNumber(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
-		List<Model> oldReleases = data.retrieve(ReleaseNumber.class, "id", string, project);
+		List<Model> oldReleases = data.retrieve(ReleaseNumber.class, "id", id, project);
 		if(oldReleases.size() < 1 || oldReleases.get(0) == null) {
 			issues.add(new ValidationIssue("ReleaseNumber with id does not exist in project", fieldName));
 			return null;
@@ -132,23 +132,26 @@ public class ReleaseNumberValidator {
 			return issues;
 		}
 		
-		//check if the id is unique
-		if(mode == Mode.CREATE) {
-			if(getExistingReleaseNumber(releaseNumber.getId() + "", session.getProject(), issues, "id") != null) {
-				issues.add(new ValidationIssue("Unable to create an ReleaseNumber with the provided id ("+releaseNumber.getId()+") since there is already an ReleaseNumber with that id"));
+		ReleaseNumber[] allReleaseNumbers = getAllExistingReleaseNumbers(session.getProject(), issues);
+		
+		if(mode == Mode.CREATE) { // make sure there are none with the same release numbers when creating
+			for(ReleaseNumber rn : allReleaseNumbers) {
+				if(rn.getId() == releaseNumber.getId()) {
+					issues.add(new ValidationIssue("Unable to create an ReleaseNumber with the provided id ("+releaseNumber.getId()+") since there is already an ReleaseNumber with that id"));
+				}
 			}
 		}
-
-		//check if the iterationNumber is unique for the project
-		if(mode == Mode.CREATE) {
-			if(getExistingReleaseNumber(releaseNumber.getReleaseNumber(), session.getProject(), issues, "releaseNumber") != null) {
+		
+		// regardless of mode, no release numbers should have the same number
+		for(ReleaseNumber rn : allReleaseNumbers) {
+			if(rn.getReleaseNumber().equals(releaseNumber.getReleaseNumber())) {
 				issues.add(new ValidationIssue("Unable to create an ReleaseNumber with the provided releaseNumber ("+releaseNumber.getReleaseNumber()+") since there is already an ReleaseNumber with that releaseNumber"));
 			}
 		}
 
 		ReleaseNumber oldReleaseNumber = null;
 		if(mode == Mode.EDIT) {
-			oldReleaseNumber = getExistingReleaseNumber(releaseNumber.getId() + "", session.getProject(), issues, "id");
+			oldReleaseNumber = getExistingReleaseNumber(releaseNumber.getId(), session.getProject(), issues, "id");
 		}
 		lastExistingReleaseNumber = oldReleaseNumber;
 		
