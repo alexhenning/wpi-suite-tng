@@ -12,12 +12,18 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
@@ -69,6 +75,15 @@ public class JanewayModule implements IJanewayModule {
 		tabs = new ArrayList<JanewayTabModel>();
 		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), toolbarView, mainTabView);
 		tabs.add(tab);
+		
+		tab.getMainComponent().addAncestorListener(new AncestorListener() {
+			@Override public void ancestorRemoved(AncestorEvent e) {}
+			@Override public void ancestorMoved(AncestorEvent e) {}
+			@Override public void ancestorAdded(AncestorEvent e) {
+				System.out.println("Showing all requirements.");
+				mainTabController.addListRequirementsTab();
+			}
+		});
 	}
 
 	/**

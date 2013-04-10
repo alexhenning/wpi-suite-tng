@@ -33,7 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabControll
 public class DevToolbarView extends ToolbarGroupView {
 
 	/** button to list requirements */
-	private JButton listReq, showReports;
+	private JButton showReports;
 	
 	/**
 	 * Constructor
@@ -53,21 +53,16 @@ public class DevToolbarView extends ToolbarGroupView {
 		c.gridx = 0;
 		c.gridy = 0;
 		
-		// Setup button panel
-		listReq = new JButton("List Requirements");
-		listReq.setAction(new ListRequirementsAction(tabController));
-		content.add(listReq, c);
-		
+		// Show reports button
 		showReports = new JButton("Show Reports");
 		showReports.setAction(new ShowReportsAction(tabController));
-		c.gridy = 1;
 		content.add(showReports, c);
 		
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
 		
 		// Calculate the width of the toolbar
-		Double toolbarGroupWidth = listReq.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
+		Double toolbarGroupWidth = showReports.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		setPreferredWidth(toolbarGroupWidth.intValue());
 	}
 
