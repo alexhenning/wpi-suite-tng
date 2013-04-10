@@ -24,7 +24,6 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.MockData;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -86,7 +85,7 @@ public class RequirementNoteValidatorTest {
 		// RequirementNote(int requirementId, User user, String body)
 		goodNote = new RequirementNote(1, currentUser, noteBody);
 		
-		db = new MockData(new HashSet<Object>());
+		db = new edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.MockData(new HashSet<Object>());
 		db.save(currentUser);
 		db.save(mainRequirement);
 		
