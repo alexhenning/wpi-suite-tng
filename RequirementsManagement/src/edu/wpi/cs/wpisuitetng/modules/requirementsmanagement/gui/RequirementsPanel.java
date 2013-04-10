@@ -760,6 +760,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		if (estimate <= 0 || editMode.equals(Mode.CREATE)) {
 			iteration.setEnabled(false);
 			iteration.setBackground(Color.LIGHT_GRAY);
+			if (iteration.getModel().getSize() > 0) iteration.setSelectedIndex(0);
 		} else {
 			iteration.setEnabled(true);
 			iteration.setBackground(Color.WHITE);
