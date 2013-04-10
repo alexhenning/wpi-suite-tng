@@ -147,7 +147,7 @@ public class IterationValidator {
 		//check if the iterationNumber is unique for the project
 		if(mode == Mode.CREATE) {
 			for(Iteration it : allIterations) {
-				if(it.getIterationNumber() == iteration.getIterationNumber()) {
+				if(it.getIterationNumber().equals(iteration.getIterationNumber())) {
 					issues.add(new ValidationIssue("Unable to create an Iteration with the provided iterationNumber ("+iteration.getIterationNumber()+") since there is already an iteration with that iterationNumber"));
 //				return issues;
 				}
