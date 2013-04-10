@@ -13,9 +13,15 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
@@ -44,7 +50,7 @@ public class ViewIterationTab extends JPanel implements IToolbarGroupProvider {
 	 * @param permission a permissions model
 	 * @param tab the tab that contains this
 	 */
-	public ViewIterationTab(MainTabController tabController, Tab tab) {
+	public ViewIterationTab(MainTabController tabController, Tab tab){
 		this.tabController = tabController;
 		containingTab = tab;
 		if(containingTab == null) {
@@ -69,14 +75,33 @@ public class ViewIterationTab extends JPanel implements IToolbarGroupProvider {
 			}
 		});
 		
+		this.tabController.addChangeListener(new TabFocusListener(this));
+		
 		this.add(mainPanelScrollPane, BorderLayout.CENTER);
 		
 	}
-
 
 	@Override
 	public ToolbarGroupView getGroup() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+}
+
+class TabFocusListener implements ChangeListener {
+	ViewIterationTab attentiveTab;
+	
+	TabFocusListener(ViewIterationTab attentiveTab){
+		this.attentiveTab = attentiveTab;
+	}
+	
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){
+			//TODO: find a way to remove this listener if tab has been closed
+			//((JTabbedPane) e.getSource()).removeChangeListener(this);
+		} else if( ((JTabbedPane) e.getSource()).getSelectedComponent().equals(attentiveTab) ){
+			attentiveTab.mainPanel.updateAllIterationList();
+		}
 	}
 }
