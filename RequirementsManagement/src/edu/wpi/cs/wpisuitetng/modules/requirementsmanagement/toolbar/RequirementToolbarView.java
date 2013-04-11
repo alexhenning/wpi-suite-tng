@@ -151,29 +151,10 @@ public class RequirementToolbarView extends ToolbarGroupView {
 	 */
 	public void update(Mode mode, RequirementModel req) {
 		if (mode.equals(Mode.EDIT)) {
-			closeButton.setEnabled(true);
-			deleteButton.setEnabled(true);
 			closeButton.setEnabled(req.getStatus().equals(RequirementStatus.IN_PROGRESS) || req.getStatus().equals(RequirementStatus.COMPLETE));
 			deleteButton.setEnabled(req.getStatus().equals(RequirementStatus.IN_PROGRESS) || req.getStatus().equals(RequirementStatus.DELETED));
 			closeButton.setText((req.getStatus().equals(RequirementStatus.COMPLETE) ? "Reopen" : "Complete!"));
 			deleteButton.setText((req.getStatus().equals(RequirementStatus.DELETED) ? "Restore" : "Delete"));
-//			if (req.getStatus().equals(RequirementStatus.IN_PROGRESS)) {
-//				deleteButton.setEnabled(false);
-//			} else {
-//				deleteButton.setEnabled(true);
-//			}
-//			if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
-//				closeButton.setText("Reopen");
-//			} else {
-//				closeButton.setText("Complete!");
-//			}
-//			if (req.getStatus().equals(RequirementStatus.DELETED)) {
-//				deleteButton.setText("Restore");
-//				closeButton.setEnabled(false);
-//			} else {
-//				deleteButton.setText("Delete");
-//				closeButton.setEnabled(true);
-//			}
 		} else {
 			closeButton.setEnabled(false);
 			deleteButton.setEnabled(false);
