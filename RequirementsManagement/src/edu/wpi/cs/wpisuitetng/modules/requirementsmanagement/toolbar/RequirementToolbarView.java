@@ -125,6 +125,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			public void actionPerformed(ActionEvent e) {
 				RequirementModel model = tab.getRequirementPanel().getModel();
 				if (model.getStatus().equals(RequirementStatus.IN_PROGRESS)) return;
+				if (!model.getSubRequirements().isEmpty()) return;
 				if (model.getStatus() != RequirementStatus.DELETED) {
 					model.setStatus(RequirementStatus.DELETED);
 					DB.updateRequirements(model, new SingleRequirementCallback() {
@@ -221,7 +222,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		if (mode.equals(Mode.EDIT)) {
 			closeButton.setEnabled(req.getStatus().equals(RequirementStatus.IN_PROGRESS) || req.getStatus().equals(RequirementStatus.COMPLETE));
 			closeButton.setText((req.getStatus().equals(RequirementStatus.COMPLETE) ? "Reopen" : "Complete!"));
-			deleteButton.setEnabled(true);
+			deleteButton.setEnabled(req.getSubRequirements().isEmpty());
 			deleteButton.setText((req.getStatus().equals(RequirementStatus.DELETED) ? "Restore" : "Delete"));
 		} else {
 			closeButton.setEnabled(false);
