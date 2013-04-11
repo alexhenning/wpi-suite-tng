@@ -826,6 +826,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			}
 			if (added) {
 				subs.update();
+				model.setSubRequirements(currentReq.getSubRequirements());
+				parent.buttonGroup.update(editMode, model);
 				setStatus("added child");
 			} else {
 				setStatus("failed to add child");
