@@ -50,14 +50,14 @@ public class AssignUserToRequirementTab extends JPanel {
 	public static final int NAME = 1;
 	public static final int USERNAME = 2;
 	public static final int PERMISSIONLEVEL = 3;
-	public static final int ROWS = 7;
+	public static final int COLUMN = 4;
 
 	/** the panel this is shown in */
 	RequirementsPanel parent;
 	/** tableModel to display currently assigned users */
 	ViewUserTable assignedUserTableModel;
 	/** tableModel to display other users that can be assigned */
-	ViewPermissionsTable possibleUserTableModel;
+	ViewUserTable possibleUserTableModel;
 	/** tableModle to display currently assigned users */
 	JTable assignedUserTable;
 	/** tableModel to display other users that can be assigned */
@@ -67,7 +67,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	/** possible user list scroll pane */
 	JScrollPane possibleUserTableScrollPane;
 	/** list of user*/
-	List<User> users;
+	List<User> assignees;
 	JButton addUserButton;
 	JButton removeUserButton;
 
@@ -78,7 +78,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	 */
 	public AssignUserToRequirementTab(RequirementsPanel parent) {
 		this.parent = parent;
-		users = parent.model.getAssignees();
+		assignees = parent.model.getAssignees();
 
 		// Add all components to this panel
 		addComponents();
@@ -115,7 +115,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		assignedUserTableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		assignedUserTableScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		possibleUserTableModel = new ViewPermissionsTable();
+		possibleUserTableModel = new ViewUserTable();
 		possibleUserTable = new JTable(possibleUserTableModel);
 		possibleUserTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		possibleUserTable.setFillsViewportHeight(true);
@@ -235,7 +235,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	
 //	private boolean gotUpdatedList;
 	public void update(RequirementModel model) {
-		users = model.getAssignees();
+		assignees = model.getAssignees();
 		String selectedSubId = getSelectedSubId();
 		String selectedPossibleId = getSelectedPosId();
 		
@@ -294,29 +294,36 @@ public class AssignUserToRequirementTab extends JPanel {
 		public void callback(List<User> users) {
 			if (users.size() > 0) {
 				// put the data in the table
-				ArrayList<Object[]> subEntriesList = new ArrayList<Object[]>();
-				ArrayList<Object[]> posEntriesList = new ArrayList<Object[]>();
+				ArrayList<Object[]> joinedEntryList = new ArrayList<Object[]>();
+				ArrayList<Object[]> disjointEntryList = new ArrayList<Object[]>();
 				for(User user : users) {
 					String id = String.valueOf(user.getIdNum());
 					String name = user.getName();
 					String username = user.getUsername();
-					String permissions = String.valueOf(user.getPermission(user));
-					if (users.contains(id)) {
-						Object[] subEntry = new Object[ROWS];
-						subEntry[ID] = id;
-						subEntry[NAME] = name;
-						subEntry[USERNAME] = username;
-						subEntry[PERMISSIONLEVEL] = permissions;
-					} 
+					String permissions = "placeholder"; //String.valueOf(user.getPermission(user));
+					if (assignees.contains(id)) {
+						Object[] joinedEntry = new Object[COLUMN];
+						joinedEntry[ID] = id;
+						joinedEntry[NAME] = name;
+						joinedEntry[USERNAME] = username;
+						joinedEntry[PERMISSIONLEVEL] = permissions;
+						joinedEntryList.add(joinedEntry);
+					} else {
+						Object[] disjointEntry = new Object[COLUMN];
+						disjointEntry[ID] = id;
+						disjointEntry[NAME] = name;
+						disjointEntry[USERNAME] = username;
+						disjointEntry[PERMISSIONLEVEL] = "placeholder";//permissions;
+						joinedEntryList.add(disjointEntry);
+					}
 				}
-
 				Object[][] subEntries = {};
 				Object[][] posEntries = {};
-				if(subEntriesList.size()>0) {
-					subEntries = subEntriesList.toArray(new Object[1][1]);
+				if(joinedEntryList.size()>0) {
+					subEntries = joinedEntryList.toArray(new Object[1][1]);
 				}
-				if(posEntriesList.size()>0) {
-					posEntries = posEntriesList.toArray(new Object[1][1]);
+				if(disjointEntryList.size()>0) {
+					posEntries = disjointEntryList.toArray(new Object[1][1]);
 				}
 
 				assignedUserTableModel.setData(subEntries);
@@ -330,7 +337,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		
 			TableColumn column = null;
 			TableColumn column2 = null;
-			for (int i = 0; i < ROWS; i++) {
+			for (int i = 0; i < COLUMN; i++) {
 				column = assignedUserTable.getColumnModel().getColumn(i);
 				column2 = possibleUserTable.getColumnModel().getColumn(i);
 				if (i == ID) {

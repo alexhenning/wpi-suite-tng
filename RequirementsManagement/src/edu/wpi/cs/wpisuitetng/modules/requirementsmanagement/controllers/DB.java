@@ -173,7 +173,7 @@ public class DB {
 	 * @param callback the class that has the callback function to be run on the requirement
 	 */
 	public static void getSingleUser(String id, SingleUserCallback callback) {
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/user/" + id, HttpMethod.GET);
+		final Request request = Network.getInstance().makeRequest("core/user/" + id, HttpMethod.GET);
 		request.addObserver(new RetrieveSingleUserRequestObserver(callback));
 		request.send();
 	}
@@ -185,7 +185,7 @@ public class DB {
 	 */
 	public static void getAllUsers(UsersCallback callback) {
 		System.out.println("get all users");
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/user", HttpMethod.GET);
+		final Request request = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
 		request.addObserver(new RetrieveUsersRequestObserver(callback));
 		request.send();
 	}
