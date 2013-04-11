@@ -70,12 +70,17 @@ public class AddIterationController extends AbstractAction implements ActionList
 	 * @param req
 	 */
 	public void receivedAddConfirmation(Iteration iter) {
-		DB.updateIteration(iter, new SingleIterationCallback() {
-			@Override public void callback(Iteration iter) {
-				panel.updateModel(iter);
-			}
-		});
-		panel.setStatus("Iteration saved!");
+		if(!panel.validateFields()){
+			
+		}
+		else{
+			DB.updateIteration(iter, new SingleIterationCallback() {
+				@Override public void callback(Iteration iter) {
+					panel.updateModel(iter);
+				}
+			});
+			panel.setStatus("Iteration saved!");
+		}
 	}
 	
 	/**

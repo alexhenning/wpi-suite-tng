@@ -126,10 +126,12 @@ public class IterationPanel extends JPanel{
 		
 		if(editMode == Mode.CREATE) {
 			submit = new JButton("Submit");
+			submit.addActionListener(new AddIterationController(this));
 		} else {
 			submit = new JButton("Update");
+			submit.addActionListener(new EditIterationAction());
 		}
-		submit.addActionListener(new AddIterationController(this));
+		
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
@@ -306,11 +308,11 @@ public class IterationPanel extends JPanel{
 	 *
 	 */
 	class CheckDateOverlapCallback implements IterationCallback {
-		List<Iteration> iters;
-		
-		public CheckDateOverlapCallback (List<Iteration> iters){
-			this.iters = iters;
-		}
+//		List<Iteration> iters;
+//		
+//		public CheckDateOverlapCallback (List<Iteration> iters){
+//			this.iters = iters;
+//		}
 		
 		@Override
 		public void callback(List<Iteration> iterationList) {
@@ -324,11 +326,16 @@ public class IterationPanel extends JPanel{
 					}
 					if(model.getEndDate().after(i.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
 						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
+						setStatus("End date overlaps with another iteration.");
+						endDatePicker.getEditor().setBackground(Color.RED);
 					}
-					if(i.getStartDate().after(model.getStartDate()) && model.getStartDate().before(i.getEndDate()) ||
-							i.getEndDate().after(model.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-					}
+//					if(i.getStartDate().after(model.getStartDate()) && model.getStartDate().before(i.getEndDate()) ||
+//							i.getEndDate().after(model.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
+//						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
+//						setStatus("Both dates overlap with another iteration.");
+//						startDatePicker.getEditor().setBackground(Color.RED);
+//						endDatePicker.getEditor().setBackground(Color.RED);
+//					}
 				}
 			}
 			//TODO figure out how to display the issues...
@@ -338,12 +345,21 @@ public class IterationPanel extends JPanel{
 
 	public boolean validateFields() {
 		if(model.getStartDate().after(model.getEndDate())){
+			setStatus("Dates are backwards.");
 			startDatePicker.getEditor().setBackground(Color.RED);
 			endDatePicker.getEditor().setBackground(Color.RED);
 			return false;
 		}
-		
-		return true;
+		if(model.getIterationNumber().length() < 1){
+			setStatus("Need a valid name");
+			iterationNumber.setBackground(Color.RED);
+			return false;
+		}
+		DB.getAllIterations(new CheckDateOverlapCallback());
+		if (!result.getText().equals("Iteration saved"))
+			return false;
+		else
+			return true;
 	}
 	
 }
