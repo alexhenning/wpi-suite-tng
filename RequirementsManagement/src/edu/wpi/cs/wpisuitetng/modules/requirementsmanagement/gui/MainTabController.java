@@ -62,6 +62,35 @@ public class MainTabController {
 		});
 	}
 	
+	class RequirementTabChangeListener implements ChangeListener {
+
+		private RequirementsTab tab;
+		
+		public RequirementTabChangeListener(final RequirementsTab view) {
+			super();
+			this.tab = view;
+		}
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			if (MainTabController.this.view.getSelectedComponent() instanceof RequirementsTab) {
+				RequirementsTab tmpTab = (RequirementsTab)MainTabController.this.view.getSelectedComponent();
+				System.out.println("is match: " + (tab == tmpTab));
+				if(tab == tmpTab) {
+					tmpTab.getRequirementPanel().updateLists();
+				}
+			}
+			boolean tabExists = false;
+			for(int i=0; i<MainTabController.this.view.getComponentCount(); i++) {
+				if (MainTabController.this.view.getComponent(i) == tab) tabExists = true;
+			}
+			if(!tabExists) {
+				MainTabController.this.view.removeChangeListener(this);
+			}
+		}
+		
+	}
+	
 	/**
 	 * Adds a tab.
 	 * 
@@ -95,21 +124,8 @@ public class MainTabController {
 		final RequirementsTab view = new RequirementsTab(this, requirement, mode, tab);
 		tab.setComponent(view);
 		view.requestFocus();
-		this.view.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				System.out.println("statechanged");
-				view.getRequirementPanel().updateLists();
-//				if(e.getSource() instanceof RequirementsTab) {
-//					RequirementsTab src = (RequirementsTab)e.getSource();
-//					src.getRequirementPanel().updateLists();
-//				}
-				
-//				if(listReqsView.mainPanel.tableModel.getMode() == ViewReqTable.Mode.VIEW) {
-//					listReqsView.mainPanel.updateAllRequirementList();
-//				}
-			}
-		});
+		this.view.addChangeListener(new RequirementTabChangeListener(view));
+
 		return tab;
 	}
 	
