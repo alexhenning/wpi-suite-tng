@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.FieldChange;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent.ProjectEventType;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 
 /**
  * Displays a single posted history
@@ -56,7 +57,6 @@ public class RequirementHistoryPanel extends JPanel {
 	 * @param date
 	 */
 	public RequirementHistoryPanel(Map<String, FieldChange<?>> map, String author, Date date) {
-		
 
 		this.author = author;
 		this.date = date;
@@ -66,34 +66,9 @@ public class RequirementHistoryPanel extends JPanel {
 			System.out.println(change.getKey()+": "+change.getValue().getClass());
 			//TODO improve this code
 			if (message.compareTo("") != 0) {
-				if (change.getKey().equals("subRequirements")) {
-					message = message + eol + change.getKey() + " changed from [";
-					for(Object obj : (String[])change.getValue().getOldValue()) {
-						message = message + obj + ", ";
-					}
-					message = message + "] to [";
-					for(Object obj : (String[])change.getValue().getNewValue()) {
-						message = message + obj + ", ";
-					}
-					message = message + "].";
-				} else {
-					message = message + eol + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
-				}
-			}
-			else {
-				if (change.getKey().equals("subRequirements")) {
-					message = message + change.getKey() + " changed from [";
-					for(Object obj : (String[])change.getValue().getOldValue()) {
-						message = message + obj + ", ";
-					}
-					message = message + "] to [";
-					for(Object obj : (String[])change.getValue().getNewValue()) {
-						message = message + obj + ", ";
-					}
-					message = message + "].";
-				} else {
-					message = message + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
-				}
+				message = message + eol + getChangeMessage(change);
+			} else {
+				message = message + getChangeMessage(change);
 			}
 		}
 		this.message = message;
@@ -116,34 +91,9 @@ public class RequirementHistoryPanel extends JPanel {
 			for (Entry <String,FieldChange<?>> change: event.getChanges().entrySet()) {
 				//TODO improve this code
 				if (message.compareTo("") != 0) {
-					if (change.getKey().equals("subRequirements")) {
-						message = message + eol + change.getKey() + " changed from [";
-						for(Object obj : (String[])change.getValue().getOldValue()) {
-							message = message + obj + ", ";
-						}
-						message = message + "] to [";
-						for(Object obj : (String[])change.getValue().getNewValue()) {
-							message = message + obj + ", ";
-						}
-						message = message + "].";
-					} else {
-						message = message + eol + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
-					}
-				}
-				else {
-					if (change.getKey().equals("subRequirements")) {
-						message = message + change.getKey() + " changed from [";
-						for(Object obj : (String[])change.getValue().getOldValue()) {
-							message = message + obj + ", ";
-						}
-						message = message + "] to [";
-						for(Object obj : (String[])change.getValue().getNewValue()) {
-							message = message + obj + ", ";
-						}
-						message = message + "].";
-					} else {
-						message = message + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
-					}
+					message = message + eol + getChangeMessage(change);
+				} else {
+					message = message + getChangeMessage(change);
 				}
 			}
 		} else {
@@ -153,6 +103,40 @@ public class RequirementHistoryPanel extends JPanel {
 
 		// Add all components to this panel
 		addComponents();
+	}
+	
+	/**
+	 * handles converting a filed change object to a properly formated message.
+	 * @param change
+	 * @return the message for the field change
+	 */
+	private String getChangeMessage(Entry <String,FieldChange<?>> change) {
+		String out = "";
+		//TODO add any additional special filed changes
+		if (change.getKey().equals("subRequirements")) {
+			out = out + change.getKey() + " changed from [";
+			for(int i=0; i<((String[])change.getValue().getOldValue()).length; i++) {
+				out = out + (i==0 ? ", " : "") + ((String[])change.getValue().getOldValue())[i];
+			}
+			out = out + "] to [";
+			for(int i=0; i<((String[])change.getValue().getNewValue()).length; i++) {
+				out = out + (i==0 ? ", " : "") + ((String[])change.getValue().getNewValue())[i];
+			}
+			out = out + "].";
+		} else if (change.getKey().equals("releaseNumber")) {
+			ReleaseNumber oldValue = ((ReleaseNumber)change.getValue().getOldValue());
+			ReleaseNumber newValue = ((ReleaseNumber)change.getValue().getNewValue());
+			
+			out = out + change.getKey() + " changed from ";
+			out = out + (oldValue != null ? oldValue.getReleaseNumber() : "none" );
+			out = out + " to ";
+			out = out + (newValue != null ? newValue.getReleaseNumber() : "none" );
+			out = out + ".";
+		} else {
+			out = out + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
+		}
+		return out;
+		
 	}
 
 	/**
