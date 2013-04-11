@@ -147,9 +147,15 @@ public class PermissionsValidator {
 		if (permissions == null) {
 			issues.add(new ValidationIssue("Permissions cannot be null"));
 			return issues;
+		} else if(permissions.getUsername() == null) {
+			issues.add(new ValidationIssue("Username cannot be null"));
+			return issues;
+		} else if(permissions.getPermissionLevel() == null) {
+			issues.add(new ValidationIssue("PermissionLevel cannot be null"));
+			return issues;
 		}
 
-		System.out.println("validate this (" + mode.toString() + ") : " + permissions.getUsername());
+		System.out.println("validate this (" + mode.toString() + ") : " + permissions.toJSON());
 		Permissions oldPermissions = null;
 		
 		//check if user is in the db
