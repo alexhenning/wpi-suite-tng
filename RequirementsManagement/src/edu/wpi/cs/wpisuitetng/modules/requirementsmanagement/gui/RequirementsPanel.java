@@ -834,6 +834,24 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			}
 		}
 	}
+	/**
+	 * checks to see if the field values are different from the values in the model.
+	 * @return true if the values are different from the values in the model
+	 */
+	public boolean valuesHaveChanged() {
+		if (!model.getName().equals(namefield.getText())) return true;
+		if (!model.getType().equals((RequirementType) type.getSelectedItem())) return true;
+		if (!model.getPriority().equals((RequirementPriority) priority.getSelectedItem())) return true;
+		if (model.getIteration() == null && !iteration.getSelectedItem().toString().equals("Backlog")) return true;
+		if (!model.getIteration().getIterationNumber().equals(iteration.getSelectedItem().toString())) return true;
+		if (model.getReleaseNumber() == null && !releaseNumbers.getSelectedItem().toString().equals("None")) return true;
+		if (!model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
+		if (!model.getDescription().equals(descriptionfield.getText())) return true;
+//		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
+		if (model.getEstimate() != new Integer(estimateField.getText()).intValue()) return true;
+		if (model.getActualEffort() != new Integer(actualEffortField.getText()).intValue()) return true;
+		return false;
+	}
 	
 	/**
 	 * Validate the estimate and make the appropriate updates
