@@ -149,8 +149,9 @@ public class AssignUserToRequirementTab extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//int selectedRow = possibleUserTable.getSelectedRow();
 System.err.println("selected row: " + selectedRow);
-System.err.println("" + rowsInAssignedTable);
+System.err.println("" + rowsInPossibleTable);
 				if (selectedRow >= 0 && selectedRow < rowsInPossibleTable) {//possibleUserTable.getRowCount()) {
+System.err.println("if statement entered");
 					parent.addUser(new Integer((String) possibleUserTable.getModel().getValueAt(selectedRow, ID)));
 				}
 			}
@@ -215,12 +216,10 @@ System.err.println("selected row: " + selectedRow);
 		} else {
 			addUserButton.setEnabled(true);
 			removeUserButton.setEnabled(true);
-			for (User user : assignees) {
-				if(user.getIdNum() == Integer.parseInt(selectedId)) {
-					removeUserButton.setEnabled(false);
-				} else {
-					addUserButton.setEnabled(false);	
-				}
+			if(possibleUserTable.isRowSelected(selectedRow)) {
+				removeUserButton.setEnabled(false);
+			} else {
+				addUserButton.setEnabled(false);
 			}
 		}
 	}
@@ -312,7 +311,8 @@ System.err.println("you have selected row" + selectedRow);
 					String id = String.valueOf(user.getIdNum());
 					String name = user.getName();
 					String username = user.getUsername();
-					String permissions = "";//DB.getSinglePermission(username, new SinglePermissionCallback() {
+					String permissions = "";
+//DB.getSinglePermission(username, new SinglePermissionCallback() {
 //						
 //						@Override
 //						public void callback(Permissions profile) {							
