@@ -283,13 +283,12 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	 * @param s
 	 * @param args
 	 * @return
-	 * @throws NotImplementedException
+	 * @throws WPISuiteException 
 	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
-			throws NotImplementedException {
+			throws WPISuiteException {
 		if(args[2].equals("canClose")) {
-			//TODO check if the subs are closed and return the state
 			boolean canClose = true;
 			RequirementModel[] tmp = null;
 			try {
@@ -313,7 +312,6 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 			}
 			return ""+canClose;
 		} else if(args[2].equals("subsClosed")) {
-			//TODO check if the subs are closed and return the state
 			boolean isClosed = true;
 			RequirementModel[] tmp = null;
 			try {
@@ -338,6 +336,34 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 				}
 			}
 			return ""+isClosed;
+		} else if(args[2].equals("closeSub")) {
+			boolean canClose = true;
+			RequirementModel[] tmp = null;
+			try {
+				tmp = getEntity(s, args[3]);
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			} catch (WPISuiteException e) {
+				e.printStackTrace();
+			}
+			if(tmp.length != 1) {
+				//TODO figure out what to do if a requirement was not returned...
+				canClose = false;
+			}
+			if (canClose) {
+				for(String subId : tmp[0].getSubRequirements()) {
+					String res = advancedGet(s, new String[] {args[0], args[1], "closeSub", subId});
+					if(res.equals("false")) {
+						canClose = false;
+					}
+				}
+			}
+			if(canClose) {
+				tmp[0].setStatus(RequirementStatus.COMPLETE);
+				update(s, tmp[0].toJSON());
+			}
+			//TODO should probably throw some exception if false...
+			return ""+canClose;
 		}
 		
 		throw new NotImplementedException();

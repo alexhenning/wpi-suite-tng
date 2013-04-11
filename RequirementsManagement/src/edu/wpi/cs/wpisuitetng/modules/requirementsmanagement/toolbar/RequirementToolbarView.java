@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CanCloseRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CloseSubRequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
@@ -32,6 +33,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsTab
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CloseSubRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveCanCloseRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.Request;
+import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  * The Requirements Management tab's toolbar panel. Provides cancel, close, and delete buttons for creating and/or editing requirements
@@ -183,6 +189,23 @@ public class RequirementToolbarView extends ToolbarGroupView {
 				});
 			} else {
 				//TODO what to do if false...
+				
+				boolean closeSub = false;
+				//TODO ask user if they want to close the sub requirements
+				
+				if(closeSub) {
+					final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/closeSub/"+model.getId(),  HttpMethod.GET);
+					request.addObserver(new CloseSubRequirementModelRequestObserver(new CloseSubRequirementsCallback() {
+						
+						@Override
+						public void callback(boolean result) {
+							// TODO Auto-generated method stub
+							
+						}
+					}));
+					request.send();
+
+				}
 			}
 		}
 		
