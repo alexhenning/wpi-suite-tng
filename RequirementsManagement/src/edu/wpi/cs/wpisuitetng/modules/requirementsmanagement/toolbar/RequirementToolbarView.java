@@ -152,8 +152,8 @@ public class RequirementToolbarView extends ToolbarGroupView {
 	public void update(Mode mode, RequirementModel req) {
 		if (mode.equals(Mode.EDIT)) {
 			closeButton.setEnabled(req.getStatus().equals(RequirementStatus.IN_PROGRESS) || req.getStatus().equals(RequirementStatus.COMPLETE));
-			deleteButton.setEnabled(req.getStatus().equals(RequirementStatus.IN_PROGRESS) || req.getStatus().equals(RequirementStatus.DELETED));
 			closeButton.setText((req.getStatus().equals(RequirementStatus.COMPLETE) ? "Reopen" : "Complete!"));
+			deleteButton.setEnabled(true);
 			deleteButton.setText((req.getStatus().equals(RequirementStatus.DELETED) ? "Restore" : "Delete"));
 		} else {
 			closeButton.setEnabled(false);
