@@ -602,7 +602,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 */
 	public void updateSubmitButton() {
 		unsavedChanges = true;
-		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && !(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) && (editMode == Mode.EDIT && valuesHaveChanged()));
+		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && 
+				!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) 
+				&& (editMode == Mode.EDIT && valuesHaveChanged()) ||
+				(editMode ==Mode.CREATE && validateFields()));
 	}
 	
 	/**
