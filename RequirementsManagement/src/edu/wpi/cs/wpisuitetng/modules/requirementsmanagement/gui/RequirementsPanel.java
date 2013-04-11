@@ -400,6 +400,15 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 
 	/**
+	 * updates all the lists used in the GUI
+	 */
+	public void updateLists() {
+		updateIterationList();
+		updateReleaseNumberList();
+		subs.update(model);
+	}
+	
+	/**
 	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
 	 * JComponent#setEnabled because setEnabled does not affect its children.
 	 * 
@@ -740,6 +749,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	class UpdateReleaseNumberListCallback implements ReleaseNumberCallback {
 		@Override
 		public void callback(List<ReleaseNumber> releaseNumbers) {
+			System.out.println("releaseNumbers: "+releaseNumbers.size());
 			releaseNums = new ReleaseNumber[releaseNumbers.size() + 1];
 			releaseNums[0] = null;
 			if(releaseNumbers.size() > 0) {
@@ -941,6 +951,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		if (model.getReleaseNumber() != null && !model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
 		if (!model.getDescription().equals(descriptionfield.getText())) return true;
 //		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
+		//TODO could probably improve this 
 		if (estimateField.getText().matches("[0-9]+") && model.getEstimate() != new Integer(estimateField.getText()).intValue()) return true;
 		if (actualEffortField.getText().matches("[0-9]+") && model.getActualEffort() != new Integer(actualEffortField.getText()).intValue()) return true;
 		return false;

@@ -92,9 +92,24 @@ public class MainTabController {
 	 */
 	private Tab addRequirementTab(RequirementModel requirement, Mode mode) {
 		Tab tab = addTab();
-		RequirementsTab view = new RequirementsTab(this, requirement, mode, tab);
+		final RequirementsTab view = new RequirementsTab(this, requirement, mode, tab);
 		tab.setComponent(view);
 		view.requestFocus();
+		this.view.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				System.out.println("statechanged");
+				view.getRequirementPanel().updateLists();
+//				if(e.getSource() instanceof RequirementsTab) {
+//					RequirementsTab src = (RequirementsTab)e.getSource();
+//					src.getRequirementPanel().updateLists();
+//				}
+				
+//				if(listReqsView.mainPanel.tableModel.getMode() == ViewReqTable.Mode.VIEW) {
+//					listReqsView.mainPanel.updateAllRequirementList();
+//				}
+			}
+		});
 		return tab;
 	}
 	
