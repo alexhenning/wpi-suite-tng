@@ -519,6 +519,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		updateSubmitButton();
 		subs.update();
 		unsavedChanges = false;
+		parent.buttonGroup.update(this.editMode, model);
+		
 	}
 	
 	/**
@@ -554,7 +556,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		model.setName(namefield.getText());
 		model.setType((RequirementType) type.getSelectedItem());
 		model.setPriority((RequirementPriority) priority.getSelectedItem());
-		if (iteration.getSelectedItem().toString().equals("")){
+		if (iteration.getSelectedItem().toString().equals("Backlog")){
 			model.setIteration(null);
 		} else {
 			String selected = iteration.getSelectedItem().toString();
