@@ -8,6 +8,7 @@
 	<path id="classpath">
 		<pathelement path="../Janeway/build"/>
 		<pathelement path="../Network/build"/>
+		<pathelement path="../Network/build-test"/>
 		<pathelement path="../Core/WPISuite-Interfaces/build"/>
 		<fileset dir="${core-lib}">
 			<include name="gson-*.jar"/>

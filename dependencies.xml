@@ -60,7 +60,7 @@
 	</target>
 
 	<target name="depend.RequirementsManagement"
-		depends="depend.Network, depend.Janeway">
+		depends="depend.Janeway">
 		<ant dir="${dependencies.basedir}/RequirementsManagement"
 			target="${dependency.target}"
 			inheritAll="false"/>
