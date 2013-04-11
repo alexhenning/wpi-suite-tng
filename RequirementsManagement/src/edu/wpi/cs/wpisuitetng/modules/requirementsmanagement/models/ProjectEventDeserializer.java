@@ -104,12 +104,8 @@ class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 						addFieldChange("actualEffort", Integer.class, changes, context, changesMap);
 						addFieldChange("iteration", Iteration.class, changes, context, changesMap);
 						addFieldChange("type", RequirementType.class, changes, context, changesMap);
-//						if (changes.has("tags")) {
-//						JsonObject tagsObj = changes.get("tags").getAsJsonObject();
-//						Tag[] oldTags = context.deserialize(tagsObj.get("oldValue"), Tag[].class);
-//						Tag[] newTags = context.deserialize(tagsObj.get("newValue"), Tag[].class);
-//						changesMap.put("tags", new FieldChange<Set<Tag>>(new HashSet<Tag>(new ArrayList<Tag>(Arrays.asList(oldTags))), new HashSet<Tag>(new ArrayList<Tag>(Arrays.asList(newTags)))));
-//					}
+						addFieldChange("subRequirements", String[].class, changes, context, changesMap);
+						addFieldChange("releaseNumber", ReleaseNumber.class, changes, context, changesMap);
 					}
 					retVal.setChanges(changesMap);
 					retVal.setDate((Date)(context.deserialize(changeSet.get("date"), Date.class)));

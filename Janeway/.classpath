@@ -12,5 +12,16 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/Janeway/swingx/swingx-all-1.6.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jfreechart/lib/gnujaxp.jar"/>
+	<classpathentry kind="lib" path="jfreechart/lib/iText-2.1.5.jar"/>
+	<classpathentry kind="lib" path="jfreechart/lib/jcommon-1.0.17.jar"/>
+	<classpathentry kind="lib" path="jfreechart/lib/jfreechart-1.0.14.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Janeway/jfreechart/jfreechart-1.0.14-javadocs.jar!/jfreechart-1.0.14-javadocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="jfreechart/lib/junit.jar"/>
+	<classpathentry kind="lib" path="jfreechart/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="jfreechart/lib/swtgraphics2d.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

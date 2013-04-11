@@ -80,12 +80,14 @@ public class Iteration extends AbstractModel {
 	 * @param date Date to have its time set
 	 */
 	public Date setTimeToEndOfDay(Date date) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
-		cal.set(Calendar.HOUR_OF_DAY, 23);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
-		date = cal.getTime();
+		if (date != null) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
+			date = cal.getTime();
+		}
 		return date;
 	}
 	

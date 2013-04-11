@@ -8,12 +8,16 @@
 	<path id="classpath">
 		<pathelement path="../Janeway/build"/>
 		<pathelement path="../Network/build"/>
+		<pathelement path="../Network/build-test"/>
 		<pathelement path="../Core/WPISuite-Interfaces/build"/>
 		<fileset dir="${core-lib}">
 			<include name="gson-*.jar"/>
 		</fileset>
 		<fileset dir="../Janeway/swingx">
 			<include name="swingx*.jar"/>
+		</fileset>
+		<fileset dir="../Janeway/jfreechart/lib">
+			<include name="*.jar"/>
 		</fileset>
 		<pathelement path="build"/>
 	</path>
@@ -25,6 +29,9 @@
 	</path>
 
 	<target name="compile-base">
+	  <pathconvert property="classpathProp" refid="classpath"/>
+
+	  <echo>Classpath is ${classpathProp}</echo>
 		<mkdir dir="build"/>
 		<javac srcdir="src" destdir="build" includeJavaRuntime="yes" debug="true" target="1.6"
 				debuglevel="lines,vars,source">

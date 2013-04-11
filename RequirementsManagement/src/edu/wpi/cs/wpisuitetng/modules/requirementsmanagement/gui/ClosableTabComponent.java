@@ -75,4 +75,10 @@ public class ClosableTabComponent extends JPanel implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Returns the sub-pane
+	 */
+	public JTabbedPane getTabbedPane() {
+		return tabbedPane;
+	}
 }

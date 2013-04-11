@@ -10,6 +10,7 @@
  *    Andrew Hurle
  *    Chris Casola
  *    JPage
+ *    Josh
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -18,6 +19,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
  * Contributors:
  * AHurle
  * JPage
+ * Josh
  */
 
 import java.awt.Component;
@@ -32,6 +34,7 @@ import javax.swing.event.ChangeListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -108,6 +111,55 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
+	
+	public Tab addCreateReleaseNumberTab() {
+		// If the tab is already opened, switch to that tab.
+		for (int i = 0; i < this.view.getTabCount(); i++) {
+			// TODO: May have to refactor "View Iteration"
+			if (view.getTitleAt(i).equals("Release Number")) {
+				switchToTab(i);
+				// TODO: figure out what to return
+				return null;
+			}
+		}
+				
+		ReleaseNumber rn = new ReleaseNumber();
+		Tab tab = addTab();
+		ReleaseNumberTab view = new ReleaseNumberTab(this, rn, tab);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
+	/**
+	 * Adds a tab that displays the given requirement in the given mode
+	 * @param requirement The requirement to display
+	 * @param mode The Mode to use
+	 */
+	public Tab addIterationTab(Iteration iteration, String title) {
+		if (iteration == null) {
+			for (int i=0; i<view.getTabCount(); i++) {
+				if (("View Backlog").equals(view.getTitleAt(i))) {
+					switchToTab(i);
+					return null;//TODO figure out what to return
+				}
+			}
+		}
+		else {
+			for (int i=0; i<view.getTabCount(); i++) {
+				if (("Edit "+(iteration.getIterationNumber())).equals(view.getTitleAt(i))) {
+					switchToTab(i);
+					return null;//TODO figure out what to return
+				}
+			}
+		}
+		Tab tab = addTab();
+		ViewSingleIterationTab view = new ViewSingleIterationTab(this, iteration, tab, title);
+		tab.setComponent(view);
+		view.requestFocus();
+		return tab;
+	}
+	
 	
 	/**
 	 * create a tab for editing permissions
@@ -249,10 +301,60 @@ public class MainTabController {
 		view.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				listReqsView.mainPanel.updateAllRequirementList();
+				if(listReqsView.mainPanel.tableModel.getMode() == ViewReqTable.Mode.VIEW) {
+					listReqsView.mainPanel.updateAllRequirementList();
+				}
 			}
 		});
 
+		return tab;
+	}
+
+	public void addShowReportsTab() {
+		for (int i=0; i<view.getTabCount(); i++) {
+			// TODO: If the tab name changes, will need to change the string
+			// to match the tab name
+			if (view.getTitleAt(i).equals("Reports")) {
+				switchToTab(i);
+				view.requestFocus();
+				return;
+			}
+		}
+
+		Tab tab = addTab();
+		final ReportsTab reportsTab = new ReportsTab(this, tab);
+		reportsTab.requestFocus();
+		view.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				reportsTab.mainPanel.refresh();
+			}
+		});
+	}
+
+	
+	/**
+	 * add a tab that views iterations
+	 *
+	 * @return the created tab
+	 */
+
+	public Tab addViewIterationTab() {
+		// If the tab is already opened, switch to that tab.
+		for (int i = 0; i < this.view.getTabCount(); i++) {
+			// TODO: May have to refactor "View Iteration"
+			if (view.getTitleAt(i).equals("View Iteration")) {
+				switchToTab(i);
+				// TODO: figure out what to return
+				return null;
+			}
+		}
+
+		// Otherwise, create a new one.
+		Tab tab = addTab();
+		ViewIterationTab view = new ViewIterationTab(this, tab);
+		tab.setComponent(view);
+		view.requestFocus();
 		return tab;
 	}
 }

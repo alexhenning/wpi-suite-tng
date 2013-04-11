@@ -59,9 +59,8 @@ public class RequirementHistoryTab extends JPanel {
 	}
 
 	/**
-	 * Adds the components to the panel and places constraints on them
-	 * for the SpringLayout manager.
-	 * @param layout the layout manager
+	 * Adds the components to the panel and places constraints on them.
+	 * 
 	 */
 	protected void addComponents() {
 		setLayout(new BorderLayout());

@@ -264,7 +264,7 @@ public class RequirementModelValidator {
 			boolean isExistingReleaseNumber = false;
 			for(ReleaseNumber existingReleaseNumber : existingReleaseNumbers) {
 				//TODO change to .equals()
-				if(requirement.getReleaseNumber().getReleaseNumber() == existingReleaseNumber.getReleaseNumber()) {
+				if(requirement.getReleaseNumber().getReleaseNumber().equals(existingReleaseNumber.getReleaseNumber())) {
 					isExistingReleaseNumber = true;
 				}
 			}
@@ -316,14 +316,14 @@ public class RequirementModelValidator {
 			}
 		}
 		
-		ArrayList<RequirementModel> subRequirements = new ArrayList<RequirementModel>();
-		for(RequirementModel subRequirement : requirement.getSubRequirements()) {
-			RequirementModel tmp = getExistingRequirement(subRequirement.getId(), session.getProject(), issues, "id");
+		ArrayList<String> subRequirements = new ArrayList<String>();
+		for(String subRequirement : requirement.getSubRequirements()) {
+			RequirementModel tmp = getExistingRequirement(new Integer(subRequirement), session.getProject(), issues, "id");
 			if (tmp != null) {
 				subRequirements.add(subRequirement);
 			}
 		}
-		requirement.setSubRequirementIDs(subRequirements);
+		requirement.setSubRequirements(subRequirements);
 		
 		return issues;
 	}

@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Tim DeFreitas
+ * 	 Deniz Ozgoren
+ *   Tim DeFreitas    
  *    
  ******************************************************************************/
 
@@ -15,56 +16,56 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers;
 
 import static org.junit.Assert.*;
 
-import org.junit.*;
+import java.util.HashSet;
 
+import org.junit.*;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.MockData;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-
 import edu.wpi.cs.wpisuitetng.Session;
+import edu.wpi.cs.wpisuitetng.exceptions.BadRequestException;
+import edu.wpi.cs.wpisuitetng.exceptions.ConflictException;
+import edu.wpi.cs.wpisuitetng.exceptions.NotFoundException;
+import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
-import edu.wpi.cs.wpisuitetng.modules.core.models.Role;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+
 
 public class RequirementModelEntityManagerTest {
 
 	MockData db;
-	User existingUser;
-	RequirementModel existingRequirement;
+	User deniz;
 	Session defaultSession;
 	String mockSsid;
-	RequirementModelEntityManager manager;
-	
-	RequirementModel newRequirement;
-	User bob;
-	RequirementModel goodUpdatedRequirement;
-	Session adminSession;
+	RequirementModelEntityManager manager;	
 	Project testProject;
-	Project otherProject;
-	RequirementModel otherRequirement;
-	
+
+	RequirementModel existingRequirement;
+	RequirementModel newRequirement2;
+	RequirementModel newRequirement3;
+
 	/**
 	 * @throws Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		User admin = new User("admin", "admin", "1234", 27);
-		admin.setRole(Role.ADMIN);
+		//initial setup
+		mockSsid = "abc123";
+		deniz = new User("deniz", "dboz", "password", 1);
 		testProject = new Project("test", "1");
-		otherProject = new Project("other", "2");
-		mockSsid = "ABC";
-		adminSession = new Session(admin, testProject, mockSsid);
-		
-		existingUser = new User("tim", "tim", "password", 2);
-		/*existingRequirement = new RequirementModel(1, new ReleaseNumber(1,3, testProject), RequirementStatus.NEW,
-				RequirementPriority.NONE, "existingReq", "descrip", "0","0", existingUser, null,
-				new Date(0), new Date(0), null, null, null, RequirementType.EPIC );
-		*/
-		otherRequirement = new RequirementModel();
-		otherRequirement.setProject(otherProject);
-	
-		//TODO more setup for tests
-		
+		defaultSession = new Session(deniz, testProject, mockSsid);
+
+		//create an initial requirement to be put to the database
+		existingRequirement = new RequirementModel();
+		existingRequirement.setId(1);
+
+		//setup a mock database with current settings and intial requirement		
+		db = new MockData(new HashSet<Object>());
+		db.save(existingRequirement, testProject);
+		db.save(deniz);
+
+		//create a new entity manager
+		manager = new RequirementModelEntityManager(db);		
 	}
 
 	/**
@@ -74,11 +75,106 @@ public class RequirementModelEntityManagerTest {
 	public void tearDown() throws Exception {
 	}
 
-	//TODO test entity managers
+
+	@Test
+	public void testMakeEntity() {
+		//check the initially saved requirement on database
+		assertNotNull(db.retrieve(RequirementModel.class, "ID", 1));
+	}
+
+
+
+
+
+	@Test(expected=BadRequestException.class)
+	public void testMakeBadEntity() throws WPISuiteException {
+		newRequirement2 = new RequirementModel();
+		newRequirement2.setName(""); 
+		manager.makeEntity(defaultSession, newRequirement2.toJSON());
+	}
+
+	
+	@Test
+	public void testGetEntity() throws WPISuiteException {
+		RequirementModel[] gotten = manager.getEntity(defaultSession, "1");
+		assertSame(existingRequirement, gotten[0]);
+	}
+	
+	
+	@Test(expected=NotFoundException.class)
+	public void testGetBadId() throws WPISuiteException {
+		manager.getEntity(defaultSession, "-1");
+		
+	}
+
+	
+	@Test(expected=NotFoundException.class)
+	public void testGetMissingEntity() throws WPISuiteException {
+		manager.getEntity(defaultSession, "2");
+	}
+	
+	
+	@Test
+	public void testGetAll() throws WPISuiteException {
+		RequirementModel[] gotten = manager.getAll(defaultSession);
+		assertEquals(1, gotten.length);
+		assertSame(existingRequirement, gotten[0]);
+	}
+	
 	@Ignore
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testSave() throws WPISuiteException {
+		newRequirement2 = new RequirementModel();
+		newRequirement2.setName("name2");
+		newRequirement2.setDescription("lorem ipsilum2");
+		newRequirement2.setCreator(deniz);
+		
+		
+		manager.makeEntity(defaultSession, newRequirement2.toJSON());
+		assertSame(newRequirement2, db.retrieve(RequirementModel.class, "id", 2).get(0));
+		assertSame(testProject, newRequirement2.getProject());
 	}
+	
+	
+
+
+
+
+	@Test
+	public void testIDincrementing() throws BadRequestException, ConflictException, WPISuiteException{
+		assertEquals(1, existingRequirement.getId());
+
+		newRequirement2 = new RequirementModel();
+		newRequirement2.setName("name2");
+		newRequirement2.setDescription("lorem ipsilum2");
+		newRequirement2.setCreator(deniz);		
+		RequirementModel created2 = manager.makeEntity(defaultSession, newRequirement2.toJSON());
+		assertEquals(2, created2.getId());
+
+		//assertNotNull(db.retrieve(RequirementModel.class, "ID", 2));
+
+	}
+
+
+	@Test
+	public void testMultipleIDincrementing2() throws BadRequestException, ConflictException, WPISuiteException{
+		newRequirement2 = new RequirementModel();
+		newRequirement2.setName("name2");
+		newRequirement2.setDescription("lorem ipsilum2");
+		newRequirement2.setCreator(deniz);		
+		RequirementModel created2 = manager.makeEntity(defaultSession, newRequirement2.toJSON());		
+		assertEquals(2, created2.getId());
+
+
+		newRequirement3 = new RequirementModel();
+		newRequirement3.setName("name3");
+		newRequirement3.setDescription("lorem ipsilum3");
+		newRequirement3.setCreator(deniz);		
+		RequirementModel created3 = manager.makeEntity(defaultSession, newRequirement3.toJSON());		
+		assertEquals(3, created3.getId());
+	}
+
+	//
+
 
 }

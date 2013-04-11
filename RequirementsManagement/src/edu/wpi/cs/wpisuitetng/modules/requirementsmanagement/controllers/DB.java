@@ -14,15 +14,20 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveAllReleaseNumbersObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveCanCloseRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveProjectEventsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrievePermissionsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.UpdateReleaseNumberObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
@@ -48,13 +53,24 @@ public class DB {
 	}
 	
 	/**
-	 * Retrieves all the requirements from the databse and runs the callback function in the class passed
+	 * Retrieves all the requirements from the database and runs the callback function in the class passed
 	 *
 	 * @param callback the class that has the callback function to be run on the list of requirements
 	 */
 	public static void getAllRequirements(RequirementsCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.GET);
 		request.addObserver(new RetrieveRequirementModelRequestObserver(callback));
+		request.send();
+	}
+	
+	/**
+	 * Checks if a requirement has all of it's subrequirements closed
+	 *
+	 * @param callback the class that has the callback function to be run on the list of requirements
+	 */
+	public static void canCloseRequirements(CanCloseRequirementCallback callback, String id) {
+		final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/canClose/"+id,  HttpMethod.GET);
+		request.addObserver(new RetrieveCanCloseRequirementModelRequestObserver(callback));
 		request.send();
 	}
 	
@@ -69,6 +85,18 @@ public class DB {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel/" + req.getId(),  HttpMethod.POST);
 		request.setBody(req.toJSON());
 		request.addObserver(new EditRequirementModelRequestObserver(callback));
+		request.send();
+	}
+	
+	/**
+	 * Retrieves a single requirement from the database and runs the callback function in the class passed
+	 *
+	 * @param id the id of the requirement
+	 * @param callback the class that has the callback function to be run on the requirement
+	 */
+	public static void getSingleIteration(String id, SingleIterationCallback callback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration/" + id, HttpMethod.GET);
+		request.addObserver(new RetrieveSingleIterationRequestObserver(callback));
 		request.send();
 	}
 
@@ -147,6 +175,30 @@ public class DB {
 		System.out.println("get all permissions");
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions", HttpMethod.GET);
 		request.addObserver(new RetrievePermissionsRequestObserver(updateTableCallback));
+		request.send();
+	}
+	
+	/**
+	 * Retrieves all release numbers from the database
+	 *
+	 * @param getReleaseNumbersCallback class with the callback function to run
+	 */
+	public static void getAllReleaseNumbers(ReleaseNumberCallback getReleaseNumbersCallback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/releasenumber", HttpMethod.GET);
+		request.addObserver(new RetrieveAllReleaseNumbersObserver(getReleaseNumbersCallback));
+		request.send();
+	}
+	
+	/**
+	 * Updates the database with the given release number
+	 *
+	 * @param rn Release number that will be updated
+	 * @param updateReleaseNumberCallback class with the callback function to run
+	 */
+	public static void updateReleaseNumber(ReleaseNumber rn, SingleReleaseNumberCallback updateReleaseNumberCallback) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/releasenumber/" + rn.getId(), HttpMethod.POST);
+		request.setBody(rn.toJSON());
+		request.addObserver(new UpdateReleaseNumberObserver(updateReleaseNumberCallback));
 		request.send();
 	}
 

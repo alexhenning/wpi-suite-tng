@@ -18,6 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.database.Data;
@@ -41,6 +42,7 @@ public class Db4oDatabaseTest {
 		db.delete(me);
 	}
 	
+	@Ignore
 	@Test
 	public void testDelete() throws WPISuiteException{
 		Data db = DataStore.getDataStore();

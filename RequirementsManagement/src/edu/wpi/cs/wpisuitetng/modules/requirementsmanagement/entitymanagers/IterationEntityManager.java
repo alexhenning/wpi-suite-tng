@@ -98,7 +98,12 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	public Iteration[] getEntity(Session s, String id) throws NotFoundException,
 			WPISuiteException {
 
-		final int intId = Integer.parseInt(id);
+		int intId;
+		try {
+			intId = Integer.parseInt(id);
+		} catch (NumberFormatException e) {
+			throw new NotFoundException("Cannot parse the id [" + id + "]");
+		}
 		if(intId < 1) {
 			throw new NotFoundException();
 		}
