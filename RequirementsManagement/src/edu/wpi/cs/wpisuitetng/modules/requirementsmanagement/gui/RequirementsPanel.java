@@ -20,6 +20,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Date;
@@ -37,6 +39,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
@@ -240,6 +244,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		estimateField.addFocusListener(new FocusListener() {
 			@Override public void focusLost(FocusEvent arg0) {
 				validateEstimate();
+				updateSubmitButton();
 			}
 			@Override public void focusGained(FocusEvent arg0) {}
 		});
@@ -266,6 +271,66 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			nt.setInputEnabled(true);
 		}
+		
+		
+		namefield.addKeyListener(this);
+		descriptionfield.addKeyListener(this);
+		iteration.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					updateSubmitButton();
+				}
+			}
+		});
+		priority.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					updateSubmitButton();
+				}
+			}
+		});
+		releaseNumbers.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					updateSubmitButton();
+				}
+			}
+		});
+		type.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					updateSubmitButton();
+				}
+			}
+		});
+		actualEffortField.addFocusListener(new FocusListener() {
+			@Override public void focusLost(FocusEvent arg0) {
+				updateSubmitButton();
+			}
+			@Override public void focusGained(FocusEvent arg0) {}
+		});
+		descriptionfield.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				// TODO Auto-generated method stub
+				updateSubmitButton();
+			}
+		});
 		
 		// Add subpanels to main panel
 		// Left side (gridx = 0) and aligned right (east)
@@ -392,8 +457,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 */
 	private void updateFields() {
-		namefield.addKeyListener(this);
-		descriptionfield.addKeyListener(this);
+		
 		if(model.getIteration() != null && !(model.getStatus() == RequirementStatus.COMPLETE || model.getStatus() == RequirementStatus.DELETED)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
 		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
@@ -529,7 +593,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 */
 	public void updateSubmitButton() {
 		unsavedChanges = true;
-		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && !(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && !(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) && (editMode == Mode.EDIT && valuesHaveChanged()));
 	}
 	
 	/**
@@ -668,6 +732,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				}
 			}
 			updateIterationComboBox();
+			updateSubmitButton();
 		}
 		
 	}
@@ -683,6 +748,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				}
 			}
 			updateReleaseNumberComboBox();
+			updateSubmitButton();
 		}
 	}
 
@@ -722,7 +788,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			actualEffortField.setBackground(Color.WHITE);
 		}
-		System.out.println("Estimate value is " + estimateField.getText());
 
 		return true;
 	}
@@ -834,23 +899,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			}
 		}
 	}
+	
 	/**
 	 * checks to see if the field values are different from the values in the model.
 	 * @return true if the values are different from the values in the model
 	 */
 	public boolean valuesHaveChanged() {
-		if (!model.getName().equals(namefield.getText())) return true;
-		if (!model.getType().equals((RequirementType) type.getSelectedItem())) return true;
-		if (!model.getPriority().equals((RequirementPriority) priority.getSelectedItem())) return true;
-		if (model.getIteration() == null && !iteration.getSelectedItem().toString().equals("Backlog")) return true;
-		if (!model.getIteration().getIterationNumber().equals(iteration.getSelectedItem().toString())) return true;
-		if (model.getReleaseNumber() == null && !releaseNumbers.getSelectedItem().toString().equals("None")) return true;
-		if (!model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
-		if (!model.getDescription().equals(descriptionfield.getText())) return true;
-//		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
-		if (model.getEstimate() != new Integer(estimateField.getText()).intValue()) return true;
-		if (model.getActualEffort() != new Integer(actualEffortField.getText()).intValue()) return true;
-		return false;
+		return hasUnsavedChanges();
 	}
 	
 	/**
@@ -877,6 +932,17 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 
 	public boolean hasUnsavedChanges() {
-		return unsavedChanges;
+		if (!model.getName().equals(namefield.getText())) return true;
+		if (!model.getType().equals((RequirementType) type.getSelectedItem())) return true;
+		if (!model.getPriority().equals((RequirementPriority) priority.getSelectedItem())) return true;
+		if (model.getIteration() == null && !iteration.getSelectedItem().toString().equals("Backlog")) return true;
+		if (model.getIteration() != null && !model.getIteration().getIterationNumber().equals(iteration.getSelectedItem().toString())) return true;
+		if (model.getReleaseNumber() == null && !releaseNumbers.getSelectedItem().toString().equals("None")) return true;
+		if (model.getReleaseNumber() != null && !model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
+		if (!model.getDescription().equals(descriptionfield.getText())) return true;
+//		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
+		if (model.getEstimate() != new Integer(estimateField.getText()).intValue()) return true;
+		if (model.getActualEffort() != new Integer(actualEffortField.getText()).intValue()) return true;
+		return false;
 	}
 }
