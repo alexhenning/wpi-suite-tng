@@ -241,13 +241,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		
 		//estimate field
 		JLabel estimateArea = new JLabel("Estimate:");
-		estimateField.addFocusListener(new FocusListener() {
-			@Override public void focusLost(FocusEvent arg0) {
-				validateEstimate();
-				updateSubmitButton();
-			}
-			@Override public void focusGained(FocusEvent arg0) {}
-		});
+		
 		JLabel actualEffortArea = new JLabel("Actual Effort:");
 	
 		//submit panel
@@ -275,7 +269,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		
 		namefield.addKeyListener(this);
 		descriptionfield.addKeyListener(this);
-		iteration.addItemListener(new ItemListener() {
+		estimateField.addKeyListener(this);
+		estimateField.addFocusListener(new FocusListener() {
+			@Override public void focusLost(FocusEvent arg0) {
+				validateEstimate();
+			}
+			@Override public void focusGained(FocusEvent arg0) {}
+		});iteration.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -941,8 +941,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		if (model.getReleaseNumber() != null && !model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
 		if (!model.getDescription().equals(descriptionfield.getText())) return true;
 //		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
-		if (model.getEstimate() != new Integer(estimateField.getText()).intValue()) return true;
-		if (model.getActualEffort() != new Integer(actualEffortField.getText()).intValue()) return true;
+		if (estimateField.getText().matches("[0-9]+") && model.getEstimate() != new Integer(estimateField.getText()).intValue()) return true;
+		if (actualEffortField.getText().matches("[0-9]+") && model.getActualEffort() != new Integer(actualEffortField.getText()).intValue()) return true;
 		return false;
 	}
 }
