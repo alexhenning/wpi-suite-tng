@@ -535,6 +535,13 @@ public class RequirementModel extends AbstractModel {
 	 * Changes the list of sub-requirement IDs
 	 * @param subRequirements new list of requirements
 	 */
+	public void setSubRequirements(List<String> subRequirements) {
+		this.subRequirements = subRequirements;
+	}
+	/**
+	 * Changes the list of sub-requirement IDs
+	 * @param subRequirements new list of requirements
+	 */
 	public void setSubRequirements(ArrayList<String> subRequirements) {
 		this.subRequirements = subRequirements;
 	}
