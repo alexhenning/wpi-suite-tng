@@ -32,7 +32,9 @@ import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.UsersCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 
@@ -103,7 +105,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		assignedUserTable.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				//TODO finish this listener
+				updateSelectedPossible(getSelectedSubId());
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
 			@Override public void mouseExited(MouseEvent arg0) {}
@@ -124,7 +126,7 @@ public class AssignUserToRequirementTab extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 1) {
-//                	updateSelectedPossible(getSelectedPosId());
+                	updateSelectedPossible(getSelectedPosId());
                 }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
@@ -193,26 +195,26 @@ public class AssignUserToRequirementTab extends JPanel {
 	}
 	
 	
-	//kept in the event that we find the need to disqualify users from being added to a requirement
-//	/**
-//	 * called when the selection in the possible list changes.
-//	 * @param selectedId the id of the selected requirement
-//	 */
-//	private void updateSelectedPossible(String selectedId) {
+	/**
+	 * called when the selection in the possible list changes.
+	 * @param selectedId the id of the selected requirement
+	 */
+	private void updateSelectedPossible(String selectedId) {
 //		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED) {
 //			addUserButton.setEnabled(false);
 //			removeUserButton.setEnabled(false);
 //		} else {
-//			addUserButton.setEnabled(true);
-//			removeUserButton.setEnabled(true);
-//			for (User user : users) {
-//				if(user.equals(selectedId)) {
-//					addUserButton.setEnabled(false);
-//					removeUserButton.setEnabled(false);
-//				}
-//			}
+			addUserButton.setEnabled(true);
+			removeUserButton.setEnabled(true);
+			for (User user : assignees) {
+				if(user.getIdNum() == Integer.parseInt(selectedId)) {
+					removeUserButton.setEnabled(false);
+				} else {
+					addUserButton.setEnabled(false);	
+				}
+			}
 //		}
-//	}
+	}
 	
 	@Override
 	public void setEnabled(boolean enabled) {
@@ -222,7 +224,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		assignedUserTable.setEnabled(enabled);
 		possibleUserTable.setEnabled(enabled);
 		if (enabled) {
-//			updateSelectedPossible(getSelectedPosId());
+			updateSelectedPossible(getSelectedPosId());
 		} else {
 			addUserButton.setEnabled(false);
 			removeUserButton.setEnabled(false);
@@ -300,8 +302,13 @@ public class AssignUserToRequirementTab extends JPanel {
 					String id = String.valueOf(user.getIdNum());
 					String name = user.getName();
 					String username = user.getUsername();
-					String permissions = "placeholder"; //String.valueOf(user.getPermission(user));
-					if (assignees.contains(id)) {
+					String permissions = "";//DB.getSinglePermission(username, new SinglePermissionCallback() {
+//						
+//						@Override
+//						public void callback(Permissions profile) {							
+//						}
+//					});
+					if (assignees.contains(user)) {
 						Object[] joinedEntry = new Object[COLUMN];
 						joinedEntry[ID] = id;
 						joinedEntry[NAME] = name;
@@ -317,18 +324,18 @@ public class AssignUserToRequirementTab extends JPanel {
 						joinedEntryList.add(disjointEntry);
 					}
 				}
-				Object[][] subEntries = {};
-				Object[][] posEntries = {};
+				Object[][] joinedEntries = {};
+				Object[][] disjointEntries = {};
 				if(joinedEntryList.size()>0) {
-					subEntries = joinedEntryList.toArray(new Object[1][1]);
+					joinedEntries = joinedEntryList.toArray(new Object[1][1]);
 				}
 				if(disjointEntryList.size()>0) {
-					posEntries = disjointEntryList.toArray(new Object[1][1]);
+					disjointEntries = disjointEntryList.toArray(new Object[1][1]);
 				}
 
-				assignedUserTableModel.setData(subEntries);
+				assignedUserTableModel.setData(joinedEntries);
 				assignedUserTableModel.fireTableStructureChanged();
-				possibleUserTableModel.setData(posEntries);
+				possibleUserTableModel.setData(disjointEntries);
 				possibleUserTableModel.fireTableStructureChanged();
 			}
 			else {
@@ -375,7 +382,7 @@ public class AssignUserToRequirementTab extends JPanel {
 					possibleUserTable.setRowSelectionInterval(i, i);
 				}
 			}
-//			updateSelectedPossible(getSelectedPosId());
+			updateSelectedPossible(getSelectedPosId());
 
 		}
 		
