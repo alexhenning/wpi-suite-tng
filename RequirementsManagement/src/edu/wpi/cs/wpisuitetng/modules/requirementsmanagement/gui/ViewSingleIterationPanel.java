@@ -52,7 +52,7 @@ public class ViewSingleIterationPanel extends JPanel{
 	/** the tab that created this panel */
 	ViewSingleIterationTab parent;
 	/** labels to describe the text fields */
-	JLabel lbl1, lbl2, lbl3;
+	JLabel lbl1, lbl2, lbl3, lbl4;
 	/** text fields for the iteration's data to be entered into */
 	JTextField iterationNumber;
 	/** text field that displays if the iteration was saved or not */
@@ -115,6 +115,7 @@ public class ViewSingleIterationPanel extends JPanel{
 			lbl1 = new JLabel("Start Date");
 			lbl2 = new JLabel("End Date");
 			lbl3 = new JLabel ("Iteration");
+			lbl4 = new JLabel ("Estimate");
 			
 			Date startDate = model.getStartDate();
 			Date endDate = model.getEndDate();
@@ -125,6 +126,8 @@ public class ViewSingleIterationPanel extends JPanel{
 			result = new JTextField();
 			
 			iterationNumber = new JTextField(model.getIterationNumber());
+			JTextField estimate = new JTextField(model.getEstimate());
+			estimate.setEditable(false);
 			
 			submit = new JButton("Update");
 			submit.addActionListener(new EditIterationAction());
@@ -146,17 +149,22 @@ public class ViewSingleIterationPanel extends JPanel{
 			topPanel.add(iterationNumber, c);
 			c.gridy = 1;
 			c.gridx = 0;
+			topPanel.add(lbl4, c);
+			c.gridx = 1;
+			topPanel.add(estimate, c);
+			c.gridy = 2;
+			c.gridx = 0;
 			topPanel.add(lbl1, c);
 			c.gridx = 1;
 			topPanel.add(startDatePicker, c);
-			c.gridy = 2;
-			c.gridx = 0;
+			c.gridx  = 0;
+			c.gridy = 3;
 			topPanel.add(lbl2, c);
 			c.gridx = 1;
 			topPanel.add(endDatePicker, c);
-			c.gridy = 3;
-			topPanel.add(submit, c);
 			c.gridy = 4;
+			topPanel.add(submit, c);
+			c.gridy = 5;
 			topPanel.add(result, c);
 			result.setEditable(false);
 		}
