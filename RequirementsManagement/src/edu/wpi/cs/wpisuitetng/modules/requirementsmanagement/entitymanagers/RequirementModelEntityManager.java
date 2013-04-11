@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEventObjectType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementModelValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
@@ -287,6 +288,58 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	@Override
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
+		if(args[2].equals("canClose")) {
+			//TODO check if the subs are closed and return the state
+			boolean canClose = true;
+			RequirementModel[] tmp = null;
+			try {
+				tmp = getEntity(s, args[3]);
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			} catch (WPISuiteException e) {
+				e.printStackTrace();
+			}
+			if(tmp.length != 1) {
+				//TODO this is bad. figure out what to do....
+				canClose = false;
+			}
+			if (canClose) {
+				for(String subId : tmp[0].getSubRequirements()) {
+					String res = advancedGet(s, new String[] {args[0], args[1], "subsClosed", subId});
+					if(res.equals("false")) {
+						canClose = false;
+					}
+				}
+			}
+			return ""+canClose;
+		} else if(args[2].equals("subsClosed")) {
+			//TODO check if the subs are closed and return the state
+			boolean isClosed = true;
+			RequirementModel[] tmp = null;
+			try {
+				tmp = getEntity(s, args[3]);
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			} catch (WPISuiteException e) {
+				e.printStackTrace();
+			}
+			if(tmp.length != 1) {
+				//TODO figure out what to do if a requirement was not returned...
+				isClosed = false;
+			} else {
+				isClosed = tmp[0].getStatus().equals(RequirementStatus.COMPLETE);
+			}
+			if (isClosed) {
+				for(String subId : tmp[0].getSubRequirements()) {
+					String res = advancedGet(s, new String[] {args[0], args[1], "subsClosed", subId});
+					if(res.equals("false")) {
+						isClosed = false;
+					}
+				}
+			}
+			return ""+isClosed;
+		}
+		
 		throw new NotImplementedException();
 	}
 

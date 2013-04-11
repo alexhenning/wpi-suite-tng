@@ -16,13 +16,16 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CanCloseRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.RequirementsTab;
@@ -82,22 +85,27 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				RequirementModel model = tab.getRequirementPanel().getModel();
-				if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
-					model.setStatus(RequirementStatus.OPEN);
+				if (!model.getSubRequirements().isEmpty()) {
+					//Check that the sub requirements are closed
+					DB.canCloseRequirements(new CanCloseCallback(model, tabController), ""+model.getId());
 				} else {
-					model.setStatus(RequirementStatus.COMPLETE);
-				}
-				DB.updateRequirements(model, new SingleRequirementCallback() {
-					@Override
-					public void callback(RequirementModel req) {
-						if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
-							tabController.closeCurrentTab();
-							tabController.addListRequirementsTab();
-						} else {
-							tab.getRequirementPanel().updateModel(req);
-						}
+					if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
+						model.setStatus(RequirementStatus.OPEN);
+					} else {
+						model.setStatus(RequirementStatus.COMPLETE);
 					}
-				});
+					DB.updateRequirements(model, new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
+								tabController.closeCurrentTab();
+								tabController.addListRequirementsTab();
+							} else {
+								tab.getRequirementPanel().updateModel(req);
+							}
+						}
+					});
+				}
 			}
 		});
 		closeButton.setText("Complete!");
@@ -141,6 +149,43 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		// Calculate the width of the toolbar
 		Double toolbarGroupWidth = closeButton.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		setPreferredWidth(toolbarGroupWidth.intValue());
+	}
+	
+	class CanCloseCallback implements CanCloseRequirementCallback {
+		RequirementModel model;
+		MainTabController tabController;
+
+		public CanCloseCallback(RequirementModel model, final MainTabController tabController) {
+			super();
+			this.model = model;
+			this.tabController = tabController;
+		}
+
+		@Override
+		public void callback(boolean result) {
+			// TODO Auto-generated method stub
+			if(result){
+				if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
+					model.setStatus(RequirementStatus.OPEN);
+				} else {
+					model.setStatus(RequirementStatus.COMPLETE);
+				}
+				DB.updateRequirements(model, new SingleRequirementCallback() {
+					@Override
+					public void callback(RequirementModel req) {
+						if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
+							tabController.closeCurrentTab();
+							tabController.addListRequirementsTab();
+						} else {
+							tab.getRequirementPanel().updateModel(req);
+						}
+					}
+				});
+			} else {
+				//TODO what to do if false...
+			}
+		}
+		
 	}
 	
 	/**

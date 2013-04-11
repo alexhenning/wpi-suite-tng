@@ -19,6 +19,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveAllReleaseNumbersObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveCanCloseRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveIterationsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveProjectEventsRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrievePermissionsRequestObserver;
@@ -52,13 +53,24 @@ public class DB {
 	}
 	
 	/**
-	 * Retrieves all the requirements from the databse and runs the callback function in the class passed
+	 * Retrieves all the requirements from the database and runs the callback function in the class passed
 	 *
 	 * @param callback the class that has the callback function to be run on the list of requirements
 	 */
 	public static void getAllRequirements(RequirementsCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/requirementmodel",  HttpMethod.GET);
 		request.addObserver(new RetrieveRequirementModelRequestObserver(callback));
+		request.send();
+	}
+	
+	/**
+	 * Checks if a requirement has all of it's subrequirements closed
+	 *
+	 * @param callback the class that has the callback function to be run on the list of requirements
+	 */
+	public static void canCloseRequirements(CanCloseRequirementCallback callback, String id) {
+		final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/canClose/"+id,  HttpMethod.GET);
+		request.addObserver(new RetrieveCanCloseRequirementModelRequestObserver(callback));
 		request.send();
 	}
 	
