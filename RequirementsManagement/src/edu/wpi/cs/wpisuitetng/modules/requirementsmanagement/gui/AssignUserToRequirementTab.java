@@ -32,10 +32,9 @@ import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.UsersCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewUserTable;
 
 
 /**
@@ -52,7 +51,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	public static final int NAME = 1;
 	public static final int USERNAME = 2;
 	public static final int PERMISSIONLEVEL = 3;
-	public static final int COLUMN = 4;
+	public static final int COLUMN = 4; //change to 4 when we can acquire permissions from the db
 
 	/** the panel this is shown in */
 	RequirementsPanel parent;
@@ -72,6 +71,9 @@ public class AssignUserToRequirementTab extends JPanel {
 	List<User> assignees;
 	JButton addUserButton;
 	JButton removeUserButton;
+	int selectedRow;
+	int rowsInAssignedTable;
+	int rowsInPossibleTable;
 
 	/**
 	 * Constructs a panel for notes
@@ -105,7 +107,9 @@ public class AssignUserToRequirementTab extends JPanel {
 		assignedUserTable.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				updateSelectedPossible(getSelectedSubId());
+				if (e.getClickCount() == 1){
+					updateSelectedPossible(getSelectedSubId());
+				}	
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
 			@Override public void mouseExited(MouseEvent arg0) {}
@@ -143,8 +147,10 @@ public class AssignUserToRequirementTab extends JPanel {
 		addUserButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selectedRow = possibleUserTable.getSelectedRow();
-				if (selectedRow >= 0 && selectedRow < possibleUserTable.getRowCount()) {
+				//int selectedRow = possibleUserTable.getSelectedRow();
+System.err.println("selected row: " + selectedRow);
+System.err.println("" + rowsInAssignedTable);
+				if (selectedRow >= 0 && selectedRow < rowsInPossibleTable) {//possibleUserTable.getRowCount()) {
 					parent.addUser(new Integer((String) possibleUserTable.getModel().getValueAt(selectedRow, ID)));
 				}
 			}
@@ -155,8 +161,9 @@ public class AssignUserToRequirementTab extends JPanel {
 		removeUserButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selectedRow = possibleUserTable.getSelectedRow();
-				if (selectedRow >= 0 && selectedRow < possibleUserTable.getRowCount()) {
+				//int selectedRow = possibleUserTable.getSelectedRow();
+System.err.println("selected row: " + selectedRow);
+				if (selectedRow >= 0 && selectedRow < rowsInAssignedTable) {//possibleUserTable.getRowCount()) {
 					parent.remUser(new Integer((String) possibleUserTable.getModel().getValueAt(selectedRow, ID)));
 				}
 			}
@@ -200,10 +207,12 @@ public class AssignUserToRequirementTab extends JPanel {
 	 * @param selectedId the id of the selected requirement
 	 */
 	private void updateSelectedPossible(String selectedId) {
-//		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED) {
-//			addUserButton.setEnabled(false);
-//			removeUserButton.setEnabled(false);
-//		} else {
+		rowsInAssignedTable = assignedUserTable.getRowCount();
+		rowsInPossibleTable = possibleUserTable.getRowCount();
+		if (selectedId == null || selectedId.equals("")) {
+			addUserButton.setEnabled(false);
+			removeUserButton.setEnabled(false);
+		} else {
 			addUserButton.setEnabled(true);
 			removeUserButton.setEnabled(true);
 			for (User user : assignees) {
@@ -213,7 +222,7 @@ public class AssignUserToRequirementTab extends JPanel {
 					addUserButton.setEnabled(false);	
 				}
 			}
-//		}
+		}
 	}
 	
 	@Override
@@ -252,7 +261,8 @@ public class AssignUserToRequirementTab extends JPanel {
 	}
 	
 	private String getSelectedSubId() {
-		int selectedRow = assignedUserTable.getSelectedRow();
+		selectedRow = assignedUserTable.getSelectedRow();
+System.err.println("you have selected row" + selectedRow);
 		if (selectedRow >= 0 && selectedRow < assignedUserTable.getRowCount()) {
 			return (String) assignedUserTable.getModel().getValueAt(assignedUserTable.getSelectedRow(), ID);
 		} else {
@@ -261,7 +271,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	}
 	
 	private String getSelectedPosId() {
-		int selectedRow = possibleUserTable.getSelectedRow();
+		selectedRow = possibleUserTable.getSelectedRow();
 		if (selectedRow >= 0 && selectedRow < possibleUserTable.getRowCount()) {
 			return (String) possibleUserTable.getModel().getValueAt(possibleUserTable.getSelectedRow(), ID);
 		} else {

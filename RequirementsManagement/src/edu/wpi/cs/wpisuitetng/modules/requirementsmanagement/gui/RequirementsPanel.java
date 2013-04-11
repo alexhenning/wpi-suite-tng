@@ -769,6 +769,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 	 * @param childId
 	 */
 	public void addUser(int userId) {
+System.err.println("adduser reached***************************");
 		DB.getSingleUser(userId+"", new SingleUserCallback() {
 			@Override
 			public void callback(User assignee) {
@@ -804,6 +805,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener{
 		
 		@Override
 		public void callback(RequirementModel currentReq) {
+System.err.println("adduser callback reached**************************");
 			boolean added = false;
 			for (User assignedUsers : currentReq.getAssignees()) {
 				if(assignedUsers.equals(assignee)) {
