@@ -14,6 +14,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -83,7 +84,6 @@ public class AssignUserToRequirementTab extends JPanel {
 	public AssignUserToRequirementTab(RequirementsPanel parent) {
 		this.parent = parent;
 		assignees = parent.model.getAssignees();
-
 		// Add all components to this panel
 		addComponents();
 		
@@ -148,10 +148,7 @@ public class AssignUserToRequirementTab extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//int selectedRow = possibleUserTable.getSelectedRow();
-System.err.println("selected row: " + selectedRow);
-System.err.println("" + rowsInPossibleTable);
 				if (selectedRow >= 0 && selectedRow < rowsInPossibleTable) {//possibleUserTable.getRowCount()) {
-System.err.println("if statement entered");
 					parent.addUser(new Integer((String) possibleUserTable.getModel().getValueAt(selectedRow, ID)));
 				}
 			}
@@ -163,9 +160,8 @@ System.err.println("if statement entered");
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//int selectedRow = possibleUserTable.getSelectedRow();
-System.err.println("selected row: " + selectedRow);
 				if (selectedRow >= 0 && selectedRow < rowsInAssignedTable) {//possibleUserTable.getRowCount()) {
-					parent.remUser(new Integer((String) possibleUserTable.getModel().getValueAt(selectedRow, ID)));
+					parent.remUser(new Integer((String) assignedUserTable.getModel().getValueAt(selectedRow, ID)));
 				}
 			}
 			
@@ -261,7 +257,6 @@ System.err.println("selected row: " + selectedRow);
 	
 	private String getSelectedSubId() {
 		selectedRow = assignedUserTable.getSelectedRow();
-System.err.println("you have selected row" + selectedRow);
 		if (selectedRow >= 0 && selectedRow < assignedUserTable.getRowCount()) {
 			return (String) assignedUserTable.getModel().getValueAt(assignedUserTable.getSelectedRow(), ID);
 		} else {
@@ -331,7 +326,7 @@ System.err.println("you have selected row" + selectedRow);
 						disjointEntry[NAME] = name;
 						disjointEntry[USERNAME] = username;
 						disjointEntry[PERMISSIONLEVEL] = "placeholder";//permissions;
-						joinedEntryList.add(disjointEntry);
+						disjointEntryList.add(disjointEntry);
 					}
 				}
 				Object[][] joinedEntries = {};
