@@ -33,7 +33,9 @@ import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.UsersCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewUserTable;
 
@@ -75,6 +77,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	int selectedRow;
 	int rowsInAssignedTable;
 	int rowsInPossibleTable;
+	String permissionLevel;
 
 	/**
 	 * Constructs a panel for notes
@@ -149,7 +152,7 @@ public class AssignUserToRequirementTab extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//int selectedRow = possibleUserTable.getSelectedRow();
 				if (selectedRow >= 0 && selectedRow < rowsInPossibleTable) {//possibleUserTable.getRowCount()) {
-					parent.addUser(new Integer((String) possibleUserTable.getModel().getValueAt(selectedRow, ID)));
+					parent.addUser((String) possibleUserTable.getModel().getValueAt(selectedRow, USERNAME));
 				}
 			}
 			
@@ -161,7 +164,7 @@ public class AssignUserToRequirementTab extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//int selectedRow = possibleUserTable.getSelectedRow();
 				if (selectedRow >= 0 && selectedRow < rowsInAssignedTable) {//possibleUserTable.getRowCount()) {
-					parent.remUser(new Integer((String) assignedUserTable.getModel().getValueAt(selectedRow, ID)));
+					parent.remUser((String) assignedUserTable.getModel().getValueAt(selectedRow, USERNAME));
 				}
 			}
 			
@@ -306,13 +309,8 @@ public class AssignUserToRequirementTab extends JPanel {
 					String id = String.valueOf(user.getIdNum());
 					String name = user.getName();
 					String username = user.getUsername();
-					String permissions = "";
-//DB.getSinglePermission(username, new SinglePermissionCallback() {
-//						
-//						@Override
-//						public void callback(Permissions profile) {							
-//						}
-//					});
+					DB.getSinglePermission(username, new permissionLevelRetrivalCallback());
+					String permissions = "placeholder";// permissionLevel;
 					if (assignees.contains(user)) {
 						Object[] joinedEntry = new Object[COLUMN];
 						joinedEntry[ID] = id;
@@ -325,7 +323,7 @@ public class AssignUserToRequirementTab extends JPanel {
 						disjointEntry[ID] = id;
 						disjointEntry[NAME] = name;
 						disjointEntry[USERNAME] = username;
-						disjointEntry[PERMISSIONLEVEL] = "placeholder";//permissions;
+						disjointEntry[PERMISSIONLEVEL] = permissions;
 						disjointEntryList.add(disjointEntry);
 					}
 				}
@@ -353,16 +351,16 @@ public class AssignUserToRequirementTab extends JPanel {
 				column = assignedUserTable.getColumnModel().getColumn(i);
 				column2 = possibleUserTable.getColumnModel().getColumn(i);
 				if (i == ID) {
-					column.setPreferredWidth(30); //third column is bigger
-					column2.setPreferredWidth(30); //third column is bigger
+					column.setPreferredWidth(50); //third column is bigger
+					column2.setPreferredWidth(50); //third column is bigger
 				}
 				else if (i == NAME) {
 					column.setPreferredWidth(500);
 					column2.setPreferredWidth(500);
 				}
 				else if (i == USERNAME) {
-					column.setPreferredWidth(700);
-					column2.setPreferredWidth(700);
+					column.setPreferredWidth(500);
+					column2.setPreferredWidth(500);
 				}
 				else {
 					column.setPreferredWidth(200);
@@ -391,5 +389,13 @@ public class AssignUserToRequirementTab extends JPanel {
 
 		}
 		
+	}
+	
+	class permissionLevelRetrivalCallback implements SinglePermissionCallback {
+
+		@Override
+		public void callback(Permissions profile) {
+			permissionLevel = profile.getPermissionLevel().toString();
+		}
 	}
 }

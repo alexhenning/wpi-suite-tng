@@ -58,9 +58,6 @@ public class RetrieveUsersRequestObserver implements RequestObserver {
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to retrieve users failed.");	
-System.err.println("Body: " + iReq.getBody());
-System.err.println("Response: " + iReq.getResponse().getBody());
-System.err.println("Status: " + iReq.getResponse().getStatusMessage());
 	}
 
 	/**

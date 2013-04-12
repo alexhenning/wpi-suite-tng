@@ -172,9 +172,9 @@ public class DB {
 	 * @param id the id of the requirement
 	 * @param callback the class that has the callback function to be run on the requirement
 	 */
-	public static void getSingleUser(String id, SingleUserCallback callback) {
-System.err.println("id requested from db: " + id);
-		final Request request = Network.getInstance().makeRequest("core/user/" + id, HttpMethod.GET);
+	public static void getSingleUser(String username, SingleUserCallback callback) {
+System.err.println("requesting " + username + " from db");
+		final Request request = Network.getInstance().makeRequest("core/user/" + username, HttpMethod.GET);
 		request.addObserver(new RetrieveSingleUserRequestObserver(callback));
 		request.send();
 	}
