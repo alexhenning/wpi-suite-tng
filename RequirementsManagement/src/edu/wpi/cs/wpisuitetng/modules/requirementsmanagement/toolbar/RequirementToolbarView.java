@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
@@ -193,7 +194,12 @@ public class RequirementToolbarView extends ToolbarGroupView {
 				
 				boolean closeSub = false;
 				//TODO ask user if they want to close the sub requirements
-				
+				int input = JOptionPane.showConfirmDialog(tab,
+						"Do you want to lose these changes?", 
+						"Unsaved Changes", 
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+System.out.println("Input to close: "+input);
+closeSub = (input == JOptionPane.YES_OPTION);
 				if(closeSub) {
 					final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/closeSub/"+model.getId(),  HttpMethod.GET);
 					request.addObserver(new CloseSubRequirementModelRequestObserver(new CloseSubRequirementsCallback() {

@@ -948,10 +948,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		if (!model.getName().equals(namefield.getText())) return true;
 		if (!model.getType().equals((RequirementType) type.getSelectedItem())) return true;
 		if (!model.getPriority().equals((RequirementPriority) priority.getSelectedItem())) return true;
-		if (model.getIteration() == null && !iteration.getSelectedItem().toString().equals("Backlog")) return true;
-		if (model.getIteration() != null && !model.getIteration().getIterationNumber().equals(iteration.getSelectedItem().toString())) return true;
-		if (model.getReleaseNumber() == null && !releaseNumbers.getSelectedItem().toString().equals("None")) return true;
-		if (model.getReleaseNumber() != null && !model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
+		if (model.getIteration() == null && iteration.getSelectedItem() != null && iteration.getSelectedItem().toString() != null && !iteration.getSelectedItem().toString().equals("Backlog")) return true;
+		if (model.getIteration() != null && iteration.getSelectedItem() != null && iteration.getSelectedItem().toString() != null && !model.getIteration().getIterationNumber().equals(iteration.getSelectedItem().toString())) return true;
+		if (model.getReleaseNumber() == null && releaseNumbers.getSelectedItem() != null && releaseNumbers.getSelectedItem().toString() != null && !releaseNumbers.getSelectedItem().toString().equals("None")) return true;
+		if (model.getReleaseNumber() != null && releaseNumbers.getSelectedItem() != null && releaseNumbers.getSelectedItem().toString() != null && !model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
 		if (!model.getDescription().equals(descriptionfield.getText())) return true;
 //		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
 		//TODO could probably improve this 

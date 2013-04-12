@@ -70,13 +70,12 @@ public class MainTabView extends JTabbedPane {
 			if (getComponentAt(index) instanceof RequirementsTab) {
 				System.out.println("Deleting requirement tab");
 				if (((RequirementsTab) getComponentAt(index)).getRequirementPanel().hasUnsavedChanges()) {
-					// 0 is OK, 2 is cancel
 					int input = JOptionPane.showConfirmDialog(this,
 															"Do you want to lose these changes?", 
 															"Unsaved Changes", 
-															JOptionPane.WARNING_MESSAGE);
+															JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 					System.out.println("Input to close: "+input);
-					if (input == 2) return;  
+					if (input == JOptionPane.NO_OPTION) return;  
 				}
 			}
 			
