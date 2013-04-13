@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ClosableTabComponent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
 
 /**
@@ -37,8 +38,6 @@ public class MainTabView extends JTabbedPane {
 		setTabPlacement(TOP);
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
 		setBorder(BorderFactory.createEmptyBorder(5, 3, 3, 3));
-//		addTab("Dashboard", new ImageIcon(), new DashboardView(),
-//		       "Your Dashboard - notifications, etc.");
 	}
 	
 	/**
@@ -53,9 +52,9 @@ public class MainTabView extends JTabbedPane {
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
 		super.insertTab(title, icon, component, tip, index);
-		// the Dashboard tab cannot be closed
-		if(!(component instanceof DashboardView)
-				&& !(component instanceof ListRequirementsTab)) {
+		// the requirements list tab cannot be closed
+		if(!(component instanceof ScrollableTab<?>
+			 && ((ScrollableTab<?>) component).getPanel() instanceof ListRequirementsPanel)) {
 			setTabComponentAt(index, new ClosableTabComponent(this));
 		}
 	}
