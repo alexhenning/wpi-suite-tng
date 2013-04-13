@@ -36,7 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReleaseNumberPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReportsTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReportsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleIterationTab;
@@ -367,7 +367,8 @@ public class MainTabController {
 		}
 
 		Tab tab = addTab();
-		final ReportsTab reportsTab = new ReportsTab(this, tab);
+		final ScrollableTab<ReportsPanel> reportsTab =
+				new ScrollableTab<ReportsPanel>(this, tab, "Reports", new ReportsPanel());
 		reportsTab.requestFocus();
 		mainView.addChangeListener(new ChangeListener() {
 			@Override
