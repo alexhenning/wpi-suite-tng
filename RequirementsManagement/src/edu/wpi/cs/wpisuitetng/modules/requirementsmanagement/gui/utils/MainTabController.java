@@ -13,7 +13,7 @@
  *    Josh
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
 
 /**
  * Contributors:
@@ -31,6 +31,16 @@ import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.IterationPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReleaseNumberTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReportsTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleIterationTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationOnFocusListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
@@ -332,8 +342,8 @@ public class MainTabController {
 		view.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if(listReqsView.mainPanel.tableModel.getMode() == ViewReqTable.Mode.VIEW) {
-					listReqsView.mainPanel.updateAllRequirementList();
+				if(listReqsView.getPanel().getTable().getMode() == ViewReqTable.Mode.VIEW) {
+					listReqsView.getPanel().updateAllRequirementList();
 				}
 			}
 		});
@@ -358,7 +368,7 @@ public class MainTabController {
 		view.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				reportsTab.mainPanel.refresh();
+				reportsTab.getPanel().refresh();
 			}
 		});
 	}

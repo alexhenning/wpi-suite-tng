@@ -9,7 +9,7 @@
  * Contributors:
  *    Josh
  ******************************************************************************/
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

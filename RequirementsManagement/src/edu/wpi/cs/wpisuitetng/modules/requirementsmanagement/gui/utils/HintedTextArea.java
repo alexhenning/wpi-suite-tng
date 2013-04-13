@@ -14,7 +14,7 @@
  * @author www.how2java.com
  */
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -10,11 +10,13 @@
  *    Andrew Hurle
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
 
 import java.awt.Component;
 
 import javax.swing.Icon;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 
 /**
  * A wrapper class for MainTabView that can be given to components within that view

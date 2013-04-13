@@ -15,7 +15,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 
 
 /**

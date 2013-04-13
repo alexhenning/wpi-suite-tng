@@ -26,7 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRelea
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewPermissionAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 
 /**
  * The Requirements Management tab's toolbar panel.

@@ -10,7 +10,7 @@
  *    //TODO who did this?
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
 
 import java.awt.BorderLayout;
 
@@ -76,6 +76,13 @@ public class ScrollableTab<Panel extends JComponent & ScrollablePanel> extends J
 	 */
 	public Panel getPanel() {
 		return mainPanel;
+	}
+	
+	/**
+	 * @return The main tab controller.
+	 */
+	public MainTabController getTabController() {
+		return tabController;
 	}
 
 	/**
