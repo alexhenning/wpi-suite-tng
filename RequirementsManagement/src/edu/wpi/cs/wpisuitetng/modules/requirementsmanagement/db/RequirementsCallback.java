@@ -7,27 +7,27 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    Alex Henning
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
 import java.util.List;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
- *
- * Interface that release number callbacks can inherit from
- * @author Tim
- *
+ * An interface for callbacks that return all of the requirements.
+ * 
+ * @author alex
  */
-public interface ReleaseNumberCallback {
+public interface RequirementsCallback {
 
 	/**
-	 * Implements an action to be called on the release number being passed back
-	 *
-	 * @param releaseNumbers Release numbers returned from the database
+	 * Implements an action to be performed on the requirement being passed back.
+	 * 
+	 * @param reqs
+	 *            The requirements being returned
 	 */
-	public void callback(List<ReleaseNumber> releaseNumbers);
+	public void callback(List<RequirementModel> reqs);
 }

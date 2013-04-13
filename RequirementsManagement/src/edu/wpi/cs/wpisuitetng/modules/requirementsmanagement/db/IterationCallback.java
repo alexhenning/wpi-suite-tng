@@ -7,28 +7,28 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *   	//TODO
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
 import java.util.List;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 
 /**
  *
- * Interface that all project event callbacks must inherit in order to use the functions in DB
+ * Interface that all iteration callbacks must inherit in order to use the functions in DB
  * @author TODO
  *
  */
-public interface ProjectEventsCallback {
+public interface IterationCallback {
 
 	/**
-	 * Implements an action to be performed on the projectEvents being passed back.
+	 * Implements an action to be performed on the iteration being passed back.
 	 * 
 	 * @param reqs
-	 *            The projectEvents being returned
+	 *            The iterations being returned
 	 */
-	public void callback(List<ProjectEvent> projectEvents);
+	public void callback(List<Iteration> iterationss);
 }

@@ -10,24 +10,22 @@
  *    Alex Henning
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
-
-import java.util.List;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
- * An interface for callbacks that return all of the requirements.
+ * An interface for callbacks that return a single requirement.
  * 
  * @author alex
  */
-public interface RequirementsCallback {
+public interface SingleRequirementCallback {
 
 	/**
 	 * Implements an action to be performed on the requirement being passed back.
 	 * 
-	 * @param reqs
-	 *            The requirements being returned
+	 * @param req
+	 *            The requirement being returned
 	 */
-	public void callback(List<RequirementModel> reqs);
+	public void callback(RequirementModel req);
 }

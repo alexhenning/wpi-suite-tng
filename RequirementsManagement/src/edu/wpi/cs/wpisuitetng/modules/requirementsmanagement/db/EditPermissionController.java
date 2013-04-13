@@ -7,80 +7,68 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    vpatara
  ******************************************************************************/
-
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreatePermissionRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditPermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
+ * Responds to an action to edit (update) a user permission
  *
- * Handles saving permissions to the server
- * @author TODO
+ * @author vpatara
  *
  */
-public class AddPermissionController implements ActionListener {
+public class EditPermissionController implements ActionListener {
 
 	/** The permissions panel */
 	private final PermissionsPanel panel;
 
 	/**
-	 * constructor
+	 * Constructor
 	 * @param panel the permissions panel
 	 */
-	public AddPermissionController(PermissionsPanel panel) {
+	public EditPermissionController(PermissionsPanel panel) {
 		this.panel = panel;
 	}
-
 
 	/**
 	 * This will be called when the user clicks an add button
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 * Saves the permissions to the server
+	 * Edit the user permission in the server
 	 *
 	 * @param e the action that called this
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		panel.setAddPermissionStatus("");
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions",  HttpMethod.PUT);
-		request.setBody(panel.getNewModel().toJSON());
-		request.addObserver(new CreatePermissionRequestObserver(this));
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions",  HttpMethod.POST);
+		request.setBody(panel.getUpdatedModel().toJSON());
+		request.addObserver(new EditPermissionRequestObserver(this));
 		request.send();
 	}
 
 	/**
-	 * Response if everything worked
+	 * confirm that the permission was edited
 	 *
 	 * @param profile
 	 */
-	public void receivedAddConfirmation(Permissions profile) {
+	public void receivedEditConfirmation(Permissions profile) {
 		DB.getSinglePermission(profile.getUsername(), new SinglePermissionCallback() {
 			@Override
 			public void callback(Permissions profile) {
 				panel.updateAllPermissionsList();
 			}
 		});
-		panel.resetCreationFields();
-		panel.setAddPermissionStatus("New permission added for "
-				+ profile.getUsername() + " with "
-				+ profile.getPermissionLevel().toString());
-	}
-
-	/**
-	 * Response if there was a problem
-	 *
-	 */
-	public void receivedAddError() {
-		panel.setAddPermissionStatus("Invalid username, username already exists, or an internal error occurred");
+		panel.resetUpdateFields();
 	}
 }

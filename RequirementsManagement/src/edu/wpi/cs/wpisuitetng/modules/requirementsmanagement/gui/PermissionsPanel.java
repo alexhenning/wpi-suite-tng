@@ -32,11 +32,11 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditPermissionController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.PermissionsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddPermissionController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.EditPermissionController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.PermissionsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;

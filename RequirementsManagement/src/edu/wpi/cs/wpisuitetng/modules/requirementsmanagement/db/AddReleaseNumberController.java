@@ -10,7 +10,7 @@
  *    
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
