@@ -95,7 +95,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	 *
 	 */
 	private void addComponents() {
-		panelLayout =new GridBagLayout();
+		panelLayout = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		setLayout(panelLayout);
 		
@@ -158,15 +158,6 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	 */
 	protected void setInputEnabled(boolean enabled) {
 		// TODO: implement if made editable
-	}
-	
-	/**
-	 * Returns the parent IterationTab.
-	 * 
-	 * @return the parent IterationTab.
-	 */
-	public ScrollableTab getParent() {
-		return parent;
 	}
 	
 	public enum Report {
