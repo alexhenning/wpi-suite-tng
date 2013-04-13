@@ -25,8 +25,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
-import org.junit.runners.ParentRunner;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;

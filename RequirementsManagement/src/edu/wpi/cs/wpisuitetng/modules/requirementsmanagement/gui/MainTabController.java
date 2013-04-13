@@ -138,7 +138,8 @@ public class MainTabController {
 	public Tab addCreateIterationTab() {
 		Iteration iteration = new Iteration();
 		Tab tab = addTab();
-		IterationTab view = new IterationTab(this, iteration, tab);
+		ScrollableTab<IterationPanel> view =
+				new ScrollableTab<IterationPanel>(this, tab, "Add Iteration", new IterationPanel(iteration));
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
@@ -176,8 +177,7 @@ public class MainTabController {
 					return null;//TODO figure out what to return
 				}
 			}
-		}
-		else {
+		} else {
 			for (int i=0; i<view.getTabCount(); i++) {
 				if (("Edit "+(iteration.getIterationNumber())).equals(view.getTitleAt(i))) {
 					switchToTab(i);
@@ -385,7 +385,7 @@ public class MainTabController {
 		// Otherwise, create a new one.
 		Tab tab = addTab();
 		ScrollableTab<ViewIterationPanel> view
-			= new ScrollableTab<ViewIterationPanel>(this, tab, new ViewIterationPanel());
+			= new ScrollableTab<ViewIterationPanel>(this, tab, "Add Iteration", new ViewIterationPanel());
 		addChangeListener(new UpdateViewIterationOnFocusListener(view));
 		tab.setComponent(view);
 		view.requestFocus();

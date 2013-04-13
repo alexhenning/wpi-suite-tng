@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
  *
  */
 @SuppressWarnings("serial")
-public class ScrollableTab<Panel extends JComponent> extends JPanel implements IToolbarGroupProvider {
+public class ScrollableTab<Panel extends JComponent & ScrollablePanel> extends JPanel implements IToolbarGroupProvider {
 	
 	/** the main tab controller*/
 	MainTabController tabController;
@@ -46,16 +46,17 @@ public class ScrollableTab<Panel extends JComponent> extends JPanel implements I
 	 * @param iteration an iteration
 	 * @param tab the containing tab
 	 */
-	public ScrollableTab(MainTabController tabController, Tab tab, Panel panel) {
+	public ScrollableTab(MainTabController tabController, Tab tab, String name, Panel panel) {
 		this.tabController = tabController;
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
-		containingTab.setTitle("Add Iteration");
+		containingTab.setTitle(name);
 		
 		// Instantiate the main create iteration panel
 		mainPanel = panel;
+		panel.setTab(this);
 		this.setLayout(new BorderLayout());
 		mainPanelScrollPane = new JScrollPane(mainPanel);
 		mainPanelScrollPane.getVerticalScrollBar().setUnitIncrement(10);
