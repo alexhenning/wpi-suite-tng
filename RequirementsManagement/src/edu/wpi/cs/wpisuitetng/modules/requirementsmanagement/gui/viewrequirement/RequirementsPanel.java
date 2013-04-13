@@ -870,6 +870,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
     	});
 	}
 	
+	//TODO improve the add child code to minimize network calls.
 	public void addChild(int childId) {
 		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
 			@Override
@@ -909,6 +910,42 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				setStatus("added child");
 			} else {
 				setStatus("failed to add child");
+			}
+		}
+	}
+	
+	public void removeChild(RequirementModel child) {
+		model.getSubRequirements().remove(child.getId()+"");
+		DB.updateRequirements(model, new RemoveChildRequirementCallback(child.getId()+""));
+	}
+	
+	public void removeChild(String childId) {
+		model.getSubRequirements().remove(childId);
+		DB.updateRequirements(model, new RemoveChildRequirementCallback(childId));
+	}
+	
+	class RemoveChildRequirementCallback implements SingleRequirementCallback {
+		private String childId;
+		
+		public RemoveChildRequirementCallback(String childId) {
+			this.childId = childId;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			boolean removed = true;
+			for (String subReq : currentReq.getSubRequirements()) {
+				if(subReq.equals(childId)) {
+					removed = false;
+				}
+			}
+			if (removed) {
+				subs.update();
+				model.setSubRequirements(currentReq.getSubRequirements());
+				parent.buttonGroup.update(editMode, model);
+				setStatus("removed child");
+			} else {
+				setStatus("failed to remove child");
 			}
 		}
 	}
