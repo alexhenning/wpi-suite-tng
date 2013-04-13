@@ -13,16 +13,16 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CanCloseRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.PermissionsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ProjectEventsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ReleaseNumberCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleReleaseNumberCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CanCloseRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.PermissionsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ProjectEventsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleIterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleReleaseNumberCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;

@@ -20,8 +20,8 @@ import javax.swing.AbstractAction;
 
 import com.google.gson.Gson;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.NoteMainPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
