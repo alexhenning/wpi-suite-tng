@@ -37,12 +37,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveR
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
-<<<<<<< HEAD:RequirementsManagement/src/edu/wpi/cs/wpisuitetng/modules/requirementsmanagement/db/DB.java
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.UpdateReleaseNumberObserver;
-=======
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleUserRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveUsersRequestObserver;
->>>>>>> origin/dev-feature-assignRequirement:RequirementsManagement/src/edu/wpi/cs/wpisuitetng/modules/requirementsmanagement/controllers/DB.java
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;

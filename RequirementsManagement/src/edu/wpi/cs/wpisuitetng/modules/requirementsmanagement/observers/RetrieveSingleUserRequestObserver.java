@@ -15,7 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleUserCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleUserCallback;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;

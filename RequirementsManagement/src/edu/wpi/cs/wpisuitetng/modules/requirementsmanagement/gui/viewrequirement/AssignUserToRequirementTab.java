@@ -12,7 +12,7 @@
  *    William
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,7 +34,7 @@ import javax.swing.table.TableColumn;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.UsersCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewUserTable;
@@ -82,11 +82,11 @@ public class AssignUserToRequirementTab extends JPanel {
 	/**
 	 * Constructs a panel for notes
 	 * 
-	 * @param parent NoteTab that contains this object
+	 * @param requirementsPanel NoteTab that contains this object
 	 */
-	public AssignUserToRequirementTab(RequirementsPanel parent) {
-		this.parent = parent;
-		assignees = parent.model.getAssignees();
+	public AssignUserToRequirementTab(RequirementsPanel requirementsPanel) {
+		this.parent = requirementsPanel;
+		assignees = requirementsPanel.model.getAssignees();
 		// Add all components to this panel
 		addComponents();
 		
