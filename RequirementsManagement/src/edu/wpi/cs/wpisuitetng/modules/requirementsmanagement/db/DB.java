@@ -37,15 +37,21 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveR
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSinglePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleRequirementRequestObserver;
+<<<<<<< HEAD:RequirementsManagement/src/edu/wpi/cs/wpisuitetng/modules/requirementsmanagement/db/DB.java
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.UpdateReleaseNumberObserver;
+=======
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveSingleUserRequestObserver;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveUsersRequestObserver;
+>>>>>>> origin/dev-feature-assignRequirement:RequirementsManagement/src/edu/wpi/cs/wpisuitetng/modules/requirementsmanagement/controllers/DB.java
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  *
- * Handels retriving and updating data in the database
- * @author TODO
+ * Handles retrieving and updating data in the database
+ * @author Alex Henning
+ * @contributor William Terry
  *
  */
 public class DB {
@@ -172,12 +178,12 @@ public class DB {
 	/**
 	 * Retrieve all the permissions from the database and run the callback function in the class passed
 	 *
-	 * @param updateTableCallback the class with the callback function to run
+	 * @param callback the class with the callback function to run
 	 */
-	public static void getAllPermissions(PermissionsCallback updateTableCallback) {
+	public static void getAllPermissions(PermissionsCallback callback) {
 		System.out.println("get all permissions");
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions", HttpMethod.GET);
-		request.addObserver(new RetrievePermissionsRequestObserver(updateTableCallback));
+		request.addObserver(new RetrievePermissionsRequestObserver(callback));
 		request.send();
 	}
 	
@@ -205,4 +211,28 @@ public class DB {
 		request.send();
 	}
 
+	/**
+	 * Retrieves a single user from the database and runs the callback function in the class passed
+	 *
+	 * @param id the id of the requirement
+	 * @param callback the class that has the callback function to be run on the requirement
+	 */
+	public static void getSingleUser(String username, SingleUserCallback callback) {
+System.err.println("requesting " + username + " from db");
+		final Request request = Network.getInstance().makeRequest("core/user/" + username, HttpMethod.GET);
+		request.addObserver(new RetrieveSingleUserRequestObserver(callback));
+		request.send();
+	}
+	
+	/**
+	 * Retrieve all the users from the database and run the callback function in the class passed
+	 *
+	 * @param callback the class with the callback function to run
+	 */
+	public static void getAllUsers(UsersCallback callback) {
+		System.out.println("get all users");
+		final Request request = Network.getInstance().makeRequest("core/user", HttpMethod.GET);
+		request.addObserver(new RetrieveUsersRequestObserver(callback));
+		request.send();
+	}
 }

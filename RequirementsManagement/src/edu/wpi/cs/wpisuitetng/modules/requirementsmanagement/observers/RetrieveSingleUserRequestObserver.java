@@ -12,9 +12,10 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
+import com.google.gson.GsonBuilder;
+
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleUserCallback;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
@@ -23,17 +24,17 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * @author William Terry
  *
  */
-public class RetrieveSinglePermissionRequestObserver implements
+public class RetrieveSingleUserRequestObserver implements
 		RequestObserver {
 	
 	/** Callback paired with this */
-	private SinglePermissionCallback callback;
+	private SingleUserCallback callback;
 	
 	/**
 	 * Default constructor
 	 * @param callback Controller this Observer handles requests from
 	 */
-	public RetrieveSinglePermissionRequestObserver(SinglePermissionCallback callback) {
+	public RetrieveSingleUserRequestObserver(SingleUserCallback callback) {
 		this.callback = callback;
 	}
 
@@ -45,7 +46,8 @@ public class RetrieveSinglePermissionRequestObserver implements
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
-		final Permissions[] profile = Permissions.fromJSONArray(response.getBody());
+		GsonBuilder builder = new GsonBuilder();
+		final User[] profile = builder.create().fromJson(response.getBody(), User[].class);
 		callback.callback(profile[0]);
 	}
 
@@ -56,7 +58,7 @@ public class RetrieveSinglePermissionRequestObserver implements
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to get a permissions profile failed.");
+		System.err.println("The request to get a user profile failed.");
 	}
 
 	/**
@@ -67,7 +69,7 @@ public class RetrieveSinglePermissionRequestObserver implements
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("The request to get a permissions failed.\nError: " + exception.getMessage());
+		System.err.println("The request to get a user profile failed.\nError: " + exception.getMessage());
 	}
 
 
