@@ -45,6 +45,7 @@
 		<jar destfile="${janeway-jar-dest}">
 			<fileset dir="build"/>
 			<fileset file="manifest.txt"/>
+			<fileset dir="resources" includes="**"/>
 		</jar>
 	</target>
 

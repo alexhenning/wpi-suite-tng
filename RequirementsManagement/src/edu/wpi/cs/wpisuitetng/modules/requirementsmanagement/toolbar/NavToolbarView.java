@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateReleaseNumberAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ListRequirementsAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ShowHelpAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewPermissionAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
@@ -36,7 +37,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
 public class NavToolbarView extends ToolbarGroupView {
 
 	/** button to list requirements */
-	private JButton showReports, iterView, permissionButton, viewReleaseNumbers;
+	private JButton showReports, iterView, permissionButton,
+		viewReleaseNumbers, helpButton;
 	
 	/**
 	 * Constructor
@@ -77,6 +79,11 @@ public class NavToolbarView extends ToolbarGroupView {
 		c.gridy = 0;
 		content.add(viewReleaseNumbers, c);
 		
+		helpButton= new JButton("Help");
+		helpButton.setAction(new ShowHelpAction());
+		c.gridy = 1;
+		content.add(helpButton, c);
+		
 		// Construct a new toolbar group to be added to the end of the toolbar
 		add(content);
 		
@@ -95,5 +102,5 @@ public class NavToolbarView extends ToolbarGroupView {
 		@Override public void actionPerformed(ActionEvent arg0) {
 			tabController.addShowReportsTab();
 		}
-		}
+	}
 }
