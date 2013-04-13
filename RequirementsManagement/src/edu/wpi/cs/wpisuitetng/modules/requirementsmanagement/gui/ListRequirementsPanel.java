@@ -683,6 +683,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				} else {
 					c.setBackground(Color.WHITE);
 					setToolTipText(null);
+					invalidCells.remove(new Point(row, column));
+					if(invalidCells.size() <= 0) {
+						saveButton.setEnabled(true);
+					}
 				}
 				if(column == NAME) {
 					if(((String)value).length() < 1 || ((String)value).length() > 100) {
