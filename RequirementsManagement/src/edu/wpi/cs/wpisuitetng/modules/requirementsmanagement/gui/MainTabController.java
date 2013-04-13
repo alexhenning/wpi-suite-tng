@@ -48,7 +48,7 @@ public class MainTabController {
 	/** the main tab view */
 	private final MainTabView view;
 	/** a list requirements tab */
-	private ListRequirementsTab listReqsView = null;
+	private ScrollableTab<ListRequirementsPanel> listReqsView = null;
 	
 	/**
 	 * @param view Create a controller that controls this MainTabView
@@ -321,11 +321,10 @@ public class MainTabController {
 					return null;
 				}
 			}
-
-			// Should not reach here, but if so, let it create another tab
 		}
 
-		listReqsView = new ListRequirementsTab(null, this);
+		listReqsView = new ScrollableTab<ListRequirementsPanel>(this, null, "All Requirements",
+				new ListRequirementsPanel());
 		Tab tab = addTab("All Requirements", new ImageIcon(), listReqsView,
 							"List of requirements");
 		tab.setComponent(listReqsView);

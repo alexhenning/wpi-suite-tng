@@ -54,7 +54,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  *
  */
 @SuppressWarnings("serial")
-public class ListRequirementsPanel extends JPanel {
+public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	
 	public static final int ID = 0;
 	public static final int NAME = 1;
@@ -67,7 +67,7 @@ public class ListRequirementsPanel extends JPanel {
 	public static final int ROWS = 7;
 	
 	/** the tab that created this*/
-	ListRequirementsTab parent;
+	ScrollableTab parent;
 	/** is inpute enabled*/
 	boolean inputEnabled;
 	/** the table that displays the requirements*/
@@ -89,9 +89,7 @@ public class ListRequirementsPanel extends JPanel {
 	 * Constructor
 	 * @param parent the tab that made this
 	 */
-	public ListRequirementsPanel(final ListRequirementsTab parent) {
-		this.parent = parent;
-		
+	public ListRequirementsPanel() {
 		// Indicate that input is enabled
 		inputEnabled = true;
 
@@ -117,6 +115,11 @@ public class ListRequirementsPanel extends JPanel {
 			@Override public void mouseEntered(MouseEvent arg0) {}
 			@Override public void mouseClicked(MouseEvent arg0) {}
 		});
+	}
+
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
 	}
 
 	/**
@@ -706,6 +709,4 @@ public class ListRequirementsPanel extends JPanel {
 		}
 		
 	}
-
-
 }
