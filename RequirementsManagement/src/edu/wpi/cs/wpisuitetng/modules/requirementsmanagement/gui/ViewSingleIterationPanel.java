@@ -32,6 +32,8 @@ import org.jdesktop.swingx.JXDatePicker;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
@@ -43,14 +45,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  */
 @SuppressWarnings("serial")
-public class ViewSingleIterationPanel extends JPanel{
+public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel {
 	
 	/** the model to hold the iteration */
 	Iteration model;
 	/** the model to hold the edited iteration */
 	Iteration editModel;
 	/** the tab that created this panel */
-	ViewSingleIterationTab parent;
+	ScrollableTab parent;
 	/** labels to describe the text fields */
 	JLabel lbl1, lbl2, lbl3, lbl4;
 	/** text fields for the iteration's data to be entered into */
@@ -77,9 +79,8 @@ public class ViewSingleIterationPanel extends JPanel{
 	 * Constructor
 	 * @param iterationTab the tab that created this panel
 	 */
-	public ViewSingleIterationPanel(ViewSingleIterationTab iterationTab){
-		this.parent = iterationTab;
-		model = parent.iteration;
+	public ViewSingleIterationPanel(Iteration iteration) {
+		model = iteration;
 		editModel = null;
 		
 		// Indicate that input is enabled
@@ -92,6 +93,10 @@ public class ViewSingleIterationPanel extends JPanel{
 		updateFields();
 	}
 
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
+	}
 	
 	/**
 	 * add all the components (labels, text fields, buttons) to this panel's view
@@ -181,7 +186,7 @@ public class ViewSingleIterationPanel extends JPanel{
 	 *
 	 */
 	public void close() {
-		parent.tabController.closeCurrentTab();
+		parent.getTabController().closeCurrentTab();
 	}
 	
 	/**
@@ -268,15 +273,6 @@ public class ViewSingleIterationPanel extends JPanel{
 		
 		return model;
 	}
-	
-	/**
-	 * Returns the parent IterationTab.
-	 * 
-	 * @return the parent IterationTab.
-	 */
-	public ViewSingleIterationTab getParent() {
-		return parent;
-	}
 
 	/**
 	 * Returns the edit {@link Mode} for this IterationPanel.
@@ -359,5 +355,4 @@ public class ViewSingleIterationPanel extends JPanel{
 		
 		return editModel;
 	}
-
 }

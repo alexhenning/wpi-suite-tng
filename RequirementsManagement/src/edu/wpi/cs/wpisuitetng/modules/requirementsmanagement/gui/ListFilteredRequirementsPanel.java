@@ -29,6 +29,7 @@ import javax.swing.table.TableColumn;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -52,7 +53,7 @@ public class ListFilteredRequirementsPanel extends JPanel {
 	public static final int ROWS = 6;
 	
 	/** the tab that created this*/
-	ViewSingleIterationTab parent;
+	ScrollableTab<ViewSingleIterationPanel> parent;
 	/** is inpute enabled*/
 	JTable table;
 	/** the model for the table*/
@@ -64,7 +65,7 @@ public class ListFilteredRequirementsPanel extends JPanel {
 	 * Constructor
 	 * @param parent the tab that made this
 	 */
-	public ListFilteredRequirementsPanel(final ViewSingleIterationTab parent) {
+	public ListFilteredRequirementsPanel(final ScrollableTab<ViewSingleIterationPanel> parent) {
 		this.parent = parent;
 
 		// Add all components to this panel
@@ -79,7 +80,7 @@ public class ListFilteredRequirementsPanel extends JPanel {
                 			new SingleRequirementCallback() {
 						@Override
 						public void callback(RequirementModel req) {
-							parent.tabController.addEditRequirementTab(req);
+							parent.getTabController().addEditRequirementTab(req);
 						}
                 	});
                 }
@@ -148,13 +149,13 @@ public class ListFilteredRequirementsPanel extends JPanel {
 				// put the data in the table
 				int reqnumber = 0;
 				for(RequirementModel req : reqs) {
-					if (parent.iteration == null) {
+					if (parent.getPanel().getModel()== null) {
 						if (req.getIteration() == null) {
 							reqnumber++;
 						}
 					}
 					else if (req.getIteration() != null) {
-						if (req.getIteration().getId() == parent.iteration.getId()) {
+						if (req.getIteration().getId() == parent.getPanel().getModel().getId()) {
 							reqnumber++;
 						}
 					}
@@ -165,11 +166,11 @@ public class ListFilteredRequirementsPanel extends JPanel {
 				for(RequirementModel req : reqs) {
 					sameIter = false;
 					if (req.getIteration() == null) {
-						if (parent.iteration == null) {
+						if (parent.getPanel().getModel() == null) {
 							sameIter = true;
 						}
 					}
-					else if (parent.iteration != null && req.getIteration().getId() == parent.iteration.getId()) {
+					else if (parent.getPanel().getModel() != null && req.getIteration().getId() == parent.getPanel().getModel().getId()) {
 						sameIter = true;
 					}
 					if (sameIter) {
