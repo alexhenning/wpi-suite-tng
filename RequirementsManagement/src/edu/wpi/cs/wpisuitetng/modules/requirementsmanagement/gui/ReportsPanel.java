@@ -35,6 +35,8 @@ import org.jfree.data.general.DefaultPieDataset;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -46,10 +48,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  *
  */
 @SuppressWarnings("serial")
-public class ReportsPanel extends JPanel{
+public class ReportsPanel extends JPanel implements ScrollablePanel {
 	
 	/** the tab that created this panel */
-	ReportsTab parent;
+	ScrollableTab parent;
 	/** the layout for this panel */
 	private GridBagLayout panelLayout;
 	
@@ -65,8 +67,7 @@ public class ReportsPanel extends JPanel{
 	 * Constructor
 	 * @param iterationTab the tab that created this panel
 	 */
-	public ReportsPanel(ReportsTab parent){
-		this.parent = parent;
+	public ReportsPanel() {
 		model = new LinkedList<RequirementModel>();
 		dataset = new DefaultPieDataset();
 		dataset.setValue("Loading", 1.0);
@@ -81,6 +82,11 @@ public class ReportsPanel extends JPanel{
 		addComponents();
 
 		refresh();
+	}
+
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
 	}
 
 	
@@ -141,7 +147,7 @@ public class ReportsPanel extends JPanel{
 	 *
 	 */
 	public void close() {
-		parent.tabController.closeCurrentTab();
+		parent.getTabController().closeCurrentTab();
 	}
 	
 	/**
@@ -159,7 +165,7 @@ public class ReportsPanel extends JPanel{
 	 * 
 	 * @return the parent IterationTab.
 	 */
-	public ReportsTab getParent() {
+	public ScrollableTab getParent() {
 		return parent;
 	}
 	
