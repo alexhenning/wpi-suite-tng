@@ -18,10 +18,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -87,6 +91,9 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	JPanel editPanel;
 	/** Old data used to compare changes */
 	Object[][] data;
+	/** List of cells that have invalid data in them (the row and column of the cell are stored in a Point object) */
+	List<Point> invalidCells = new ArrayList<Point>();
+
 	
 	/**
 	 * Constructor
@@ -669,7 +676,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				if(!value.equals(data[row][column])) {
 					c.setBackground(Color.YELLOW);
 					setToolTipText("This cell has been changed from: " + (data[row][column]).toString());
-					saveButton.setEnabled(true);
+					invalidCells.remove(new Point(row, column));
+					if(invalidCells.size() <= 0) {
+						saveButton.setEnabled(true);
+					}
 				} else {
 					c.setBackground(Color.WHITE);
 					setToolTipText(null);
@@ -679,12 +689,18 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a name between 1 and 100 charecters.");
 						saveButton.setEnabled(false);
+						if(!invalidCells.contains(new Point(row, column))){
+							invalidCells.add(new Point(row, column));
+						}
 					}
 				} else if(column == DESCRIPTION) {
 					if(((String)value).length() < 1) {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a description.");
 						saveButton.setEnabled(false);
+						if(!invalidCells.contains(new Point(row, column))){
+							invalidCells.add(new Point(row, column));
+						}
 					}
 				} else if(column == ITERATION) {
 					try {
@@ -693,12 +709,18 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 							c.setBackground(Color.RED);
 							setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
 							saveButton.setEnabled(false);
+							if(!invalidCells.contains(new Point(row, column))){
+								invalidCells.add(new Point(row, column));
+							}
 						}
 					} catch (NumberFormatException e) {
 						// still an error
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
 						saveButton.setEnabled(false);
+						if(!invalidCells.contains(new Point(row, column))){
+							invalidCells.add(new Point(row, column));
+						}
 					}
 				} else if(column == ESTIMATE) {
 					try {
@@ -706,12 +728,18 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 							c.setBackground(Color.RED);
 							setToolTipText("A requirement estimate must be a positive number.");
 							saveButton.setEnabled(false);
+							if(!invalidCells.contains(new Point(row, column))){
+								invalidCells.add(new Point(row, column));
+							}
 						}
 					} catch (NumberFormatException e) {
 						// still an error
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement estimate must be a positive number.");
 						saveButton.setEnabled(false);
+						if(!invalidCells.contains(new Point(row, column))){
+							invalidCells.add(new Point(row, column));
+						}
 					}
 				}
 			}
@@ -720,4 +748,5 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		}
 		
 	}
+
 }
