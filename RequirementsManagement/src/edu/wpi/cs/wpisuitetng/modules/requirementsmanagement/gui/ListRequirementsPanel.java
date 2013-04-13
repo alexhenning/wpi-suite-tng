@@ -152,7 +152,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		
 		// create panel and button to change table to edit mode
 		editPanel = new JPanel();
-		editButton = new JButton("Edit");
+		editButton = new JButton("Edit All Requirements");
 		editButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -246,6 +246,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		editPanel.remove(editButton);
 		editPanel.add(saveButton);
 		editPanel.add(cancelButton);
+		saveButton.setEnabled(false);
 		editPanel.revalidate();
 		editPanel.repaint();
 		
@@ -668,6 +669,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				if(!value.equals(data[row][column])) {
 					c.setBackground(Color.YELLOW);
 					setToolTipText("This cell has been changed from: " + (data[row][column]).toString());
+					saveButton.setEnabled(true);
 				} else {
 					c.setBackground(Color.WHITE);
 					setToolTipText(null);
@@ -676,11 +678,13 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 					if(((String)value).length() < 1 || ((String)value).length() > 100) {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a name between 1 and 100 charecters.");
+						saveButton.setEnabled(false);
 					}
 				} else if(column == DESCRIPTION) {
 					if(((String)value).length() < 1) {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a description.");
+						saveButton.setEnabled(false);
 					}
 				} else if(column == ITERATION) {
 					try {
@@ -688,22 +692,26 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 								!value.equals(data[row][column]) && !value.equals("Backlog"))) {
 							c.setBackground(Color.RED);
 							setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
+							saveButton.setEnabled(false);
 						}
 					} catch (NumberFormatException e) {
 						// still an error
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
+						saveButton.setEnabled(false);
 					}
 				} else if(column == ESTIMATE) {
 					try {
 						if(((Integer.valueOf((String)value) < 0))) {
 							c.setBackground(Color.RED);
 							setToolTipText("A requirement estimate must be a positive number.");
+							saveButton.setEnabled(false);
 						}
 					} catch (NumberFormatException e) {
 						// still an error
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement estimate must be a positive number.");
+						saveButton.setEnabled(false);
 					}
 				}
 			}
