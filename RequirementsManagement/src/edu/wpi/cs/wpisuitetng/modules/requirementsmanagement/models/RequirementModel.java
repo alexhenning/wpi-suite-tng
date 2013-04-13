@@ -81,7 +81,6 @@ public class RequirementModel extends AbstractModel {
 		status = RequirementStatus.NEW;
 		creator = new User("", "", "", -1);
 		assignees = new ArrayList<User>();
-//		assignees.add(new User("", "", "", -1));
 		estimate = 0;
 		actualEffort = 0;
 		creationDate = new Date();
@@ -454,11 +453,6 @@ public class RequirementModel extends AbstractModel {
 		//the following method works but if wee need special serializers then the second method is needed
 		Gson gson = new Gson();
 
-		//this is used is special serializers are needed
-//		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
-//		Gson gson = builder.create();
-		
 		json = gson.toJson(this, RequirementModel.class);
 		return json;
 	}
@@ -491,9 +485,6 @@ public class RequirementModel extends AbstractModel {
 	public static void addGsonDependencies(GsonBuilder builder) {
 		RequirementEvent.addGsonDependencies(builder);
 		//TODO add dependencies for future class associations. Only needed if normal (de)serializer does not work
-//		Task.addGsonDependencies(builder);
-//		Note.addGsonDependencies(builder);
-//		AbstractAttachment.addGsonDependencies(builder);
 	}
 
 	/**
@@ -554,14 +545,7 @@ public class RequirementModel extends AbstractModel {
 			this.subRequirements.add(subreqID);
 		}
 	}
-//	/**
-//	 * Removes a sub requirement from this requirement
-//	 * @param subreqID The ID of the requirement to be removed
-//	 */
-//	public void removeSubRequirement(int subreqID){
-//		this.subRequirements.remove(this.subRequirements.indexOf(subreqID));
-//	}
-
+	
 	/**
 	 * @return the type
 	 */

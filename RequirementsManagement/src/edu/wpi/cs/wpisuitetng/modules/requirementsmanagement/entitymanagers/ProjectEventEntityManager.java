@@ -136,23 +136,6 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 		
 		throw new WPISuiteException("updating ProjectEvents is not allowed");
 		
-//		//TODO should this function work?
-//		ProjectEvent updatedProjectEvent = ProjectEvent.fromJSON(content);
-//		
-//		List<ValidationIssue> issues = validator.validate(s, updatedProjectEvent, Mode.EDIT);
-//		if(issues.size() > 0) {
-//			throw new BadRequestException();
-//		}
-//		
-//		Iteration existingIteration = validator.getLastExistingIteration();
-//		
-//		updatedProjectEvent.map(updatedProjectEvent, existingIteration);
-//		
-//		if(!db.save(existingIteration, s.getProject())) {
-//			throw new WPISuiteException();
-//		}
-//		
-//		return updatedProjectEvent;
 	}
 
 	/**

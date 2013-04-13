@@ -38,29 +38,6 @@ class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 		}
 	}
 	
-//	addFieldChange(fieldName, fieldClass, changes, context, changesMap);
-
-	//	private static final String[] RequirementFieldNames = {"status", "priority", "name", "description", "estimate", "actualEffort", "assignees", "iteration", "type"};
-//	private static final Class<?>[] RequirementFieldClasses = {RequirementStatus.class, RequirementPriority.class, String.class, String.class, Integer.class, Integer.class, List.class, Iteration.class, RequirementType.class};
-//		private int id;
-//		private ReleaseNumber releaseNumber;
-//		private RequirementStatus status;
-//		private RequirementPriority priority;
-//		private String name;
-//		private String description;
-//		private int estimate;
-//		private int actualEffort;
-//		private Date creationDate;
-//		private Date lastModifiedDate;
-//		private List<RequirementEvent> events;
-//		private User creator;
-//		private List<User> assignees;
-//		private Iteration iteration;
-//		private RequirementType type;
-//
-//		//TODO Validation Classes for Database retrieval
-//		private List<RequirementModel> subRequirements;
-	
 	@Override
 	public ProjectEvent deserialize(JsonElement element, Type type,
 			JsonDeserializationContext context) throws JsonParseException {

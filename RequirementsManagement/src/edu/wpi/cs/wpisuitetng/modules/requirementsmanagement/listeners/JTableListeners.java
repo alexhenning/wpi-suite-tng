@@ -25,20 +25,6 @@ import javax.swing.JTable;
  */
 public class JTableListeners implements MouseListener{
 
-	//myJTable.addMouseListener(
-	/*void TableMouseAdapter() {
-		mouseClicked(MouseEvent e);
-	}
-	
-	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() == 2) {
-			JTable target = (JTable)e.getSource();
-			int row = target.getSelectedRow();
-			int column = target.getSelectedColumn();
-			// do some action
-		}
-	}*/
-
 	/**
 	 * This is not implemented
 	 *
@@ -95,9 +81,7 @@ public class JTableListeners implements MouseListener{
 			int row = target.getSelectedRow();
 			Object id = target.getValueAt(row, 0);//TODO what is this used for? is it even needed?
 		}
-		
 	}
-	
 }
 
 

@@ -274,12 +274,6 @@ public class ProjectEvent extends AbstractModel {
 	 * @return the JSON string
 	 */
 	public String toString() {
-//		System.out.println("id: "+id);
-//		System.out.println("date: "+date);
-//		System.out.println("user: "+user);
-//		System.out.println("changes: "+changes);
-//		System.out.println("changedObjectClass: "+changedObjectClass);
-//		System.out.println("objectId: "+objectId);
 		return toJSON();
 	}
 	

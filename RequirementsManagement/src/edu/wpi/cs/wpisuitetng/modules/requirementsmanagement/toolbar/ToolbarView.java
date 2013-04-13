@@ -64,10 +64,6 @@ public class ToolbarView extends DefaultToolbarView {
 		JButton CrtIteration = new JButton("Create Iteration");
 		CrtIteration.setAction(new CreateIterationAction(tabController));
 				
-//		// Construct the create defect button
-//		createRequirement = new JButton();
-//		//createDefect.setAction(new CreateDefectAction(tabController));
-		
 		// Construct the search button
 		searchRequirements = new JButton("Lookup by ID");
 		
@@ -84,7 +80,6 @@ public class ToolbarView extends DefaultToolbarView {
 			}
 		});
 		searchRequirements.setText("Search Requirements");
-		//searchField.addActionListener(new LookupDefectController(tabController, searchField, this));
 		
 		// Add buttons to the content panel
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -99,7 +94,6 @@ public class ToolbarView extends DefaultToolbarView {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 1;
-		//content.add(createDefect);
 		content.add(searchField, c);
 		c.gridx = 1;
 		content.add(searchRequirements, c);

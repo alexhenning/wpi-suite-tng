@@ -100,12 +100,9 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	 *
 	 */
 	private void addComponents() {
-		//panelLayout = new GridBagLayout();
-		//GridBagConstraints c = new GridBagConstraints();
 		displayPanel = new JPanel();
 		displayPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		//setLayout(panelLayout);
 		
 		releaseNumbersComboBox = new JComboBox();
 		releaseNumbersComboBox.setBackground(Color.WHITE);
