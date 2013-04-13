@@ -50,10 +50,14 @@ public class IterationEstimate implements RequirementsCallback {
 	 */
 	@Override
 	public void callback(List<RequirementModel> reqs) {
-		if (reqs.size() > 0) {
+		estimate = 0;
+		if (iteration != null) {
 			for(RequirementModel req : reqs) {
-				if(req.getIteration() == iteration) { // If the iteration is the same as the requirment's iteration
-					this.estimate += req.getEstimate(); // Add the requirment's estimate to the iteration's estimate
+				// If the iteration is the same as the requirment's iteration
+				if (req.getIteration() != null &&
+						req.getIteration().getIterationNumber().equals(iteration.getIterationNumber())) {
+					// Add the requirment's estimate to the iteration's estimate
+					this.estimate += req.getEstimate();
 				}
 			}
 		}
