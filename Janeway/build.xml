@@ -67,6 +67,9 @@
 			<fileset dir="../Network/build"/>
 			<zipfileset src="${core-lib}/gson-2.2.2.jar"/>
 			<zipfileset src="${core-lib}/commons-codec-1.7.jar"/>
+			<zipfileset src="./swingx/swingx-all-1.6.4.jar"/>
+			<zipfileset src="./jfreechart/lib/jfreechart-1.0.14.jar"/>
+			<zipfileset src="./jfreechart/lib/jcommon-1.0.17.jar"/>
 		</jar>
 		<copy file="modules.conf" todir="${dist}/janeway" overwrite="true"/>
 	</target>
