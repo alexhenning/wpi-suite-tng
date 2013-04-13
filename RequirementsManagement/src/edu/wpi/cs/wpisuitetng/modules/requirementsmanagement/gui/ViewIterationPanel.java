@@ -25,6 +25,8 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
+import org.junit.runners.ParentRunner;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
@@ -37,7 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
  * 
  */
 @SuppressWarnings("serial")
-public class ViewIterationPanel extends JPanel {
+public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	
 	public static final int ID = 0;
 	public static final int NAME = 1;
@@ -47,7 +49,7 @@ public class ViewIterationPanel extends JPanel {
 	public static final int ROWS = 5;
 	
 	/** the tab that made this */
-	ViewIterationTab parent;
+	ScrollableTab parent;
 	JPanel topPanel;
 	JTable table;
 	ViewIterTable tableModel;
@@ -60,9 +62,7 @@ public class ViewIterationPanel extends JPanel {
 	 * constructor
 	 * @param permissionsTab the tab that created this
 	 */
-	public ViewIterationPanel(ViewIterationTab iterTab){
-		this.parent = iterTab;
-		
+	public ViewIterationPanel() {
 		tableModel = new ViewIterTable();
 		table = new JTable(tableModel);
 		
@@ -73,6 +73,11 @@ public class ViewIterationPanel extends JPanel {
 		addComponents();
 		updateAllIterationList();
 		
+	}
+
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
 	}
 
 	/**
@@ -203,5 +208,4 @@ public class ViewIterationPanel extends JPanel {
 	public ViewIterTable getTable(){
 		return this.tableModel;
 	}
-
 }
