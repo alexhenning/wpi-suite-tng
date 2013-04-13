@@ -18,7 +18,6 @@ public class UpdateViewIterationOnFocusListener implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){
 			//TODO: find a way to remove this listener if tab has been closed
-			//((JTabbedPane) e.getSource()).removeChangeListener(this);
 		} else if( ((JTabbedPane) e.getSource()).getSelectedComponent().equals(attentiveTab) ){
 			attentiveTab.getPanel().updateAllIterationList();
 		}

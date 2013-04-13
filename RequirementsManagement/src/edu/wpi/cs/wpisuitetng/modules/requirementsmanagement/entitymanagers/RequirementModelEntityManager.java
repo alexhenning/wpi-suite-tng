@@ -93,9 +93,6 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		
 		List<ValidationIssue> issues = validator.validate(s, newRequirementModel, Mode.CREATE);
 		if(issues.size() > 0) {
-//			for (ValidationIssue issue : issues) {
-//				System.out.println("Validation issue: " + issue.getMessage());
-//			}
 			throw new BadRequestException();
 		}
 		
@@ -183,10 +180,6 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		RequirementModel existingRequirement = validator.getLastExistingRequirement();
 		Date originalLastModified = existingRequirement.getLastModifiedDate();
 		
-//		RequirementChangeset changeset = new RequirementChangeset();
-//		// make sure the user exists
-//		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
-//		RequirementChangesetCallback callback = new RequirementChangesetCallback(changeset);
 		ProjectEvent changeset = ProjectEvent.createProjectChangesetEvent(ProjectEventObjectType.REQUIREMENT, existingRequirement.getId()+"");
 		// make sure the user exists
 		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
@@ -201,8 +194,6 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 			existingRequirement.setLastModifiedDate(originalLastModified);
 		} else {
 			// add changeset to events
-//			existingRequirement.getEvents().add(changeset);
-//			DB.createProjectEvent(changeset, new AddProjectEventController());
 			if(!db.save(existingRequirement, s.getProject()) || !db.save(changeset, s.getProject()) || !db.save(existingRequirement.getEvents())) {
 				throw new WPISuiteException();
 			}

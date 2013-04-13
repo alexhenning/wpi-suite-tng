@@ -125,7 +125,6 @@ public class ReleaseNumber extends AbstractModel {
 	 */
 	public static ReleaseNumber fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
 		return builder.create().fromJson(json, ReleaseNumber.class);
 	}
 	
@@ -135,7 +134,6 @@ public class ReleaseNumber extends AbstractModel {
 	 */
 	public static ReleaseNumber[] fromJSONArray(String json) {
 		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
 		return builder.create().fromJson(json, ReleaseNumber[].class);
 	}
 

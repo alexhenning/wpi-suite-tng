@@ -230,32 +230,6 @@ public class IterationValidator {
 			it2End.set(Calendar.MINUTE, 0);
 			it2End.set(Calendar.SECOND, 0);
 			
-			//  ((2start>=1start && 2start<1end) || (2end>1start && 2end<=1end) ||
-			//  (1start>=2start && 1start<2end) || (1end>2start && 1end<=2end)) && 
-			//  !((1start.equal(2end)) || (1end.equal(2start)))
-			//issue if
-			//  ((2start>=1start && 2start<1end) || (2end>1start && 2end<=1end) ||
-			//  (1start>=2start && 1start<2end) || (1end>2start && 1end<=2end))
-			// the 2nd start date between the 1st start/end dates
-			//  (2start>1start && 2start<1end)
-			// the 2nd end date between the 1st start/end dates
-			//  (2end>1start && 2end<1end)
-			// the 1st start date between the 2nd start/end dates
-			//  (1start>2start && 1start<2end)
-			// the 1st end date between the 2nd start/end dates
-			//  (1end>2start && 1end<2end)
-			// the 1st start date equal to the 2nd start date
-			//  (1start.equal(2start))
-			// the 1st end date equal to the 2nd end date
-			//  (1end.equal(2end))
-			//but not if
-			//  ((1start.equal(2end)) || (1end.equal(2start)))
-			// the 1st start date equal to the 2nd end date
-			//  (1start.equal(2end))
-			// the 1st end date equal to the 2nd start date
-			//  (1end.equal(2start))
-			
-			
 			if(it2Start.compareTo(it1Start) >= 0 && it2Start.compareTo(it1End) <= 0) {
 				issues.add(new ValidationIssue("startDate overlaps with Iteration "+iteration1.getIterationNumber(), "startDate"));
 			}

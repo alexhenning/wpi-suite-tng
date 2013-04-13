@@ -208,7 +208,6 @@ public class Iteration extends AbstractModel {
 	 */
 	public static Iteration fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
 		return builder.create().fromJson(json, Iteration.class);
 	}
 	
@@ -218,7 +217,6 @@ public class Iteration extends AbstractModel {
 	 */
 	public static Iteration[] fromJSONArray(String json) {
 		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
 		return builder.create().fromJson(json, Iteration[].class);
 	}
 

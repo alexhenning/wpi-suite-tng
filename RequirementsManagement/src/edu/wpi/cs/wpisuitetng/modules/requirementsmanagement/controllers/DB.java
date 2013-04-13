@@ -137,13 +137,6 @@ public class DB {
 		request.send();
 	}
 
-//	public static void createProjectEvent(ProjectEvent projectEvent, AddProjectEventController callback) {
-//		final Request request = Network.getInstance().makeRequest("requirementsmanagement/projectevent",  HttpMethod.PUT);
-//		request.setBody(projectEvent.toJSON());
-//		request.addObserver(new CreateProjectEventRequestObserver(callback));
-//		request.send();
-//	}
-	
 	/**
 	 * retrieves all project events from the database and runs the callback function on them in the class passed
 	 *

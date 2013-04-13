@@ -102,14 +102,6 @@ public class RequirementSubrequirementTab extends JPanel {
 		subrequirementsTableModel = new ViewReqTable();
 		subrequirementsTableModel.setMode(Mode.VIEW);
 		subrequirementsTable = new JTable(subrequirementsTableModel);// {
-//			@Override
-//			public TableCellRenderer getCellRenderer(int row, int column) {
-//				// Just return the custom renderer
-//				// This somehow works differently than setDefaultRenderer, but I'm not sure how
-//				//   other than the fact that this works and default renderer certainly does not
-//				return new CustomCellRenderer();
-//			}
-//		};
 		subrequirementsTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		subrequirementsTable.setFillsViewportHeight(true);
 		subrequirementsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -117,9 +109,6 @@ public class RequirementSubrequirementTab extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				//TODO finish this listener
-//                if (e.getClickCount() == 1) {
-//                	updateSelectedOther((String) subrequirementsTable.getModel().getValueAt(subrequirementsTable.getSelectedRow(), ID));
-//                }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
 			@Override public void mouseExited(MouseEvent arg0) {}
@@ -134,14 +123,6 @@ public class RequirementSubrequirementTab extends JPanel {
 		possibleSubrequirementsTableModel = new ViewReqTable();
 		possibleSubrequirementsTableModel.setMode(Mode.VIEW);
 		possibleSubrequirementsTable = new JTable(possibleSubrequirementsTableModel);// {
-//			@Override
-//			public TableCellRenderer getCellRenderer(int row, int column) {
-//				// Just return the custom renderer
-//				// This somehow works differently than setDefaultRenderer, but I'm not sure how
-//				//   other than the fact that this works and default renderer certainly does not
-//				return new CustomCellRenderer();
-//			}
-//		};
 		possibleSubrequirementsTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		possibleSubrequirementsTable.setFillsViewportHeight(true);
 		possibleSubrequirementsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

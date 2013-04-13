@@ -223,8 +223,6 @@ public class RequirementModelValidator {
 		}
 		if(requirement.getDescription() == null || requirement.getDescription().length() <= 0) {
 			// empty descriptions are okay
-			//requirement.setDescription("");
-		//} else if(requirement.getDescription().length() > 5000  {
 			issues.add(new ValidationIssue("description Cannot be empty", "description"));
 		}
 		

@@ -103,7 +103,6 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 		addButton = new JButton("Add note");
 		noteListener = new AddNoteController(this, parent.model, parent);
 		addButton.addActionListener(noteListener);
-//		addButton.setEnabled(inputEnabled);
 		addButton.setEnabled(false);
 		
 		// Add elements to the main panel

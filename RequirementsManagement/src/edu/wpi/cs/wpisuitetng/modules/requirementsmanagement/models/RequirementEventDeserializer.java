@@ -47,8 +47,6 @@ class RequirementEventDeserializer implements JsonDeserializer<RequirementEvent>
 		EventType eType = context.deserialize(object.get("type"), EventType.class);
 		if(eType != null) { // type could be any garbage string, eType null if not in enum
 			switch(eType) {
-//			case CHANGESET:
-//				return context.deserialize(element, RequirementChangeset.class);
 			case NOTE:
 				return context.deserialize(element, RequirementNote.class);
 			}

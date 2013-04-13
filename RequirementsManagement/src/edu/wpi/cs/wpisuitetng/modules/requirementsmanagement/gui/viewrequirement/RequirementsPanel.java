@@ -80,15 +80,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	public JTextArea descriptionfield = new JTextArea(6, 0);
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	RequirementType[] typeStrings = RequirementType.values();
-	Iteration[] iterations;// = new String() {""};//new String()[];
+	Iteration[] iterations;
 	ReleaseNumber[] releaseNums;
-	//releaseNumberStrings[0] = "";
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
-	public JComboBox iteration = new JComboBox();// = new JComboBox(releaseNumberStrings);
+	public JComboBox iteration = new JComboBox();
 	public JComboBox releaseNumbers = new JComboBox();
-//	RequirementStatus[] statusStrings = RequirementStatus.values();
-	public JTextField statusfield = new JTextField();//(statusStrings);
+	public JTextField statusfield = new JTextField();
 	public JTextField estimateField = new JTextField("0", 35);
 	public JTextField actualEffortField = new JTextField("0", 35);
 	public JTextField results = new JTextField(35);
@@ -653,7 +651,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			}
 		}
 		model.setDescription(descriptionfield.getText());
-//		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
 		if (model.getStatus() == RequirementStatus.COMPLETE) {
 			
 		} else if (model.getStatus() == RequirementStatus.DELETED) {
@@ -819,9 +816,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			}
 			setHistory(projectEvents);
 		}
-
-
-		
 	}
 	
 	/**
@@ -953,7 +947,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		if (model.getReleaseNumber() == null && releaseNumbers.getSelectedItem() != null && releaseNumbers.getSelectedItem().toString() != null && !releaseNumbers.getSelectedItem().toString().equals("None")) return true;
 		if (model.getReleaseNumber() != null && releaseNumbers.getSelectedItem() != null && releaseNumbers.getSelectedItem().toString() != null && !model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
 		if (!model.getDescription().equals(descriptionfield.getText())) return true;
-//		model.setStatus((RequirementStatus) statusfield.getSelectedItem());
 		//TODO could probably improve this 
 		if (estimateField.getText().matches("[0-9]+") && model.getEstimate() != new Integer(estimateField.getText()).intValue()) return true;
 		if (actualEffortField.getText().matches("[0-9]+") && model.getActualEffort() != new Integer(actualEffortField.getText()).intValue()) return true;

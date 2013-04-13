@@ -89,7 +89,6 @@ public abstract class RequirementEvent extends AbstractModel {
 	 */
 	public static void addGsonDependencies(GsonBuilder builder) {
 		builder.registerTypeAdapter(RequirementEvent.class, new RequirementEventDeserializer());
-//		builder.registerTypeAdapter(RequirementChangeset.class, new RequirementChangesetDeserializer());
 	}
 	
 	@Override

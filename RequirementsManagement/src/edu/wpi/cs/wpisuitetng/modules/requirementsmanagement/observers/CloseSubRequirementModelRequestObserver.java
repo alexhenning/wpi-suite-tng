@@ -55,7 +55,6 @@ public class CloseSubRequirementModelRequestObserver implements RequestObserver 
 		
 		// Parse the message out of the response body
 		final boolean result = response.getBody().trim().equals("true");
-//		final RequirementModel[] requirements = RequirementModel.fromJSONArray(response.getBody());
 		
 		// Pass the messages back to the controller
 		callback.callback(result);
