@@ -28,6 +28,8 @@ import javax.swing.table.TableColumn;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleIterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 
 /**
@@ -94,13 +96,13 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 			public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 2 ) {
                 	if (table.getModel().getValueAt(table.getSelectedRow(),ID).toString().equals("0")) {
-                		parent.tabController.addIterationTab(null, "View Backlog");
+                		parent.getTabController().addIterationTab(null, "View Backlog");
                 	}
                 	else DB.getSingleIteration(table.getModel().getValueAt(table.getSelectedRow(), ID).toString(),
                 			new SingleIterationCallback() {
 						@Override
 						public void callback(Iteration iter) {
-							parent.tabController.addIterationTab(iter, "Edit " + iter.getIterationNumber());
+							parent.getTabController().addIterationTab(iter, "Edit " + iter.getIterationNumber());
 						}
                 	});
                 }
@@ -126,7 +128,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	 *
 	 */
 	public void close() {
-		parent.tabController.closeCurrentTab();
+		parent.getTabController().closeCurrentTab();
 	}
 	
 	/**

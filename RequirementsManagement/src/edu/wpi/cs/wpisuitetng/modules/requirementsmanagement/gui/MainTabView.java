@@ -20,6 +20,9 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ClosableTabComponent;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
+
 /**
  * This tabbed pane will appear as the main content of the Requirements tab.
  * It starts out showing the single Dashboard tab.

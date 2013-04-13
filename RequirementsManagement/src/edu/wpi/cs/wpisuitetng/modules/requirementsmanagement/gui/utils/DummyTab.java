@@ -10,11 +10,13 @@
  *    Andrew Hurle
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
 
 import java.awt.Component;
 
 import javax.swing.Icon;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 
 /**
  * Holds values given to it, but doesn't actually change the given MainTabView.

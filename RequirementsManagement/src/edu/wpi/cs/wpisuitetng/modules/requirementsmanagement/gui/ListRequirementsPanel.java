@@ -40,6 +40,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.Iterati
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
@@ -105,7 +107,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
                 			new SingleRequirementCallback() {
 						@Override
 						public void callback(RequirementModel req) {
-							parent.tabController.addEditRequirementTab(req);
+							parent.getTabController().addEditRequirementTab(req);
 						}
                 	});
                 }

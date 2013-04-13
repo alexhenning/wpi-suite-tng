@@ -20,6 +20,9 @@ import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.DummyTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 
 /**
@@ -83,6 +86,13 @@ public class ReportsTab extends JPanel implements IToolbarGroupProvider{
 	public ToolbarGroupView getGroup() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * @return The main panel that this tab contains
+	 */
+	public ReportsPanel getPanel() {
+		return mainPanel;
 	}
 
 }
