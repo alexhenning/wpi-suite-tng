@@ -42,13 +42,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  */
 @SuppressWarnings("serial")
-public class IterationPanel extends JPanel{
+public class IterationPanel extends JPanel implements ScrollablePanel {
 	
 	/** the model to hold the iteration */
 	Iteration model;
 	
 	/** the tab that created this panel */
-	IterationTab parent;
+	ScrollableTab parent;
 	/** the layout for this panel */
 	private GridBagLayout panelLayout;
 	/** labels to describe the text fields */
@@ -73,9 +73,8 @@ public class IterationPanel extends JPanel{
 	 * Constructor
 	 * @param iterationTab the tab that created this panel
 	 */
-	public IterationPanel(IterationTab iterationTab){
-		this.parent = iterationTab;
-		model = parent.iteration;
+	public IterationPanel(Iteration iteration){
+		model = iteration;
 		
 		editMode = Mode.CREATE;
 		
@@ -88,11 +87,14 @@ public class IterationPanel extends JPanel{
 		
 		// Add all components to this panel
 		addComponents();
-//		parent.buttonGroup.update(mode, model);
-
 		
 		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
 		updateFields();
+	}
+
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
 	}
 
 	
@@ -249,7 +251,7 @@ public class IterationPanel extends JPanel{
 	 * 
 	 * @return the parent IterationTab.
 	 */
-	public IterationTab getParent() {
+	public ScrollableTab getParent() {
 		return parent;
 	}
 
@@ -320,5 +322,4 @@ public class IterationPanel extends JPanel{
 
 		}
 	}
-
 }
