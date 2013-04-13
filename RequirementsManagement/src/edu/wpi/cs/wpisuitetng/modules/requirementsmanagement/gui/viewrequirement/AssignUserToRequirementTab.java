@@ -32,8 +32,8 @@ import javax.swing.SpringLayout;
 import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
