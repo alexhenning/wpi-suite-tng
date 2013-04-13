@@ -41,6 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
 @SuppressWarnings("serial")
 public class ShowHelpAction extends AbstractAction{
 
+	File pdfFile = null;
 	
 	public ShowHelpAction() {
 		super("Help");
@@ -56,39 +57,17 @@ public class ShowHelpAction extends AbstractAction{
 	public void actionPerformed(ActionEvent e) {
 		if (Desktop.isDesktopSupported()) {
 		    try {
-		    	File pdfFile = File.createTempFile("help-reqmanagment-", ".pdf");
-		    	System.out.println(pdfFile);
-		    	
-		    	writeHelpFile(pdfFile);
-		    	
-		        //Desktop.getDesktop().browse(helpStream.toURI());
-		        //File myFile = new File(helpStream.toURI());
+		    	if (pdfFile == null || !pdfFile.exists()) {
+		    		pdfFile = File.createTempFile("help-reqmanagment-", ".pdf");
+		    		InputStream in = ShowHelpAction.class.getResourceAsStream("/help.pdf");
+		    		OutputStream out = new FileOutputStream(pdfFile);
+		    		IOUtils.getInstance().copyStreams(in, out);
+		    	}
+
 		        Desktop.getDesktop().open(pdfFile);
 		    } catch (IOException ex) {
 		        // no application registered for PDFs
 		    }
 		}
-	}
-
-	private void writeHelpFile(File pdfFile) throws IOException {
-		InputStream in = ShowHelpAction.class.getResourceAsStream("/help.pdf");
-		    	
-		//BufferedReader in = new BufferedReader(new InputStreamReader(helpStream));
-		//BufferedWriter out = new BufferedWriter(new FileWriter(pdfFile));
-		OutputStream out = new FileOutputStream(pdfFile);
-		IOUtils.getInstance().copyStreams(in, out);
-//		try {
-//			int s;
-//		    while ((s = in.read()) != -1) {
-//		    	System.out.print(s);
-//		        out.write(s);
-//		    }
-//		    System.out.println();
-//		} finally {
-//		    if (out != null) {
-//		    	in.close();
-//		        out.close();
-//		    }
-//		}
 	}
 }
