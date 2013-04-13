@@ -33,8 +33,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;

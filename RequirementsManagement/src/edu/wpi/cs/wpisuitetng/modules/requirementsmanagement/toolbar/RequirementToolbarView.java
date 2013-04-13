@@ -24,11 +24,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CanCloseRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.CloseSubRequirementsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CanCloseRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CloseSubRequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;

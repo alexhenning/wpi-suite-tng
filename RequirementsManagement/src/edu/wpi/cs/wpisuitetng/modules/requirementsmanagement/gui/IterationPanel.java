@@ -25,9 +25,9 @@ import javax.swing.JTextField;
 
 import org.jdesktop.swingx.JXDatePicker;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;

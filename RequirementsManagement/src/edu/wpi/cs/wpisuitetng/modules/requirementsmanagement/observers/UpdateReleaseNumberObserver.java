@@ -11,7 +11,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleReleaseNumberCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;

@@ -10,7 +10,7 @@
  *    Alex Henning
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
 import java.util.List;
 

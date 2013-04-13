@@ -13,7 +13,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;

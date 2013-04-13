@@ -7,25 +7,24 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    vpatara
  ******************************************************************************/
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
+import java.util.List;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
 /**
+ * An interface for callbacks that return permissions profiles.
  *
- * Interface that release number callbacks can inherit from
- * @author Tim
- *
+ * @author vpatara
  */
-public interface SingleReleaseNumberCallback {
-
+public interface PermissionsCallback {
 	/**
-	 * Implements an action to be called on the release number being passed back
+	 * Implements an action to be performed on the permissions profile being passed back.
 	 *
-	 * @param releaseNumbers Release numbers returned from the database
+	 * @param req The requirement being returned
 	 */
-	public void callback(ReleaseNumber releaseNumber);
+	public void callback(List<Permissions> profiles);
 }

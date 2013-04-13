@@ -13,7 +13,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import java.util.List;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 
 /**
  *

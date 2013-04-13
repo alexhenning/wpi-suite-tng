@@ -8,26 +8,26 @@
  *
  * Contributors:
  *    Alex Henning
- *    Jacob Palnick
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import java.util.List;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
- * An interface for callbacks that return a single requirement.
+ * An interface for callbacks that return all of the requirements.
  * 
  * @author alex
- * @author Jacob Palnick
  */
-public interface SingleIterationCallback {
+public interface CanCloseRequirementCallback {
 
 	/**
-	 * Implements an action to be performed on the iteration being passed back.
+	 * Implements an action to be performed on the requirement being passed back.
 	 * 
-	 * @param iteration
-	 *            The iteration being returned
+	 * @param result
+	 *            boolean of if it can be closed
 	 */
-	public void callback(Iteration iteration);
+	public void callback(boolean result);
 }

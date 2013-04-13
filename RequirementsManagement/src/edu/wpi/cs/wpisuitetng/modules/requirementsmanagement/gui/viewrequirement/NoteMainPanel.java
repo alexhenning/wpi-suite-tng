@@ -26,7 +26,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddNoteController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddNoteController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.HintedTextArea;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
 
