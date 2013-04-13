@@ -35,6 +35,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddRele
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleReleaseNumberCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 
@@ -45,12 +47,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumbe
  *
  */
 @SuppressWarnings("serial")
-public class ReleaseNumberPanel extends JPanel implements KeyListener {
+public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyListener {
 	
 	/** the model that holds the ReleaseNumber */
 	ReleaseNumber model;
 	/** the tab that created this panel */
-	ReleaseNumberTab parent;
+	ScrollableTab parent;
 	/** layout for this panel */
 	//private GridBagLayout panelLayout;
 	/** combo box holding all release numbers */
@@ -76,9 +78,8 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 	/**
 	 * @param releaseTab
 	 */
-	public ReleaseNumberPanel(ReleaseNumberTab releaseTab) {
-		this.parent = releaseTab;
-		model = parent.releaseNum;
+	public ReleaseNumberPanel(ReleaseNumber rn) {
+		model = rn;
 		
 		editMode = Mode.CREATE;
 		
@@ -87,6 +88,11 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 		addComponents();
 		updateReleaseNumbers(null);
 		updateFields();
+	}
+
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
 	}
 	
 	/**
@@ -184,7 +190,7 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 	 *
 	 */
 	public void close() {
-		parent.tabController.closeCurrentTab();
+		parent.getTabController().closeCurrentTab();
 	}
 	
 	/**
@@ -446,5 +452,4 @@ public class ReleaseNumberPanel extends JPanel implements KeyListener {
 		}
 		
 	}
-	
 }

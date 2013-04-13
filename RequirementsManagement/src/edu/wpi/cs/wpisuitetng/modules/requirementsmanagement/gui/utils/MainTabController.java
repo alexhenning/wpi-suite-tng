@@ -35,7 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.IterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReleaseNumberTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReleaseNumberPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReportsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
@@ -168,7 +168,9 @@ public class MainTabController {
 				
 		ReleaseNumber rn = new ReleaseNumber();
 		Tab tab = addTab();
-		ReleaseNumberTab view = new ReleaseNumberTab(this, rn, tab);
+		ScrollableTab<ReleaseNumberPanel> view = 
+				new ScrollableTab<ReleaseNumberPanel>(this, tab, "Release Number",
+						new ReleaseNumberPanel(rn));
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
