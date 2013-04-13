@@ -11,6 +11,7 @@
  *    vpatara
  *    Josh
  ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
@@ -36,6 +37,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditPermissionController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.PermissionsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
@@ -47,15 +50,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  *
  */
 @SuppressWarnings("serial")
-public class PermissionsPanel extends JPanel {
+public class PermissionsPanel extends JPanel implements ScrollablePanel {
 	/** a permissions model */
 	Permissions newModel;
 	/** a permissions model */
 	Permissions editModel;
 	
 	/** the tab that made this */
-	PermissionsTab parent;
-//	private GridBagLayout panelLayout;
+	ScrollableTab parent;
 	/** labels */
 	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
 	JPlaceholderTextField usernameTextArea;
@@ -73,7 +75,6 @@ public class PermissionsPanel extends JPanel {
 	JTable profileTable;
 	/** the model for the table */
 	ViewPermissionsTable tableModel;
-//	String sName, sUsername, sID;
 	/** the top panel */
 	JPanel topPanel;
 
@@ -84,8 +85,7 @@ public class PermissionsPanel extends JPanel {
 	 * constructor
 	 * @param permissionsTab the tab that created this
 	 */
-	public PermissionsPanel(PermissionsTab permissionsTab){
-		this.parent = permissionsTab;
+	public PermissionsPanel(){
 		newModel = null;
 		editModel = null;
 		
@@ -97,6 +97,11 @@ public class PermissionsPanel extends JPanel {
 		
 		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
 		updateFields();
+	}
+
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
 	}
 
 	/**
@@ -314,7 +319,7 @@ public class PermissionsPanel extends JPanel {
 	 *
 	 */
 	public void close() {
-		parent.tabController.closeCurrentTab();
+		parent.getTabController().closeCurrentTab();
 	}
 	
 	/**
@@ -458,22 +463,4 @@ public class PermissionsPanel extends JPanel {
 			}
 		}
 	}
-	
-//	public static void main(String[] args){
-//		 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//	            public void run() {
-//	            	JFrame frame = new JFrame("ComboBoxDemo");
-//	                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	         
-//	                //Create and set up the content pane.
-//	                JComponent newContentPane = new PermissionsPanel(null);
-//	                newContentPane.setOpaque(true); //content panes must be opaque
-//	                frame.setContentPane(newContentPane);
-//	         
-//	                //Display the window.
-//	                frame.pack();
-//	                frame.setVisible(true);
-//	            }
-//	        });
-//	}
 }

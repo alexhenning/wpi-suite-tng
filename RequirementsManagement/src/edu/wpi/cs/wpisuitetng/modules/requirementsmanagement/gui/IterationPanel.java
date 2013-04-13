@@ -14,12 +14,9 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-//import java.text.ParseException;
-//import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-//import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -113,9 +110,6 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
 		lbl3 = new JLabel ("Iteration Number");
 		
-
-//		startDate = new JTextField();
-//		endDate = new JTextField();
 		Date startDate = model.getStartDate();
 		Date endDate = model.getEndDate();
 		startDatePicker = new JXDatePicker(startDate != null ? startDate : new Date());
@@ -269,19 +263,6 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 	public void setStatus(String string) {
 		result.setText(string);
 	}
-	
-//	class EditRequirementAction extends AbstractAction {
-//		@Override
-//		public void actionPerformed(ActionEvent arg0) {
-//			DB.updateIteration(model, new SingleIterationCallback() {
-//				@Override
-//				public void callback(Iteration iteration) {
-//					setStatus("Iteration Updated");
-//				}
-//			});
-//		}
-//	}
-	
 	
 	/**
 	 *

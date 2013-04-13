@@ -34,7 +34,7 @@ import javax.swing.event.ChangeListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.IterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReleaseNumberTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReportsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPanel;
@@ -56,7 +56,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 public class MainTabController {
 	
 	/** the main tab view */
-	private final MainTabView view;
+	private final MainTabView mainView;
 	/** a list requirements tab */
 	private ScrollableTab<ListRequirementsPanel> listReqsView = null;
 	
@@ -64,8 +64,8 @@ public class MainTabController {
 	 * @param view Create a controller that controls this MainTabView
 	 */
 	public MainTabController(MainTabView view) {
-		this.view = view;
-		this.view.addMouseListener(new MouseAdapter() {
+		this.mainView = view;
+		this.mainView.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				MainTabController.this.onMouseClick(event);
@@ -84,19 +84,19 @@ public class MainTabController {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			if (MainTabController.this.view.getSelectedComponent() instanceof RequirementsTab) {
-				RequirementsTab tmpTab = (RequirementsTab)MainTabController.this.view.getSelectedComponent();
+			if (MainTabController.this.mainView.getSelectedComponent() instanceof RequirementsTab) {
+				RequirementsTab tmpTab = (RequirementsTab)MainTabController.this.mainView.getSelectedComponent();
 				System.out.println("is match: " + (tab == tmpTab));
 				if(tab == tmpTab) {
 					tmpTab.getRequirementPanel().updateLists();
 				}
 			}
 			boolean tabExists = false;
-			for(int i=0; i<MainTabController.this.view.getComponentCount(); i++) {
-				if (MainTabController.this.view.getComponent(i) == tab) tabExists = true;
+			for(int i=0; i<MainTabController.this.mainView.getComponentCount(); i++) {
+				if (MainTabController.this.mainView.getComponent(i) == tab) tabExists = true;
 			}
 			if(!tabExists) {
-				MainTabController.this.view.removeChangeListener(this);
+				MainTabController.this.mainView.removeChangeListener(this);
 			}
 		}
 		
@@ -112,10 +112,10 @@ public class MainTabController {
 	 * @return				The created Tab
 	 */
 	public Tab addTab(String title, Icon icon, Component component, String tip) {
-		view.addTab(title, icon, component, tip);
-		int index = view.getTabCount() - 1;
-		view.setSelectedIndex(index);
-		return new Tab(view, view.getTabComponentAt(index));
+		mainView.addTab(title, icon, component, tip);
+		int index = mainView.getTabCount() - 1;
+		mainView.setSelectedIndex(index);
+		return new Tab(mainView, mainView.getTabComponentAt(index));
 	}
 	
 	/**
@@ -135,7 +135,7 @@ public class MainTabController {
 		final RequirementsTab view = new RequirementsTab(this, requirement, mode, tab);
 		tab.setComponent(view);
 		view.requestFocus();
-		this.view.addChangeListener(new RequirementTabChangeListener(view));
+		this.mainView.addChangeListener(new RequirementTabChangeListener(view));
 
 		return tab;
 	}
@@ -157,9 +157,9 @@ public class MainTabController {
 	
 	public Tab addCreateReleaseNumberTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.view.getTabCount(); i++) {
+		for (int i = 0; i < this.mainView.getTabCount(); i++) {
 			// TODO: May have to refactor "View Iteration"
-			if (view.getTitleAt(i).equals("Release Number")) {
+			if (mainView.getTitleAt(i).equals("Release Number")) {
 				switchToTab(i);
 				// TODO: figure out what to return
 				return null;
@@ -181,15 +181,15 @@ public class MainTabController {
 	 */
 	public Tab addIterationTab(Iteration iteration, String title) {
 		if (iteration == null) {
-			for (int i=0; i<view.getTabCount(); i++) {
-				if (("View Backlog").equals(view.getTitleAt(i))) {
+			for (int i=0; i<mainView.getTabCount(); i++) {
+				if (("View Backlog").equals(mainView.getTitleAt(i))) {
 					switchToTab(i);
 					return null;//TODO figure out what to return
 				}
 			}
 		} else {
-			for (int i=0; i<view.getTabCount(); i++) {
-				if (("Edit "+(iteration.getIterationNumber())).equals(view.getTitleAt(i))) {
+			for (int i=0; i<mainView.getTabCount(); i++) {
+				if (("Edit "+(iteration.getIterationNumber())).equals(mainView.getTitleAt(i))) {
 					switchToTab(i);
 					return null;//TODO figure out what to return
 				}
@@ -210,10 +210,10 @@ public class MainTabController {
 	 */
 	public Tab addPermissionTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.view.getTabCount(); i++) {
+		for (int i = 0; i < this.mainView.getTabCount(); i++) {
 
 			// TODO: May have to refactor "Manage Permissions"
-			if (view.getTitleAt(i).equals("Manage Permissions")) {
+			if (mainView.getTitleAt(i).equals("Manage Permissions")) {
 				switchToTab(i);
 				// TODO: figure out what to return
 				return null;
@@ -223,7 +223,9 @@ public class MainTabController {
 		// Otherwise, create a new one.
 		Permissions profile = new Permissions();
 		Tab tab = addTab();
-		PermissionsTab view = new PermissionsTab(this, profile, tab);
+		ScrollableTab<PermissionsPanel> view = 
+				new ScrollableTab<PermissionsPanel>(this, tab, "Manage Permissions",
+						new PermissionsPanel());
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
@@ -235,8 +237,8 @@ public class MainTabController {
 	 * @return The created Tab 
 	 */
 	public Tab addEditRequirementTab(RequirementModel requirement) {
-		for (int i=0; i<view.getTabCount(); i++) {
-			if (("Requirement #"+(requirement.getId())).equals(view.getTitleAt(i))) {
+		for (int i=0; i<mainView.getTabCount(); i++) {
+			if (("Requirement #"+(requirement.getId())).equals(mainView.getTitleAt(i))) {
 				switchToTab(i);
 				return null;//TODO figure out what to return
 			}
@@ -257,15 +259,15 @@ public class MainTabController {
 	 * @param listener the ChangeListener that should receive ChangeEvents
 	 */
 	public void addChangeListener(ChangeListener listener) {
-		view.addChangeListener(listener);
+		mainView.addChangeListener(listener);
 	}
 	
 	/**
 	 * Changes the selected tab to the tab left of the current tab
 	 */
 	public void switchToLeftTab() {
-		if (view.getSelectedIndex() > 0) {
-			switchToTab(view.getSelectedIndex() - 1);
+		if (mainView.getSelectedIndex() > 0) {
+			switchToTab(mainView.getSelectedIndex() - 1);
 		}
 	}
 	
@@ -273,7 +275,7 @@ public class MainTabController {
 	 * Changes the selected tab to the tab right of the current tab
 	 */
 	public void switchToRightTab() {
-		switchToTab(view.getSelectedIndex() + 1);
+		switchToTab(mainView.getSelectedIndex() + 1);
 	}
 	
 	/**
@@ -281,7 +283,7 @@ public class MainTabController {
 	 */
 	public void closeCurrentTab() {
 		try {
-			view.removeTabAt(view.getSelectedIndex());
+			mainView.removeTabAt(mainView.getSelectedIndex());
 		}
 		catch (IndexOutOfBoundsException e) {
 			// do nothing, tried to close tab that does not exist
@@ -294,7 +296,7 @@ public class MainTabController {
 	 */
 	private void switchToTab(int tabIndex) {
 		try {
-			view.setSelectedIndex(tabIndex);
+			mainView.setSelectedIndex(tabIndex);
 		}
 		catch (IndexOutOfBoundsException e) {
 			// an invalid tab was requested, do nothing
@@ -308,9 +310,9 @@ public class MainTabController {
 	private void onMouseClick(MouseEvent event) {
 		// only want middle mouse button
 		if(event.getButton() == MouseEvent.BUTTON2) {
-			final int clickedIndex = view.indexAtLocation(event.getX(), event.getY());
+			final int clickedIndex = mainView.indexAtLocation(event.getX(), event.getY());
 			if(clickedIndex > -1) {
-				view.removeTabAt(clickedIndex);
+				mainView.removeTabAt(clickedIndex);
 			}
 		}
 	}
@@ -322,12 +324,12 @@ public class MainTabController {
 	 */
 	public Tab addListRequirementsTab() {
 		if(listReqsView != null) {
-			for (int i=0; i<view.getTabCount(); i++) {
+			for (int i=0; i<mainView.getTabCount(); i++) {
 				// TODO: If the tab name changes, will need to change the string
 				// to match the tab name
-				if (view.getTitleAt(i).equals("All Requirements")) {
+				if (mainView.getTitleAt(i).equals("All Requirements")) {
 					switchToTab(i);
-					view.requestFocus();
+					mainView.requestFocus();
 					return null;
 				}
 			}
@@ -339,7 +341,7 @@ public class MainTabController {
 							"List of requirements");
 		tab.setComponent(listReqsView);
 		listReqsView.requestFocus();
-		view.addChangeListener(new ChangeListener() {
+		mainView.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if(listReqsView.getPanel().getTable().getMode() == ViewReqTable.Mode.VIEW) {
@@ -352,12 +354,12 @@ public class MainTabController {
 	}
 
 	public void addShowReportsTab() {
-		for (int i=0; i<view.getTabCount(); i++) {
+		for (int i=0; i<mainView.getTabCount(); i++) {
 			// TODO: If the tab name changes, will need to change the string
 			// to match the tab name
-			if (view.getTitleAt(i).equals("Reports")) {
+			if (mainView.getTitleAt(i).equals("Reports")) {
 				switchToTab(i);
-				view.requestFocus();
+				mainView.requestFocus();
 				return;
 			}
 		}
@@ -365,7 +367,7 @@ public class MainTabController {
 		Tab tab = addTab();
 		final ReportsTab reportsTab = new ReportsTab(this, tab);
 		reportsTab.requestFocus();
-		view.addChangeListener(new ChangeListener() {
+		mainView.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				reportsTab.getPanel().refresh();
@@ -382,9 +384,9 @@ public class MainTabController {
 
 	public Tab addViewIterationTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.view.getTabCount(); i++) {
+		for (int i = 0; i < this.mainView.getTabCount(); i++) {
 			// TODO: May have to refactor "View Iteration"
-			if (view.getTitleAt(i).equals("View Iteration")) {
+			if (mainView.getTitleAt(i).equals("View Iteration")) {
 				switchToTab(i);
 				// TODO: figure out what to return
 				return null;
