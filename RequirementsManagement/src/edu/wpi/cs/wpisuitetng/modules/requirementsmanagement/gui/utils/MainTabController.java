@@ -372,6 +372,7 @@ public class MainTabController {
 		final ScrollableTab<ReportsPanel> reportsTab =
 				new ScrollableTab<ReportsPanel>(this, tab, "Reports", new ReportsPanel());
 		reportsTab.requestFocus();
+		tab.setComponent(reportsTab);
 		mainView.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {

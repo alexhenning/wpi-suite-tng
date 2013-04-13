@@ -54,7 +54,8 @@ public class ScrollableTab<Panel extends JComponent & ScrollablePanel> extends J
 		}
 		containingTab.setTitle(name);
 		
-		// Instantiate the main create iteration panel
+		// Set the panel panel
+		System.out.println(name+": "+panel.toString());
 		mainPanel = panel;
 		panel.setTab(this);
 		this.setLayout(new BorderLayout());
