@@ -7,55 +7,55 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    Josh
+ *    //TODO who did this?
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 
 /**
- * Tab for permissions
- * @author Josh
+ *
+ * The tab for iterations
+ * @author TODO
  *
  */
 @SuppressWarnings("serial")
-public class ViewIterationTab extends JPanel implements IToolbarGroupProvider {
-	/** the main tab controller */
-	MainTabController tabController;
-	/** tab that contains this*/
-	Tab containingTab;
-	/** scroll pane */
-	JScrollPane mainPanelScrollPane;
-	/** the main panel */
-	ViewIterationPanel mainPanel;
+public class ScrollableTab<Panel extends JComponent> extends JPanel implements IToolbarGroupProvider {
 	
+	/** the main tab controller*/
+	MainTabController tabController;
+	/** tab that this tab resides*/
+	Tab containingTab;
+	/** the main scroll pane */
+	JScrollPane mainPanelScrollPane;
+	/** The main panel */
+	Panel mainPanel;
+	ToolbarGroupView toolbar;
 
 	/**
 	 * Constructor
 	 * @param tabController the main tab controller
-	 * @param permission a permissions model
-	 * @param tab the tab that contains this
+	 * @param iteration an iteration
+	 * @param tab the containing tab
 	 */
-	public ViewIterationTab(MainTabController tabController, Tab tab){
+	public ScrollableTab(MainTabController tabController, Tab tab, Panel panel) {
 		this.tabController = tabController;
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
-		containingTab.setTitle("View Iteration");
+		containingTab.setTitle("Add Iteration");
 		
 		// Instantiate the main create iteration panel
-		mainPanel = new ViewIterationPanel(this);
+		mainPanel = panel;
 		this.setLayout(new BorderLayout());
 		mainPanelScrollPane = new JScrollPane(mainPanel);
 		mainPanelScrollPane.getVerticalScrollBar().setUnitIncrement(10);
@@ -63,41 +63,33 @@ public class ViewIterationTab extends JPanel implements IToolbarGroupProvider {
 		// Prevent content of scroll pane from smearing (credit: https://gist.github.com/303464)
 		mainPanelScrollPane.getVerticalScrollBar().addAdjustmentListener(new java.awt.event.AdjustmentListener(){
 			public void adjustmentValueChanged(java.awt.event.AdjustmentEvent ae){
-				//SwingUtilities.invokeLater(new Runnable(){
-				//	public void run(){
-						mainPanelScrollPane.repaint();
-				//	}
-				//});
+				mainPanelScrollPane.repaint();
 			}
 		});
 		
-		this.tabController.addChangeListener(new TabFocusListener(this));
-		
 		this.add(mainPanelScrollPane, BorderLayout.CENTER);
-		
 	}
 
+	/**
+	 * @return The main panel that this tab contains
+	 */
+	public Panel getPanel() {
+		return mainPanel;
+	}
+
+	/**
+	 * @return The toolbar
+	 */
 	@Override
 	public ToolbarGroupView getGroup() {
-		// TODO Auto-generated method stub
-		return null;
+		return toolbar;
 	}
-}
 
-class TabFocusListener implements ChangeListener {
-	ViewIterationTab attentiveTab;
-	
-	TabFocusListener(ViewIterationTab attentiveTab){
-		this.attentiveTab = attentiveTab;
+	/**
+	 * Set toolbar group
+	 */
+	public void setGroup(ToolbarGroupView toolbar) {
+		this.toolbar = toolbar;
 	}
-	
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){
-			//TODO: find a way to remove this listener if tab has been closed
-			//((JTabbedPane) e.getSource()).removeChangeListener(this);
-		} else if( ((JTabbedPane) e.getSource()).getSelectedComponent().equals(attentiveTab) ){
-			attentiveTab.mainPanel.updateAllIterationList();
-		}
-	}
+
 }

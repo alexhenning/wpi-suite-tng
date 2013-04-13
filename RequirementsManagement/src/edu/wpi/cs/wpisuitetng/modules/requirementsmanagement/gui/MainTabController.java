@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationOnFocusListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
@@ -383,7 +384,9 @@ public class MainTabController {
 
 		// Otherwise, create a new one.
 		Tab tab = addTab();
-		ViewIterationTab view = new ViewIterationTab(this, tab);
+		ScrollableTab<ViewIterationPanel> view
+			= new ScrollableTab<ViewIterationPanel>(this, tab, new ViewIterationPanel());
+		addChangeListener(new UpdateViewIterationOnFocusListener(view));
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
