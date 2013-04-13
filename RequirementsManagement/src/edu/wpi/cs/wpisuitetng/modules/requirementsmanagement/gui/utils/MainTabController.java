@@ -39,7 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReleaseNumberPa
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReportsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleIterationTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationOnFocusListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
@@ -198,7 +198,9 @@ public class MainTabController {
 			}
 		}
 		Tab tab = addTab();
-		ViewSingleIterationTab view = new ViewSingleIterationTab(this, iteration, tab, title);
+		ScrollableTab<ViewSingleIterationPanel> view =
+				new ScrollableTab<ViewSingleIterationPanel>(this, tab, title,
+						new ViewSingleIterationPanel(iteration));
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
