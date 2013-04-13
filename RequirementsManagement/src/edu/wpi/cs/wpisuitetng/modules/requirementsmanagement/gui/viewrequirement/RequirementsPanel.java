@@ -42,12 +42,14 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ProjectEventsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleUserCallback;
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.ListProjectEvents;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
@@ -94,6 +96,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
 	private RequirementSubrequirementTab subs;
+	private AssignUserToRequirementTab users;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
@@ -255,9 +258,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		nt = new NoteMainPanel(this);
 		hs = new RequirementHistoryTab(this);
 		subs = new RequirementSubrequirementTab(this);
+		users = new AssignUserToRequirementTab(this);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("History", hs);
 		supplementPane.add("Sub-Requirements", subs);
+		supplementPane.add("Assigned Users", users);
 		if(this.editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
 		} else {
@@ -592,6 +597,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		unsavedChanges = false;
 		parent.buttonGroup.update(this.editMode, model);
 		
+		users.update();
 	}
 	
 	/**
@@ -864,6 +870,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
     	});
 	}
 	
+	//TODO improve the add child code to minimize network calls.
 	public void addChild(int childId) {
 		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
 			@Override
@@ -907,12 +914,150 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		}
 	}
 	
+	public void removeChild(RequirementModel child) {
+		model.getSubRequirements().remove(child.getId()+"");
+		DB.updateRequirements(model, new RemoveChildRequirementCallback(child.getId()+""));
+	}
+	
+	public void removeChild(String childId) {
+		model.getSubRequirements().remove(childId);
+		DB.updateRequirements(model, new RemoveChildRequirementCallback(childId));
+	}
+	
+	class RemoveChildRequirementCallback implements SingleRequirementCallback {
+		private String childId;
+		
+		public RemoveChildRequirementCallback(String childId) {
+			this.childId = childId;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			boolean removed = true;
+			for (String subReq : currentReq.getSubRequirements()) {
+				if(subReq.equals(childId)) {
+					removed = false;
+				}
+			}
+			if (removed) {
+				subs.update();
+				model.setSubRequirements(currentReq.getSubRequirements());
+				parent.buttonGroup.update(editMode, model);
+				setStatus("removed child");
+			} else {
+				setStatus("failed to remove child");
+			}
+		}
+	}
+	
 	/**
 	 * checks to see if the field values are different from the values in the model.
 	 * @return true if the values are different from the values in the model
 	 */
 	public boolean valuesHaveChanged() {
 		return hasUnsavedChanges();
+	}
+	/**
+	 * adds a user to requirement model using only the user's id
+	 *
+	 * @param childId
+	 */
+	public void addUser(String username) {
+System.err.println("adduser reached***************************");
+		DB.getSingleUser(username, new SingleUserCallback() {
+			@Override
+			public void callback(User assignee) {
+				model.getAssignees().add(assignee);
+				DB.updateRequirements(model, new AddAssigneeCallback(assignee));
+
+			}
+    	});
+	}
+	
+	/**
+	 * Adds a user to requirement model and saves the updated model to the db
+	 *
+	 * @param assignee
+	 */
+	public void addUser(User assignee) {
+		model.getAssignees().add(assignee);
+		DB.updateRequirements(model, new AddAssigneeCallback(assignee));
+	}
+	
+	/**
+	 * Callback to provide feedback to the UI if the attempt to add the user was successful
+	 * 
+	 * @author William Terry
+	 *
+	 */
+	class AddAssigneeCallback implements SingleRequirementCallback {
+		private User assignee;
+		
+		public AddAssigneeCallback(User assignee) {
+			this.assignee = assignee;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			boolean added = false;
+			for (User assignedUsers : currentReq.getAssignees()) {
+				if(assignedUsers.equals(assignee)) {
+					added = true;
+				}
+			}
+			if (added) {
+				users.update();
+				setStatus("added user");
+			} else {
+				setStatus("failed to add user");
+			}
+		}
+	}
+	
+	/**
+	 * removes a user from requirement model using only the user's id
+	 *
+	 * @param childId
+	 */
+	public void remUser(String username) {
+		DB.getSingleUser(username, new SingleUserCallback() {
+			@Override
+			public void callback(User assigned) {
+				model.getAssignees().remove(assigned);
+				DB.updateRequirements(model, new RemAssigneeCallback(assigned));
+
+			}
+    	});
+	}
+	
+	/**
+	 * Callback to provide feedback to the UI if the attempt to add the user was successful
+	 * 
+	 * @author William Terry
+	 *
+	 */
+	class RemAssigneeCallback implements SingleRequirementCallback {
+		private User assigned;
+		
+		public RemAssigneeCallback(User assigned) {
+			this.assigned = assigned;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			boolean removed = true;
+			for (User assignedUsers : currentReq.getAssignees()) {
+				if(assignedUsers.equals(assigned)) {
+					removed = false;
+				}
+			}
+			if (removed) {
+				users.update();
+				setStatus("removed user");
+			} else {
+				setStatus("failed to remove user");
+			}
+		}
 	}
 	
 	/**

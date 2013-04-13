@@ -7,68 +7,67 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    //TODO
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
+import java.util.Arrays;
+
+import com.google.gson.GsonBuilder;
+
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
-/**
- * @author William Terry
- *
- */
-public class RetrieveSinglePermissionRequestObserver implements
-		RequestObserver {
+public class RetrieveUsersRequestObserver implements RequestObserver {
 	
 	/** Callback paired with this */
-	private SinglePermissionCallback callback;
+	private UsersCallback callback;
 	
 	/**
-	 * Default constructor
-	 * @param callback Controller this Observer handles requests from
+	 * Constructor
+	 * @param callback callback paired with this
 	 */
-	public RetrieveSinglePermissionRequestObserver(SinglePermissionCallback callback) {
+	public RetrieveUsersRequestObserver(UsersCallback callback) {
 		this.callback = callback;
 	}
 
 	/**
-	 * Successful request
+	 * Indicate a successful response
 	 *
-	 * @param iReq Request returned from db
+	 * @param iReq a request
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
-		final Permissions[] profile = Permissions.fromJSONArray(response.getBody());
-		callback.callback(profile[0]);
+		GsonBuilder builder = new GsonBuilder();
+		final User[] users = builder.create().fromJson(response.getBody(), User[].class);
+		System.out.println(users.toString());
+		callback.callback(Arrays.asList(users));
+
 	}
 
 	/**
-	 * Error on return
+	 * indicate an error in the response
 	 *
-	 * @param iReq
+	 * @param iReq a request
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to get a permissions profile failed.");
+		System.err.println("The request to retrieve users failed.");	
 	}
 
 	/**
-	 * Failure on return
+	 *indicate the response failed
 	 *
-	 * @param iReq
-	 * @param exception
+	 * @param iReq a request
+	 * @param exception the exception
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("The request to get a permissions failed.\nError: " + exception.getMessage());
+		System.err.println("The request to retrieve users failed.");
 	}
-
-
 }

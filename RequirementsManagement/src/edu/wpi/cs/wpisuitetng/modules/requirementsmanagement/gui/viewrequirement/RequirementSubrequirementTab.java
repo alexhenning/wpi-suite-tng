@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -74,6 +75,7 @@ public class RequirementSubrequirementTab extends JPanel {
 	List<String> subrequirements;
 	JButton addChildButton;
 	JButton setParrentButton;
+	JButton removeChildButton;
 
 	/**
 	 * Constructs a panel for notes
@@ -98,6 +100,8 @@ public class RequirementSubrequirementTab extends JPanel {
 	protected void addComponents() {
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
+		JLabel subLabel = new JLabel("Sub requirements");
+		JLabel posLabel = new JLabel("possible sub requirements");
 
 		subrequirementsTableModel = new ViewReqTable();
 		subrequirementsTableModel.setMode(Mode.VIEW);
@@ -108,7 +112,9 @@ public class RequirementSubrequirementTab extends JPanel {
 		subrequirementsTable.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				//TODO finish this listener
+                if (e.getClickCount() == 1) {
+                	updateSelectedSub(getSelectedSubId());
+                }
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
 			@Override public void mouseExited(MouseEvent arg0) {}
@@ -167,6 +173,18 @@ public class RequirementSubrequirementTab extends JPanel {
 			
 		});
 		
+		removeChildButton = new JButton("Remove selected child");
+		removeChildButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int selectedRow = subrequirementsTable.getSelectedRow();
+				if (selectedRow >= 0 && selectedRow < subrequirementsTable.getRowCount()) {
+					parent.removeChild((String) subrequirementsTable.getModel().getValueAt(selectedRow, ID));
+				}
+			}
+			
+		});
+		
 		int maxPreferedWidth = (addChildButton.getPreferredSize().width > setParrentButton.getPreferredSize().width ? addChildButton.getPreferredSize().width : setParrentButton.getPreferredSize().width);
 		
 		Dimension pref = new Dimension(maxPreferedWidth, addChildButton.getPreferredSize().height);
@@ -174,15 +192,26 @@ public class RequirementSubrequirementTab extends JPanel {
 		addChildButton.setMinimumSize(pref);
 		setParrentButton.setPreferredSize(pref);
 		setParrentButton.setMinimumSize(pref);
+		removeChildButton.setMaximumSize(removeChildButton.getPreferredSize());
+		removeChildButton.setMinimumSize(removeChildButton.getPreferredSize());
 		
 		//layout the components
+		layout.putConstraint(SpringLayout.WEST, subLabel, 4, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, subLabel, 4, SpringLayout.NORTH, this);
+		
 		layout.putConstraint(SpringLayout.WEST, subrequirementTableScrollPane, 4, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, subrequirementTableScrollPane, -4, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.NORTH, subrequirementTableScrollPane, 4, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.NORTH, subrequirementTableScrollPane, 4, SpringLayout.SOUTH, subLabel);
+		
+		layout.putConstraint(SpringLayout.NORTH, removeChildButton, 4, SpringLayout.SOUTH, subrequirementTableScrollPane);
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, removeChildButton, 0, SpringLayout.HORIZONTAL_CENTER, this);
+		
+		layout.putConstraint(SpringLayout.WEST, posLabel, 4, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, posLabel, 5, SpringLayout.SOUTH, removeChildButton);
 		
 		layout.putConstraint(SpringLayout.WEST, possibleSubrequirementTableScrollPane, 4, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, this, 4, SpringLayout.EAST, possibleSubrequirementTableScrollPane);
-		layout.putConstraint(SpringLayout.NORTH, possibleSubrequirementTableScrollPane, 5, SpringLayout.SOUTH, subrequirementTableScrollPane);
+		layout.putConstraint(SpringLayout.NORTH, possibleSubrequirementTableScrollPane, 4, SpringLayout.SOUTH, posLabel);
 		layout.putConstraint(SpringLayout.SOUTH, this, 3 + 4 + addChildButton.getPreferredSize().height, SpringLayout.SOUTH, possibleSubrequirementTableScrollPane);
 		
 		layout.putConstraint(SpringLayout.EAST, addChildButton, -2, SpringLayout.HORIZONTAL_CENTER, this);
@@ -196,6 +225,9 @@ public class RequirementSubrequirementTab extends JPanel {
 		add(possibleSubrequirementTableScrollPane);
 		add(addChildButton);
 		add(setParrentButton);
+		add(subLabel);
+		add(posLabel);
+		add(removeChildButton);
 	}
 	
 	/**
@@ -218,6 +250,25 @@ public class RequirementSubrequirementTab extends JPanel {
 		}
 	}
 	
+	/**
+	 * called when the selection in the sub requirement list changes.
+	 * @param selectedId the id of the selected requirement
+	 */
+	private void updateSelectedSub(String selectedId) {
+		if (selectedId == null || selectedId.equals("")) {
+			removeChildButton.setEnabled(false);
+		} else {
+			removeChildButton.setEnabled(true);
+//			setParrentButton.setEnabled(true);
+//			for (String req : subrequirements) {
+//				if(req.equals(selectedId)) {
+//					addChildButton.setEnabled(false);
+//					setParrentButton.setEnabled(false);
+//				}
+//			}
+		}
+	}
+	
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
@@ -227,9 +278,11 @@ public class RequirementSubrequirementTab extends JPanel {
 		possibleSubrequirementsTable.setEnabled(enabled);
 		if (enabled) {
 			updateSelectedPossible(getSelectedPosId());
+			updateSelectedSub(getSelectedSubId());
 		} else {
 			addChildButton.setEnabled(false);
 			setParrentButton.setEnabled(false);
+			removeChildButton.setEnabled(false);
 		}
 	}
 
@@ -246,6 +299,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		//TODO figure out how to do sync network request.
 		addChildButton.setEnabled(false);
 		setParrentButton.setEnabled(false);
+		removeChildButton.setEnabled(false);
 		subrequirementTableScrollPane.setEnabled(false);
 		possibleSubrequirementTableScrollPane.setEnabled(false);
 		subrequirementsTable.setEnabled(false);
@@ -395,6 +449,7 @@ public class RequirementSubrequirementTab extends JPanel {
 				}
 			}
 			updateSelectedPossible(getSelectedPosId());
+			updateSelectedSub(getSelectedSubId());
 
 		}
 		
