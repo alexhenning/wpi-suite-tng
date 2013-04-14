@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //Josh
+ *    Josh
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
@@ -24,6 +25,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -93,6 +96,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	public JTextField actualEffortField = new JTextField("0", 35);
 	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
+	JButton resetButton = new JButton("Reset");
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
 	private RequirementSubrequirementTab subs;
@@ -254,6 +258,19 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			submit.setText("Update");
 		}
 		
+		// Reset panel
+		resetButton.addMouseListener(new MouseListener() {
+			@Override public void mousePressed(MouseEvent arg0) {}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() >= 1) {
+					updateFields();
+				}
+			}
+		});
+
 		// Supplement Pane (i.e., notes, history, attachments)
 		nt = new NoteMainPanel(this);
 		hs = new RequirementHistoryTab(this);
@@ -360,12 +377,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		c.gridy = 8;
 		leftside.add(actualEffortArea, c);
 		c.gridy = 9;
-		// Make the save button taller
-		c.ipady = 20;
 		leftside.add(submit, c);
-		c.ipady = 0;
+		// Put less space between save/update and reset buttons
+		c.insets = new Insets(0, 5, 5, 5);
+		c.gridy = 10;
+		c.ipadx = 7; // Make the reset button as wide as the save/update button
+		leftside.add(resetButton, c);
+		c.ipadx = 0;
 		
 		// Right side (gridx = 1)
+		c.insets = new Insets(5, 5, 5, 5);
 		c.anchor = GridBagConstraints.CENTER;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
@@ -392,6 +413,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		c.gridy = 8;
 		leftside.add(actualEffortField, c);
 		c.gridy = 9;
+		c.gridheight = 2;
 		leftside.add(results, c);
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
