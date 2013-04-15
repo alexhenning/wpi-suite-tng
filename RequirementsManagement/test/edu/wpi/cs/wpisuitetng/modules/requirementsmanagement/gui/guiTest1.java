@@ -2,6 +2,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import static org.junit.Assert.*;
 
+import java.awt.Component;
+import java.awt.event.MouseEvent;
 import java.util.HashSet;
 
 import org.junit.*;
@@ -10,8 +12,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -21,13 +25,16 @@ import javax.swing.event.AncestorListener;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.HintedTextArea;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.NavToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarView;
@@ -85,24 +92,13 @@ public class guiTest1 {
 	private static int port = 38512;
 
 
-	//	@Ignore
-	//	@Before
-	//	public void setUp(){
-	//		config = new NetworkConfiguration("http://localhost:" + port);
-	//		Network.getInstance().setDefaultNetworkConfiguration(config);
-	//	
-	//		MainTabView mainTabView = new MainTabView();
-	//		mainTabController = new MainTabController(mainTabView);
-	//		module1 = new JanewayModule();
-	//
-	//	}
 
 
 	DummyServer server;
 	/**
 	 * Test that communication works. DummyServer must be running on port 8080 for this test to work.
 	 */
-//	@Before
+	@Before
 	public void setUp() {
 		config = new NetworkConfiguration("http://localhost:" + port);
 		Network.getInstance().setDefaultNetworkConfiguration(config);
@@ -140,10 +136,10 @@ public class guiTest1 {
 
 
 
-			server.stop();
-		} //TODO switch to https
+
+		} 
 		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
@@ -161,32 +157,79 @@ public class guiTest1 {
 	@Test
 	public void HintedTextArea()  {
 
-
 		new HintedTextArea(1, 1, "hint");
 
-
 	}
 
-	@Ignore
+	
+	
 	@Test
-	public void NoteMainPanel()  {
+	public void MainTabView()  {
 		MainTabView MainTabView1 = new MainTabView();
-		MainTabController MainTabController1 = new MainTabController(MainTabView1);
-		MainTabController1.addCreateRequirementTab();
-		MainTabController1.addCreateIterationTab();
+
+		Tab tab1 = new Tab(MainTabView1, tabPane);
+
+
+	}
+
+
+	@Test
+	public void mainTabController()  {
+		MainTabView MainTabView1 = new MainTabView();
+		mainTabController = new MainTabController(MainTabView1);
+
+		mainTabController.addCreateRequirementTab();
+
+		mainTabController.addCreateIterationTab();
+
 		Iteration iteration1 = new Iteration();
-		MainTabController1.addIterationTab(iteration1, "title1");
-//		ViewIterationTab ViewIterationTab1 = new ViewIterationTab(MainTabController1, new tab);
+		mainTabController.addIterationTab(iteration1, "title1");
 
-		//		RequirementsTab RequirementsTab1 = new RequirementsTab(MainTabController1);
-		//		RequirementsPanel RequirementsPanel1 = new RequirementsPanel(RequirementsTab1, new RequirementModel(), Mode.CREATE);
+		mainTabController.addCreateReleaseNumberTab();
 
-		//		NoteMainPanel NoteMainPanel1 = new NoteMainPanel(RequirementsPanel1);
+		mainTabController.addIterationTab(null,"title2");
+
+		mainTabController.addPermissionTab();
+
+		mainTabController.addEditRequirementTab(new RequirementModel());
+
+		mainTabController.addListRequirementsTab();
+
+		mainTabController.addShowReportsTab();
+
+		mainTabController.addViewIterationTab();
+
+		mainTabController.switchToLeftTab();
+
+		mainTabController.switchToRightTab();
+	}
+
+
+	@Test
+	public void requirement(){
+
+		RequirementModel RequirementModel2 = new RequirementModel(3, null, RequirementStatus.NEW, null, "name3"
+				, "description3", 0, 0, new User("", "", "", -1), new ArrayList<User>(), 
+				new Date(), new Date(), new ArrayList<RequirementEvent>(), 
+				new ArrayList<String>(), null, RequirementType.EPIC);
+	}
+
+	
+	
+	
+	@Test
+	public void ListRequirementsPanel(){
+		ListRequirementsPanel ListRequirementsPanel1 = new ListRequirementsPanel();
+		ListRequirementsPanel1.setEditTable();
+		ListRequirementsPanel1.setViewTable(false);
+		ListRequirementsPanel1.setViewTable(true);
+	
+
 	}
 
 
 
-//	@After
+	@After
 	public void after(){
 		server.stop();	
 	}
