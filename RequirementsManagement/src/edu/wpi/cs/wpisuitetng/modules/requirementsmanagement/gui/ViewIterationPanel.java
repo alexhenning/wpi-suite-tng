@@ -18,6 +18,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DateFormat;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -180,11 +181,12 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 				entries[0][ENDDATE] = "N/A";
 				entries[0][ESTIMATE] = "N/A";
 				int i = 1;
+				DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
 				for(Iteration iteration : iterations) {
 					entries[i][ID] = iteration.getId();
 					entries[i][NAME] = iteration.getIterationNumber();
-					entries[i][STARTDATE] = iteration.getStartDate();
-					entries[i][ENDDATE] = iteration.getEndDate();
+					entries[i][STARTDATE] = df.format(iteration.getStartDate());
+					entries[i][ENDDATE] = df.format(iteration.getEndDate());
 					entries[i][ESTIMATE] = iteration.getEstimate();					
 					i++;
 				}
