@@ -26,9 +26,6 @@ import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.network.Network;
-import edu.wpi.cs.wpisuitetng.network.dummyserver.DummyServer;
-import edu.wpi.cs.wpisuitetng.network.models.RequestModel;
 
 public class DefaultToolbarViewTest {
 
@@ -131,24 +128,6 @@ public class DefaultToolbarViewTest {
 	public void testRemoveNonexistent() {
 		toolbar.removeGroup(newGroup);
 		assertContents(Arrays.asList(group1, null, group2, null, group3));
-	}
-
-	// TODO: This test should be removed after done testing, since it doesn't belong here.
-	@Test
-	public void testDummyServer() {
-		new DummyServer(10001); // Test if DummyServer is okay here TODO: remove this line after done testing
-	}
-
-	// TODO: This test should be removed after done testing, since it doesn't belong here.
-	@Test
-	public void testNetworkGetInstance() {
-		Network.getInstance(); // Test if Network is okay in this test package
-	}
-
-	// TODO: This test should be removed after done testing, since it doesn't belong here.
-	@Test
-	public void testInstantiateRequestModel() {
-		new RequestModel(); // Test if RequestModel is okay in this test package
 	}
 
 }
