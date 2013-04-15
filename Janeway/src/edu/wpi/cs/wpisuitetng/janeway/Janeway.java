@@ -29,7 +29,6 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.login.LoginFrame;
 import edu.wpi.cs.wpisuitetng.janeway.modules.DummyModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.ModuleLoader;
-import edu.wpi.cs.wpisuitetng.network.dummyserver.DummyServer;
 
 /**
  * The client launcher class, contains the main method that
@@ -45,7 +44,6 @@ public class Janeway {
 	 * Instantiate the main GUI frame
 	 */
 	public static void main(final String[] args) {
-		new DummyServer(10000); // Test if DummyServer is okay here TODO: remove this line after done testing 
 		
 		// Set the look and feel to cross-platform so the UI looks
 		// the same across operating systems
