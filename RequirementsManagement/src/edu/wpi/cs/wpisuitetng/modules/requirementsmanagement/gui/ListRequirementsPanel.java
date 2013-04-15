@@ -10,6 +10,7 @@
  *    Josh Morse
  *    James Megin
  *    Tim Calvert
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -21,8 +22,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -447,12 +446,16 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @param reqs a list of all the requirements
 	 */
 	public void sendRequirementsToDatabase(List<RequirementModel> reqs) {
-		// TODO (with updateModels) Only update those that need to be updated
-		for(RequirementModel req : reqs.subList(0, reqs.size() - 1)) {  // update all but the last requirement
-			DB.updateRequirements(req, new UpdateRequirementCallback(false));
+		if(reqs == null)
+			System.err.println("Null req list in sendRequirementsToDatabase");
+		else if(reqs.size() > 0) {
+			// TODO (with updateModels) Only update those that need to be updated
+			for(RequirementModel req : reqs.subList(0, reqs.size() - 1)) {  // update all but the last requirement
+				DB.updateRequirements(req, new UpdateRequirementCallback(false));
+			}
+			// now update the last requirement with the provision that the callback updates the table
+			DB.updateRequirements(reqs.get(reqs.size() - 1), new UpdateRequirementCallback(true));
 		}
-		// now update the last requirement with the provision that the callback updates the table
-		DB.updateRequirements(reqs.get(reqs.size() - 1), new UpdateRequirementCallback(true));
 	}
 	
 	/**
