@@ -109,11 +109,12 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		
 		/** iteration is null, this is the backlog */
 		if (model == null) {
+			topPanel.setLayout(new BorderLayout());
 			iterationNumber = new JTextField("Backlog");
 			Font font = new Font("Verdana", Font.BOLD, 40);
 			iterationNumber.setFont(font);
 			iterationNumber.setEditable(false);
-			topPanel.add(iterationNumber);
+			topPanel.add(iterationNumber, BorderLayout.CENTER);
 		}
 		/** iteration is not null, retrieve and display iteration values */
 		else {
