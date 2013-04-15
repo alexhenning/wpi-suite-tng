@@ -21,8 +21,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -665,6 +663,13 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 *
 	 */
 	class CustomCellRenderer extends DefaultTableCellRenderer {
+		
+		public void removeInvalidCell(Point invalidCell) {
+			invalidCells.remove(invalidCell);
+			if(invalidCells.size() <= 0) {
+				saveButton.setEnabled(true);
+			}
+		}
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table,
@@ -676,17 +681,11 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				if(!value.equals(data[row][column])) {
 					c.setBackground(Color.YELLOW);
 					setToolTipText("This cell has been changed from: " + (data[row][column]).toString());
-					invalidCells.remove(new Point(row, column));
-					if(invalidCells.size() <= 0) {
-						saveButton.setEnabled(true);
-					}
+					removeInvalidCell(new Point(row, column));
 				} else {
 					c.setBackground(Color.WHITE);
 					setToolTipText(null);
-					invalidCells.remove(new Point(row, column));
-					if(invalidCells.size() <= 0) {
-						saveButton.setEnabled(true);
-					}
+					removeInvalidCell(new Point(row, column));
 				}
 				if(column == NAME) {
 					if(((String)value).length() < 1 || ((String)value).length() > 100) {
@@ -735,6 +734,9 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 							if(!invalidCells.contains(new Point(row, column))){
 								invalidCells.add(new Point(row, column));
 							}
+						} else if(Integer.valueOf((String)value) > 0) {
+							//if this fixes an iteration assaignment error, remove that from the invalid cells
+							removeInvalidCell(new Point(row, ITERATION));
 						}
 					} catch (NumberFormatException e) {
 						// still an error
