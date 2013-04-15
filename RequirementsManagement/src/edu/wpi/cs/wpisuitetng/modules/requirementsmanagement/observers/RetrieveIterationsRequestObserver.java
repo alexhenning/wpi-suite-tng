@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
@@ -41,10 +42,10 @@ public class RetrieveIterationsRequestObserver implements RequestObserver {
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
-		final Iteration[] reqs = Iteration.fromJSONArray(response.getBody());
-		System.out.println(reqs.toString());
-		callback.callback(Arrays.asList(reqs));
-
+		final Iteration[] iterations = Iteration.fromJSONArray(response.getBody());
+		if(iterations == null)
+			System.err.println("Null iterations in response body");
+		callback.callback((iterations != null) ? Arrays.asList(iterations) : new ArrayList<Iteration>());
 	}
 
 	/**

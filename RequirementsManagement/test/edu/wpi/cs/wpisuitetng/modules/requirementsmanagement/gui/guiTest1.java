@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    dbozgoren
+ *    vpatara
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import static org.junit.Assert.*;
@@ -18,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.HintedTextArea;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -77,8 +90,6 @@ public class guiTest1 {
 	private static int port = 38512;
 
 
-
-
 	DummyServer server;
 	/**
 	 * Test that communication works. DummyServer must be running on port 8080 for this test to work.
@@ -119,9 +130,6 @@ public class guiTest1 {
 			assertTrue(body.equals(server.getLastReceived().getBody()));
 			assertEquals(manualRequest.getHttpMethod(), server.getLastReceived().getHttpMethod());
 
-
-
-
 		} 
 		catch (InterruptedException e) {
 
@@ -129,37 +137,26 @@ public class guiTest1 {
 		}
 	}
 
-
-
 	@Test
-	public void test1()  {
-
-		assertEquals("RequirementsManagement", new JanewayModule().getName());
-		new JanewayModule().getTabs();
-
+	public void testCreateJanewayModule() {
+		JanewayModule janeway = new JanewayModule();
+		assertEquals("RequirementsManagement", janeway.getName());
+		janeway.getTabs();
 	}
-/*
-	@Test
-	public void HintedTextArea()  {
 
+	@Test
+	public void testInstantiateHintedTextArea() {
 		new HintedTextArea(1, 1, "hint");
-
 	}
-*///causes build to fail
-	
-	
+
 	@Test
-	public void MainTabView()  {
+	public void testCreateMainTabView() {
 		MainTabView MainTabView1 = new MainTabView();
-
 		Tab tab1 = new Tab(MainTabView1, tabPane);
-
-
 	}
 
-
 	@Test
-	public void mainTabController()  {
+	public void testCreateMainTabController() {
 		MainTabView MainTabView1 = new MainTabView();
 		mainTabController = new MainTabController(MainTabView1);
 
@@ -189,35 +186,29 @@ public class guiTest1 {
 		mainTabController.switchToRightTab();
 	}
 
-
 	@Test
-	public void requirement(){
-
-		RequirementModel RequirementModel2 = new RequirementModel(3, null, RequirementStatus.NEW, null, "name3"
-				, "description3", 0, 0, new User("", "", "", -1), new ArrayList<User>(), 
-				new Date(), new Date(), new ArrayList<RequirementEvent>(), 
+	public void testCreateRequirementModel() {
+		RequirementModel requirementModel2 = new RequirementModel(3, null,
+				RequirementStatus.NEW, null, "name3", "description3", 0, 0,
+				new User("", "", "", -1), new ArrayList<User>(), new Date(),
+				new Date(), new ArrayList<RequirementEvent>(),
 				new ArrayList<String>(), null, RequirementType.EPIC);
 	}
 
-	
-	
-	
 	@Test
-	public void ListRequirementsPanel(){
+	public void testListRequirementPanel() {
 		ListRequirementsPanel ListRequirementsPanel1 = new ListRequirementsPanel();
+		// Try saving edits
 		ListRequirementsPanel1.setEditTable();
 		ListRequirementsPanel1.setViewTable(false);
+		// Try canceling edits
+		ListRequirementsPanel1.setEditTable();
 		ListRequirementsPanel1.setViewTable(true);
-	
-
 	}
-
-
 
 	@After
-	public void after(){
-		server.stop();	
+	public void after() {
+		server.stop();
 	}
-
 
 }
