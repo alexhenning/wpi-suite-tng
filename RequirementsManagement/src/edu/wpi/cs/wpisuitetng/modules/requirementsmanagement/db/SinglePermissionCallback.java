@@ -27,5 +27,5 @@ public interface SinglePermissionCallback {
 	 * @param req
 	 *            The requirement being returned
 	 */
-	public void callback(Permissions profile);
+	void callback(Permissions profile);
 }

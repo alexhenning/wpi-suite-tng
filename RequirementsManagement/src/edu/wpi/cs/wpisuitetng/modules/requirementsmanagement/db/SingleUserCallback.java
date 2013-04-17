@@ -27,5 +27,5 @@ public interface SingleUserCallback {
 	 * @param req
 	 *            The requirement being returned
 	 */
-	public void callback(User user);
+	void callback(User user);
 }

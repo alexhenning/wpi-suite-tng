@@ -30,5 +30,5 @@ public interface IterationCallback {
 	 * @param reqs
 	 *            The iterations being returned
 	 */
-	public void callback(List<Iteration> iterationss);
+	void callback(List<Iteration> iterationss);
 }
