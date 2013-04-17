@@ -56,17 +56,38 @@ public class ShowHelpAction extends AbstractAction{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (Desktop.isDesktopSupported()) {
+			InputStream in = null;
+			OutputStream out = null;
 		    try {
 		    	if (pdfFile == null || !pdfFile.exists()) {
 		    		pdfFile = File.createTempFile("help-reqmanagment-", ".pdf");
-		    		InputStream in = ShowHelpAction.class.getResourceAsStream("/help.pdf");
-		    		OutputStream out = new FileOutputStream(pdfFile);
+		    		in = ShowHelpAction.class.getResourceAsStream("/help.pdf");
+		    		out = new FileOutputStream(pdfFile);
+		    		
+		    		System.out.println("Help Input Stream: "+in);
+		    		System.out.println("Help Out Stream: "+out);
+		    		
 		    		IOUtils.getInstance().copyStreams(in, out);
 		    	}
 
 		        Desktop.getDesktop().open(pdfFile);
 		    } catch (IOException ex) {
 		        // no application registered for PDFs
+		    } finally { // Close all streams
+		    	if (in != null) {
+		    		try {
+		    			in.close();
+		    		} catch (IOException e1) {
+		    			e1.printStackTrace();
+		    		}
+		    	}
+		    	if (out != null) {
+		    		try {
+						out.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+	    		}
 		    }
 		}
 	}
