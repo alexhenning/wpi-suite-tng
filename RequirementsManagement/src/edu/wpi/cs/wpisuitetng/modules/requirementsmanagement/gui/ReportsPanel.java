@@ -30,6 +30,9 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.demo.PieChartDemo1;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -78,6 +81,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
             true,
             false
         );
+		((PiePlot) chart.getPlot()).setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1} ({2})"));
 		
 		addComponents();
 
@@ -187,11 +191,11 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				Map<Iteration, Integer> map = new HashMap<Iteration, Integer>();
 			
 				for (RequirementModel req : model) {
-					Iteration status = req.getIteration();
-					if (map.containsKey(status)) {
-						map.put(status, 1 + map.get(status));
+					Iteration iteration = req.getIteration();
+					if (map.containsKey(iteration)) {
+						map.put(iteration, 1 + map.get(iteration));
 					} else {
-						map.put(status, 1);
+						map.put(iteration, 1);
 					}
 				}
 				
@@ -210,11 +214,13 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				Map<User, Integer> map = new HashMap<User, Integer>();
 			
 				for (RequirementModel req : model) {
-					User status = req.getCreator(); // TODO: replace with assigned to
-					if (map.containsKey(status)) {
-						map.put(status, 1 + map.get(status));
-					} else {
-						map.put(status, 1);
+					List<User> users = req.getAssignees();
+					for (User user: users) {
+						if (map.containsKey(user)) {
+							map.put(user, 1 + map.get(user));
+						} else {
+							map.put(user, 1);
+						}
 					}
 				}
 				
