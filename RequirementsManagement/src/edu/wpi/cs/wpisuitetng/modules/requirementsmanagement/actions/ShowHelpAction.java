@@ -66,6 +66,7 @@ public class ShowHelpAction extends AbstractAction{
 		        Desktop.getDesktop().open(pdfFile);
 		    } catch (IOException ex) {
 		        // no application registered for PDFs
+		    	System.out.println("No application registered to open PDFs with.");
 		    } finally { // Close all streams
 		    	if (in != null) {
 		    		try {

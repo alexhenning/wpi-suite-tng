@@ -291,6 +291,7 @@ public class MainTabController {
 		}
 		catch (IndexOutOfBoundsException e) {
 			// do nothing, tried to close tab that does not exist
+			System.out.println("Attempted to close tab that does not exist");
 		}
 	}
 	
@@ -304,6 +305,7 @@ public class MainTabController {
 		}
 		catch (IndexOutOfBoundsException e) {
 			// an invalid tab was requested, do nothing
+			System.out.println("Request for invalid tab failed.");
 		}
 	}
 	
