@@ -39,7 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 /**
  *
  * Description goes here
- * @author Tim
+ * @author Tim DeFreitas
  *
  */
 public class TestRequirementModelValidator {
