@@ -138,7 +138,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			result = new JTextField();
 			
 			iterationNumber = new JTextField(model.getIterationNumber());
-			estimate = new JTextField(model.getEstimate());
+			estimate = new JTextField("Calculating");//(model.getEstimate());
 			estimate.setEditable(false);
 			
 			submit = new JButton("Update");
@@ -352,6 +352,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	}
 	
 	public void updateEstimate() {
+		if (model != null) {
 		DB.getAllRequirements(new RequirementsCallback() {
 			
 			@Override
@@ -360,13 +361,14 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 				int estimate = 0;
 				for(RequirementModel req : reqs) {
 					Iteration it = req.getIteration();
-					if (it != null && it.getIterationNumber().equals(model.getIterationNumber())) {
+					if (it != null && model != null && it.getIterationNumber().equals(model.getIterationNumber())) {
 						estimate += req.getEstimate();
 					}
 				}
 				setEstimate(estimate);
 			}
 		});
+		}
 	}
 	
 	public void setEstimate(int est) {
