@@ -30,10 +30,12 @@ import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleIterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * GUI for a project manager to view and manage iterations 
@@ -172,6 +174,25 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 		 */
 		@Override
 		public void callback(List<Iteration> iterations) {
+			DB.getAllRequirements(new UpdateIterationTableCallback(iterations));
+		}
+	}
+	
+	class UpdateIterationTableCallback implements RequirementsCallback {
+		
+		/** the iteration to be put into the table */
+		List<Iteration> iterations;
+		
+		/**
+		 * Constructor
+		 * @param iteration the iteration
+		 */
+		public UpdateIterationTableCallback(List<Iteration> iterations) {
+			this.iterations = iterations;
+		}
+
+		@Override
+		public void callback(List<RequirementModel> reqs) {
 			if (iterations.size() > 0) {
 				// put the data in the table
 				Object[][] entries = new Object[iterations.size() + 1][ROWS];
@@ -187,7 +208,18 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 					entries[i][NAME] = iteration.getIterationNumber();
 					entries[i][STARTDATE] = df.format(iteration.getStartDate());
 					entries[i][ENDDATE] = df.format(iteration.getEndDate());
-					entries[i][ESTIMATE] = iteration.getEstimate();					
+					int estimate = 0;
+					if (iteration != null) {
+						for(RequirementModel req : reqs) {
+							// If the iteration is the same as the requirment's iteration
+							if (req.getIteration() != null &&
+									req.getIteration().getIterationNumber().equals(iteration.getIterationNumber())) {
+								// Add the requirment's estimate to the iteration's estimate
+								estimate += req.getEstimate();
+							}
+						}
+					}
+					entries[i][ESTIMATE] = estimate;					
 					i++;
 				}
 				getTable().setData(entries);
@@ -196,7 +228,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 			else {
 				// do nothing, there are no requirements
 			}
-		
+
 			TableColumn column = null;
 			for (int i = 0; i < ROWS; i++) {
 				column = table.getColumnModel().getColumn(i);
@@ -211,6 +243,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 				}
 			}
 		}
+		
 	}
 	
 	/**

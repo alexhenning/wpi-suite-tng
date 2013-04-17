@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,6 +22,7 @@ import com.google.gson.GsonBuilder;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 
 /**
  * The iteration model
@@ -39,6 +41,8 @@ public class Iteration extends AbstractModel {
 	private Date endDate;
 	/** the name */
 	private String iterationNumber;
+	/** the sum of the estimates for all requirements in the iteration */
+	private int estimate;
 
 	/**
 	 * Constructor
@@ -97,10 +101,16 @@ public class Iteration extends AbstractModel {
 	 * @return The sum of the estimates for all the requirements in the iteration
 	 */
 	public int getEstimate() {
-		IterationEstimate estimate = new IterationEstimate(this); // Create a new IterationEstimate class
-		DB.getAllRequirements(estimate); // Have that class run its callback method to get the estimate
-		return estimate.getEstimate(); // Return the estimate
-		
+		return estimate;	
+	}
+	
+	/**
+	 * sets the estimate of the iteration to the sum of all the estimates of all the requirements assigned to it
+	 *
+	 */
+	public void setEstimate() {
+		IterationEstimate iterationEstimate = new IterationEstimate(this);
+		DB.getAllRequirements(iterationEstimate);
 	}
 
 	/**
@@ -233,4 +243,48 @@ public class Iteration extends AbstractModel {
 	}
 	//TODO add new equals method
 
+	/**
+	 *
+	 * Description goes here
+	 * @author James
+	 * @author Visit
+	 *
+	 */
+	public class IterationEstimate implements RequirementsCallback {
+		
+		/** The Iteration that an estimate is needed for */
+		private Iteration iteration;
+
+		/**
+		 * Constructor
+		 * @param iteration the iteration
+		 */
+		public IterationEstimate(Iteration iteration) {
+			this.iteration = iteration;
+		}
+
+		/**
+		 * Get the total estimate for all of the requirements in an iteration
+		 * TODO: when sub-children are implemented for requirements make sure that this still works
+		 *
+		 * @param reqs list of requirements
+		 */
+		@Override
+		public void callback(List<RequirementModel> reqs) {
+			estimate = 0;
+			if (iteration != null) {
+				for(RequirementModel req : reqs) {
+					// If the iteration is the same as the requirment's iteration
+					if (req.getIteration() != null &&
+							req.getIteration().getIterationNumber().equals(iteration.getIterationNumber())) {
+						// Add the requirment's estimate to the iteration's estimate
+						estimate += req.getEstimate();
+					}
+				}
+			}
+			System.out.println("\nESTIMATE SET TO " + estimate + "!!!!\n");
+		}
+		
+	}
+	
 }

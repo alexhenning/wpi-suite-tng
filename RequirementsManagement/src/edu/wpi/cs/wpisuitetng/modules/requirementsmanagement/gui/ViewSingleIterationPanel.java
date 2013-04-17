@@ -118,6 +118,9 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		}
 		/** iteration is not null, retrieve and display iteration values */
 		else {
+			
+			model.setEstimate(); // update the estimate
+			
 			lbl1 = new JLabel("Start Date");
 			lbl2 = new JLabel("End Date");
 			lbl3 = new JLabel ("Iteration");
