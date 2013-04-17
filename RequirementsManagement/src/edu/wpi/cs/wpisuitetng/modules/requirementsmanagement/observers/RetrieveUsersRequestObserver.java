@@ -12,25 +12,26 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import com.google.gson.GsonBuilder;
+
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
-public class RetrieveIterationsRequestObserver implements RequestObserver {
+public class RetrieveUsersRequestObserver implements RequestObserver {
 	
 	/** Callback paired with this */
-	private IterationCallback callback;
+	private UsersCallback callback;
 	
 	/**
 	 * Constructor
 	 * @param callback callback paired with this
 	 */
-	public RetrieveIterationsRequestObserver(IterationCallback callback) {
+	public RetrieveUsersRequestObserver(UsersCallback callback) {
 		this.callback = callback;
 	}
 
@@ -42,10 +43,11 @@ public class RetrieveIterationsRequestObserver implements RequestObserver {
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
-		final Iteration[] iterations = Iteration.fromJSONArray(response.getBody());
-		if(iterations == null)
-			System.err.println("Null iterations in response body");
-		callback.callback((iterations != null) ? Arrays.asList(iterations) : new ArrayList<Iteration>());
+		GsonBuilder builder = new GsonBuilder();
+		final User[] users = builder.create().fromJson(response.getBody(), User[].class);
+		System.out.println(users.toString());
+		callback.callback(Arrays.asList(users));
+
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class RetrieveIterationsRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to retrieve Iterations failed.");	
+		System.err.println("The request to retrieve users failed.");	
 	}
 
 	/**
@@ -66,6 +68,6 @@ public class RetrieveIterationsRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
-		System.err.println("The request to retrieve Iterations failed.");
+		System.err.println("The request to retrieve users failed.");
 	}
 }

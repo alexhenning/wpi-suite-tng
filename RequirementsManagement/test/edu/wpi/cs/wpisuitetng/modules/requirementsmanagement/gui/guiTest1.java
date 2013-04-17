@@ -1,8 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    dbozgoren
+ *    vpatara
+ ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import static org.junit.Assert.*;
-
-import java.util.HashSet;
 
 import org.junit.*;
 
@@ -10,31 +20,26 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 
-import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
-import edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.HintedTextArea;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.HintedTextArea;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.NavToolbarView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarView;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
-//import edu.wpi.cs.wpisuitetng.network.TestRequest.MockObserver;
 import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
 import edu.wpi.cs.wpisuitetng.network.dummyserver.DummyServer;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
@@ -85,24 +90,11 @@ public class guiTest1 {
 	private static int port = 38512;
 
 
-	//	@Ignore
-	//	@Before
-	//	public void setUp(){
-	//		config = new NetworkConfiguration("http://localhost:" + port);
-	//		Network.getInstance().setDefaultNetworkConfiguration(config);
-	//	
-	//		MainTabView mainTabView = new MainTabView();
-	//		mainTabController = new MainTabController(mainTabView);
-	//		module1 = new JanewayModule();
-	//
-	//	}
-
-
 	DummyServer server;
 	/**
 	 * Test that communication works. DummyServer must be running on port 8080 for this test to work.
 	 */
-//	@Before
+	@Before
 	public void setUp() {
 		config = new NetworkConfiguration("http://localhost:" + port);
 		Network.getInstance().setDefaultNetworkConfiguration(config);
@@ -138,58 +130,85 @@ public class guiTest1 {
 			assertTrue(body.equals(server.getLastReceived().getBody()));
 			assertEquals(manualRequest.getHttpMethod(), server.getLastReceived().getHttpMethod());
 
-
-
-			server.stop();
-		} //TODO switch to https
+		} 
 		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
 
-
-
 	@Test
-	public void test1()  {
-
-		assertEquals("RequirementsManagement", new JanewayModule().getName());
-		new JanewayModule().getTabs();
-
+	public void testCreateJanewayModule() {
+		JanewayModule janeway = new JanewayModule();
+		assertEquals("RequirementsManagement", janeway.getName());
+		janeway.getTabs();
 	}
 
 	@Test
-	public void HintedTextArea()  {
-
-
+	public void testInstantiateHintedTextArea() {
 		new HintedTextArea(1, 1, "hint");
-
-
 	}
 
-	@Ignore
 	@Test
-	public void NoteMainPanel()  {
+	public void testCreateMainTabView() {
 		MainTabView MainTabView1 = new MainTabView();
-		MainTabController MainTabController1 = new MainTabController(MainTabView1);
-		MainTabController1.addCreateRequirementTab();
-		MainTabController1.addCreateIterationTab();
+		Tab tab1 = new Tab(MainTabView1, tabPane);
+	}
+
+	@Test
+	public void testCreateMainTabController() {
+		MainTabView MainTabView1 = new MainTabView();
+		mainTabController = new MainTabController(MainTabView1);
+
+		mainTabController.addCreateRequirementTab();
+
+		mainTabController.addCreateIterationTab();
+
 		Iteration iteration1 = new Iteration();
-		MainTabController1.addIterationTab(iteration1, "title1");
-//		ViewIterationTab ViewIterationTab1 = new ViewIterationTab(MainTabController1, new tab);
+		mainTabController.addIterationTab(iteration1, "title1");
 
-		//		RequirementsTab RequirementsTab1 = new RequirementsTab(MainTabController1);
-		//		RequirementsPanel RequirementsPanel1 = new RequirementsPanel(RequirementsTab1, new RequirementModel(), Mode.CREATE);
+		mainTabController.addCreateReleaseNumberTab();
 
-		//		NoteMainPanel NoteMainPanel1 = new NoteMainPanel(RequirementsPanel1);
+		mainTabController.addIterationTab(null,"title2");
+
+		mainTabController.addPermissionTab();
+
+		mainTabController.addEditRequirementTab(new RequirementModel());
+
+		mainTabController.addListRequirementsTab();
+
+		mainTabController.addShowReportsTab();
+
+		mainTabController.addViewIterationTab();
+
+		mainTabController.switchToLeftTab();
+
+		mainTabController.switchToRightTab();
 	}
 
-
-
-//	@After
-	public void after(){
-		server.stop();	
+	@Test
+	public void testCreateRequirementModel() {
+		RequirementModel requirementModel2 = new RequirementModel(3, null,
+				RequirementStatus.NEW, null, "name3", "description3", 0, 0,
+				new User("", "", "", -1), new ArrayList<User>(), new Date(),
+				new Date(), new ArrayList<RequirementEvent>(),
+				new ArrayList<String>(), null, RequirementType.EPIC);
 	}
 
+	@Test
+	public void testListRequirementPanel() {
+		ListRequirementsPanel ListRequirementsPanel1 = new ListRequirementsPanel();
+		// Try saving edits
+		ListRequirementsPanel1.setEditTable();
+		ListRequirementsPanel1.setViewTable(false);
+		// Try canceling edits
+		ListRequirementsPanel1.setEditTable();
+		ListRequirementsPanel1.setViewTable(true);
+	}
+
+	@After
+	public void after() {
+		server.stop();
+	}
 
 }

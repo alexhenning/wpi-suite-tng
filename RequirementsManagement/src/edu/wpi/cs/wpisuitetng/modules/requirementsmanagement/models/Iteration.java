@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,6 +22,7 @@ import com.google.gson.GsonBuilder;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 
 /**
  * The iteration model
@@ -91,18 +93,6 @@ public class Iteration extends AbstractModel {
 		return date;
 	}
 	
-	/**
-	 * Get the sum of all the estimate of the requirements in the iteration
-	 *
-	 * @return The sum of the estimates for all the requirements in the iteration
-	 */
-	public int getEstimate() {
-		IterationEstimate estimate = new IterationEstimate(this); // Create a new IterationEstimate class
-		DB.getAllRequirements(estimate); // Have that class run its callback method to get the estimate
-		return estimate.getEstimate(); // Return the estimate
-		
-	}
-
 	/**
 	 * @return the id
 	 */

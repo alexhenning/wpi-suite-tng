@@ -15,22 +15,27 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DateFormat;
 import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleIterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * GUI for a project manager to view and manage iterations 
@@ -51,6 +56,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	/** the tab that made this */
 	ScrollableTab parent;
 	JPanel topPanel;
+	JTextField panelLabel;
 	JTable table;
 	ViewIterTable tableModel;
 	protected Iteration model;
@@ -87,6 +93,13 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	private void addComponents() {
 		setLayout(new BorderLayout());
 		
+		topPanel = new JPanel(new BorderLayout());
+		panelLabel = new JTextField("List of Iterations");
+		Font font = new Font("Verdana", Font.BOLD, 40);
+		panelLabel.setFont(font);
+		panelLabel.setEditable(false);
+		topPanel.add(panelLabel, BorderLayout.CENTER);
+		
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -115,6 +128,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 100));
+		add(topPanel, BorderLayout.PAGE_START);
 		add(scrollPane, BorderLayout.CENTER);
 
 	}
@@ -160,6 +174,25 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 		 */
 		@Override
 		public void callback(List<Iteration> iterations) {
+			DB.getAllRequirements(new UpdateIterationTableCallback(iterations));
+		}
+	}
+	
+	class UpdateIterationTableCallback implements RequirementsCallback {
+		
+		/** the iteration to be put into the table */
+		List<Iteration> iterations;
+		
+		/**
+		 * Constructor
+		 * @param iteration the iteration
+		 */
+		public UpdateIterationTableCallback(List<Iteration> iterations) {
+			this.iterations = iterations;
+		}
+
+		@Override
+		public void callback(List<RequirementModel> reqs) {
 			if (iterations.size() > 0) {
 				// put the data in the table
 				Object[][] entries = new Object[iterations.size() + 1][ROWS];
@@ -169,12 +202,24 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 				entries[0][ENDDATE] = "N/A";
 				entries[0][ESTIMATE] = "N/A";
 				int i = 1;
+				DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
 				for(Iteration iteration : iterations) {
 					entries[i][ID] = iteration.getId();
 					entries[i][NAME] = iteration.getIterationNumber();
-					entries[i][STARTDATE] = iteration.getStartDate();
-					entries[i][ENDDATE] = iteration.getEndDate();
-					entries[i][ESTIMATE] = iteration.getEstimate();					
+					entries[i][STARTDATE] = df.format(iteration.getStartDate());
+					entries[i][ENDDATE] = df.format(iteration.getEndDate());
+					int estimate = 0;
+					if (iteration != null) {
+						for(RequirementModel req : reqs) {
+							// If the iteration is the same as the requirment's iteration
+							if (req.getIteration() != null &&
+									req.getIteration().getIterationNumber().equals(iteration.getIterationNumber())) {
+								// Add the requirment's estimate to the iteration's estimate
+								estimate += req.getEstimate();
+							}
+						}
+					}
+					entries[i][ESTIMATE] = estimate;					
 					i++;
 				}
 				getTable().setData(entries);
@@ -183,12 +228,12 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 			else {
 				// do nothing, there are no requirements
 			}
-		
+
 			TableColumn column = null;
 			for (int i = 0; i < ROWS; i++) {
 				column = table.getColumnModel().getColumn(i);
 				if (i == ID) {
-					column.setPreferredWidth(1);
+					column.setPreferredWidth(30);
 				}
 				else if (i == NAME) {
 					column.setPreferredWidth(700);
@@ -198,6 +243,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 				}
 			}
 		}
+		
 	}
 	
 	/**

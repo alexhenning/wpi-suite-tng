@@ -402,7 +402,7 @@ public class MainTabController {
 		// Otherwise, create a new one.
 		Tab tab = addTab();
 		ScrollableTab<ViewIterationPanel> view
-			= new ScrollableTab<ViewIterationPanel>(this, tab, "Add Iteration", new ViewIterationPanel());
+			= new ScrollableTab<ViewIterationPanel>(this, tab, "View Iteration", new ViewIterationPanel());
 		addChangeListener(new UpdateViewIterationOnFocusListener(view));
 		tab.setComponent(view);
 		view.requestFocus();

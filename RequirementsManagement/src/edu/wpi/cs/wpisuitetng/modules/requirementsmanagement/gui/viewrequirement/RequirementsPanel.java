@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //Josh
+ *    Josh
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
@@ -24,6 +25,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -42,12 +45,14 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ProjectEventsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleUserCallback;
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.ListProjectEvents;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
@@ -91,9 +96,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	public JTextField actualEffortField = new JTextField("0", 35);
 	public JTextField results = new JTextField(35);
 	JButton submit = new JButton("Submit");
+	JButton resetButton = new JButton("Reset");
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
 	private RequirementSubrequirementTab subs;
+	private AssignUserToRequirementTab users;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
@@ -251,13 +258,28 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			submit.setText("Update");
 		}
 		
+		// Reset panel
+		resetButton.addMouseListener(new MouseListener() {
+			@Override public void mousePressed(MouseEvent arg0) {}
+			@Override public void mouseReleased(MouseEvent arg0) {}
+			@Override public void mouseExited(MouseEvent arg0) {}
+			@Override public void mouseEntered(MouseEvent arg0) {}
+			@Override public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() >= 1) {
+					updateFields();
+				}
+			}
+		});
+
 		// Supplement Pane (i.e., notes, history, attachments)
 		nt = new NoteMainPanel(this);
 		hs = new RequirementHistoryTab(this);
 		subs = new RequirementSubrequirementTab(this);
+		users = new AssignUserToRequirementTab(this);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("History", hs);
 		supplementPane.add("Sub-Requirements", subs);
+		supplementPane.add("Assigned Users", users);
 		if(this.editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
 		} else {
@@ -270,7 +292,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		estimateField.addKeyListener(this);
 		estimateField.addFocusListener(new FocusListener() {
 			@Override public void focusLost(FocusEvent arg0) {
+				validateEsitmateFields();
 				validateEstimate();
+				updateSubmitButton();
 			}
 			@Override public void focusGained(FocusEvent arg0) {}
 		});iteration.addItemListener(new ItemListener() {
@@ -307,6 +331,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		});
 		actualEffortField.addFocusListener(new FocusListener() {
 			@Override public void focusLost(FocusEvent arg0) {
+				validateEsitmateFields();
 				updateSubmitButton();
 			}
 			@Override public void focusGained(FocusEvent arg0) {}
@@ -355,12 +380,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		c.gridy = 8;
 		leftside.add(actualEffortArea, c);
 		c.gridy = 9;
-		// Make the save button taller
-		c.ipady = 20;
 		leftside.add(submit, c);
-		c.ipady = 0;
+		// Put less space between save/update and reset buttons
+		c.insets = new Insets(0, 5, 5, 5);
+		c.gridy = 10;
+		c.ipadx = 7; // Make the reset button as wide as the save/update button
+		leftside.add(resetButton, c);
+		c.ipadx = 0;
 		
 		// Right side (gridx = 1)
+		c.insets = new Insets(5, 5, 5, 5);
 		c.anchor = GridBagConstraints.CENTER;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
@@ -387,6 +416,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		c.gridy = 8;
 		leftside.add(actualEffortField, c);
 		c.gridy = 9;
+		c.gridheight = 2;
 		leftside.add(results, c);
 		//pointless to allow user to edit result text
 		results.setEditable(false); 
@@ -592,6 +622,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		unsavedChanges = false;
 		parent.buttonGroup.update(this.editMode, model);
 		
+		users.update();
 	}
 	
 	/**
@@ -602,7 +633,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		unsavedChanges = true;
 		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && 
 				!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) 
-				&& (editMode == Mode.EDIT && valuesHaveChanged()) ||
+				&& (editMode == Mode.EDIT && valuesHaveChanged() && validateFields()) ||
 				(editMode ==Mode.CREATE && validateFields()));
 	}
 	
@@ -761,6 +792,26 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			updateSubmitButton();
 		}
 	}
+	
+	/**
+	 * check if the estimate and actual effort fields contain invalid characters
+	 * @return
+	 */
+	public boolean validateEsitmateFields() {
+		if (!estimateField.getText().matches("[0-9]*")) {
+			estimateField.setBackground(Color.RED);
+			setStatus("Estimate must be non-negative integer.");
+			System.out.println("Estimate value is " + estimateField.getText());
+			return false;
+		}
+		if (!actualEffortField.getText().matches("[0-9]*")) {
+			actualEffortField.setBackground(Color.RED);
+			setStatus("Actual Effort must be non-negative integer.");
+			System.out.println("Actual Effort value is " + actualEffortField.getText());
+			return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Checks to see if the fields are valid
@@ -782,7 +833,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			descriptionfield.setBackground(Color.WHITE);
 		}
-		if(Integer.parseInt(estimateField.getText()) < 0){
+		if (!estimateField.getText().matches("[0-9]*")) {
+			estimateField.setBackground(Color.RED);
+			setStatus("Estimate must be non-negative integer.");
+			System.out.println("Estimate value is " + estimateField.getText());
+			return false;
+		} else if(Integer.parseInt(estimateField.getText()) < 0){
 			estimateField.setBackground(Color.RED);
 			setStatus("Estimate must be non-negative integer.");
 			System.out.println("Estimate value is " + estimateField.getText());
@@ -790,7 +846,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			estimateField.setBackground(Color.WHITE);
 		}
-		if(Integer.parseInt(actualEffortField.getText()) < 0){
+		if (!actualEffortField.getText().matches("[0-9]*")) {
+			actualEffortField.setBackground(Color.RED);
+			setStatus("Actual Effort must be non-negative integer.");
+			System.out.println("Actual Effort value is " + actualEffortField.getText());
+			return false;
+		} else if(Integer.parseInt(actualEffortField.getText()) < 0){
 			actualEffortField.setBackground(Color.RED);
 			setStatus("Actual Effort must be a non-negative integer.");
 			System.out.println("Actual Effort value is " + actualEffortField.getText());
@@ -864,6 +925,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
     	});
 	}
 	
+	//TODO improve the add child code to minimize network calls.
 	public void addChild(int childId) {
 		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
 			@Override
@@ -907,12 +969,150 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		}
 	}
 	
+	public void removeChild(RequirementModel child) {
+		model.getSubRequirements().remove(child.getId()+"");
+		DB.updateRequirements(model, new RemoveChildRequirementCallback(child.getId()+""));
+	}
+	
+	public void removeChild(String childId) {
+		model.getSubRequirements().remove(childId);
+		DB.updateRequirements(model, new RemoveChildRequirementCallback(childId));
+	}
+	
+	class RemoveChildRequirementCallback implements SingleRequirementCallback {
+		private String childId;
+		
+		public RemoveChildRequirementCallback(String childId) {
+			this.childId = childId;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			boolean removed = true;
+			for (String subReq : currentReq.getSubRequirements()) {
+				if(subReq.equals(childId)) {
+					removed = false;
+				}
+			}
+			if (removed) {
+				subs.update();
+				model.setSubRequirements(currentReq.getSubRequirements());
+				parent.buttonGroup.update(editMode, model);
+				setStatus("removed child");
+			} else {
+				setStatus("failed to remove child");
+			}
+		}
+	}
+	
 	/**
 	 * checks to see if the field values are different from the values in the model.
 	 * @return true if the values are different from the values in the model
 	 */
 	public boolean valuesHaveChanged() {
 		return hasUnsavedChanges();
+	}
+	/**
+	 * adds a user to requirement model using only the user's id
+	 *
+	 * @param childId
+	 */
+	public void addUser(String username) {
+System.err.println("adduser reached***************************");
+		DB.getSingleUser(username, new SingleUserCallback() {
+			@Override
+			public void callback(User assignee) {
+				model.getAssignees().add(assignee);
+				DB.updateRequirements(model, new AddAssigneeCallback(assignee));
+
+			}
+    	});
+	}
+	
+	/**
+	 * Adds a user to requirement model and saves the updated model to the db
+	 *
+	 * @param assignee
+	 */
+	public void addUser(User assignee) {
+		model.getAssignees().add(assignee);
+		DB.updateRequirements(model, new AddAssigneeCallback(assignee));
+	}
+	
+	/**
+	 * Callback to provide feedback to the UI if the attempt to add the user was successful
+	 * 
+	 * @author William Terry
+	 *
+	 */
+	class AddAssigneeCallback implements SingleRequirementCallback {
+		private User assignee;
+		
+		public AddAssigneeCallback(User assignee) {
+			this.assignee = assignee;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			boolean added = false;
+			for (User assignedUsers : currentReq.getAssignees()) {
+				if(assignedUsers.equals(assignee)) {
+					added = true;
+				}
+			}
+			if (added) {
+				users.update();
+				setStatus("added user");
+			} else {
+				setStatus("failed to add user");
+			}
+		}
+	}
+	
+	/**
+	 * removes a user from requirement model using only the user's id
+	 *
+	 * @param childId
+	 */
+	public void remUser(String username) {
+		DB.getSingleUser(username, new SingleUserCallback() {
+			@Override
+			public void callback(User assigned) {
+				model.getAssignees().remove(assigned);
+				DB.updateRequirements(model, new RemAssigneeCallback(assigned));
+
+			}
+    	});
+	}
+	
+	/**
+	 * Callback to provide feedback to the UI if the attempt to add the user was successful
+	 * 
+	 * @author William Terry
+	 *
+	 */
+	class RemAssigneeCallback implements SingleRequirementCallback {
+		private User assigned;
+		
+		public RemAssigneeCallback(User assigned) {
+			this.assigned = assigned;
+		}
+		
+		@Override
+		public void callback(RequirementModel currentReq) {
+			boolean removed = true;
+			for (User assignedUsers : currentReq.getAssignees()) {
+				if(assignedUsers.equals(assigned)) {
+					removed = false;
+				}
+			}
+			if (removed) {
+				users.update();
+				setStatus("removed user");
+			} else {
+				setStatus("failed to remove user");
+			}
+		}
 	}
 	
 	/**

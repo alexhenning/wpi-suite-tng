@@ -14,6 +14,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
@@ -55,7 +56,9 @@ public class RetrieveRequirementModelRequestObserver implements RequestObserver 
 		final RequirementModel[] requirements = RequirementModel.fromJSONArray(response.getBody());
 		
 		// Pass the messages back to the controller
-		callback.callback(Arrays.asList(requirements));
+		if(requirements == null)
+			System.err.println("Null requirements in response body");
+		callback.callback((requirements != null) ? Arrays.asList(requirements) : new ArrayList<RequirementModel>());
 	}
 
 	/**

@@ -10,6 +10,7 @@
  *    Josh Morse
  *    James Megin
  *    Tim Calvert
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -18,10 +19,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -87,6 +90,9 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	JPanel editPanel;
 	/** Old data used to compare changes */
 	Object[][] data;
+	/** List of cells that have invalid data in them (the row and column of the cell are stored in a Point object) */
+	List<Point> invalidCells = new ArrayList<Point>();
+
 	
 	/**
 	 * Constructor
@@ -152,7 +158,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		
 		// create panel and button to change table to edit mode
 		editPanel = new JPanel();
-		editButton = new JButton("Edit");
+		editButton = new JButton("Edit All Requirements");
 		editButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -246,6 +252,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		editPanel.remove(editButton);
 		editPanel.add(saveButton);
 		editPanel.add(cancelButton);
+		saveButton.setEnabled(false);
 		editPanel.revalidate();
 		editPanel.repaint();
 		
@@ -439,12 +446,16 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @param reqs a list of all the requirements
 	 */
 	public void sendRequirementsToDatabase(List<RequirementModel> reqs) {
-		// TODO (with updateModels) Only update those that need to be updated
-		for(RequirementModel req : reqs.subList(0, reqs.size() - 1)) {  // update all but the last requirement
-			DB.updateRequirements(req, new UpdateRequirementCallback(false));
+		if(reqs == null)
+			System.err.println("Null req list in sendRequirementsToDatabase");
+		else if(reqs.size() > 0) {
+			// TODO (with updateModels) Only update those that need to be updated
+			for(RequirementModel req : reqs.subList(0, reqs.size() - 1)) {  // update all but the last requirement
+				DB.updateRequirements(req, new UpdateRequirementCallback(false));
+			}
+			// now update the last requirement with the provision that the callback updates the table
+			DB.updateRequirements(reqs.get(reqs.size() - 1), new UpdateRequirementCallback(true));
 		}
-		// now update the last requirement with the provision that the callback updates the table
-		DB.updateRequirements(reqs.get(reqs.size() - 1), new UpdateRequirementCallback(true));
 	}
 	
 	/**
@@ -657,6 +668,13 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 *
 	 */
 	class CustomCellRenderer extends DefaultTableCellRenderer {
+		
+		public void removeInvalidCell(Point invalidCell) {
+			invalidCells.remove(invalidCell);
+			if(invalidCells.size() <= 0) {
+				saveButton.setEnabled(true);
+			}
+		}
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table,
@@ -668,19 +686,29 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				if(!value.equals(data[row][column])) {
 					c.setBackground(Color.YELLOW);
 					setToolTipText("This cell has been changed from: " + (data[row][column]).toString());
+					removeInvalidCell(new Point(row, column));
 				} else {
 					c.setBackground(Color.WHITE);
 					setToolTipText(null);
+					removeInvalidCell(new Point(row, column));
 				}
 				if(column == NAME) {
 					if(((String)value).length() < 1 || ((String)value).length() > 100) {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a name between 1 and 100 charecters.");
+						saveButton.setEnabled(false);
+						if(!invalidCells.contains(new Point(row, column))){
+							invalidCells.add(new Point(row, column));
+						}
 					}
 				} else if(column == DESCRIPTION) {
 					if(((String)value).length() < 1) {
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a description.");
+						saveButton.setEnabled(false);
+						if(!invalidCells.contains(new Point(row, column))){
+							invalidCells.add(new Point(row, column));
+						}
 					}
 				} else if(column == ITERATION) {
 					try {
@@ -688,22 +716,41 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 								!value.equals(data[row][column]) && !value.equals("Backlog"))) {
 							c.setBackground(Color.RED);
 							setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
+							saveButton.setEnabled(false);
+							if(!invalidCells.contains(new Point(row, column))){
+								invalidCells.add(new Point(row, column));
+							}
 						}
 					} catch (NumberFormatException e) {
 						// still an error
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
+						saveButton.setEnabled(false);
+						if(!invalidCells.contains(new Point(row, column))){
+							invalidCells.add(new Point(row, column));
+						}
 					}
 				} else if(column == ESTIMATE) {
 					try {
 						if(((Integer.valueOf((String)value) < 0))) {
 							c.setBackground(Color.RED);
 							setToolTipText("A requirement estimate must be a positive number.");
+							saveButton.setEnabled(false);
+							if(!invalidCells.contains(new Point(row, column))){
+								invalidCells.add(new Point(row, column));
+							}
+						} else if(Integer.valueOf((String)value) > 0) {
+							//if this fixes an iteration assaignment error, remove that from the invalid cells
+							removeInvalidCell(new Point(row, ITERATION));
 						}
 					} catch (NumberFormatException e) {
 						// still an error
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement estimate must be a positive number.");
+						saveButton.setEnabled(false);
+						if(!invalidCells.contains(new Point(row, column))){
+							invalidCells.add(new Point(row, column));
+						}
 					}
 				}
 			}
@@ -712,4 +759,5 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		}
 		
 	}
+
 }
