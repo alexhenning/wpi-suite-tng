@@ -10,6 +10,7 @@
  *    William Terry
  *    vpatara
  *    Josh
+ *    jlmegin
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
@@ -51,7 +52,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	public static final int STARTDATE = 2;
 	public static final int ENDDATE = 3;
 	public static final int ESTIMATE = 4;
-	public static final int ROWS = 5;
+	public static final int COLUMNS = 5;
 	
 	/** the tab that made this */
 	ScrollableTab parent;
@@ -195,37 +196,49 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 		public void callback(List<RequirementModel> reqs) {
 			if (iterations.size() > 0) {
 				// put the data in the table
-				Object[][] entries = new Object[iterations.size() + 1][ROWS];
+				Object[][] entries = new Object[iterations.size() + 1][COLUMNS];
 				entries[0][ID] = 0;
 				entries[0][NAME] = "Backlog";
 				entries[0][STARTDATE] = "N/A";
 				entries[0][ENDDATE] = "N/A";
-				int i = 1;
+
 				DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
-				int totalEstimates = 0;
-				int totalIterationEstimates = 0;
+				int i = 1; // Skip backlog (index 0)
+				int totalEstimates = 0; // Estimates of all requirements
+				int totalIterationEstimates = 0; // Total estimates of scheduled requirements
+
+				// Calculate total estimates
+				for(RequirementModel req : reqs) {
+					totalEstimates += req.getEstimate();
+				}
+				// Calculate the estimate for each iteration
 				for(Iteration iteration : iterations) {
 					entries[i][ID] = iteration.getId();
 					entries[i][NAME] = iteration.getIterationNumber();
 					entries[i][STARTDATE] = df.format(iteration.getStartDate());
 					entries[i][ENDDATE] = df.format(iteration.getEndDate());
+
+					// Filter requirements scheduled for this iteration
 					int estimate = 0;
 					if (iteration != null) {
 						for(RequirementModel req : reqs) {
-							totalEstimates += req.getEstimate();
 							// If the iteration is the same as the requirment's iteration
 							if (req.getIteration() != null &&
 									req.getIteration().getIterationNumber().equals(iteration.getIterationNumber())) {
 								// Add the requirment's estimate to the iteration's estimate
 								estimate += req.getEstimate();
-								totalIterationEstimates += req.getEstimate();
 							}
 						}
 					}
+					totalIterationEstimates += estimate;
 					entries[i][ESTIMATE] = estimate;					
 					i++;
 				}
+
+				// Sum of estimates of unscheduled requirements (backlogs)
 				entries[0][ESTIMATE] = totalEstimates - totalIterationEstimates;
+
+				// Write data to the table
 				getTable().setData(entries);
 				getTable().fireTableStructureChanged();
 			}
@@ -234,7 +247,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 			}
 
 			TableColumn column = null;
-			for (int i = 0; i < ROWS; i++) {
+			for (int i = 0; i < COLUMNS; i++) {
 				column = table.getColumnModel().getColumn(i);
 				if (i == ID) {
 					column.setPreferredWidth(30);
