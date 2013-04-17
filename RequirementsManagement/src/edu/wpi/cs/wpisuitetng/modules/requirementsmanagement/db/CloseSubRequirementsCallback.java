@@ -29,5 +29,5 @@ public interface CloseSubRequirementsCallback {
 	 * @param result
 	 *            boolean of if it can be closed
 	 */
-	public void callback(boolean result);
+	void callback(boolean result);
 }

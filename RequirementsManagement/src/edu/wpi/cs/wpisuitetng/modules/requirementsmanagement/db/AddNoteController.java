@@ -64,7 +64,7 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	/**
 	 * Called by pressing add note button
 	 *
-	 * @param e
+	 * @param e The action performed when pressing add note
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
