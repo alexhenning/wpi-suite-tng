@@ -12,6 +12,9 @@ public enum ReportType {
 		this.name = name;
 	}
 	
+	/**
+	 * Convert the data to a string.
+	 */
 	@Override public String toString() {
 		return name;
 	}
