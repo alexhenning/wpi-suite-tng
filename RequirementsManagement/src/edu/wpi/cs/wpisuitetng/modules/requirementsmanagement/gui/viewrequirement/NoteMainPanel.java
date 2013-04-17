@@ -127,7 +127,7 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 		c.gridx = 0;
 		c.gridy = notes.size();
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0;
 		
 		noteViewer.removeAll();
 		
