@@ -19,10 +19,10 @@ public class AssigneeDataProvider implements ReportDataProvider {
 		for (RequirementModel req : model) {
 			List<User> users = req.getAssignees();
 			for (User user: users) {
-				if (map.containsKey(user)) {
-					map.put(user, 1 + map.get(user));
+				if (map.containsKey(user.getName())) {
+					map.put(user.getName(), 1 + map.get(user.getName()));
 				} else {
-					map.put(user, 1);
+					map.put(user.getName(), 1);
 				}
 			}
 		}
