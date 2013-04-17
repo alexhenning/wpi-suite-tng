@@ -96,10 +96,10 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 		barDataset.setValue(1.0, "Loading", "");
 		barChart = ChartFactory.createBarChart(
 				"Loading",
-				"Loading",
+				null,
 				"Requirements", 
 				barDataset,             // data
-				PlotOrientation.HORIZONTAL,
+				PlotOrientation.VERTICAL,
 				false,               // include legend
 				true,
 				false
@@ -191,12 +191,12 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 			
 			pieChart.setTitle(report.toString());
 			pieChartPanel.repaint();
-		} else if (report.getType().equals(ReportType.PIE_CHART)) {
+		} else if (report.getType().equals(ReportType.BAR_CHART)) {
 			barDataset.clear();
 			Map<Object, Integer> data = report.extractData(model);
 			
 			for (Object key : data.keySet()) {
-				barDataset.setValue(new Double(data.get(key)), key.toString(), "");
+				barDataset.setValue(new Double(data.get(key)), "", key.toString());
 			}
 			
 			barChart.setTitle(report.toString());
