@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -57,9 +58,11 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 
 	private List<RequirementModel> model;
 	private Report report = Report.STATUS;
-	private DefaultPieDataset dataset;
-	private JFreeChart chart;
-	private ChartPanel chartPanel;
+	private JPanel cardPanel;
+	
+	private DefaultPieDataset pieDataset;
+	private JFreeChart pieChart;
+	private ChartPanel pieChartPanel;
 
 	/**
 	 * Constructor
@@ -67,16 +70,17 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	 */
 	public ReportsPanel() {
 		model = new LinkedList<RequirementModel>();
-		dataset = new DefaultPieDataset();
-		dataset.setValue("Loading", 1.0);
-		chart = ChartFactory.createPieChart(
+		
+		pieDataset = new DefaultPieDataset();
+		pieDataset.setValue("Loading", 1.0);
+		pieChart = ChartFactory.createPieChart(
             "Loading",  // chart title
-            dataset,             // data
+            pieDataset,             // data
             false,               // include legend
             true,
             false
         );
-		((PiePlot) chart.getPlot()).setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1} ({2})"));
+		((PiePlot) pieChart.getPlot()).setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1} ({2})"));
 		
 		addComponents();
 
@@ -98,7 +102,10 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 		GridBagConstraints c = new GridBagConstraints();
 		setLayout(panelLayout);
 		
-		chartPanel = new ChartPanel(chart);
+		cardPanel = new JPanel();
+		cardPanel.setLayout(new CardLayout());
+		
+		pieChartPanel = new ChartPanel(pieChart);
 		reports = new JComboBox(Report.values());
 		reports.setBackground(Color.white);
 		reports.addItemListener(new ItemListener() {
@@ -107,11 +114,12 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				refreshChart();
 			}
 		});
+		cardPanel.add(pieChartPanel, ReportType.PIE_CHART.toString());
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		add(chartPanel, c);
+		add(cardPanel, c);
 		c.gridy = 1;
 		add(reports, c);
 	}
@@ -134,11 +142,13 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	 */
 	public void refreshChart() {
 		System.out.println("Refreshing chart");
-		dataset.clear();
-		report.updateDataset(model, dataset);
-		chart.setTitle(report.toString());
-		chartPanel.repaint();
-		System.out.println("Repainting");
+		((CardLayout) cardPanel.getLayout()).show(cardPanel, report.getType().toString());
+		if (report.getType().equals(ReportType.PIE_CHART)) {
+			pieDataset.clear();
+			report.updateDataset(model, pieDataset);
+			pieChart.setTitle(report.toString());
+			pieChartPanel.repaint();
+		}
 	}
 		
 	/**
@@ -157,7 +167,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	}
 	
 	public enum Report {
-		STATUS {
+		STATUS(ReportType.PIE_CHART) {
 			@Override public void updateDataset(List<RequirementModel> model, 
 					DefaultPieDataset dataset) {
 				Map<RequirementStatus, Integer> map = new HashMap<RequirementStatus, Integer>();
@@ -177,7 +187,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				}
 			}
 		},
-		ITERATION {
+		ITERATION(ReportType.PIE_CHART) {
 			@Override public void updateDataset(List<RequirementModel> model, 
 					DefaultPieDataset dataset) {
 				Map<Iteration, Integer> map = new HashMap<Iteration, Integer>();
@@ -200,7 +210,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				}
 			}
 		},
-		ASSIGNED_TO {
+		ASSIGNED_TO(ReportType.PIE_CHART) {
 			@Override public void updateDataset(List<RequirementModel> model, 
 					DefaultPieDataset dataset) {
 				Map<User, Integer> map = new HashMap<User, Integer>();
@@ -222,6 +232,16 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				}
 			}
 		};
+		
+		private ReportType type;
+		
+		private Report(ReportType type) {
+			this.type = type;
+		}
+		
+		public ReportType getType() {
+			return type;
+		}
 		
 		public abstract void updateDataset(List<RequirementModel> model, DefaultPieDataset dataset);
 	}
