@@ -798,15 +798,15 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * @return
 	 */
 	public boolean validateEsitmateFields() {
-		if (!estimateField.getText().matches("[0-9]+")) {
+		if (!estimateField.getText().matches("[0-9]{1,9}")) {
 			estimateField.setBackground(Color.RED);
-			setStatus("Estimate must be non-negative integer.");
+			setStatus("Estimate must be non-negative integer (0-999999999).");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
 		}
-		if (!actualEffortField.getText().matches("[0-9]+")) {
+		if (!actualEffortField.getText().matches("[0-9]{1,9}")) {
 			actualEffortField.setBackground(Color.RED);
-			setStatus("Actual Effort must be non-negative integer.");
+			setStatus("Actual Effort must be non-negative integer (0-999999999).");
 			System.out.println("Actual Effort value is " + actualEffortField.getText());
 			return false;
 		}
@@ -833,20 +833,20 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			descriptionfield.setBackground(Color.WHITE);
 		}
-		if (!estimateField.getText().matches("[0-9]+")) {
+		if (!estimateField.getText().matches("[0-9]{1,9}")) {
 			estimateField.setBackground(Color.RED);
-			setStatus("Estimate must be non-negative integer.");
+			setStatus("Estimate must be non-negative integer (0-999999999).");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
 		} else if(Integer.parseInt(estimateField.getText()) < 0){
 			estimateField.setBackground(Color.RED);
-			setStatus("Estimate must be non-negative integer.");
+			setStatus("Estimate must be non-negative integer (0-999999999).");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
 		} else {
 			estimateField.setBackground(Color.WHITE);
 		}
-		if (!actualEffortField.getText().matches("[0-9]+")) {
+		if (!actualEffortField.getText().matches("[0-9]{1,9}")) {
 			actualEffortField.setBackground(Color.RED);
 			setStatus("Actual Effort must be non-negative integer.");
 			System.out.println("Actual Effort value is " + actualEffortField.getText());
