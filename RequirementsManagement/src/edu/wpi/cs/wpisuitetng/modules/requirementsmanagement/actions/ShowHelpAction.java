@@ -60,6 +60,7 @@ public class ShowHelpAction extends AbstractAction{
 		    		System.out.println("Help Out Stream: "+out);
 		    		
 		    		IOUtils.getInstance().copyStreams(in, out);
+		    		out.close();
 		    	}
 
 		        Desktop.getDesktop().open(pdfFile);
