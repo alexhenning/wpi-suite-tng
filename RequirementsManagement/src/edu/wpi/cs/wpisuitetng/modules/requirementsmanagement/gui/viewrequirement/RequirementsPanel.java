@@ -384,9 +384,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		// Put less space between save/update and reset buttons
 		c.insets = new Insets(0, 5, 5, 5);
 		c.gridy = 10;
-		c.ipadx = 7; // Make the reset button as wide as the save/update button
+		c.ipadx = 0; // Make the reset button as wide as the save/update button
 		leftside.add(resetButton, c);
 		c.ipadx = 0;
+		submit.setPreferredSize(new Dimension(80,25));
+		resetButton.setPreferredSize(new Dimension(80,25));
 		
 		// Right side (gridx = 1)
 		c.insets = new Insets(5, 5, 5, 5);
@@ -424,6 +426,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		leftside.setMinimumSize(new Dimension(500,700));
 		leftScrollPane.setMinimumSize(new Dimension(500,700));
 		supplementPane.setMinimumSize(new Dimension(500,700));
+		
 		
 	}
 
