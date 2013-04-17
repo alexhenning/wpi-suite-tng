@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //TODO who did this
+ *    Alex Henning
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -23,14 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.demo.PieChartDemo1;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
@@ -45,16 +42,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 /**
- *
  * The view for viewing reports.
- * @author TODO
- *
  */
 @SuppressWarnings("serial")
 public class ReportsPanel extends JPanel implements ScrollablePanel {
 	
 	/** the tab that created this panel */
-	ScrollableTab parent;
+	@SuppressWarnings("rawtypes")
+	private ScrollableTab parent;
 	/** the layout for this panel */
 	private GridBagLayout panelLayout;
 	
@@ -89,7 +84,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	}
 
 	@Override
-	public void setTab(ScrollableTab tab) {
+	public void setTab(@SuppressWarnings("rawtypes") ScrollableTab tab) {
 		parent = tab;
 	}
 
@@ -155,13 +150,10 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	}
 	
 	/**
-	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
-	 * JComponent#setEnabled because setEnabled does not affect its children.
-	 * 
-	 * @param enabled	Whether or not input is enabled.
+	 * A type to indicate how the report should display.
 	 */
-	protected void setInputEnabled(boolean enabled) {
-		// TODO: implement if made editable
+	public enum ReportType {
+		PIE_CHART, BAR_CHART;
 	}
 	
 	public enum Report {
