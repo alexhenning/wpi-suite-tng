@@ -71,6 +71,9 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	public static final int ESTIMATE = 6;
 	public static final int RELEASE = 7;
 	public static final int ROWS = 7;
+
+	/** An estimate must be less than one million */
+	public static final int MAX_ESTIMATE_VALUE = 999999;
 	
 	/** the tab that created this*/
 	ScrollableTab parent;
@@ -693,9 +696,11 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 					removeInvalidCell(new Point(row, column));
 				}
 				if(column == NAME) {
-					if(((String)value).length() < 1 || ((String)value).length() > 100) {
+					int nameLength = ((String)value).length();
+					if(nameLength < 1 || nameLength > 100) {
+						// Mark the cell if the name length is invalid
 						c.setBackground(Color.RED);
-						setToolTipText("A requirement must have a name between 1 and 100 charecters.");
+						setToolTipText("A requirement must have a name between 1 and 100 charecters, inclusive.");
 						saveButton.setEnabled(false);
 						if(!invalidCells.contains(new Point(row, column))){
 							invalidCells.add(new Point(row, column));
@@ -703,6 +708,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 					}
 				} else if(column == DESCRIPTION) {
 					if(((String)value).length() < 1) {
+						// Mark the cell if the description length is invalid
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a description.");
 						saveButton.setEnabled(false);
@@ -711,42 +717,54 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						}
 					}
 				} else if(column == ITERATION) {
+					boolean isIterationValid = true;
+
 					try {
-						if(((Integer.valueOf((String)tableModel.getValueAt(row, ESTIMATE)) <= 0) &&
-								!value.equals(data[row][column]) && !value.equals("Backlog"))) {
-							c.setBackground(Color.RED);
-							setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
-							saveButton.setEnabled(false);
-							if(!invalidCells.contains(new Point(row, column))){
-								invalidCells.add(new Point(row, column));
-							}
+						// Try parsing the estimate for this row
+						int reqEstimate = Integer.valueOf((String)tableModel.getValueAt(row, ESTIMATE));
+
+						// Check if the iteration and estimate
+						if((reqEstimate <= 0 || reqEstimate > MAX_ESTIMATE_VALUE) &&
+								!value.equals(data[row][column]) && !value.equals("Backlog")) {
+							isIterationValid = false;
 						}
 					} catch (NumberFormatException e) {
 						// still an error
+						isIterationValid = false;
+					}
+
+					// Mark the cell if the iteration is invalid
+					if(!isIterationValid) {
 						c.setBackground(Color.RED);
-						setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
+						setToolTipText("A requirement cannot be scheduled to an iteration without a valid positive estimate.");
 						saveButton.setEnabled(false);
 						if(!invalidCells.contains(new Point(row, column))){
 							invalidCells.add(new Point(row, column));
 						}
 					}
 				} else if(column == ESTIMATE) {
+					boolean isEstimateValid = true;
+
 					try {
-						if(((Integer.valueOf((String)value) < 0))) {
-							c.setBackground(Color.RED);
-							setToolTipText("A requirement estimate must be a positive number.");
-							saveButton.setEnabled(false);
-							if(!invalidCells.contains(new Point(row, column))){
-								invalidCells.add(new Point(row, column));
-							}
-						} else if(Integer.valueOf((String)value) > 0) {
-							//if this fixes an iteration assaignment error, remove that from the invalid cells
+						// Try parsing the estimate cell
+						int reqEstimate = Integer.valueOf((String)tableModel.getValueAt(row, ESTIMATE));
+
+						// Check if the estimate is within the valid range (0-999999, inclusive)
+						if(reqEstimate < 0 || reqEstimate > MAX_ESTIMATE_VALUE) {
+							isEstimateValid = false;
+						} else if(reqEstimate > 0) {
+							// If this fixes an iteration assignment error, remove that from the invalid cells
 							removeInvalidCell(new Point(row, ITERATION));
 						}
 					} catch (NumberFormatException e) {
 						// still an error
+						isEstimateValid = false;
+					}
+
+					// Mark the cell if the estimate is invalid
+					if(!isEstimateValid) {
 						c.setBackground(Color.RED);
-						setToolTipText("A requirement estimate must be a positive number.");
+						setToolTipText("A requirement estimate must be a non-negative number (0-999999, inclusive).");
 						saveButton.setEnabled(false);
 						if(!invalidCells.contains(new Point(row, column))){
 							invalidCells.add(new Point(row, column));
