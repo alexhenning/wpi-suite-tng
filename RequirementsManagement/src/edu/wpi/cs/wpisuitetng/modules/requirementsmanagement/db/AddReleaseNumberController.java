@@ -19,7 +19,6 @@ import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReleaseNumberPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateReleaseNumberRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;

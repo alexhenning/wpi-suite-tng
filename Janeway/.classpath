@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="jfreechart/lib/junit.jar"/>
 	<classpathentry kind="lib" path="jfreechart/lib/servlet.jar"/>
 	<classpathentry kind="lib" path="jfreechart/lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="modules/RequirementsManagement.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
