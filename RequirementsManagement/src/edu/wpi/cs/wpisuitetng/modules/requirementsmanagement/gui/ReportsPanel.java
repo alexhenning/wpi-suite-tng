@@ -30,6 +30,9 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.demo.PieChartDemo1;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -78,6 +81,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
             true,
             false
         );
+		((PiePlot) chart.getPlot()).setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1} ({2})"));
 		
 		addComponents();
 
