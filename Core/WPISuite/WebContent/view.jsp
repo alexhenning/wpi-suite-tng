@@ -61,13 +61,18 @@ xmlReqList.onreadystatechange = function()
 
 function createReqDialog(reqId){
 	if($("#Dialog" + reqId).length == 0){
+		var iterationName;
+		if(reqList[reqId].iteration != null)
+			iterationName = reqList[reqId].iteration.iterationNumber;
+		else
+			iterationName = "NONE";
 		var dialogHTML = 
 		"<div id='Dialog" + reqId + "' title='Requirement - " + reqList[reqId].name + "'>" +
 		  "<p>"+
 		  "<div class = 'reqFields'>ID: " + reqList[reqId].id + "</div>"+
 		  "<div class = 'reqFields'>Name: " + reqList[reqId].name + "</div>"+
 		  "<div class = 'reqFields'>Description:<br>" + reqList[reqId].description + "</div>"+
-		  "<div class = 'reqFields'>Iteration: " + reqList[reqId].iteration.iterationNumber + "</div>"+
+		  "<div class = 'reqFields'>Iteration: " + iterationName + "</div>"+
 		  "<div class = 'reqFields'>Status: " + reqList[reqId].status + "</div>"+
 		  "<div class = 'reqFields'>Priority: " + reqList[reqId].priority + "</div>"+
 		  "<div class = 'reqFields'>Estimate: " + reqList[reqId].estimate + "</div>"+
