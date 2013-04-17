@@ -177,7 +177,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	 * Update the charts to reflect the most up to date information.
 	 */
 	public void refreshChart() {
-		System.out.println("Refreshing chart");
+		System.out.println("Refreshing chart: "+report);
 		((CardLayout) cardPanel.getLayout()).show(cardPanel, report.getType().toString());
 		if (report.getType().equals(ReportType.PIE_CHART)) {
 			pieDataset.clear();

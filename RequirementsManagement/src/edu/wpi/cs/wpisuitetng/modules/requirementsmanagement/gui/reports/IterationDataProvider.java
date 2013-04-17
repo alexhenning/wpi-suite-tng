@@ -8,6 +8,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 public class IterationDataProvider implements ReportDataProvider {
+
+	@Override public String getName() {
+		return "Requirements in a Iteration";
+	}
 	
 	@Override public Map<Object, Integer> extractData(List<RequirementModel> model) {
 		Map<Object, Integer> map = new HashMap<Object, Integer>();

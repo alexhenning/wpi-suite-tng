@@ -23,4 +23,7 @@ public class Report {
 		return dataProvider.extractData(model);
 	}
 	
+	@Override public String toString() {
+		return type.toString() + " of " + dataProvider.getName();
+	}
 }

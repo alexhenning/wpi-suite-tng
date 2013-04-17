@@ -7,4 +7,5 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 
 public interface ReportDataProvider {
 	Map<Object, Integer> extractData(List<RequirementModel> model);
+	String getName();
 }

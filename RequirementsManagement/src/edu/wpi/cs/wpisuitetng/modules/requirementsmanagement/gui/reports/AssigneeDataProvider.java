@@ -8,6 +8,10 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 public class AssigneeDataProvider implements ReportDataProvider {
+
+	@Override public String getName() {
+		return "Requirement Assignees";
+	}
 	
 	@Override public Map<Object, Integer> extractData(List<RequirementModel> model) {
 		Map<Object, Integer> map = new HashMap<Object, Integer>();

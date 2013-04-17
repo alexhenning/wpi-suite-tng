@@ -8,6 +8,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 public class StatusDataProvider implements ReportDataProvider {
+
+	@Override public String getName() {
+		return "Requirement Status";
+	}
 	
 	@Override public Map<Object, Integer> extractData(List<RequirementModel> model) {
 		Map<Object, Integer> map = new HashMap<Object, Integer>();
@@ -23,5 +27,4 @@ public class StatusDataProvider implements ReportDataProvider {
 		
 		return map;
 	}
-
 }
