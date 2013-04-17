@@ -68,7 +68,7 @@ public class RetrieveRequirementModelRequestObserver implements RequestObserver 
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to retrieve requirements failed.");		
+		System.err.println("The request to retrieve requirements failed." + iReq.getResponse().getStatusCode());		
 	}
 
 	/**
