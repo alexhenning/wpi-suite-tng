@@ -94,24 +94,6 @@ public class Iteration extends AbstractModel {
 		}
 		return date;
 	}
-	
-	/**
-	 * Get the sum of all the estimate of the requirements in the iteration
-	 *
-	 * @return The sum of the estimates for all the requirements in the iteration
-	 */
-	public int getEstimate() {
-		return estimate;	
-	}
-	
-	/**
-	 * sets the estimate of the iteration to the sum of all the estimates of all the requirements assigned to it
-	 *
-	 */
-	public void setEstimate() {
-		IterationEstimate iterationEstimate = new IterationEstimate(this);
-		DB.getAllRequirements(iterationEstimate);
-	}
 
 	/**
 	 * @return the id
@@ -282,7 +264,6 @@ public class Iteration extends AbstractModel {
 					}
 				}
 			}
-			System.out.println("\nESTIMATE SET TO " + estimate + "!!!!\n");
 		}
 		
 	}

@@ -200,9 +200,10 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 				entries[0][NAME] = "Backlog";
 				entries[0][STARTDATE] = "N/A";
 				entries[0][ENDDATE] = "N/A";
-				entries[0][ESTIMATE] = "N/A";
 				int i = 1;
 				DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+				int totalEstimates = 0;
+				int totalIterationEstimates = 0;
 				for(Iteration iteration : iterations) {
 					entries[i][ID] = iteration.getId();
 					entries[i][NAME] = iteration.getIterationNumber();
@@ -211,17 +212,20 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 					int estimate = 0;
 					if (iteration != null) {
 						for(RequirementModel req : reqs) {
+							totalEstimates += req.getEstimate();
 							// If the iteration is the same as the requirment's iteration
 							if (req.getIteration() != null &&
 									req.getIteration().getIterationNumber().equals(iteration.getIterationNumber())) {
 								// Add the requirment's estimate to the iteration's estimate
 								estimate += req.getEstimate();
+								totalIterationEstimates += req.getEstimate();
 							}
 						}
 					}
 					entries[i][ESTIMATE] = estimate;					
 					i++;
 				}
+				entries[0][ESTIMATE] = totalEstimates - totalIterationEstimates;
 				getTable().setData(entries);
 				getTable().fireTableStructureChanged();
 			}
