@@ -13,7 +13,6 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
