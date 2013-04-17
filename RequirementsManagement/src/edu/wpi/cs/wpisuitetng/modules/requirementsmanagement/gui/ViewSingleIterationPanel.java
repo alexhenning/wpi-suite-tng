@@ -122,7 +122,6 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		}
 		/** iteration is not null, retrieve and display iteration values */
 		else {
-						
 			lbl1 = new JLabel("Start Date");
 			lbl2 = new JLabel("End Date");
 			lbl3 = new JLabel ("Iteration");
@@ -257,6 +256,8 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 */
 	private void updateFields() {
 		//TODO finish this
+		updateEstimate();
+		
 	}
 
 	/**
@@ -348,6 +349,30 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			//TODO figure out how to display the issues...
 
 		}
+	}
+	
+	public void updateEstimate() {
+		if (model != null) {
+		DB.getAllRequirements(new RequirementsCallback() {
+			
+			@Override
+			public void callback(List<RequirementModel> reqs) {
+				// TODO Auto-generated method stub
+				int estimate = 0;
+				for(RequirementModel req : reqs) {
+					Iteration it = req.getIteration();
+					if (it != null && model != null && it.getIterationNumber().equals(model.getIterationNumber())) {
+						estimate += req.getEstimate();
+					}
+				}
+				setEstimate(estimate);
+			}
+		});
+		}
+	}
+	
+	public void setEstimate(int est) {
+		estimate.setText(est+"");
 	}
 	
 	public Iteration getUpdatedModel() {
