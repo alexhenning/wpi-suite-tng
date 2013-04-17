@@ -277,7 +277,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		subs = new RequirementSubrequirementTab(this);
 		users = new AssignUserToRequirementTab(this);
 		supplementPane.add("Notes", nt);
-		supplementPane.add("History", hs);
+		supplementPane.add("Transaction Log", hs);
 		supplementPane.add("Sub-Requirements", subs);
 		supplementPane.add("Assigned Users", users);
 		if(this.editMode == Mode.CREATE) {
