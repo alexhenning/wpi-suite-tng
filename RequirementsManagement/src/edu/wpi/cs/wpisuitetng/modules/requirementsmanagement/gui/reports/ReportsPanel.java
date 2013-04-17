@@ -7,32 +7,34 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //TODO who did this
+ *    Alex Henning
  ******************************************************************************/
 
-package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
+package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.demo.PieChartDemo1;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -45,26 +47,32 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
 /**
- *
  * The view for viewing reports.
- * @author TODO
- *
  */
 @SuppressWarnings("serial")
 public class ReportsPanel extends JPanel implements ScrollablePanel {
 	
 	/** the tab that created this panel */
-	ScrollableTab parent;
+	@SuppressWarnings("rawtypes")
+	private ScrollableTab parent;
 	/** the layout for this panel */
 	private GridBagLayout panelLayout;
 	
 	private JComboBox reports;
 
 	private List<RequirementModel> model;
-	private Report report = Report.STATUS;
-	private DefaultPieDataset dataset;
-	private JFreeChart chart;
-	private ChartPanel chartPanel;
+	private List<Report> reportsList;
+	private Report report;
+	private JPanel cardPanel;
+	
+	private DefaultPieDataset pieDataset;
+	private JFreeChart pieChart;
+	private ChartPanel pieChartPanel;
+	
+	private DefaultCategoryDataset barDataset;
+	private JFreeChart barChart;
+	private ChartPanel barChartPanel;
+
 
 	/**
 	 * Constructor
@@ -72,16 +80,40 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	 */
 	public ReportsPanel() {
 		model = new LinkedList<RequirementModel>();
-		dataset = new DefaultPieDataset();
-		dataset.setValue("Loading", 1.0);
-		chart = ChartFactory.createPieChart(
+		
+		pieDataset = new DefaultPieDataset();
+		pieDataset.setValue("Loading", 1.0);
+		pieChart = ChartFactory.createPieChart(
             "Loading",  // chart title
-            dataset,             // data
+            pieDataset,             // data
             false,               // include legend
             true,
             false
         );
-		((PiePlot) chart.getPlot()).setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1} ({2})"));
+		((PiePlot) pieChart.getPlot()).setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1} ({2})"));
+		
+		barDataset = new DefaultCategoryDataset();
+		barDataset.setValue(1.0, "Loading", "");
+		barChart = ChartFactory.createBarChart(
+				"Loading",
+				null,
+				"Requirements", 
+				barDataset,             // data
+				PlotOrientation.VERTICAL,
+				false,               // include legend
+				true,
+				false
+        );
+		
+		ReportDataProvider[] dataProviders = {new StatusDataProvider(),
+				new IterationDataProvider(), new AssigneeDataProvider()};
+		reportsList = new ArrayList<Report>();
+		for (ReportDataProvider dataProvider: dataProviders) {
+			for (ReportType type: ReportType.values()) {
+				reportsList.add(new Report(dataProvider, type));
+			}
+		}
+		report = reportsList.get(0);
 		
 		addComponents();
 
@@ -89,7 +121,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	}
 
 	@Override
-	public void setTab(ScrollableTab tab) {
+	public void setTab(@SuppressWarnings("rawtypes") ScrollableTab tab) {
 		parent = tab;
 	}
 
@@ -103,8 +135,17 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 		GridBagConstraints c = new GridBagConstraints();
 		setLayout(panelLayout);
 		
-		chartPanel = new ChartPanel(chart);
-		reports = new JComboBox(Report.values());
+		cardPanel = new JPanel();
+		cardPanel.setLayout(new CardLayout());
+		
+		pieChartPanel = new ChartPanel(pieChart);
+		cardPanel.add(pieChartPanel, ReportType.PIE_CHART.toString());
+		
+		barChartPanel = new ChartPanel(barChart);
+		cardPanel.add(barChartPanel, ReportType.BAR_CHART.toString());
+		
+		
+		reports = new JComboBox(new DefaultComboBoxModel(reportsList.toArray()));
 		reports.setBackground(Color.white);
 		reports.addItemListener(new ItemListener() {
 			@Override public void itemStateChanged(ItemEvent e) {
@@ -116,7 +157,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
-		add(chartPanel, c);
+		add(cardPanel, c);
 		c.gridy = 1;
 		add(reports, c);
 	}
@@ -138,12 +179,29 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	 * Update the charts to reflect the most up to date information.
 	 */
 	public void refreshChart() {
-		System.out.println("Refreshing chart");
-		dataset.clear();
-		report.updateDataset(model, dataset);
-		chart.setTitle(report.toString());
-		chartPanel.repaint();
-		System.out.println("Repainting");
+		System.out.println("Refreshing chart: "+report);
+		((CardLayout) cardPanel.getLayout()).show(cardPanel, report.getType().toString());
+		if (report.getType().equals(ReportType.PIE_CHART)) {
+			pieDataset.clear();
+			Map<Object, Integer> data = report.extractData(model);
+			
+			for (Object key : data.keySet()) {
+				pieDataset.setValue(key.toString(), new Double(data.get(key)));
+			}
+			
+			pieChart.setTitle(report.toString());
+			pieChartPanel.repaint();
+		} else if (report.getType().equals(ReportType.BAR_CHART)) {
+			barDataset.clear();
+			Map<Object, Integer> data = report.extractData(model);
+			
+			for (Object key : data.keySet()) {
+				barDataset.setValue(new Double(data.get(key)), "", key.toString());
+			}
+			
+			barChart.setTitle(report.toString());
+			barChartPanel.repaint();
+		}
 	}
 		
 	/**
@@ -152,85 +210,5 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 	 */
 	public void close() {
 		parent.getTabController().closeCurrentTab();
-	}
-	
-	/**
-	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
-	 * JComponent#setEnabled because setEnabled does not affect its children.
-	 * 
-	 * @param enabled	Whether or not input is enabled.
-	 */
-	protected void setInputEnabled(boolean enabled) {
-		// TODO: implement if made editable
-	}
-	
-	public enum Report {
-		STATUS {
-			@Override public void updateDataset(List<RequirementModel> model, 
-					DefaultPieDataset dataset) {
-				Map<RequirementStatus, Integer> map = new HashMap<RequirementStatus, Integer>();
-			
-				for (RequirementModel req : model) {
-					RequirementStatus status = req.getStatus();
-					if (map.containsKey(status)) {
-						map.put(status, 1 + map.get(status));
-					} else {
-						map.put(status, 1);
-					}
-				}
-				
-				for (RequirementStatus key : map.keySet()) {
-					System.out.println("\t"+key+": "+map.get(key));
-					dataset.setValue(key.toString(), new Double(map.get(key)));
-				}
-			}
-		},
-		ITERATION {
-			@Override public void updateDataset(List<RequirementModel> model, 
-					DefaultPieDataset dataset) {
-				Map<Iteration, Integer> map = new HashMap<Iteration, Integer>();
-			
-				for (RequirementModel req : model) {
-					Iteration iteration = req.getIteration();
-					if (map.containsKey(iteration)) {
-						map.put(iteration, 1 + map.get(iteration));
-					} else {
-						map.put(iteration, 1);
-					}
-				}
-				
-				for (Iteration key : map.keySet()) {
-					System.out.println("\t"+key+": "+map.get(key));
-					if (key != null) 
-						dataset.setValue(key.toString(), new Double(map.get(key)));
-					else
-						dataset.setValue("Backlog", new Double(map.get(key)));
-				}
-			}
-		},
-		ASSIGNED_TO {
-			@Override public void updateDataset(List<RequirementModel> model, 
-					DefaultPieDataset dataset) {
-				Map<User, Integer> map = new HashMap<User, Integer>();
-			
-				for (RequirementModel req : model) {
-					List<User> users = req.getAssignees();
-					for (User user: users) {
-						if (map.containsKey(user)) {
-							map.put(user, 1 + map.get(user));
-						} else {
-							map.put(user, 1);
-						}
-					}
-				}
-				
-				for (User key : map.keySet()) {
-					System.out.println("\t"+key+": "+map.get(key));
-					dataset.setValue(key.getName(), new Double(map.get(key)));
-				}
-			}
-		};
-		
-		public abstract void updateDataset(List<RequirementModel> model, DefaultPieDataset dataset);
 	}
 }
