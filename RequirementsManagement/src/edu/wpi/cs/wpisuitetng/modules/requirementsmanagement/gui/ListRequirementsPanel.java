@@ -77,7 +77,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	
 	/** the tab that created this*/
 	ScrollableTab parent;
-	/** is inpute enabled*/
+	/** is input enabled*/
 	boolean inputEnabled;
 	/** the table that displays the requirements*/
 	JTable table;
@@ -473,7 +473,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		boolean lastReq = false;
 		
 		
-		public UpdateRequirementCallback(boolean lastReq) {
+		protected UpdateRequirementCallback(boolean lastReq) {
 			this.lastReq = lastReq;
 		}
 
@@ -529,7 +529,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Constructor for the class
 		 * @param reqs List of requirements just retrieved from the db
 		 */
-		public RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
+		protected RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
 			this.reqs = reqs;
 		}
 
@@ -636,7 +636,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Constructor
 		 * @param iterationBox the combobox that will get filled in
 		 */
-		public FillIterationDropdown(JComboBox iterationBox) {
+		protected FillIterationDropdown(JComboBox iterationBox) {
 			this.iterationBox = iterationBox;
 			iterationBox.addItem("Backlog");
 		}
