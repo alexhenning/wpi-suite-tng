@@ -23,6 +23,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.FieldChange;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent.ProjectEventType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
@@ -131,6 +132,15 @@ public class RequirementHistoryPanel extends JPanel {
 			out = out + (oldValue != null ? oldValue.getReleaseNumber() : "none" );
 			out = out + " to ";
 			out = out + (newValue != null ? newValue.getReleaseNumber() : "none" );
+			out = out + ".";
+		} else if (change.getKey().equals("iteration")) {
+			Iteration oldValue = ((Iteration)change.getValue().getOldValue());
+			Iteration newValue = ((Iteration)change.getValue().getNewValue());
+			
+			out = out + change.getKey() + " changed from ";
+			out = out + (oldValue != null ? oldValue.getIterationNumber() : "Backlog" );
+			out = out + " to ";
+			out = out + (newValue != null ? newValue.getIterationNumber() : "Backlog" );
 			out = out + ".";
 		} else {
 			out = out + change.getKey() + " changed from " + change.getValue().getOldValue() + " to " + change.getValue().getNewValue() + ".";
