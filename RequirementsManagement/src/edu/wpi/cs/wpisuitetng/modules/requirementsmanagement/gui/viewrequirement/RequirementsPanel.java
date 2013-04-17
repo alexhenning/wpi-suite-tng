@@ -1132,6 +1132,8 @@ System.err.println("adduser reached***************************");
 		if (model.getDescription() != null && !model.getDescription().equals(descriptionfield.getText())) return true;
 		if (!estimateField.getText().equals(oldEstimateString)) return true;
 		if (!actualEffortField.getText().equals(oldActualEffortString)) return true;
+		if (nt.ta.getText().length() > 0) return true;
+		
 		return false;
 	}
 }
