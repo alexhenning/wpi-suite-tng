@@ -392,7 +392,7 @@ public class MainTabController {
 		// If the tab is already opened, switch to that tab.
 		for (int i = 0; i < this.mainView.getTabCount(); i++) {
 			// TODO: May have to refactor "View Iteration"
-			if (mainView.getTitleAt(i).equals("View Iteration")) {
+			if (mainView.getTitleAt(i).equals("All Iterations")) {
 				switchToTab(i);
 				// TODO: figure out what to return
 				return null;
@@ -402,7 +402,7 @@ public class MainTabController {
 		// Otherwise, create a new one.
 		Tab tab = addTab();
 		ScrollableTab<ViewIterationPanel> view
-			= new ScrollableTab<ViewIterationPanel>(this, tab, "View Iteration", new ViewIterationPanel());
+			= new ScrollableTab<ViewIterationPanel>(this, tab, "All Iterations", new ViewIterationPanel());
 		addChangeListener(new UpdateViewIterationOnFocusListener(view));
 		tab.setComponent(view);
 		view.requestFocus();
