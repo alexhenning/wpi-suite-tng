@@ -92,7 +92,7 @@ public class Iteration extends AbstractModel {
 		}
 		return date;
 	}
-	
+
 	/**
 	 * @return the id
 	 */

@@ -30,5 +30,5 @@ public interface ProjectEventsCallback {
 	 * @param reqs
 	 *            The projectEvents being returned
 	 */
-	public void callback(List<ProjectEvent> projectEvents);
+	void callback(List<ProjectEvent> projectEvents);
 }

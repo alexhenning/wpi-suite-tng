@@ -80,6 +80,7 @@ public class DB {
 	 * Checks if a requirement has all of it's subrequirements closed
 	 *
 	 * @param callback the class that has the callback function to be run on the list of requirements
+	 * @param id
 	 */
 	public static void canCloseRequirements(CanCloseRequirementCallback callback, String id) {
 		final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/canClose/"+id,  HttpMethod.GET);

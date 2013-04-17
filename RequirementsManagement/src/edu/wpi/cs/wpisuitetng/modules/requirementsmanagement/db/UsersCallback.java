@@ -29,5 +29,5 @@ public interface UsersCallback {
 	 * @param reqs
 	 *            The requirements being returned
 	 */
-	public void callback(List<User> users);
+	void callback(List<User> users);
 }

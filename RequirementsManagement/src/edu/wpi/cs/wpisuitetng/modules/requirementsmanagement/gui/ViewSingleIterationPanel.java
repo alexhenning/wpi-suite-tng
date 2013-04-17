@@ -67,6 +67,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	JPanel topPanel;
 	/**bottom panel*/
 	ListFilteredRequirementsPanel bottomPanel;
+	/** text field that holds the iteration's estimate value */
 	JTextField estimate;
 	
 	JXDatePicker startDatePicker;
@@ -121,9 +122,6 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		}
 		/** iteration is not null, retrieve and display iteration values */
 		else {
-			
-			//model.setEstimate(); // update the estimate
-			
 			lbl1 = new JLabel("Start Date");
 			lbl2 = new JLabel("End Date");
 			lbl3 = new JLabel ("Iteration");
@@ -138,8 +136,10 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			result = new JTextField();
 			
 			iterationNumber = new JTextField(model.getIterationNumber());
-			estimate = new JTextField("Calculating");
+			estimate = new JTextField();
 			estimate.setEditable(false);
+			//TODO: APPEARS THAT MODEL COULD BE NULL HERE, NOT GOOD
+			DB.getSingleIteration("" + model.getId(), new SetEstimateFieldCallback());
 			
 			submit = new JButton("Update");
 			submit.addActionListener(new EditIterationAction());
@@ -387,5 +387,68 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		editModel.setEndDate(end);
 		
 		return editModel;
+	}
+	
+	/**
+	 *
+	 * Update the estimate text field to display the iterations estimate
+	 * @author James
+	 *
+	 */
+	class SetEstimateFieldCallback implements SingleIterationCallback {
+
+		/**
+		 * callback function to call a callback to calculate and set the estimate field
+		 *
+		 * @param iteration the iteration
+		 */
+		@Override
+		public void callback(Iteration iteration) {
+			DB.getAllRequirements(new SetIterationEstimateFieldCallback(iteration));
+		}
+		
+	}
+	
+	/**
+	 *
+	 * Update the estimate text field to display the iterations estimate
+	 * @author James
+	 *
+	 */
+	class SetIterationEstimateFieldCallback implements RequirementsCallback {
+		
+		/** the iteration that the estimate needs to be know for */
+		Iteration iteration;
+		
+		/**
+		 * Constructor
+		 * @param estimateField the estimate field
+		 * @param iteration the iteration
+		 */
+		SetIterationEstimateFieldCallback(Iteration iteration) {
+			this.iteration = iteration;
+		}
+
+		/**
+		 * a callback function to set the estimate field
+		 *
+		 * @param reqs all the requirements
+		 */
+		@Override
+		public void callback(List<RequirementModel> reqs) {
+			int estimateAmount = 0;
+			if (iteration != null) {
+				for(RequirementModel req : reqs) {
+					// If the iteration is the same as the requirment's iteration
+					if (req.getIteration() != null &&
+							req.getIteration().getIterationNumber().equals(iteration.getIterationNumber())) {
+						// Add the requirment's estimate to the iteration's estimate
+						estimateAmount += req.getEstimate();
+					}
+				}
+			}
+			estimate.setText("" + estimateAmount);
+		}
+		
 	}
 }
