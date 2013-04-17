@@ -35,6 +35,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -158,6 +160,8 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getColumnModel().getSelectionModel().
+			addListSelectionListener(new ColumnChangeListener(this));
 		
 		// create panel and button to change table to edit mode
 		editPanel = new JPanel();
@@ -730,7 +734,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						}
 					} catch (NumberFormatException e) {
 						// still an error
-						isIterationValid = false;
+						if(tableModel.getValueAt(row, ESTIMATE) == null) {
+							// estimate is empty, so it isn't the iteration's fault; don't highlight
+							isIterationValid = false;
+						}
 					}
 
 					// Mark the cell if the iteration is invalid
@@ -774,6 +781,42 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			}
 			
 			return c;
+		}
+		
+	}
+	
+	/**
+	 *
+	 * Listener to detect if the user changes columns so that the renderers
+	 * can be updated
+	 * 
+	 * @author Tim Calvert
+	 *
+	 */
+	class ColumnChangeListener implements ListSelectionListener {
+
+		/** The list requirements panel */
+		ListRequirementsPanel panel;
+		
+		/**
+		 * Default constructor
+		 * @param panel The main panel
+		 */
+		public ColumnChangeListener(ListRequirementsPanel panel) {
+			this.panel = panel;
+		}
+		
+		/**
+		 * Interface method to listen for change in list selection
+		 *
+		 * @param e Event
+		 */
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(e.getValueIsAdjusting()) {
+				return;
+			}
+			panel.repaint();
 		}
 		
 	}
