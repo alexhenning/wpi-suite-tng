@@ -14,15 +14,12 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 
 /**
  * The iteration model

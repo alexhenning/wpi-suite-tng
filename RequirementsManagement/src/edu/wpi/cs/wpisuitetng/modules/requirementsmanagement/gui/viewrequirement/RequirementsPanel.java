@@ -87,6 +87,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	RequirementType[] typeStrings = RequirementType.values();
 	Iteration[] iterations;
 	ReleaseNumber[] releaseNums;
+	String oldEstimateString;
+	String oldActualEffortString;
 	public JComboBox priority = new JComboBox(priorityStrings);
 	public JComboBox type = new JComboBox(typeStrings);
 	public JComboBox iteration = new JComboBox();
@@ -146,7 +148,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		iteration.setSelectedIndex(0);
 		if (iteration.getItemCount() > 1){
 			if(model.getIteration() != null) {
-				String modelItStr = new Integer(model.getIteration().getIterationNumber()).toString();
+				String modelItStr = model.getIteration().getIterationNumber();
 				for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
 					if(modelItStr.equals(iteration.getItemAt(i).toString())) {
 						iteration.setSelectedIndex(i);
@@ -259,6 +261,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		}
 		
 		// Reset panel
+		resetButton.setEnabled(false);
 		resetButton.addMouseListener(new MouseListener() {
 			@Override public void mousePressed(MouseEvent arg0) {}
 			@Override public void mouseReleased(MouseEvent arg0) {}
@@ -277,7 +280,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		subs = new RequirementSubrequirementTab(this);
 		users = new AssignUserToRequirementTab(this);
 		supplementPane.add("Notes", nt);
-		supplementPane.add("History", hs);
+		supplementPane.add("Transaction Log", hs);
 		supplementPane.add("Sub-Requirements", subs);
 		supplementPane.add("Assigned Users", users);
 		if(this.editMode == Mode.CREATE) {
@@ -286,18 +289,22 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			nt.setInputEnabled(true);
 		}
 		
-		
 		namefield.addKeyListener(this);
-		descriptionfield.addKeyListener(this);
 		estimateField.addKeyListener(this);
-		estimateField.addFocusListener(new FocusListener() {
-			@Override public void focusLost(FocusEvent arg0) {
-				validateEsitmateFields();
-				validateEstimate();
+		actualEffortField.addKeyListener(this);
+		descriptionfield.addKeyListener(this);
+		descriptionfield.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {}
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {}
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				// TODO Auto-generated method stub
 				updateSubmitButton();
 			}
-			@Override public void focusGained(FocusEvent arg0) {}
-		});iteration.addItemListener(new ItemListener() {
+		});
+		iteration.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -327,31 +334,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					updateSubmitButton();
 				}
-			}
-		});
-		actualEffortField.addFocusListener(new FocusListener() {
-			@Override public void focusLost(FocusEvent arg0) {
-				validateEsitmateFields();
-				updateSubmitButton();
-			}
-			@Override public void focusGained(FocusEvent arg0) {}
-		});
-		descriptionfield.getDocument().addDocumentListener(new DocumentListener() {
-			
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-				// TODO Auto-generated method stub
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				// TODO Auto-generated method stub
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent arg0) {
-				// TODO Auto-generated method stub
-				updateSubmitButton();
 			}
 		});
 		
@@ -384,9 +366,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		// Put less space between save/update and reset buttons
 		c.insets = new Insets(0, 5, 5, 5);
 		c.gridy = 10;
-		c.ipadx = 7; // Make the reset button as wide as the save/update button
+		c.ipadx = 0; // Make the reset button as wide as the save/update button
 		leftside.add(resetButton, c);
 		c.ipadx = 0;
+		submit.setPreferredSize(new Dimension(80,25));
+		resetButton.setPreferredSize(new Dimension(80,25));
 		
 		// Right side (gridx = 1)
 		c.insets = new Insets(5, 5, 5, 5);
@@ -535,8 +519,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				}
 			}
 		}
-		estimateField.setText(model.getEstimate()+"");
-		actualEffortField.setText(model.getActualEffort()+"");
+
+		// Update estimate and actual-effort strings and fields
+		oldEstimateString = "" + model.getEstimate();
+		oldActualEffortString = "" + model.getActualEffort();
+		estimateField.setText(oldEstimateString);
+		actualEffortField.setText(oldActualEffortString);
+
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
@@ -549,17 +538,23 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			parent.setEditModeDescriptors(model);
 		}
 		parent.buttonGroup.update(editMode, model);
-		
+
+		// Reset all fields colors to white
+		type.setBackground(Color.WHITE);
+		priority.setBackground(Color.WHITE);
+		iteration.setBackground(Color.WHITE);
+		releaseNumbers.setBackground(Color.WHITE);
+		estimateField.setBackground(Color.WHITE);
+		actualEffortField.setBackground(Color.WHITE);
+		// Gray out the reset button after reseting or updating
+		resetButton.setEnabled(false);
+
 		if(editMode == Mode.CREATE) {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
-			type.setBackground(Color.WHITE);
 			priority.setEnabled(true);
-			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(true);
-			iteration.setBackground(Color.WHITE);
 			releaseNumbers.setEnabled(true);
-			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
@@ -568,13 +563,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
-			type.setBackground(Color.WHITE);
 			priority.setEnabled(false);
-			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(false);
-			iteration.setBackground(Color.WHITE);
 			releaseNumbers.setEnabled(false);
-			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(true);
@@ -583,13 +574,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
 			namefield.setEnabled(false);
 			type.setEnabled(false);
-			type.setBackground(Color.WHITE);
 			priority.setEnabled(false);
-			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(false);
-			iteration.setBackground(Color.WHITE);
 			releaseNumbers.setEnabled(false);
-			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(false);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
@@ -599,13 +586,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			namefield.setEnabled(true);
 			type.setEnabled(true);
-			type.setBackground(Color.WHITE);
 			priority.setEnabled(true);
-			priority.setBackground(Color.WHITE);
 			iteration.setEnabled(true);
-			iteration.setBackground(Color.WHITE);
 			releaseNumbers.setEnabled(true);
-			releaseNumbers.setBackground(Color.WHITE);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
@@ -635,6 +618,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) 
 				&& (editMode == Mode.EDIT && valuesHaveChanged() && validateFields()) ||
 				(editMode ==Mode.CREATE && validateFields()));
+		System.out.println("set reset : " + valuesHaveChanged());
+		resetButton.setEnabled(valuesHaveChanged());
 	}
 	
 	/**
@@ -797,7 +782,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * check if the estimate and actual effort fields contain invalid characters
 	 * @return
 	 */
-	public boolean validateEsitmateFields() {
+	public boolean validateEstimateFields() {
 		if (estimateField.getText().equals("")) { estimateField.setText("0"); }
 		if (actualEffortField.getText().equals("")) { actualEffortField.setText("0"); }
 		
@@ -851,7 +836,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			descriptionfield.setBackground(Color.WHITE);
 		}
 
-		return validateEsitmateFields();
+		return validateEstimateFields();
 	}
 	/**
 	 *
@@ -875,8 +860,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 * @param e a key event
 	 */
-	public void keyTyped ( KeyEvent e ){  
-		updateSubmitButton();
+	public void keyTyped ( KeyEvent e ){
+		System.out.println("key typed : " + e.getKeyCode());
 	}
 	/**
 	 * check if key is pressed. Doesn't really do anything now, but needs to be included 
@@ -884,15 +869,17 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * @param e a key event
 	 */
 	public void keyPressed ( KeyEvent e){  
-
+		System.out.println("key pressed : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
+//		updateSubmitButton();
 	}  
 	/**
-	 * check if key is released. Doesn't really do anything now, but needs to be included 
+	 * Check if key is released. If so, validate fields and update buttons
 	 *
 	 * @param e a key event
 	 */
 	public void keyReleased ( KeyEvent e ){  
-		//l1.setText( "Key Released" ) ; 
+		System.out.println("key released : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
+		validateFields();
 		updateSubmitButton();
 	}  
 
@@ -1129,6 +1116,11 @@ System.err.println("adduser reached***************************");
 		return estimate >= 0;
 	}
 
+	/**
+	 * Checks whether a field has changed
+	 *
+	 * @return true if at least one field has changed, false otherwise
+	 */
 	public boolean hasUnsavedChanges() {
 		if (!model.getName().equals(namefield.getText())) return true;
 		if (model.getType() != null && !model.getType().equals((RequirementType) type.getSelectedItem())) return true;
@@ -1138,9 +1130,8 @@ System.err.println("adduser reached***************************");
 		if (model.getReleaseNumber() == null && releaseNumbers.getSelectedItem() != null && releaseNumbers.getSelectedItem().toString() != null && !releaseNumbers.getSelectedItem().toString().equals("None")) return true;
 		if (model.getReleaseNumber() != null && releaseNumbers.getSelectedItem() != null && releaseNumbers.getSelectedItem().toString() != null && !model.getReleaseNumber().getReleaseNumber().equals(releaseNumbers.getSelectedItem().toString())) return true;
 		if (model.getDescription() != null && !model.getDescription().equals(descriptionfield.getText())) return true;
-		//TODO could probably improve this 
-		if (estimateField.getText().matches("[0-9]+") && model.getEstimate() != new Integer(estimateField.getText()).intValue()) return true;
-		if (actualEffortField.getText().matches("[0-9]+") && model.getActualEffort() != new Integer(actualEffortField.getText()).intValue()) return true;
+		if (!estimateField.getText().equals(oldEstimateString)) return true;
+		if (!actualEffortField.getText().equals(oldActualEffortString)) return true;
 		return false;
 	}
 }
