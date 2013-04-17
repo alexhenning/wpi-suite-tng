@@ -15,8 +15,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
+//import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+//import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreatePermissionRequestObserver;
