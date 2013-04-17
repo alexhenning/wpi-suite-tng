@@ -798,13 +798,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * @return
 	 */
 	public boolean validateEsitmateFields() {
-		if (!estimateField.getText().matches("[0-9]*")) {
+		if (!estimateField.getText().matches("[0-9]+")) {
 			estimateField.setBackground(Color.RED);
 			setStatus("Estimate must be non-negative integer.");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
 		}
-		if (!actualEffortField.getText().matches("[0-9]*")) {
+		if (!actualEffortField.getText().matches("[0-9]+")) {
 			actualEffortField.setBackground(Color.RED);
 			setStatus("Actual Effort must be non-negative integer.");
 			System.out.println("Actual Effort value is " + actualEffortField.getText());
@@ -833,7 +833,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			descriptionfield.setBackground(Color.WHITE);
 		}
-		if (!estimateField.getText().matches("[0-9]*")) {
+		if (!estimateField.getText().matches("[0-9]+")) {
 			estimateField.setBackground(Color.RED);
 			setStatus("Estimate must be non-negative integer.");
 			System.out.println("Estimate value is " + estimateField.getText());
@@ -846,7 +846,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			estimateField.setBackground(Color.WHITE);
 		}
-		if (!actualEffortField.getText().matches("[0-9]*")) {
+		if (!actualEffortField.getText().matches("[0-9]+")) {
 			actualEffortField.setBackground(Color.RED);
 			setStatus("Actual Effort must be non-negative integer.");
 			System.out.println("Actual Effort value is " + actualEffortField.getText());
