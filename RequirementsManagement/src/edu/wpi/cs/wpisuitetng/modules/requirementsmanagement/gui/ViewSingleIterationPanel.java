@@ -138,7 +138,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			result = new JTextField();
 			
 			iterationNumber = new JTextField(model.getIterationNumber());
-			estimate = new JTextField("Calculating");//(model.getEstimate());
+			estimate = new JTextField("Calculating");
 			estimate.setEditable(false);
 			
 			submit = new JButton("Update");

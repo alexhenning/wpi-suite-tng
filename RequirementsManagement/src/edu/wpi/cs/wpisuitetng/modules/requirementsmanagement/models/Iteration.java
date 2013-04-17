@@ -41,8 +41,6 @@ public class Iteration extends AbstractModel {
 	private Date endDate;
 	/** the name */
 	private String iterationNumber;
-//	/** the sum of the estimates for all requirements in the iteration */
-//	private int estimate;
 
 	/**
 	 * Constructor
@@ -95,24 +93,6 @@ public class Iteration extends AbstractModel {
 		return date;
 	}
 	
-//	/**
-//	 * Get the sum of all the estimate of the requirements in the iteration
-//	 *
-//	 * @return The sum of the estimates for all the requirements in the iteration
-//	 */
-//	public int getEstimate() {
-//		return estimate;	
-//	}
-//	
-//	/**
-//	 * sets the estimate of the iteration to the sum of all the estimates of all the requirements assigned to it
-//	 *
-//	 */
-//	public void setEstimate() {
-//		IterationEstimate iterationEstimate = new IterationEstimate(this);
-//		DB.getAllRequirements(iterationEstimate);
-//	}
-
 	/**
 	 * @return the id
 	 */
@@ -243,48 +223,4 @@ public class Iteration extends AbstractModel {
 	}
 	//TODO add new equals method
 
-//	/**
-//	 *
-//	 * Description goes here
-//	 * @author James
-//	 * @author Visit
-//	 *
-//	 */
-//	public class IterationEstimate implements RequirementsCallback {
-//		
-//		/** The Iteration that an estimate is needed for */
-//		private Iteration iteration;
-//
-//		/**
-//		 * Constructor
-//		 * @param iteration the iteration
-//		 */
-//		public IterationEstimate(Iteration iteration) {
-//			this.iteration = iteration;
-//		}
-//
-//		/**
-//		 * Get the total estimate for all of the requirements in an iteration
-//		 * TODO: when sub-children are implemented for requirements make sure that this still works
-//		 *
-//		 * @param reqs list of requirements
-//		 */
-//		@Override
-//		public void callback(List<RequirementModel> reqs) {
-//			estimate = 0;
-//			if (iteration != null) {
-//				for(RequirementModel req : reqs) {
-//					// If the iteration is the same as the requirment's iteration
-//					if (req.getIteration() != null &&
-//							req.getIteration().getIterationNumber().equals(iteration.getIterationNumber())) {
-//						// Add the requirment's estimate to the iteration's estimate
-//						estimate += req.getEstimate();
-//					}
-//				}
-//			}
-//			System.out.println("\nESTIMATE SET TO " + estimate + "!!!!\n");
-//		}
-//		
-//	}
-	
 }
