@@ -191,11 +191,11 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				Map<Iteration, Integer> map = new HashMap<Iteration, Integer>();
 			
 				for (RequirementModel req : model) {
-					Iteration status = req.getIteration();
-					if (map.containsKey(status)) {
-						map.put(status, 1 + map.get(status));
+					Iteration iteration = req.getIteration();
+					if (map.containsKey(iteration)) {
+						map.put(iteration, 1 + map.get(iteration));
 					} else {
-						map.put(status, 1);
+						map.put(iteration, 1);
 					}
 				}
 				
@@ -214,11 +214,13 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				Map<User, Integer> map = new HashMap<User, Integer>();
 			
 				for (RequirementModel req : model) {
-					User status = req.getCreator(); // TODO: replace with assigned to
-					if (map.containsKey(status)) {
-						map.put(status, 1 + map.get(status));
-					} else {
-						map.put(status, 1);
+					List<User> users = req.getAssignees();
+					for (User user: users) {
+						if (map.containsKey(user)) {
+							map.put(user, 1 + map.get(user));
+						} else {
+							map.put(user, 1);
+						}
 					}
 				}
 				
