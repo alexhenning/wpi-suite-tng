@@ -109,7 +109,9 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				new IterationDataProvider(), new AssigneeDataProvider()};
 		reportsList = new ArrayList<Report>();
 		for (ReportDataProvider dataProvider: dataProviders) {
-			reportsList.add(new Report(dataProvider, ReportType.PIE_CHART));
+			for (ReportType type: ReportType.values()) {
+				reportsList.add(new Report(dataProvider, type));
+			}
 		}
 		report = reportsList.get(0);
 		
@@ -190,7 +192,15 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 			pieChart.setTitle(report.toString());
 			pieChartPanel.repaint();
 		} else if (report.getType().equals(ReportType.PIE_CHART)) {
+			barDataset.clear();
+			Map<Object, Integer> data = report.extractData(model);
 			
+			for (Object key : data.keySet()) {
+				barDataset.setValue(new Double(data.get(key)), key.toString(), "");
+			}
+			
+			barChart.setTitle(report.toString());
+			barChartPanel.repaint();
 		}
 	}
 		
