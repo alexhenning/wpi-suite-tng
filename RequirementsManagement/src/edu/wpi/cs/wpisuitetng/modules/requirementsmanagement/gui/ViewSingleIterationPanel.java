@@ -31,11 +31,13 @@ import org.jdesktop.swingx.JXDatePicker;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleIterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 /**
@@ -65,6 +67,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	JPanel topPanel;
 	/**bottom panel*/
 	ListFilteredRequirementsPanel bottomPanel;
+	JTextField estimate;
 	
 	JXDatePicker startDatePicker;
 	JXDatePicker endDatePicker;
@@ -119,7 +122,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		/** iteration is not null, retrieve and display iteration values */
 		else {
 			
-			model.setEstimate(); // update the estimate
+			//model.setEstimate(); // update the estimate
 			
 			lbl1 = new JLabel("Start Date");
 			lbl2 = new JLabel("End Date");
@@ -135,7 +138,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			result = new JTextField();
 			
 			iterationNumber = new JTextField(model.getIterationNumber());
-			JTextField estimate = new JTextField(model.getEstimate());
+			estimate = new JTextField(model.getEstimate());
 			estimate.setEditable(false);
 			
 			submit = new JButton("Update");
@@ -253,6 +256,8 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 */
 	private void updateFields() {
 		//TODO finish this
+		updateEstimate();
+		
 	}
 
 	/**
@@ -344,6 +349,28 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			//TODO figure out how to display the issues...
 
 		}
+	}
+	
+	public void updateEstimate() {
+		DB.getAllRequirements(new RequirementsCallback() {
+			
+			@Override
+			public void callback(List<RequirementModel> reqs) {
+				// TODO Auto-generated method stub
+				int estimate = 0;
+				for(RequirementModel req : reqs) {
+					Iteration it = req.getIteration();
+					if (it != null && it.getIterationNumber().equals(model.getIterationNumber())) {
+						estimate += req.getEstimate();
+					}
+				}
+				setEstimate(estimate);
+			}
+		});
+	}
+	
+	public void setEstimate(int est) {
+		estimate.setText(est+"");
 	}
 	
 	public Iteration getUpdatedModel() {
