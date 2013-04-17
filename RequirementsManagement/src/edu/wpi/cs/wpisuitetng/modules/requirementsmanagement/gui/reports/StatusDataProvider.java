@@ -9,10 +9,20 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 
 public class StatusDataProvider implements ReportDataProvider {
 
+	/**
+	 * @return The name of this data provider
+	 */
 	@Override public String getName() {
 		return "Requirement Status";
 	}
 	
+	/**
+	 * Extracts data from a list of requirements and returns the corresponding
+	 * map.
+	 * 
+	 * @param model List of requirements.
+	 * @return some data to chart with a name and thecorresponding value
+	 */
 	@Override public Map<Object, Integer> extractData(List<RequirementModel> model) {
 		Map<Object, Integer> map = new HashMap<Object, Integer>();
 	
