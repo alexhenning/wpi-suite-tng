@@ -15,23 +15,15 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import javax.swing.AbstractAction;
 
 import org.jfree.io.IOUtils;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 
 
 /**
@@ -68,11 +60,13 @@ public class ShowHelpAction extends AbstractAction{
 		    		System.out.println("Help Out Stream: "+out);
 		    		
 		    		IOUtils.getInstance().copyStreams(in, out);
+		    		out.close();
 		    	}
 
 		        Desktop.getDesktop().open(pdfFile);
 		    } catch (IOException ex) {
 		        // no application registered for PDFs
+		    	System.out.println("No application registered to open PDFs with.");
 		    } finally { // Close all streams
 		    	if (in != null) {
 		    		try {

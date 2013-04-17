@@ -30,23 +30,28 @@ xmlReqList.onreadystatechange = function()
 {
 	if(xmlReqList.readyState == 4)//wait until response is available
 	{
-		//document.getElementById("divBuffer").innerHTML = xmlReqList.statusText;
 		if(xmlReqList.statusText=="OK"){
+			// For debug
+			// document.getElementById("divBuffer").innerHTML = xmlReqList.responseText;
 			reqList = eval(xmlReqList.responseText);
 			for(var i = 0; i<reqList.length; i++){
+				var iterationName;
+				if(reqList[i].iteration != null)
+					iterationName = reqList[i].iteration.iterationNumber;
+				else
+					iterationName = "NONE";
 				document.getElementById("reqTBody").innerHTML += 
 				("<tr id = 'req" + i + "' onclick = 'createReqDialog("+ i +");'>"+
 				    "<td>"+reqList[i].id+"</td>"+
 				    "<td>"+reqList[i].name+"</td>"+
 				    "<td>"+reqList[i].description+"</td>"+
-				    "<td>"+reqList[i].iteration.iterationNumber+"</td>"+
+				    "<td>"+iterationName+"</td>"+
 				   	"<td>"+reqList[i].status+"</td>"+
 				    "<td>"+reqList[i].priority+"</td>"+
 				    "<td>"+reqList[i].estimate+"</td>"+
 				"</tr>");
 			}
 			$("#reqTable").tablesorter();
-			document.getElementById("divBuffer").innerHTML = xmlReqList.responseText;
 		}else{
 			window.location = "login.jsp";
 		}
@@ -56,13 +61,18 @@ xmlReqList.onreadystatechange = function()
 
 function createReqDialog(reqId){
 	if($("#Dialog" + reqId).length == 0){
+		var iterationName;
+		if(reqList[reqId].iteration != null)
+			iterationName = reqList[reqId].iteration.iterationNumber;
+		else
+			iterationName = "NONE";
 		var dialogHTML = 
 		"<div id='Dialog" + reqId + "' title='Requirement - " + reqList[reqId].name + "'>" +
 		  "<p>"+
 		  "<div class = 'reqFields'>ID: " + reqList[reqId].id + "</div>"+
 		  "<div class = 'reqFields'>Name: " + reqList[reqId].name + "</div>"+
 		  "<div class = 'reqFields'>Description:<br>" + reqList[reqId].description + "</div>"+
-		  "<div class = 'reqFields'>Iteration: " + reqList[reqId].iteration.iterationNumber + "</div>"+
+		  "<div class = 'reqFields'>Iteration: " + iterationName + "</div>"+
 		  "<div class = 'reqFields'>Status: " + reqList[reqId].status + "</div>"+
 		  "<div class = 'reqFields'>Priority: " + reqList[reqId].priority + "</div>"+
 		  "<div class = 'reqFields'>Estimate: " + reqList[reqId].estimate + "</div>"+
@@ -116,6 +126,6 @@ function init(){
 <tbody id = "reqTBody">
 </tbody> 
 </table>
-<div id = "reqDialogs"></div>
+<div id = "divBuffer"></div>
 </body>
 </html>

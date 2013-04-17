@@ -146,7 +146,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		iteration.setSelectedIndex(0);
 		if (iteration.getItemCount() > 1){
 			if(model.getIteration() != null) {
-				String modelItStr = new Integer(model.getIteration().getIterationNumber()).toString();
+				String modelItStr = model.getIteration().getIterationNumber();
 				for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
 					if(modelItStr.equals(iteration.getItemAt(i).toString())) {
 						iteration.setSelectedIndex(i);
@@ -277,7 +277,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		subs = new RequirementSubrequirementTab(this);
 		users = new AssignUserToRequirementTab(this);
 		supplementPane.add("Notes", nt);
-		supplementPane.add("History", hs);
+		supplementPane.add("Transaction Log", hs);
 		supplementPane.add("Sub-Requirements", subs);
 		supplementPane.add("Assigned Users", users);
 		if(this.editMode == Mode.CREATE) {

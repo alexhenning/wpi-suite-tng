@@ -56,7 +56,6 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	
 	/** the tab that made this */
 	ScrollableTab parent;
-	JPanel topPanel;
 	JTextField panelLabel;
 	JTable table;
 	ViewIterTable tableModel;
@@ -94,13 +93,6 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	private void addComponents() {
 		setLayout(new BorderLayout());
 		
-		topPanel = new JPanel(new BorderLayout());
-		panelLabel = new JTextField("List of Iterations");
-		Font font = new Font("Verdana", Font.BOLD, 40);
-		panelLabel.setFont(font);
-		panelLabel.setEditable(false);
-		topPanel.add(panelLabel, BorderLayout.CENTER);
-		
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -129,7 +121,6 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 100));
-		add(topPanel, BorderLayout.PAGE_START);
 		add(scrollPane, BorderLayout.CENTER);
 
 	}
