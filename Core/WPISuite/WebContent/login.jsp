@@ -4,7 +4,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Requirements viewer login</title>
+<link rel="stylesheet" href="css/smoothness/jquery-ui-1.10.2.custom.css" type="text/css">
+<style type="text/css">
+	lable{
+    font-size: 10px;
+    display:block;
+    }
+    input{
+    width: 200px;
+    display:block;
+    }
+</style>
+<script type="text/javascript" src="libs/jquery-1.9.1.min.js"></script>
+ <script type="text/javascript" src="libs/jquery-ui-1.10.2.custom.js"></script>
 <script type="text/javascript">
 
 function login()
@@ -29,8 +42,7 @@ function login()
 						//document.getElementById("projectresponsespan").innerHTML = xmlProject.statusText;
 						window.location = "view.jsp";
 					}else{
-						document.getElementById("loginresponsespan").innerHTML = "";
-						document.getElementById("projectresponsespan").innerHTML = "Project is not exist";
+						document.getElementById("loginresponsespan").innerHTML = "Project is not exist";
 					}
 				}
 				
@@ -53,7 +65,6 @@ function login()
 				xmlProject.send(document.getElementById("loginproject").value);
 			}else{	
 				document.getElementById("loginresponsespan").innerHTML = "Wrong user name or password";
-				document.getElementById("projectresponsespan").innerHTML = "";
 			}
 		}
 	};
@@ -65,14 +76,29 @@ function login()
 	//send the request
 	xml.send();             
 }
+
+$(function() {
+    $( "#login-dialog" ).dialog({ width: "30%", draggable: false}).css("fontSize", "12px");
+    $("button").css("display", "none");
+    $( "#loginbutton" ).button().width("70px");
+});
 </script>
 </head>
 <body>
-<h1>WPI Suite Requirements viewer</h1>
-<h4>Login:</h4>
-Username:<input type="text" id="loginusername"></input><span id="loginresponsespan"></span><br>
-Password:<input type="password" id="loginpassword"></input><br>
-Project:<input type="text" id="loginproject"></input><span id="projectresponsespan"></span><br>
-<input type="button" value="Submit" onclick="login()">
+<div id="login-dialog" title="WPI Suite Requirements viewer">
+	<h3>Login:</h3>
+	<form>
+	<fieldset>
+	<h4 id="loginresponsespan">All form fields are required.</h4><br>
+	<lable for="loginusername">Username:</lable>
+	<input type="text" id="loginusername" name = "loginusername"></input>
+	<lable for = "loginpassword">Password:</lable>
+	<input type="password" id="loginpassword" name="loginpassword"></input>
+	<lable for = "loginproject">Project:</lable>
+	<input type="text" id="loginproject" name = "loginproject"></input>
+	<input type="button" id="loginbutton" value = "Login" onclick="login()"></input>
+	</fieldset>
+	</form>
+</div>
 </body>
 </html>
