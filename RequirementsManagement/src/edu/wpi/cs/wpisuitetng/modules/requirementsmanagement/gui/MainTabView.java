@@ -71,7 +71,7 @@ public class MainTabView extends JTabbedPane {
 			// TODO: Hacky fix for requirements panel, make an interface and generalize
 			if (getComponentAt(index) instanceof RequirementsTab) {
 				System.out.println("Deleting requirement tab");
-				if (((RequirementsTab) getComponentAt(index)).getRequirementPanel().hasUnsavedChanges()) {
+				if (((RequirementsTab) getComponentAt(index)).getRequirementPanel().hasUnsavedChanges(true)) {
 					int input = JOptionPane.showConfirmDialog(this,
 															"Do you want to lose these changes?", 
 															"Unsaved Changes", 

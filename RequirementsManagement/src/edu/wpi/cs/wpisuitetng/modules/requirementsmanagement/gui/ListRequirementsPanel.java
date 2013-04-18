@@ -35,6 +35,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -77,7 +79,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	
 	/** the tab that created this*/
 	ScrollableTab parent;
-	/** is inpute enabled*/
+	/** is input enabled*/
 	boolean inputEnabled;
 	/** the table that displays the requirements*/
 	JTable table;
@@ -121,6 +123,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						}
                 	});
                 }
+                parent.repaint();
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
 			@Override public void mouseExited(MouseEvent arg0) {}
@@ -158,6 +161,8 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getColumnModel().getSelectionModel().
+			addListSelectionListener(new ColumnChangeListener(this));
 		
 		// create panel and button to change table to edit mode
 		editPanel = new JPanel();
@@ -473,7 +478,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		boolean lastReq = false;
 		
 		
-		public UpdateRequirementCallback(boolean lastReq) {
+		protected UpdateRequirementCallback(boolean lastReq) {
 			this.lastReq = lastReq;
 		}
 
@@ -529,7 +534,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Constructor for the class
 		 * @param reqs List of requirements just retrieved from the db
 		 */
-		public RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
+		protected RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
 			this.reqs = reqs;
 		}
 
@@ -636,7 +641,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Constructor
 		 * @param iterationBox the combobox that will get filled in
 		 */
-		public FillIterationDropdown(JComboBox iterationBox) {
+		protected FillIterationDropdown(JComboBox iterationBox) {
 			this.iterationBox = iterationBox;
 			iterationBox.addItem("Backlog");
 		}
@@ -730,7 +735,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						}
 					} catch (NumberFormatException e) {
 						// still an error
-						isIterationValid = false;
+						if(tableModel.getValueAt(row, ESTIMATE) == null) {
+							// estimate is empty, so it isn't the iteration's fault; don't highlight
+							isIterationValid = false;
+						}
 					}
 
 					// Mark the cell if the iteration is invalid
@@ -774,6 +782,42 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			}
 			
 			return c;
+		}
+		
+	}
+	
+	/**
+	 *
+	 * Listener to detect if the user changes columns so that the renderers
+	 * can be updated
+	 * 
+	 * @author Tim Calvert
+	 *
+	 */
+	class ColumnChangeListener implements ListSelectionListener {
+
+		/** The list requirements panel */
+		ListRequirementsPanel panel;
+		
+		/**
+		 * Default constructor
+		 * @param panel The main panel
+		 */
+		public ColumnChangeListener(ListRequirementsPanel panel) {
+			this.panel = panel;
+		}
+		
+		/**
+		 * Interface method to listen for change in list selection
+		 *
+		 * @param e Event
+		 */
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(e.getValueIsAdjusting()) {
+				return;
+			}
+			panel.repaint();
 		}
 		
 	}

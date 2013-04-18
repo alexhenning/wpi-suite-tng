@@ -90,11 +90,11 @@ $(function() {
 	<form>
 	<fieldset>
 	<h4 id="loginresponsespan">All form fields are required.</h4><br>
-	<lable for="loginusername">Username:</lable>
+	<label for="loginusername">Username:</label>
 	<input type="text" id="loginusername" name = "loginusername"></input>
-	<lable for = "loginpassword">Password:</lable>
+	<label for = "loginpassword">Password:</label>
 	<input type="password" id="loginpassword" name="loginpassword"></input>
-	<lable for = "loginproject">Project:</lable>
+	<label for = "loginproject">Project:</label>
 	<input type="text" id="loginproject" name = "loginproject"></input>
 	<input type="button" id="loginbutton" value = "Login" onclick="login()"></input>
 	</fieldset>
