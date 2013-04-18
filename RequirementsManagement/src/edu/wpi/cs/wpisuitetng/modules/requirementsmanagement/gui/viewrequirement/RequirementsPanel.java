@@ -102,6 +102,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
 	private RequirementSubrequirementTab subs;
+	private SplitRequirementTab splitter;
 	private AssignUserToRequirementTab users;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
@@ -278,10 +279,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		nt = new NoteMainPanel(this);
 		hs = new RequirementHistoryTab(this);
 		subs = new RequirementSubrequirementTab(this);
+		splitter = new SplitRequirementTab(this);
 		users = new AssignUserToRequirementTab(this);
 		supplementPane.add("Notes", nt);
 		supplementPane.add("Transaction Log", hs);
 		supplementPane.add("Sub-Requirements", subs);
+		supplementPane.add("Split Requirement", splitter);
 		supplementPane.add("Assigned Users", users);
 		if(this.editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
