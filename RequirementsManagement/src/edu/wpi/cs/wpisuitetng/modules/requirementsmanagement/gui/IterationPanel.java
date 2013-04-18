@@ -118,7 +118,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		startDatePicker = new JXDatePicker(startDate != null ? startDate : new Date());
 		endDatePicker = new JXDatePicker(endDate != null ? endDate : new Date());
 
-		result = new JTextField();
+		result = new JTextField(25);
 		iterationNumber = new JTextField();
 		
 		if(editMode == Mode.CREATE) {
@@ -300,7 +300,8 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			new ValidateIterationCallback(parent);
+			getModel();
+			DB.getAllIterations(new ValidateIterationCallback(parent));
 		}
 		
 	}
