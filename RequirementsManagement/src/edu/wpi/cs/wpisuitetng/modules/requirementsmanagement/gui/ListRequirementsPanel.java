@@ -20,6 +20,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Date;
@@ -32,9 +36,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
@@ -57,8 +64,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  *
  */
 @SuppressWarnings("serial")
-public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
-	
+public class ListRequirementsPanel extends JPanel implements ScrollablePanel, TableModelListener {
+
 	public static final int ID = 0;
 	public static final int NAME = 1;
 	public static final int DESCRIPTION = 2;
@@ -68,10 +75,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	public static final int ESTIMATE = 6;
 	public static final int RELEASE = 7;
 	public static final int ROWS = 7;
-	
+
 	/** the tab that created this*/
 	ScrollableTab parent;
-	/** is inpute enabled*/
+	/** is input enabled*/
 	boolean inputEnabled;
 	/** the table that displays the requirements*/
 	JTable table;
@@ -87,7 +94,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	JPanel editPanel;
 	/** Old data used to compare changes */
 	Object[][] data;
-	
+
 	/**
 	 * Constructor
 	 * @param parent the tab that made this
@@ -99,26 +106,29 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		// Add all components to this panel
 		addComponents();
 		updateAllRequirementList();
-		
+
 		table.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-                if (e.getClickCount() == 2 && tableModel.getMode() != Mode.EDIT) {
-                	DB.getSingleRequirement((String) table.getModel().getValueAt(table.getSelectedRow(), ID),
-                			new SingleRequirementCallback() {
+				if (e.getClickCount() == 2 && tableModel.getMode() != Mode.EDIT) {
+					DB.getSingleRequirement((String) table.getModel().getValueAt(table.getSelectedRow(), ID),
+							new SingleRequirementCallback() {
 						@Override
 						public void callback(RequirementModel req) {
 							parent.getTabController().addEditRequirementTab(req);
 						}
-                	});
-                }
+					});
+				}
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
 			@Override public void mouseExited(MouseEvent arg0) {}
 			@Override public void mouseEntered(MouseEvent arg0) {}
 			@Override public void mouseClicked(MouseEvent arg0) {}
 		});
+		
+
 	}
+	
 
 	@Override
 	public void setTab(ScrollableTab tab) {
@@ -133,7 +143,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	protected void addComponents() {
 		//borderlayout so the table can expand while the filter area remains constant
 		setLayout(new BorderLayout());
-		
+
 		//create the table part of the GUI
 		tableModel = new ViewReqTable();
 		tableModel.setMode(Mode.VIEW);
@@ -146,10 +156,11 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				return new CustomCellRenderer();
 			}
 		};
+		tableModel.addTableModelListener(this);
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		// create panel and button to change table to edit mode
 		editPanel = new JPanel();
 		editButton = new JButton("Edit");
@@ -159,16 +170,17 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				setEditTable();
 			}
 		});
-		
+
 		// create the save and cancel buttons
 		saveButton = new JButton("Save");
+		saveButton.setEnabled(false);
 		saveButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setViewTable(false);
 			}
-			
+
 		});
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
@@ -176,13 +188,13 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setViewTable(true);
-				
+
 			}
-			
+
 		});
-		
+
 		editPanel.add(editButton);
-		
+
 		//Add the table to a scrollpane and add it
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 100));
@@ -208,7 +220,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	public void updateAllRequirementList() {
 		DB.getAllRequirements(new UpdateTableCallback());
 	}
-	
+
 	/**
 	 * the the table model
 	 *
@@ -217,7 +229,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	public ViewReqTable getTable(){
 		return this.tableModel;
 	}
-	
+
 	/**
 	 * Copies data over to a new structure
 	 * clone() didn't seem to work correctly
@@ -227,35 +239,36 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 */
 	private Object[][] copyData(Object[][] data) {
 		Object[][] copy = new Object[tableModel.getRowCount()][tableModel.getColumnCount()];
-		
+
 		for(int i = 0; i < tableModel.getRowCount(); ++i) {
 			for(int j = 0; j < tableModel.getColumnCount(); ++j) {
 				copy[i][j] = data[i][j];
 			}
 		}
-		
+
 		return copy;
 	}
-	
+
 	/**
 	 * Function to turn the table into edit mode
 	 *
 	 */
 	public void setEditTable() {
+		saveButton.setEnabled(false);
 		tableModel.setMode(Mode.EDIT);
 		editPanel.remove(editButton);
 		editPanel.add(saveButton);
 		editPanel.add(cancelButton);
 		editPanel.revalidate();
 		editPanel.repaint();
-		
+
 		// save copy of current data (clone() didn't seem to work)
 		data = copyData(tableModel.getData());
-		
+
 		setUpColumns(); // TODO disable status except for delete and complete, just display the correct one
-		                // TODO set up cell editors to limit what can be typed
+		// TODO set up cell editors to limit what can be typed
 	}
-	
+
 	/**
 	 * turn the table into view mode
 	 *
@@ -272,6 +285,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			// validate fields
 			noErrors = validateModels();
 			if(noErrors) {  // no errors, update models and save
+				saveButton.setEnabled(true);
 				// get all models from data base and continue from callback
 				RetrieveAllRequirementsCallback cb = new RetrieveAllRequirementsCallback();
 				DB.getAllRequirements(cb);
@@ -284,12 +298,12 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			editPanel.add(editButton);
 			editPanel.revalidate();
 			editPanel.repaint();
-			
+
 			// dump saved data
 			data = null;
 		}
 	}
-	
+
 	/**
 	 * Helper function to call other functions to set up individual columns
 	 *
@@ -299,20 +313,29 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		setUpStatusColumn(table, table.getColumnModel().getColumn(STATUS));
 		setUpIterationColumn(table, table.getColumnModel().getColumn(ITERATION));
 	}
-	
+
 	/**
-	 * make the iteration comboboxes in the iteration column
+	 * Make the iteration comboboxes in the iteration column
 	 *
 	 * @param table the JTable that has the column
 	 * @param iterColumn the iteration column
 	 */
 	private void setUpIterationColumn(JTable table, TableColumn iterColumn) {
-		JComboBox iterationBox = new JComboBox();
-		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
+		final JComboBox iterationBox = new JComboBox();
+		final FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
+		iterationBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					updateSaveButton(iterationDropdown.iterationBox.getSelectedItem(), ITERATION);
+				}
+			}
+
+		});
 		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox));
 	}
-	
+
 	/**
 	 * make the status comboboxes in the status column
 	 *
@@ -327,10 +350,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		statusBox.addItem("IN_PROGRESS");
 		statusBox.addItem("COMPLETE");
 		statusBox.addItem("DELETED");
-		
+
 		statusColumn.setCellEditor(new DefaultCellEditor(statusBox));
 	}
-	
+
 	/**
 	 * make the priority comboxes in the priority column
 	 *
@@ -343,10 +366,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		priorityBox.addItem("LOW");
 		priorityBox.addItem("MEDIUM");
 		priorityBox.addItem("HIGH");
-		
+
 		priorityColumn.setCellEditor(new DefaultCellEditor(priorityBox));
 	}
-	
+
 	/**
 	 * update the requirements models so that they can be sent to the database to update them there
 	 *
@@ -387,10 +410,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				}
 			}
 		}
-		
+
 		return reqs;
 	}
-	
+
 	/**
 	 * checks to see if all the changes made in the table are valid
 	 *
@@ -398,11 +421,13 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 */
 	public boolean validateModels() {
 		boolean noErrors = true;
+		//saveButton.setEnabled(false);
 		// TODO add more robust validating
 		// no real need to check iterations, status, or priority because the
 		// user can't select invalid things from the JComboBox
 		for(int i = 0; i < tableModel.getRowCount(); i++) {
 			// check name
+
 			if(((String)tableModel.getValueAt(i, NAME)).length() < 1) {
 				System.out.println("Error in name for Requirement in row " + i);
 				noErrors = false;
@@ -432,7 +457,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 
 		return noErrors;
 	}
-	
+
 	/**
 	 * updates all the requirements in the database to match those in reqs
 	 *
@@ -446,7 +471,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		// now update the last requirement with the provision that the callback updates the table
 		DB.updateRequirements(reqs.get(reqs.size() - 1), new UpdateRequirementCallback(true));
 	}
-	
+
 	/**
 	 * Callback for updating a requirement in the database
 	 * 
@@ -455,10 +480,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 *
 	 */
 	class UpdateRequirementCallback implements SingleRequirementCallback {
-		
+
 		boolean lastReq = false;
-		
-		
+
+
 		public UpdateRequirementCallback(boolean lastReq) {
 			this.lastReq = lastReq;
 		}
@@ -471,13 +496,13 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		@Override
 		public void callback(RequirementModel req) {
 			if(lastReq) {  // this should be the callback from the last requirement (or close enough)
-				           // so go ahead and update the list again
+				// so go ahead and update the list again
 				updateAllRequirementList();
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 *
 	 * gets a list of all the requirements and creates a RetrieveAllIterationsCallback to update them and send them to the database
@@ -486,7 +511,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 *
 	 */
 	class RetrieveAllRequirementsCallback implements RequirementsCallback {
-		
+
 		/**
 		 * Create RetrieveallIteratoinsCallback to update the requirments and send the to the database
 		 *
@@ -496,9 +521,9 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		public void callback(List<RequirementModel> reqs) {
 			DB.getAllIterations(new RetrieveAllIterationsCallback(reqs));
 		}
-		
+
 	}
-	
+
 	/**
 	 *
 	 * Retrieves all iterations from the database
@@ -507,10 +532,10 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 *
 	 */
 	class RetrieveAllIterationsCallback implements IterationCallback {
-		
+
 		/** a list of all the requirements */
 		List<RequirementModel> reqs;
-		
+
 		/**
 		 * Constructor for the class
 		 * @param reqs List of requirements just retrieved from the db
@@ -529,11 +554,11 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		public void callback(List<Iteration> iterationss) {
 			List<RequirementModel> requirements = updateModels(reqs, iterationss);
 			sendRequirementsToDatabase(requirements);
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 *
 	 * Callback to populate the table with all the requirements
@@ -583,7 +608,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			else {
 				// do nothing, there are no requirements
 			}
-		
+
 			TableColumn column = null;
 			for (int i = 0; i < ROWS; i++) {
 				column = table.getColumnModel().getColumn(i);
@@ -601,9 +626,9 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				}
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 *
 	 * Class to take the list of iterations from the database and fill in a combobox with their names
@@ -612,12 +637,12 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 *
 	 */
 	class FillIterationDropdown implements IterationCallback {
-		
+
 		/**
 		 * The combo box that will get filled in
 		 */
 		JComboBox iterationBox;
-		
+
 		/**
 		 * Constructor
 		 * @param iterationBox the combobox that will get filled in
@@ -645,9 +670,9 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				}
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 *
 	 * A custom cell renderer to allow for changing the background color
@@ -663,7 +688,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			
+
 			if(tableModel.getMode() == Mode.EDIT) {
 				if(!value.equals(data[row][column])) {
 					c.setBackground(Color.YELLOW);
@@ -707,9 +732,27 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 					}
 				}
 			}
-			
+
 			return c;
 		}
-		
+
 	}
+
+	public void updateSaveButton(Object obj, int Case){
+		for(int i = 0; i < tableModel.getRowCount(); i++){
+			if(!tableModel.getValueAt(i, Case).equals(obj)){
+				saveButton.setEnabled(true);
+			}
+		}
+	}
+	
+	public void tableChanged(TableModelEvent e){
+		int row = e.getFirstRow();
+		int column = e.getColumn();
+		TableModel model = (TableModel)e.getSource();
+		String columnName = model.getColumnName(column);
+		Object data = model.getValueAt(row, column);
+		updateSaveButton(data, column);
+	}
+	
 }

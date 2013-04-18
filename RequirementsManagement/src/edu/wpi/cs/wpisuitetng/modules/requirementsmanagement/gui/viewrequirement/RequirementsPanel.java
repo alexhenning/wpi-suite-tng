@@ -50,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ProjectEventsCal
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleUserCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.SparkleRed;
 //import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.ListProjectEvents;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
@@ -103,6 +104,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	
 	private boolean unsavedChanges;
 	
+	SparkleRed Salmon = new SparkleRed();
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -226,11 +228,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		GridBagConstraints c = new GridBagConstraints();
 		
 		//name field
-		JLabel nameArea = new JLabel("Name:");
+		JLabel nameArea = new JLabel("*Name:");
 		JLabel typeArea = new JLabel("Type:");
 		JLabel priorityArea = new JLabel("Priority:");
 		JLabel iterationArea = new JLabel("Iteration:");
-		JLabel descriptionArea = new JLabel("Description:");
+		JLabel descriptionArea = new JLabel("*Description:");
 		JLabel releaseNumberArea = new JLabel("Release Number: ");
 		descriptionfield.setLineWrap(true);
 		JScrollPane descScrollPane = new JScrollPane(descriptionfield);
@@ -775,21 +777,21 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 */
 	public boolean validateFields() {
 		if(namefield.getText().length()<1) {
-			namefield.setBackground(Color.RED);
+			namefield.setBackground(Salmon.getColor());
 			setStatus("Name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
 		if(descriptionfield.getText().length()<1) {
-			descriptionfield.setBackground(Color.RED);
+			descriptionfield.setBackground(Salmon.getColor());
 			setStatus("Description must be 1-5000 characters long.");
 			return false;
 		} else {
 			descriptionfield.setBackground(Color.WHITE);
 		}
 		if(Integer.parseInt(estimateField.getText()) < 0){
-			estimateField.setBackground(Color.RED);
+			estimateField.setBackground(Salmon.getColor());
 			setStatus("Estimate must be non-negative integer.");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
@@ -797,7 +799,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			estimateField.setBackground(Color.WHITE);
 		}
 		if(Integer.parseInt(actualEffortField.getText()) < 0){
-			actualEffortField.setBackground(Color.RED);
+			actualEffortField.setBackground(Salmon.getColor());
 			setStatus("Actual Effort must be a non-negative integer.");
 			System.out.println("Actual Effort value is " + actualEffortField.getText());
 			return false;
@@ -825,7 +827,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 	
 	/**
-	 * checked for input from keyboard
+	 * Check for input from keyboard
 	 *
 	 * @param e a key event
 	 */
@@ -833,7 +835,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		updateSubmitButton();
 	}
 	/**
-	 * check if key is pressed. Doesn't really do anything now, but needs to be included 
+	 * Check if key is pressed.
 	 *
 	 * @param e a key event
 	 */
@@ -841,12 +843,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 
 	}  
 	/**
-	 * check if key is released. Doesn't really do anything now, but needs to be included 
+	 * Check if key is released. 
 	 *
 	 * @param e a key event
 	 */
 	public void keyReleased ( KeyEvent e ){  
-		//l1.setText( "Key Released" ) ; 
 		updateSubmitButton();
 	}  
 
@@ -1046,6 +1047,10 @@ System.err.println("adduser reached***************************");
 		return estimate >= 0;
 	}
 
+	/**
+	 * Checks for any unsaved changes in status fields or drop down menus
+	 * @return true if changes are unsaved false otherwise
+	 */
 	public boolean hasUnsavedChanges() {
 		if (!model.getName().equals(namefield.getText())) return true;
 		if (model.getType() != null && !model.getType().equals((RequirementType) type.getSelectedItem())) return true;
