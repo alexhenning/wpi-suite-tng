@@ -730,7 +730,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 
 						// Check if the iteration and estimate
 						if((reqEstimate <= 0 || reqEstimate > MAX_ESTIMATE_VALUE) &&
-								!value.equals(data[row][column]) && !value.equals("Backlog")) {
+								!value.equals("Backlog")) {
 							isIterationValid = false;
 						}
 					} catch (NumberFormatException e) {
