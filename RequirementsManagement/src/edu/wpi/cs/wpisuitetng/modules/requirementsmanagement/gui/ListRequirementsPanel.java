@@ -123,6 +123,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						}
                 	});
                 }
+                parent.repaint();
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
 			@Override public void mouseExited(MouseEvent arg0) {}
