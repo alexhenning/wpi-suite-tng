@@ -101,7 +101,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		JLabel subLabel = new JLabel("Sub requirements");
-		JLabel posLabel = new JLabel("possible sub requirements");
+		JLabel posLabel = new JLabel("Possible sub requirements");
 
 		subrequirementsTableModel = new ViewReqTable();
 		subrequirementsTableModel.setMode(Mode.VIEW);
@@ -235,7 +235,7 @@ public class RequirementSubrequirementTab extends JPanel {
 	 * @param selectedId the id of the selected requirement
 	 */
 	private void updateSelectedPossible(String selectedId) {
-		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED) {
+		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED || parent.submit.getText().equals("Save")) {
 			addChildButton.setEnabled(false);
 			setParrentButton.setEnabled(false);
 		} else {
