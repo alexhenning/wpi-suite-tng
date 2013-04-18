@@ -848,9 +848,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		
 		@Override
 		public void callback(List<ProjectEvent> projectEvents) {
-			for(ProjectEvent event : projectEvents) {
-				System.out.println("project event: "+event.toJSON());
-			}
+			System.out.println("project event size : " + projectEvents.size());
+//			for(ProjectEvent event : projectEvents) {
+//				System.out.println("project event: "+event.toJSON());
+//			}
 			setHistory(projectEvents);
 		}
 	}
@@ -988,7 +989,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * @return true if the values are different from the values in the model
 	 */
 	public boolean valuesHaveChanged() {
-		return hasUnsavedChanges();
+		return hasUnsavedChanges(false);
 	}
 	/**
 	 * adds a user to requirement model using only the user's id
@@ -1119,9 +1120,10 @@ System.err.println("adduser reached***************************");
 	/**
 	 * Checks whether a field has changed
 	 *
+	 * @param alsoChecksForNote whether an unsaved note is taken into account
 	 * @return true if at least one field has changed, false otherwise
 	 */
-	public boolean hasUnsavedChanges() {
+	public boolean hasUnsavedChanges(boolean alsoChecksForNote) {
 		if (!model.getName().equals(namefield.getText())) return true;
 		if (model.getType() != null && !model.getType().equals((RequirementType) type.getSelectedItem())) return true;
 		if (model.getPriority() != null && !model.getPriority().equals((RequirementPriority) priority.getSelectedItem())) return true;
@@ -1132,6 +1134,8 @@ System.err.println("adduser reached***************************");
 		if (model.getDescription() != null && !model.getDescription().equals(descriptionfield.getText())) return true;
 		if (!estimateField.getText().equals(oldEstimateString)) return true;
 		if (!actualEffortField.getText().equals(oldActualEffortString)) return true;
+		if (alsoChecksForNote && !nt.isTextAreaEmpty()) return true;
+		
 		return false;
 	}
 }
