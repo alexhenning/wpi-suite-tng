@@ -29,8 +29,8 @@ import javax.swing.JTextArea;
 public class HintedTextArea extends JTextArea {
 
 	private String hint;
-	Font gainFont = new Font("Tahoma", Font.PLAIN, 11);
-	Font lostFont = new Font("Tahoma", Font.ITALIC, 11);
+	private Font gainFont = new Font("Tahoma", Font.PLAIN, 11);
+	private Font lostFont = new Font("Tahoma", Font.ITALIC, 11);
 
 	/**
 	 * Constructs a hinted text area
@@ -73,6 +73,15 @@ public class HintedTextArea extends JTextArea {
 	}
 
 	/**
+	 * Determines whether the hinted text area is empty or contains the hint
+	 *
+	 * @return true if empty, false otherwise
+	 */
+	public boolean isEmpty() {
+		return getText().length() == 0 || getText().equals(hint);
+	}
+
+	/**
 	 * Sets the appearance of the object according to whether it is active or
 	 * focused
 	 *
@@ -98,14 +107,5 @@ public class HintedTextArea extends JTextArea {
 				setForeground(Color.BLACK);
 			}
 		}
-	}
-
-	/**
-	 * Determines whether the hinted text area is empty or contains the hint
-	 *
-	 * @return true if empty, false otherwise
-	 */
-	public boolean isEmpty() {
-		return getText().length() == 0 || getText().equals(hint);
 	}
 }
