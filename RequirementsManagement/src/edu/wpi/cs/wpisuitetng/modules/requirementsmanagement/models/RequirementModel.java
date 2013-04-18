@@ -88,8 +88,8 @@ public class RequirementModel extends AbstractModel {
 		events = new ArrayList<RequirementEvent>();
 		subRequirements = new ArrayList<String>();
 		iteration = null;
-		setType(null);
-		priority = null;
+		setType(RequirementType.NONE);
+		priority = RequirementPriority.NONE;
 		releaseNumber = null;
 	}
 	
