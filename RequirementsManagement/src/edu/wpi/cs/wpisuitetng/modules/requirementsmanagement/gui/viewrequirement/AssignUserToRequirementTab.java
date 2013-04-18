@@ -208,7 +208,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	private void updateSelectedPossible(String selectedId) {
 		rowsInAssignedTable = assignedUserTable.getRowCount();
 		rowsInPossibleTable = possibleUserTable.getRowCount();
-		if (selectedId == null || selectedId.equals("")) {
+		if (selectedId == null || selectedId.equals("") || parent.submit.getText().equals("Save")) {
 			addUserButton.setEnabled(false);
 			removeUserButton.setEnabled(false);
 		} else {

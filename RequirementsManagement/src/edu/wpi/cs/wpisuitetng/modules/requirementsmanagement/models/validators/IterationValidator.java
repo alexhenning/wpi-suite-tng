@@ -213,34 +213,15 @@ public class IterationValidator {
 				if(i != null && i.getId() != iteration.getId()) {
 					if(iterationStart.after(iStart) && iterationStart.before(iEnd)) {
 						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
-						System.out.println("\nPROBLEM IS IN FIRST IF\n");
 					}
 					if(iterationEnd.after(iStart) && iterationEnd.before(iEnd)) {
 						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
-						System.out.println("\nPROBLEM IS IN SECOND IF\n");
 					}
 					if((iStart.after(iterationStart) && iStart.before(iterationEnd)) ||
 							(iEnd.after(iterationStart) && iEnd.before(iterationEnd)) ||
 							(iStart.equals(iterationStart) || iEnd.equals(iterationEnd))) {
-						System.out.println("\nPROBLEM IS IN THIRD IF\n");
 						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
 					}
-					/*if((iStart.after(iterationStart) && iStart.before(iterationEnd))) {
-						System.out.println("\nPROBLEM IS IN THIRD IF\n");
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-					}
-					if((iEnd.after(iterationStart) && iEnd.before(iterationEnd))) {
-						System.out.println("\nPROBLEM IS IN FOURTH IF\n");
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-					}
-					if(iStart.equals(iterationStart)) {
-						System.out.println("\nPROBLEM IS IN FIFTH IF\n");
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-					}
-					 if(iEnd.equals(iterationEnd)) {
-						 System.out.println("\nPROBLEM IS IN SIXTH IF\n");
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-					 }*/
 				}
 			}
 		}
