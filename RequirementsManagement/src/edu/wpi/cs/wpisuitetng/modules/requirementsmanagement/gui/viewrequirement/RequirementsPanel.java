@@ -144,7 +144,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			if (it == null) {
 				comboboxModel.addElement("Backlog");
 			} else if (it.getEndDate().after(new Date())) {
-				comboboxModel.addElement(""+it.getIterationNumber());
+				comboboxModel.addElement(it.getIterationNumber());
 			}
 		}
 		iteration.setModel(comboboxModel);
@@ -512,7 +512,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		if (iteration.getItemCount() > 1){
 			iteration.setSelectedIndex(0);
 			if(model.getIteration() != null) {
-				String modelItStr = model.getIteration().getIterationNumber().toString();
+				String modelItStr = model.getIteration().getIterationNumber();
 				for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
 					if(modelItStr.equals(iteration.getItemAt(i).toString())) {
 						iteration.setSelectedIndex(i);

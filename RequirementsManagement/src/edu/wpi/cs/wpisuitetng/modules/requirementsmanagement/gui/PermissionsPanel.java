@@ -95,7 +95,7 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 		// Add all components to this panel
 		addComponents();
 		
-		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
+		// Populate the form with the contents of the permissions model and update the TextUpdateListeners.
 		updateFields();
 	}
 

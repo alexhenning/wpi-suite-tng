@@ -28,10 +28,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 
 
 /**
+ * Entity manager for project events (history logs)
  *
- * Entity manager for Iterations
  * @author Tim
- *
  */
 public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	/** the database */

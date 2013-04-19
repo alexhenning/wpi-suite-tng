@@ -43,8 +43,9 @@ public class ScrollableTab<Panel extends JComponent & ScrollablePanel> extends J
 	/**
 	 * Constructor
 	 * @param tabController the main tab controller
-	 * @param iteration an iteration
 	 * @param tab the containing tab
+	 * @param name the tab name
+	 * @param panel the main panel to be put in this scrollable tab
 	 */
 	public ScrollableTab(MainTabController tabController, Tab tab, String name, Panel panel) {
 		this.tabController = tabController;

@@ -30,7 +30,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
 
 /**
  * The Requirements Management tab's toolbar panel.
- * Always has a group of global commands (Create Requirement, Create Iteration, Search, List Requirements).
+ * Always has a group of global commands (Show Reports, View Iterations,
+ * User Permissions, View Release Numbers, Help).
+ *
+ * @author TODO
  */
 @SuppressWarnings("serial")
 public class NavToolbarView extends ToolbarGroupView {
