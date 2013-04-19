@@ -19,7 +19,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.SplitRequirementTab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.SplitRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -34,15 +34,15 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 public class SplitRequirementController extends AbstractAction implements ActionListener {
 
 	/** The requirement splitting panel */
-	private final SplitRequirementTab splitPanel;
+	private final RequirementsPanel requirementsPanel;
 
 	/**
 	 * Constructs the controller for splitting a requirement
 	 *
-	 * @param splitPanel The panel that contains the requirement being split
+	 * @param panel The panel that contains the requirement being split
 	 */
-	public SplitRequirementController(SplitRequirementTab splitPanel) {
-		this.splitPanel = splitPanel;
+	public SplitRequirementController(RequirementsPanel panel) {
+		this.requirementsPanel = panel;
 	}
 
 	/**
@@ -54,10 +54,10 @@ public class SplitRequirementController extends AbstractAction implements Action
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Make sure the fields are valid (e.g. non-empty) before sending
-		if (splitPanel.validateFields()) {
+		if (requirementsPanel.validateFields()) {
 			final Request request = Network.getInstance().makeRequest(
 					"requirementsmanagement/requirementmodel", HttpMethod.PUT);
-			request.setBody(splitPanel.getChildModel().toJSON());
+			request.setBody(requirementsPanel.getChildModel().toJSON());
 			request.addObserver(new SplitRequirementModelRequestObserver(this));
 			request.send();
 		}
@@ -71,6 +71,6 @@ public class SplitRequirementController extends AbstractAction implements Action
 	 */
 	public void receivedSplitConfirmation(boolean success, int childId) {
 		// Simple passes the result to the panel
-		splitPanel.reportNewChild(success, childId);
+		requirementsPanel.reportSplitChild(success, childId);
 	}
 }
