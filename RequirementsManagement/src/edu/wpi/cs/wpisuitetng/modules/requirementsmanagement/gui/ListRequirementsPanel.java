@@ -542,11 +542,11 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Updates the requirements to what the user edited and then
 		 * sends them to the database
 		 *
-		 * @param iterationss Iterations retrieved from the database
+		 * @param iterations Iterations retrieved from the database
 		 */
 		@Override
-		public void callback(List<Iteration> iterationss) {
-			List<RequirementModel> requirements = updateModels(reqs, iterationss);
+		public void callback(List<Iteration> iterations) {
+			List<RequirementModel> requirements = updateModels(reqs, iterations);
 			sendRequirementsToDatabase(requirements);
 			
 		}
@@ -576,7 +576,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 					entries[i][NAME] = req.getName();
 					entries[i][DESCRIPTION] = req.getDescription();
 					if (req.getIteration() != null) {
-						entries[i][ITERATION] = req.getIteration().getIterationNumber().toString();	
+						entries[i][ITERATION] = req.getIteration().getIterationNumber();
 					}
 					else {
 						entries[i][ITERATION] = "Backlog";
@@ -650,15 +650,15 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Go through the list of iterations and add their name to the combobox
 		 * it does not add iterations that are already over as it would be invalid to set a project to those iterations
 		 *
-		 * @param iterationss the list of iterations
+		 * @param iterations the list of iterations
 		 */
 		@Override
-		public void callback(List<Iteration> iterationss) {
-			if(iterationss.size() > 0) {
+		public void callback(List<Iteration> iterations) {
+			if(iterations.size() > 0) {
 				final Date now = new Date();
-				for(Iteration iteration : iterationss) {
+				for(Iteration iteration : iterations) {
 					// Make sure the iteration the only iterations that are added are still in progress
-					if(now.before(iteration.getEndDate()) || now == iteration.getEndDate()) {
+					if(now.before(iteration.getEndDate()) || now.equals(iteration.getEndDate())) {
 						iterationBox.addItem("" + iteration.getIterationNumber());
 					}
 				}
@@ -728,7 +728,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						// Try parsing the estimate for this row
 						int reqEstimate = Integer.valueOf((String)tableModel.getValueAt(row, ESTIMATE));
 
-						// Check if the iteration and estimate
+						// Check if the iteration and estimate are valid
 						if((reqEstimate <= 0 || reqEstimate > MAX_ESTIMATE_VALUE) &&
 								!value.equals("Backlog")) {
 							isIterationValid = false;

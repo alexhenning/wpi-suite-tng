@@ -408,7 +408,7 @@ public class RequirementSubrequirementTab extends JPanel {
 					String id = String.valueOf(req.getId());
 					String name = req.getName();
 					String description = req.getDescription();
-					String iteraton = (req.getIteration() == null ? "Backlog" : req.getIteration().getIterationNumber().toString());
+					String iteraton = (req.getIteration() == null ? "Backlog" : req.getIteration().getIterationNumber());
 					String status = (req.getStatus() == null ? "Error: Status set to null" : req.getStatus().toString());
 					String priority = (req.getPriority() == null ? "" : req.getPriority().toString());
 					String estimate = req.getEstimate()+"";
@@ -418,7 +418,7 @@ public class RequirementSubrequirementTab extends JPanel {
 						subEntry[ID] = id;
 						subEntry[NAME] = name;
 						subEntry[DESCRIPTION] = description;
-						subEntry[ITERATION] = iteraton;	
+						subEntry[ITERATION] = iteraton;
 						subEntry[STATUS] = status;
 						subEntry[PRIORITY] = priority;
 						subEntry[ESTIMATE] = estimate;
@@ -435,7 +435,7 @@ public class RequirementSubrequirementTab extends JPanel {
 							posEntry[ID] = id;
 							posEntry[NAME] = name;
 							posEntry[DESCRIPTION] = description;
-							posEntry[ITERATION] = iteraton;	
+							posEntry[ITERATION] = iteraton;
 							posEntry[STATUS] = status;
 							posEntry[PRIORITY] = priority;
 							posEntry[ESTIMATE] = estimate;

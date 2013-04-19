@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  * Controller responds to a click of an add button to create a new
- * Iteartion to send to the server
+ * Iteration to send to the server
  * @author Tim Calvert
  * @author Jacob Palnick
  *

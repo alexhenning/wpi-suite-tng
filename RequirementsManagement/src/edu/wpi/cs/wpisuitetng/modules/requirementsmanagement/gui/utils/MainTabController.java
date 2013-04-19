@@ -158,7 +158,7 @@ public class MainTabController {
 	public Tab addCreateReleaseNumberTab() {
 		// If the tab is already opened, switch to that tab.
 		for (int i = 0; i < this.mainView.getTabCount(); i++) {
-			// TODO: May have to refactor "View Iteration"
+			// TODO: May have to refactor "Release Number"
 			if (mainView.getTitleAt(i).equals("Release Number")) {
 				switchToTab(i);
 				// TODO: figure out what to return

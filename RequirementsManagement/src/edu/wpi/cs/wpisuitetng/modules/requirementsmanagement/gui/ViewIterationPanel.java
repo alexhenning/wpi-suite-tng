@@ -222,7 +222,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 						}
 					}
 					totalIterationEstimates += estimate;
-					entries[i][ESTIMATE] = estimate;					
+					entries[i][ESTIMATE] = estimate;
 					i++;
 				}
 
