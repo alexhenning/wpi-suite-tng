@@ -15,8 +15,10 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SplitRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
+import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 
 /**
  * This observer is called when a response is received from a request
@@ -41,12 +43,28 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 	/**
 	 * Indicate a successful response and reports success to the controller
 	 *
-	 * @param iReq a request response
+	 * @param iReq a request response containing the split child requirement
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
-		// Tells the controller that the request was successful
-		controller.receivedSplitConfirmation(true);
+		// Get the response to the given request
+		final ResponseModel response = iReq.getResponse();
+
+		// Parse the requirement model out of the response body
+		final RequirementModel requirement = RequirementModel.fromJSON(response.getBody());
+		final int childId = requirement.getId();
+
+		// Tells the controller the success and sends the child id (only if id
+		// is valid, or non-negative)
+		if(childId >= 0)
+			controller.receivedSplitConfirmation(true, childId);
+		else {
+			System.err.println("The request to split a requirement was successful, "
+							+ "although the child id is invalid ("
+							+ childId
+							+ ").");
+			controller.receivedSplitConfirmation(false, -1);
+		}
 	}
 
 	/**
@@ -61,7 +79,7 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 							+ iReq.getResponse().getBody());
 
 		// Tells the controller that the request was unsuccessful
-		controller.receivedSplitConfirmation(false);
+		controller.receivedSplitConfirmation(false, -1);
 	}
 
 	/**
@@ -75,6 +93,6 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 		System.err.println("The request to split a requirement has failed.");
 
 		// Tells the controller that the request was unsuccessful
-		controller.receivedSplitConfirmation(false);
+		controller.receivedSplitConfirmation(false, -1);
 	}
 }

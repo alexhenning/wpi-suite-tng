@@ -57,7 +57,7 @@ public class SplitRequirementController extends AbstractAction implements Action
 		if (splitPanel.validateFields()) {
 			final Request request = Network.getInstance().makeRequest(
 					"requirementsmanagement/requirementmodel", HttpMethod.PUT);
-			request.setBody(splitPanel.getModel().toJSON());
+			request.setBody(splitPanel.getChildModel().toJSON());
 			request.addObserver(new SplitRequirementModelRequestObserver(this));
 			request.send();
 		}
@@ -67,9 +67,10 @@ public class SplitRequirementController extends AbstractAction implements Action
 	 * Receives confirmation that server whether the request was successful
 	 *
 	 * @param success whether the split request was successful
+	 * @param childId the id of the split child requirement, or -1 if failure
 	 */
-	public void receivedSplitConfirmation(boolean success) {
+	public void receivedSplitConfirmation(boolean success, int childId) {
 		// Simple passes the result to the panel
-		splitPanel.setStatus(success);
+		splitPanel.reportNewChild(success, childId);
 	}
 }
