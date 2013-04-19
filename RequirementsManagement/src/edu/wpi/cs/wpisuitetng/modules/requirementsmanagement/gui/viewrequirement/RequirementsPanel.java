@@ -724,7 +724,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 * @param string the status
 	 */
-	public void setStatus(String string) {
+	public void setStatusMessage(String string) {
 		results.setText(string);
 	}
 	
@@ -745,9 +745,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 					@Override
 					public void callback(RequirementModel req) {
 						if(model.getStatus() == RequirementStatus.DELETED) {
-							setStatus("Requirement Deleted");
+							setStatusMessage("Requirement Deleted");
 						} else {
-							setStatus("Requirement Updated");
+							setStatusMessage("Requirement Updated");
 						}
 					}
 				});
@@ -804,12 +804,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		
 		if (!estimateField.getText().matches("[0-9]{1,6}")) {
 			estimateField.setBackground(Color.RED);
-			setStatus("Estimate must be non-negative integer (0-999999).");
+			setStatusMessage("Estimate must be non-negative integer (0-999999).");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
 		} else if(Integer.parseInt(estimateField.getText()) < 0){
 			estimateField.setBackground(Color.RED);
-			setStatus("Estimate must be non-negative integer (0-999999).");
+			setStatusMessage("Estimate must be non-negative integer (0-999999).");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
 		} else {
@@ -817,12 +817,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		}
 		if (!actualEffortField.getText().matches("[0-9]{1,6}")) {
 			actualEffortField.setBackground(Color.RED);
-			setStatus("Actual Effort must be non-negative integer (0-999999).");
+			setStatusMessage("Actual Effort must be non-negative integer (0-999999).");
 			System.out.println("Actual Effort value is " + actualEffortField.getText());
 			return false;
 		} else if(Integer.parseInt(actualEffortField.getText()) < 0){
 			actualEffortField.setBackground(Color.RED);
-			setStatus("Actual Effort must be a non-negative integer (0-999999).");
+			setStatusMessage("Actual Effort must be a non-negative integer (0-999999).");
 			System.out.println("Actual Effort value is " + actualEffortField.getText());
 			return false;
 		} else {
@@ -839,14 +839,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	public boolean validateFields() {
 		if(namefield.getText().length()<1) {
 			namefield.setBackground(Color.RED);
-			setStatus("Name must be 1-100 characters long.");
+			setStatusMessage("Name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
 		if(descriptionfield.getText().length()<1) {
 			descriptionfield.setBackground(Color.RED);
-			setStatus("Description must be 1-5000 characters long.");
+			setStatusMessage("Description must be 1-5000 characters long.");
 			return false;
 		} else {
 			descriptionfield.setBackground(Color.WHITE);
@@ -909,9 +909,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 					@Override
 					public void callback(RequirementModel req) {
 						if (req.getSubRequirements().contains(model.getId()+"")) {
-							setStatus("added to parent");
+							setStatusMessage("added to parent");
 						} else {
-							setStatus("failed to add to parent");
+							setStatusMessage("failed to add to parent");
 						}
 						
 					}
@@ -957,9 +957,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				subs.update();
 				model.setSubRequirements(currentReq.getSubRequirements());
 				parent.buttonGroup.update(editMode, model);
-				setStatus("added child");
+				setStatusMessage("added child");
 			} else {
-				setStatus("failed to add child");
+				setStatusMessage("failed to add child");
 			}
 		}
 	}
@@ -993,9 +993,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				subs.update();
 				model.setSubRequirements(currentReq.getSubRequirements());
 				parent.buttonGroup.update(editMode, model);
-				setStatus("removed child");
+				setStatusMessage("removed child");
 			} else {
-				setStatus("failed to remove child");
+				setStatusMessage("failed to remove child");
 			}
 		}
 	}
@@ -1057,9 +1057,9 @@ System.err.println("adduser reached***************************");
 			}
 			if (added) {
 				users.update();
-				setStatus("added user");
+				setStatusMessage("added user");
 			} else {
-				setStatus("failed to add user");
+				setStatusMessage("failed to add user");
 			}
 		}
 	}
@@ -1103,9 +1103,9 @@ System.err.println("adduser reached***************************");
 			}
 			if (removed) {
 				users.update();
-				setStatus("removed user");
+				setStatusMessage("removed user");
 			} else {
-				setStatus("failed to remove user");
+				setStatusMessage("failed to remove user");
 			}
 		}
 	}
@@ -1190,7 +1190,7 @@ System.err.println("adduser reached***************************");
 			addSubRequirementToParent(childId);
 		} else {
 			System.out.println("Split: FAILURE");
-			setStatus("Failed to split the requirement");
+			setStatusMessage("Failed to split the requirement");
 		}
 	}
 
@@ -1208,13 +1208,13 @@ System.err.println("adduser reached***************************");
 		// SingleRequirementCallback (although it would make error handling
 		// easier)
 
-		setStatus("The requirement split, being attached as a sub-requirement...");
+		setStatusMessage("The requirement split, being attached as a sub-requirement...");
 		model.addSubRequirement("" + childId);
 		DB.updateRequirements(model, new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel req) {
 				System.out.println("Split and updated successfully!");
-				setStatus("The requirement has been successfully split");
+				setStatusMessage("The requirement has been successfully split");
 				updateFields();
 			}
 		});
