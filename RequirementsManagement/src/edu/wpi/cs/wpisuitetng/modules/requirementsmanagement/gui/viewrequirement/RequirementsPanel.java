@@ -278,7 +278,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		});
 
 		// Requirement-split button
-//		splitButton.setEnabled(false);
+		splitButton.setEnabled(false);
 		splitButton.addActionListener(new SplitRequirementController(this));
 
 		// Supplement Pane (i.e., notes, history, attachments)
@@ -632,6 +632,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				(editMode ==Mode.CREATE && validateFields()));
 		System.out.println("set reset : " + valuesHaveChanged());
 		resetButton.setEnabled(valuesHaveChanged());
+		splitButton.setEnabled(editMode == Mode.EDIT
+				&& (model.getStatus() == RequirementStatus.NEW
+						|| model.getStatus() == RequirementStatus.OPEN || model
+						.getStatus() == RequirementStatus.IN_PROGRESS));
 	}
 	
 	/**
@@ -716,7 +720,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 
 	/**
-	 *set the status
+	 * Displays the status (result) of a request or an operation
 	 *
 	 * @param string the status
 	 */
@@ -1211,6 +1215,7 @@ System.err.println("adduser reached***************************");
 			public void callback(RequirementModel req) {
 				System.out.println("Split and updated successfully!");
 				setStatus("The requirement has been successfully split");
+				updateFields();
 			}
 		});
 	}

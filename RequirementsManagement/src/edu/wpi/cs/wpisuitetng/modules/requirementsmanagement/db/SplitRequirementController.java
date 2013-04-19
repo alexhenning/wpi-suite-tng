@@ -53,14 +53,11 @@ public class SplitRequirementController extends AbstractAction implements Action
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// Make sure the fields are valid (e.g. non-empty) before sending
-		if (requirementsPanel.validateFields()) {
-			final Request request = Network.getInstance().makeRequest(
-					"requirementsmanagement/requirementmodel", HttpMethod.PUT);
-			request.setBody(requirementsPanel.getChildModel().toJSON());
-			request.addObserver(new SplitRequirementModelRequestObserver(this));
-			request.send();
-		}
+		final Request request = Network.getInstance().makeRequest(
+				"requirementsmanagement/requirementmodel", HttpMethod.PUT);
+		request.setBody(requirementsPanel.getChildModel().toJSON());
+		request.addObserver(new SplitRequirementModelRequestObserver(this));
+		request.send();
 	}
 
 	/**
