@@ -1151,7 +1151,6 @@ System.err.println("adduser reached***************************");
 		return false;
 	}
 
-	// TODO: Figure out which attributes the child should inherit from the parent
 	/**
 	 * Returns a child requirement split from the current requirement model
 	 *
@@ -1167,6 +1166,7 @@ System.err.println("adduser reached***************************");
 		}
 		childName += " (Split)";
 
+		// Only the name (+ " (Split)") and description are inherited
 		RequirementModel childModel = new RequirementModel();
 		childModel.setName(childName);
 		childModel.setDescription(model.getDescription());
@@ -1186,11 +1186,13 @@ System.err.println("adduser reached***************************");
 			addSubRequirementToParent(childId);
 		} else {
 			System.out.println("Split: FAILURE");
+			setStatus("Failed to split the requirement");
 		}
 	}
 
 	/**
-	 * After a new child has been reported, makes it a sub-requirement of the parent
+	 * After a new child has been reported, makes it a sub-requirement of the
+	 * parent and sets the status about the split
 	 *
 	 * @param childId the id of the split child requirement
 	 */
@@ -1198,13 +1200,17 @@ System.err.println("adduser reached***************************");
 		// TODO: May have to refresh the parent model before updating it
 
 		// TODO: Cannot detect when updating fails because a lot of code has to
-		// be modified (although it would make error handling easier)
+		// be modified, e.g., EditRequirementModelRequestObserver and
+		// SingleRequirementCallback (although it would make error handling
+		// easier)
 
+		setStatus("The requirement split, being attached as a sub-requirement...");
 		model.addSubRequirement("" + childId);
 		DB.updateRequirements(model, new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel req) {
 				System.out.println("Split and updated successfully!");
+				setStatus("The requirement has been successfully split");
 			}
 		});
 	}
