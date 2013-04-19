@@ -75,7 +75,7 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 				panel.updateModel(req);
 			}
 		});
-		panel.setStatus("Requirement saved!");
+		panel.setStatusMessage("Requirement saved!");
 	}
 
 }
