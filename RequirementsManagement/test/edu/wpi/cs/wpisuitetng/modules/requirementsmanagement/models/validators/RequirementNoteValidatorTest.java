@@ -15,34 +15,29 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
 import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
+import edu.wpi.cs.wpisuitetng.network.dummyserver.DummyServer;
 
 
 
@@ -66,8 +61,18 @@ public class RequirementNoteValidatorTest {
 	
 	RequirementModel mainRequirement;
 	
+	// Network
+	DummyServer server;
+	private NetworkConfiguration config;
+	private static int port = 38512;
+	
 	@Before
 	public void setUp() throws Exception {
+		
+		config = new NetworkConfiguration("http://localhost:" + port);
+		Network.getInstance().setDefaultNetworkConfiguration(config);
+		server = new DummyServer(port);
+		server.start();
 		
 		noteBody = "Requirement note body.";
 		currentUser = new User("Admin", "Admin", "pass", 1);
@@ -102,6 +107,10 @@ public class RequirementNoteValidatorTest {
 		db.save(mainRequirement);
 		
 		validator = new RequirementNoteValidator(db);
+	}
+	@After
+	public void tearDown() throws Exception {
+		server.stop();
 	}
 	public List<ValidationIssue> checkNumIssues(int num, Session session, RequirementNote comment) {
 		List<ValidationIssue> issues;
