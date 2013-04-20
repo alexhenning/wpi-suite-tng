@@ -10,7 +10,6 @@
  *    vpatara
  *    Sergey
  *    Josh
- *    vpatara
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
 

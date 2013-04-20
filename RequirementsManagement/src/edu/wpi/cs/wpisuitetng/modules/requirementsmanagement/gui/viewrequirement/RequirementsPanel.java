@@ -69,7 +69,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementT
  *
  * Panel for editing/creating a requirement
  * @author Josh
- *
+ * @author vpatara
  */
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JSplitPane implements KeyListener {
