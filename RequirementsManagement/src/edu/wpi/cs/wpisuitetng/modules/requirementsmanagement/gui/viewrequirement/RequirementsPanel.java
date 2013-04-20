@@ -69,7 +69,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementT
  *
  * Panel for editing/creating a requirement
  * @author Josh
- *
+ * @author vpatara
  */
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JSplitPane implements KeyListener {
@@ -1197,13 +1197,13 @@ System.err.println("adduser reached***************************");
 	 * Tells the user whether the split was successful and if so clears the
 	 * fields, and then adds this child as the sub-requirement of the parent
 	 *
-	 * @param success whether the split was successful
-	 * @param childId the id of the split child requirement, or -1 if failure
+	 * @param childModel the split child requirement, or null if failure
 	 */
-	public void reportSplitChild(boolean success, int childId) {
-		if(success) {
-			System.out.println("Split: SUCCESS (id: " + childId + ")");
-			addSubRequirementToParent(childId);
+	public void reportSplitChild(RequirementModel childModel) {
+		if(childModel != null) {
+			System.out.println("Split: SUCCESS (id: " + childModel.getId() + ")");
+			parent.mainTabController.addEditRequirementTab(childModel);
+			addSubRequirementToParent(childModel.getId());
 		} else {
 			System.out.println("Split: FAILURE");
 			setStatusMessage("Failed to split the requirement");

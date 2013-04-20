@@ -20,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 
 /**
  * Holds values given to it, but doesn't actually change the given MainTabView.
+ * @author Andrew Hurle
  */
 public class DummyTab extends Tab {
 

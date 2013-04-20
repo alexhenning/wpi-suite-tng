@@ -43,6 +43,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.configuration.NetworkConfiguration;
+import edu.wpi.cs.wpisuitetng.network.dummyserver.DummyServer;
 
 
 
@@ -66,8 +69,18 @@ public class RequirementNoteValidatorTest {
 	
 	RequirementModel mainRequirement;
 	
+	// Network
+	DummyServer server;
+	private NetworkConfiguration config;
+	private static int port = 38512;
+	
 	@Before
 	public void setUp() throws Exception {
+		
+		config = new NetworkConfiguration("http://localhost:" + port);
+		Network.getInstance().setDefaultNetworkConfiguration(config);
+		server = new DummyServer(port);
+		server.start();
 		
 		noteBody = "Requirement note body.";
 		currentUser = new User("Admin", "Admin", "pass", 1);
@@ -102,6 +115,10 @@ public class RequirementNoteValidatorTest {
 		db.save(mainRequirement);
 		
 		validator = new RequirementNoteValidator(db);
+	}
+	@After
+	public void tearDown() throws Exception {
+		server.stop();
 	}
 	public List<ValidationIssue> checkNumIssues(int num, Session session, RequirementNote comment) {
 		List<ValidationIssue> issues;

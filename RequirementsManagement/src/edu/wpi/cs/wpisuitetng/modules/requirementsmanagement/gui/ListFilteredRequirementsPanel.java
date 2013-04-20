@@ -29,7 +29,6 @@ import javax.swing.table.TableColumn;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
@@ -52,8 +51,8 @@ public class ListFilteredRequirementsPanel extends JPanel {
 	public static final int RELEASE = 6;
 	public static final int ROWS = 6;
 	
-	/** the tab that created this*/
-	ScrollableTab<ViewSingleIterationPanel> parent;
+	/** the parent that created this*/
+	ViewSingleIterationPanel parent; 
 	/** is inpute enabled*/
 	JTable table;
 	/** the model for the table*/
@@ -65,7 +64,7 @@ public class ListFilteredRequirementsPanel extends JPanel {
 	 * Constructor
 	 * @param parent the tab that made this
 	 */
-	public ListFilteredRequirementsPanel(final ScrollableTab<ViewSingleIterationPanel> parent) {
+	public ListFilteredRequirementsPanel(final ViewSingleIterationPanel parent) {
 		this.parent = parent;
 
 		// Add all components to this panel
@@ -80,7 +79,7 @@ public class ListFilteredRequirementsPanel extends JPanel {
                 			new SingleRequirementCallback() {
 						@Override
 						public void callback(RequirementModel req) {
-							parent.getTabController().addEditRequirementTab(req);
+							parent.parent.getTabController().addEditRequirementTab(req);
 						}
                 	});
                 }
@@ -149,28 +148,29 @@ public class ListFilteredRequirementsPanel extends JPanel {
 				// put the data in the table
 				int reqnumber = 0;
 				for(RequirementModel req : reqs) {
-					if (parent.getPanel().getModel()== null) {
+					if (parent.model == null) {
 						if (req.getIteration() == null) {
 							reqnumber++;
 						}
 					}
 					else if (req.getIteration() != null) {
-						if (req.getIteration().getId() == parent.getPanel().getModel().getId()) {
+						if (req.getIteration().getId() == parent.model.getId()) {
 							reqnumber++;
 						}
 					}
 				}
+				System.out.println(reqnumber);
 				Object[][] entries = new Object[reqnumber][ROWS];
 				int i = 0;
 				boolean sameIter;
 				for(RequirementModel req : reqs) {
 					sameIter = false;
 					if (req.getIteration() == null) {
-						if (parent.getPanel().getModel() == null) {
+						if (parent.model == null) {
 							sameIter = true;
 						}
 					}
-					else if (parent.getPanel().getModel() != null && req.getIteration().getId() == parent.getPanel().getModel().getId()) {
+					else if (parent.model != null && req.getIteration().getId() == parent.model.getId()) {
 						sameIter = true;
 					}
 					if (sameIter) {

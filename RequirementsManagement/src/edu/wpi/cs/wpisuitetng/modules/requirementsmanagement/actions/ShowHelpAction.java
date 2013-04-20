@@ -29,6 +29,7 @@ import org.jfree.io.IOUtils;
 /**
  * Action for opening a pdf for help.
  *
+ *@author TODO
  */
 @SuppressWarnings("serial")
 public class ShowHelpAction extends AbstractAction{
