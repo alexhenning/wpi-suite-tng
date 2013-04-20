@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    milk3dfx
+ *    Sergey
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
@@ -28,7 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 /**
  * Test cases for the iteration model
  *
- * @author milk3dfx
+ * @author Sergey
  */
 public class IterationTest {
 	Iteration goodIteration;

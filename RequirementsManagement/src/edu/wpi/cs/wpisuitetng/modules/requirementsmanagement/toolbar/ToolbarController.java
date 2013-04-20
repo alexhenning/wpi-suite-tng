@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  * group of controls provided by the displayed components' getGroup method, if it
  * is an instance of IToolbarGroupProvider.
  * If the current tab has no associated toolbar group, no additional group is shown in the toolbar.
+ * @author Andrew Hurle
  */
 public class ToolbarController extends DefaultToolbarController implements ChangeListener {
 

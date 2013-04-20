@@ -9,7 +9,8 @@
  *
  * Contributors:
  *   David Modica
- *    Tim Calvert
+ *   Jacob Palnick
+ *   Tim Calvert
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
@@ -24,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * 
  * @author David
  * @author Jacob Palnick
+ * @author Tim Calvert
  *
  */
 public class CreateIterationRequestObserver implements RequestObserver {

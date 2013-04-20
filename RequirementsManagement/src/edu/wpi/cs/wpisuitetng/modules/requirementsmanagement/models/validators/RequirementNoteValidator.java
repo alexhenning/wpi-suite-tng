@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 
 /**
  * Responsible for validating a comment model.
+ * @author TODO
  */
 public class RequirementNoteValidator {
 

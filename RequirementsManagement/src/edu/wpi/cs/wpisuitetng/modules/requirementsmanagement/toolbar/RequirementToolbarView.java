@@ -40,6 +40,8 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 /**
  * The Requirements Management tab's toolbar panel. Provides cancel, close, and delete buttons for creating and/or editing requirements
  * Always has a group of global commands (Create Requirement, Create Iteration, Search, List Requirements).
+ * @author Andrew Hurle
+ * @author Chris Casola
  */
 @SuppressWarnings("serial")
 public class RequirementToolbarView extends ToolbarGroupView {

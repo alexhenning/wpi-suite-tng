@@ -19,7 +19,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 
 /**
  * @author William Terry
- *
+ * @author vpatara
  */
 public class Permissions extends AbstractModel {
 	
