@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -109,15 +110,17 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		GridBagConstraints c = new GridBagConstraints();
 		setLayout(panelLayout);
 		
-		lbl1 = new JLabel("Start Date (mm/dd/yyyy)");
-		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
+		lbl1 = new JLabel("Start Date");
+		lbl2 = new JLabel("End Date");
 		lbl3 = new JLabel ("Iteration Number");
 		
 		Date startDate = model.getStartDate();
 		Date endDate = model.getEndDate();
 		startDatePicker = new JXDatePicker(startDate != null ? startDate : new Date());
+		//startDatePicker.
 		endDatePicker = new JXDatePicker(endDate != null ? endDate : new Date());
-
+startDatePicker.setEnabled(false);
+endDatePicker.setEnabled(false);
 		result = new JTextField(25);
 		iterationNumber = new JTextField();
 		
@@ -131,22 +134,35 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.gridwidth = 2;
+		c.insets = new Insets(0, 0, 0, 5);
 		add(lbl1, c);
-		c.gridx = 1;
-		add(startDatePicker, c);
 		c.gridy = 1;
-		c.gridx = 0;
+		add(startDatePicker, c);
+		c.gridy = 2;
+		add(startDatePicker.getMonthView(),c);
+		c.gridy = 0;
+		c.gridx = 2;
+		c.insets = new Insets(0, 5, 0, 0);
 		add(lbl2, c);
-		c.gridx = 1;
+		c.gridy = 1;
 		add(endDatePicker, c);
 		c.gridy = 2;
+		add(endDatePicker.getMonthView(),c);
 		c.gridx = 0;
+		c.gridy = 3;
+		c.insets = new Insets(10, 0, 10, 5);
+		c.gridwidth = 1;
 		add(lbl3, c);
 		c.gridx = 1;
+		c.gridwidth = 3;
+		c.insets = new Insets(10, 0, 10, 0);
 		add(iterationNumber, c);
-		c.gridy = 3;
-		add(submit, c);
 		c.gridy = 4;
+		c.gridx = 0;
+		c.gridwidth = 4;
+		add(submit, c);
+		c.gridy = 5;
 		add(result, c);
 		
 		result.setEditable(false);
@@ -287,7 +303,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 	class ValidateIterationActionListener implements ActionListener {
 		
 		/**
-		 * Validate the iteratin being created, if its valid send it to the DB
+		 * Validate the iteration being created, if its valid send it to the DB
 		 *
 		 * @param e action that happened
 		 */
