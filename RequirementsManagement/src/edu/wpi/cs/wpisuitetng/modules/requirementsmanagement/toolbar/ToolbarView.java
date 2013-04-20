@@ -34,6 +34,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 /**
  * The Requirements Management tab's toolbar panel.
  * Always has a group of global commands (Create Requirement, Create Iteration, Search, List Requirements).
+ * @author Andrew Hurle
+ * @author Chris Casola
  */
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {

@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 
 /**
  * A mock data implementation for server-side testing. 
+ * @author Andrew Hurle
  */
 public class MockData implements Data {
 

@@ -42,6 +42,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleItera
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports.ReportsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationOnFocusListener;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationReqList;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
@@ -52,6 +53,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * Controls the behavior of a given MainTabView.
  * Provides convenient public methods for controlling the MainTabView.
  * Keep in mind that this controller is visible as a public field in the module.
+ * 
+ * @author Andrew Hurle
+ * @author Josh Morse
  */
 public class MainTabController {
 	
@@ -177,7 +181,7 @@ public class MainTabController {
 	}
 	
 	/**
-	 * Adds a tab that displays the given requirement in the given mode
+	 * Adds a tab that displays the given iteration in the given mode
 	 * @param requirement The requirement to display
 	 * @param mode The Mode to use
 	 */
@@ -203,6 +207,8 @@ public class MainTabController {
 						new ViewSingleIterationPanel(iteration));
 		tab.setComponent(view);
 		view.requestFocus();
+		UpdateViewIterationReqList reqListListener = new UpdateViewIterationReqList(view);
+		addChangeListener(reqListListener);
 		return tab;
 	}
 	

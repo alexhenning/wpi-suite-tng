@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 /**
  * Represents an error in model validation. 
+ * @author Andrew Hurle
  */
 public class ValidationIssue {
 	

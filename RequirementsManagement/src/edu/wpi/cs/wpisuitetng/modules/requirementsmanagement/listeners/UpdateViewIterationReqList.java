@@ -16,17 +16,18 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 
 /**
- * TODO Description
- * @author TODO
+ * Updates the requirements list within the view single iteration panel
+ * @author Haley
  */
 
-public class UpdateViewIterationOnFocusListener implements ChangeListener {
-	ScrollableTab<ViewIterationPanel> attentiveTab;
+public class UpdateViewIterationReqList implements ChangeListener {
+	ScrollableTab<ViewSingleIterationPanel> attentiveTab;
 	
-	public UpdateViewIterationOnFocusListener(ScrollableTab<ViewIterationPanel> attentiveTab){
+	public UpdateViewIterationReqList(ScrollableTab<ViewSingleIterationPanel> attentiveTab){
 		this.attentiveTab = attentiveTab;
 	}
 	
@@ -35,7 +36,7 @@ public class UpdateViewIterationOnFocusListener implements ChangeListener {
 		if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){
 			//TODO: find a way to remove this listener if tab has been closed
 		} else if( ((JTabbedPane) e.getSource()).getSelectedComponent().equals(attentiveTab) ){
-			attentiveTab.getPanel().updateAllIterationList();
+			attentiveTab.getPanel().updateFields();
 		}
 	}
 }

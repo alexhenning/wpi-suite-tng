@@ -9,6 +9,8 @@
  * Contributors:
  *    William Terry
  *    vpatara
+ * References:
+ *    www.how2java.com
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
@@ -23,7 +25,8 @@ import javax.swing.JTextArea;
 /**
  * JTextArea modified to display a hinted message when empty
  *
- * @author www.how2java.com
+ * @author William Terry
+ * @author vpatara
  */
 @SuppressWarnings("serial")
 public class HintedTextArea extends JTextArea {

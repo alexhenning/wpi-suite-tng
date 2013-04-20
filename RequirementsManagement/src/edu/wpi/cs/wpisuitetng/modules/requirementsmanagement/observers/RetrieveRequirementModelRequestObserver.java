@@ -27,7 +27,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * to retrieve a requirement from the database.
  * 
  * @author David
- *
+ * @author Tim Calvert
  */
 public class RetrieveRequirementModelRequestObserver implements RequestObserver {
 

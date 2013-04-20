@@ -34,6 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  * 
  * Note that Data could be something used client-side (e.g. a wrapper around a local cache of
  * Users so you can check assignee usernames as-you-type).
+ * @author TODO
  */
 public class RequirementModelValidator {
 

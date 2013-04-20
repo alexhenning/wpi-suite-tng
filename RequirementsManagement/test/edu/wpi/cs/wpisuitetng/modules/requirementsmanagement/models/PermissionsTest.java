@@ -11,18 +11,10 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author Sergey Zolotykh (szolotykh)

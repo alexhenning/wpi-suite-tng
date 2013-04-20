@@ -22,13 +22,13 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 /**
  * Implementations of this class represent some kind of event in a Requirement.
  * For example, the addition of a comment or the modification of fields.
+ * @author TODO
  */
 public abstract class RequirementEvent extends AbstractModel {
 	
 	/**
 	 *
 	 * the kinds of events
-	 *
 	 */
 	public enum EventType {
 		NOTE,

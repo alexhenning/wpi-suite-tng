@@ -18,6 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
 /**
  * Persistent Model that represents a Comment on a Requirement 
+ * @author TODO
  */
 public class RequirementNote extends RequirementEvent {
 

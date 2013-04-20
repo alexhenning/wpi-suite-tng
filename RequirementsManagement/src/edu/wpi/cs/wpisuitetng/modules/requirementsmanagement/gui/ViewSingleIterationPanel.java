@@ -33,6 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleIterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.UpdateRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
@@ -43,7 +44,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 /**
  *
  * The view for creating an iteration
- * @author TODO
+ * @author Josh
  *
  */
 @SuppressWarnings("serial")
@@ -183,8 +184,16 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		add(topPanel, BorderLayout.PAGE_START);
 		
 		/** adding bottom panel */
-		bottomPanel = new ListFilteredRequirementsPanel(parent);
+		bottomPanel = new ListFilteredRequirementsPanel(this);
 		add(bottomPanel, BorderLayout.CENTER);
+		bottomPanel.updateRequirementList();
+	}
+	
+	/**
+	 * Updates requirement list
+	 */
+	public void updateIterReqs(){
+		bottomPanel.updateRequirementList();
 	}
 	
 	/**
@@ -235,6 +244,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 */
 	public void updateModel(Iteration iteration) {
 		updateModel(iteration, Mode.EDIT);
+		updateFields();
 	}
 
 	/**
@@ -253,10 +263,11 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 * Updates the IterationPanel's fields to match those in the current model
 	 *
 	 */
-	private void updateFields() {
-		//TODO finish this
+	public void updateFields() {
 		updateEstimate();
-		
+		updateIterReqs();
+		updateName();
+		updateDates();
 	}
 
 	/**
@@ -368,6 +379,15 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			}
 		});
 		}
+	}
+	
+	public void updateName(){
+		iterationNumber.setText(model.getIterationNumber());
+	}
+	
+	public void updateDates(){
+		startDatePicker.setDate(model.getStartDate());
+		endDatePicker.setDate(model.getEndDate());
 	}
 	
 	public void setEstimate(int est) {

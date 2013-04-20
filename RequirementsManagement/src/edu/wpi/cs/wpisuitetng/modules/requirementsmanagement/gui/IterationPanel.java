@@ -7,13 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //TODO who did this
+ *    Josh
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 /**
  *
  * The view for creating an iteration
- * @author TODO
+ * @author Josh
  *
  */
 @SuppressWarnings("serial")
@@ -109,15 +110,17 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		GridBagConstraints c = new GridBagConstraints();
 		setLayout(panelLayout);
 		
-		lbl1 = new JLabel("Start Date (mm/dd/yyyy)");
-		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
+		lbl1 = new JLabel("Start Date");
+		lbl2 = new JLabel("End Date");
 		lbl3 = new JLabel ("Iteration Number");
 		
 		Date startDate = model.getStartDate();
 		Date endDate = model.getEndDate();
 		startDatePicker = new JXDatePicker(startDate != null ? startDate : new Date());
+		//startDatePicker.
 		endDatePicker = new JXDatePicker(endDate != null ? endDate : new Date());
-
+startDatePicker.setEnabled(false);
+endDatePicker.setEnabled(false);
 		result = new JTextField(25);
 		iterationNumber = new JTextField();
 		
@@ -126,27 +129,40 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		} else {
 			submit = new JButton("Update");
 		}
-		submit.addActionListener(new ValidateIterationActionListener(this));
+		submit.addActionListener(new ValidateIterationActionListener());
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
+		c.gridwidth = 2;
+		c.insets = new Insets(0, 0, 0, 5);
 		add(lbl1, c);
-		c.gridx = 1;
-		add(startDatePicker, c);
 		c.gridy = 1;
-		c.gridx = 0;
+		add(startDatePicker, c);
+		c.gridy = 2;
+		add(startDatePicker.getMonthView(),c);
+		c.gridy = 0;
+		c.gridx = 2;
+		c.insets = new Insets(0, 5, 0, 0);
 		add(lbl2, c);
-		c.gridx = 1;
+		c.gridy = 1;
 		add(endDatePicker, c);
 		c.gridy = 2;
+		add(endDatePicker.getMonthView(),c);
 		c.gridx = 0;
+		c.gridy = 3;
+		c.insets = new Insets(10, 0, 10, 5);
+		c.gridwidth = 1;
 		add(lbl3, c);
 		c.gridx = 1;
+		c.gridwidth = 3;
+		c.insets = new Insets(10, 0, 10, 0);
 		add(iterationNumber, c);
-		c.gridy = 3;
-		add(submit, c);
 		c.gridy = 4;
+		c.gridx = 0;
+		c.gridwidth = 4;
+		add(submit, c);
+		c.gridy = 5;
 		add(result, c);
 		
 		result.setEditable(false);
@@ -267,6 +283,10 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		result.setText(string);
 	}
 	
+	public IterationPanel getThisIterationPanel() {
+		return this;
+	}
+	
 	/**
 	 *
 	 * callback class to update the iteration's id
@@ -282,26 +302,15 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 	
 	class ValidateIterationActionListener implements ActionListener {
 		
-		/** the iteration panel that created this */
-		IterationPanel parent;
-		
 		/**
-		 * Constructor
-		 * @param parent the iteration panel that created this
-		 */
-		public ValidateIterationActionListener(IterationPanel parent) {
-			this.parent = parent;
-		}
-
-		/**
-		 * Validate the iteratin being created, if its valid send it to the DB
+		 * Validate the iteration being created, if its valid send it to the DB
 		 *
 		 * @param e action that happened
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			getModel();
-			DB.getAllIterations(new ValidateIterationCallback(parent));
+			DB.getAllIterations(new ValidateIterationCallback(e));
 		}
 		
 	}
@@ -314,15 +323,10 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 	 */
 	class ValidateIterationCallback implements IterationCallback {
 		
-		/** the iteration panel that called this */
-		IterationPanel parent;
+		ActionEvent e;
 		
-		/**
-		 * Constructor
-		 * @param parent the iteration panel that called this
-		 */
-		ValidateIterationCallback(IterationPanel parent) {
-			this.parent = parent;
+		public ValidateIterationCallback(ActionEvent e) {
+			this.e = e;
 		}
 		
 		/**
@@ -395,7 +399,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 				}
 				if(isValid) {
 					// if there's no problems, add the iteration
-					new AddIterationController(parent);
+					new AddIterationController(getThisIterationPanel()).actionPerformed(e);
 				}
 			}
 		}

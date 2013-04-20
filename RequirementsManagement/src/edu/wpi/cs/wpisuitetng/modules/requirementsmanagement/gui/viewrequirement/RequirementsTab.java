@@ -32,10 +32,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.Requirement
 
 /**
  * This view is responsible for showing the form for creating or viewing a new requirements.
+ * @author TODO
  */
 @SuppressWarnings("serial")
 public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 
+	/** Controller for the MainTabView */
+	MainTabController mainTabController;
 	/** group of buttons to show */
 	RequirementToolbarView buttonGroup;
 	/** the save button */
@@ -68,7 +71,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		if(containingTab == null) {
 			containingTab = new DummyTab();
 		}
-		
+
+		this.mainTabController = tabController;
 		buttonGroup = new RequirementToolbarView(tabController, this);
 		
 		containingTab.setIcon(new ImageIcon());
