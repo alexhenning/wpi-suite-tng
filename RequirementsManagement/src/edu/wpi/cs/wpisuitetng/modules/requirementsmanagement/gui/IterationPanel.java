@@ -126,7 +126,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		} else {
 			submit = new JButton("Update");
 		}
-		submit.addActionListener(new ValidateIterationActionListener(this));
+		submit.addActionListener(new ValidateIterationActionListener());
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
@@ -267,6 +267,10 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		result.setText(string);
 	}
 	
+	public IterationPanel getThisIterationPanel() {
+		return this;
+	}
+	
 	/**
 	 *
 	 * callback class to update the iteration's id
@@ -282,17 +286,6 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 	
 	class ValidateIterationActionListener implements ActionListener {
 		
-		/** the iteration panel that created this */
-		IterationPanel parent;
-		
-		/**
-		 * Constructor
-		 * @param parent the iteration panel that created this
-		 */
-		public ValidateIterationActionListener(IterationPanel parent) {
-			this.parent = parent;
-		}
-
 		/**
 		 * Validate the iteratin being created, if its valid send it to the DB
 		 *
@@ -301,7 +294,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			getModel();
-			DB.getAllIterations(new ValidateIterationCallback(parent));
+			DB.getAllIterations(new ValidateIterationCallback(e));
 		}
 		
 	}
@@ -314,15 +307,10 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 	 */
 	class ValidateIterationCallback implements IterationCallback {
 		
-		/** the iteration panel that called this */
-		IterationPanel parent;
+		ActionEvent e;
 		
-		/**
-		 * Constructor
-		 * @param parent the iteration panel that called this
-		 */
-		ValidateIterationCallback(IterationPanel parent) {
-			this.parent = parent;
+		public ValidateIterationCallback(ActionEvent e) {
+			this.e = e;
 		}
 		
 		/**
@@ -395,7 +383,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 				}
 				if(isValid) {
 					// if there's no problems, add the iteration
-					new AddIterationController(parent);
+					new AddIterationController(getThisIterationPanel()).actionPerformed(e);
 				}
 			}
 		}
