@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.NavToolbarView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.UserToolbarView;
 
 /**
  * Tab for requirements management
@@ -63,6 +64,7 @@ public class JanewayModule implements IJanewayModule {
 		// Add default toolbars
 		toolbarController = new ToolbarController(toolbarView, mainTabController);
 		toolbarController.setRelevant(new NavToolbarView(mainTabController), true);
+		toolbarController.setRelevant(new UserToolbarView(mainTabController), true);
 
 		tabs = new ArrayList<JanewayTabModel>();
 		JanewayTabModel tab = new JanewayTabModel("Requirements Management", new ImageIcon(), toolbarView, mainTabView);
