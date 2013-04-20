@@ -28,6 +28,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
@@ -37,6 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewUserTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 
 
 /**
@@ -118,6 +121,7 @@ public class AssignUserToRequirementTab extends JPanel {
 			@Override public void mouseEntered(MouseEvent arg0) {}
 			@Override public void mouseClicked(MouseEvent arg0) {}
 		});
+		
 		assignedUserTableScrollPane = new JScrollPane(assignedUserTable);
 		assignedUserTableScrollPane.setPreferredSize(new Dimension(300, 300));
 		assignedUserTableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -257,6 +261,10 @@ public class AssignUserToRequirementTab extends JPanel {
 		DB.getAllUsers(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
 	}
 	
+	public void addChangeListenerTo(MainTabView mainView){
+		mainView.addChangeListener(new AssignedUserTabChangeListener());
+	}
+	
 	private String getSelectedSubId() {
 		selectedRow = assignedUserTable.getSelectedRow();
 		if (selectedRow >= 0 && selectedRow < assignedUserTable.getRowCount()) {
@@ -281,6 +289,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	 * @author Josh
 	 * @author Jacob Palnick
 	 * @author William Terry
+	 * @author David Modica
 	 */
 	class UpdateTablesCallback implements UsersCallback {
 		
@@ -291,6 +300,7 @@ public class AssignUserToRequirementTab extends JPanel {
 			super();
 			this.selectedSub = selectedSub;
 			this.selectedPos = selectedPos;
+			
 		}
 
 		/**
@@ -301,28 +311,28 @@ public class AssignUserToRequirementTab extends JPanel {
 		@Override
 		public void callback(List<User> users) {
 			if (users.size() > 0) {
-				// put the data in the table
+				//put the data in the table
 				ArrayList<Object[]> joinedEntryList = new ArrayList<Object[]>();
 				ArrayList<Object[]> disjointEntryList = new ArrayList<Object[]>();
 				for(User user : users) {
 					String id = String.valueOf(user.getIdNum());
 					String name = user.getName();
 					String username = user.getUsername();
-					DB.getSinglePermission(username, new permissionLevelRetrivalCallback());
-					String permissions = "placeholder";// permissionLevel;
 					if (assignees.contains(user)) {
+						DB.getSinglePermission(name, new PermissionLevelRetrivalCallback(assignedUserTableModel, joinedEntryList.size()));
 						Object[] joinedEntry = new Object[COLUMN];
 						joinedEntry[ID] = id;
 						joinedEntry[NAME] = name;
 						joinedEntry[USERNAME] = username;
-						joinedEntry[PERMISSIONLEVEL] = permissions;
+						joinedEntry[PERMISSIONLEVEL] = null;
 						joinedEntryList.add(joinedEntry);
 					} else {
+						DB.getSinglePermission(name, new PermissionLevelRetrivalCallback(possibleUserTableModel, disjointEntryList.size()));
 						Object[] disjointEntry = new Object[COLUMN];
 						disjointEntry[ID] = id;
 						disjointEntry[NAME] = name;
 						disjointEntry[USERNAME] = username;
-						disjointEntry[PERMISSIONLEVEL] = permissions;
+						disjointEntry[PERMISSIONLEVEL] = null;
 						disjointEntryList.add(disjointEntry);
 					}
 				}
@@ -341,7 +351,7 @@ public class AssignUserToRequirementTab extends JPanel {
 				possibleUserTableModel.fireTableStructureChanged();
 			}
 			else {
-				// do nothing, there are no requirements
+				// do nothing, there are no users
 			}
 		
 			TableColumn column = null;
@@ -390,11 +400,28 @@ public class AssignUserToRequirementTab extends JPanel {
 		
 	}
 	
-	class permissionLevelRetrivalCallback implements SinglePermissionCallback {
+	class PermissionLevelRetrivalCallback implements SinglePermissionCallback {
+		ViewUserTable table;
+		int row;
 
+		PermissionLevelRetrivalCallback(ViewUserTable table, int row){
+			this.table = table;
+			this.row = row;
+		}
+		
 		@Override
 		public void callback(Permissions profile) {
-			permissionLevel = profile.getPermissionLevel().toString();
+			String permissionLevel = profile.getPermissionLevel().toString();
+			table.setValueAt(permissionLevel, row, 3);
 		}
+	}
+	
+	class AssignedUserTabChangeListener implements ChangeListener{
+
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			DB.getAllUsers(new UpdateTablesCallback(getSelectedSubId(), getSelectedPosId()));
+		}
+		
 	}
 }
