@@ -21,6 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 /**
  * A wrapper class for MainTabView that can be given to components within that view
  * in order to allow them to easily change their titles and icons.
+ * @author Andrew Hurle
  */
 public class Tab {
 

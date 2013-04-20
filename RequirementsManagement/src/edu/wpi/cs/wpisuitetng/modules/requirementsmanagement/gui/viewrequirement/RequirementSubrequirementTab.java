@@ -9,6 +9,7 @@
  * Contributors:
  *    Josh
  *    Deniz
+ *    JacobPalnick
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;

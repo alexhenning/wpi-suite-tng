@@ -3,6 +3,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports;
 
 /**
  * A type to indicate how the report should display.
+ * @author TODO
  */
 public enum ReportType {
 	PIE_CHART("Pie Chart"), BAR_CHART("Bar Chart");

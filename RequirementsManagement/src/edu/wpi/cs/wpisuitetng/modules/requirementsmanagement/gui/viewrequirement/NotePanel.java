@@ -8,6 +8,8 @@
  *
  * Contributors:
  *    Josh
+ *    Sergey
+ *    vpatara
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
 

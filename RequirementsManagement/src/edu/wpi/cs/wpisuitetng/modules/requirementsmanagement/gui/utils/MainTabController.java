@@ -52,6 +52,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * Controls the behavior of a given MainTabView.
  * Provides convenient public methods for controlling the MainTabView.
  * Keep in mind that this controller is visible as a public field in the module.
+ * 
+ * @author Andrew Hurle
+ * @author Josh Morse
  */
 public class MainTabController {
 	
