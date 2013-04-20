@@ -209,9 +209,11 @@ public class MainTabController {
 		mainView.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
+				if(mainView.getSelectedComponent() !=null){
 				if(mainView.getSelectedComponent().equals(tab)) {
 					view.getPanel().updateIterReqs();
-					System.out.println("Tabel has been updated");
+					System.out.println("Table has been updated");
+				}
 				}
 			}
 		});
