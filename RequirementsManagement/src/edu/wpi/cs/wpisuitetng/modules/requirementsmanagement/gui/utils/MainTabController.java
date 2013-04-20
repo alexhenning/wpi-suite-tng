@@ -200,12 +200,21 @@ public class MainTabController {
 				}
 			}
 		}
-		Tab tab = addTab();
-		ScrollableTab<ViewSingleIterationPanel> view =
+		final Tab tab = addTab();
+		final ScrollableTab<ViewSingleIterationPanel> view =
 				new ScrollableTab<ViewSingleIterationPanel>(this, tab, title,
 						new ViewSingleIterationPanel(iteration));
 		tab.setComponent(view);
 		view.requestFocus();
+		mainView.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(mainView.getSelectedComponent().equals(tab)) {
+					view.getPanel().updateIterReqs();
+					System.out.println("Tabel has been updated");
+				}
+			}
+		});
 		return tab;
 	}
 	

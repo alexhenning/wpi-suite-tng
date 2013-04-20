@@ -185,6 +185,14 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		/** adding bottom panel */
 		bottomPanel = new ListFilteredRequirementsPanel(this);
 		add(bottomPanel, BorderLayout.CENTER);
+		bottomPanel.updateRequirementList();
+	}
+	
+	/**
+	 * Updates requirement list
+	 */
+	public void updateIterReqs(){
+		bottomPanel.updateRequirementList();
 	}
 	
 	/**
