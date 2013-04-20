@@ -169,7 +169,7 @@ public class guiTest1 {
 
 		mainTabController.addCreateReleaseNumberTab();
 
-		mainTabController.addIterationTab(null,"title2");
+		mainTabController.addIterationTab(new Iteration(),"title2");
 
 		mainTabController.addPermissionTab();
 
