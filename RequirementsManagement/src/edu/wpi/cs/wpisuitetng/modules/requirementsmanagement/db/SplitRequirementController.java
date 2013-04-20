@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.SplitRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -63,11 +64,10 @@ public class SplitRequirementController extends AbstractAction implements Action
 	/**
 	 * Receives confirmation that server whether the request was successful
 	 *
-	 * @param success whether the split request was successful
-	 * @param childId the id of the split child requirement, or -1 if failure
+	 * @param childModel the split child requirement, or null if failure
 	 */
-	public void receivedSplitConfirmation(boolean success, int childId) {
-		// Simple passes the result to the panel
-		requirementsPanel.reportSplitChild(success, childId);
+	public void receivedSplitConfirmation(RequirementModel childModel) {
+		// Simple passes the resulted child to the panel
+		requirementsPanel.reportSplitChild(childModel);
 	}
 }
