@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
 /**
  * Responsible for deserializing a RequirementEvent.
  * TODO: DOCUMENT THIS CLASS
+ * @author TODO
  */
 class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 	public static <T> void addFieldChange(String fieldName, Class<T> fieldClass, JsonObject changes, JsonDeserializationContext context, HashMap<String, FieldChange<?>> changesMap) {

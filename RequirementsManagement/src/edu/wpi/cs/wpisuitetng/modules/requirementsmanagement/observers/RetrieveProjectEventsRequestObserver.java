@@ -7,18 +7,22 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    TODO
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import java.util.Arrays;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ProjectEventsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
+/**
+ * This observer is called when TODO
+ * 
+ * @author TODO
+ */
 
 public class RetrieveProjectEventsRequestObserver implements RequestObserver {
 	

@@ -19,6 +19,7 @@ import java.lang.reflect.ParameterizedType;
  * Doesn't implement Model since it will see no use outside of RequirementChangesets.
  *
  * @param <T> the type of the field that was changed
+ * @author TODO
  */
 public class FieldChange<T> {
 	private final T oldValue;

@@ -14,12 +14,15 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import static org.junit.Assert.*;
-
 import org.junit.*;
-
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import static edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus.*;
 import static edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority.*;
+/**
+ * TODO Description
+ * @author vpatara
+ * @author Tim
+ */
 
 public class RequirementModelTest {
 	
