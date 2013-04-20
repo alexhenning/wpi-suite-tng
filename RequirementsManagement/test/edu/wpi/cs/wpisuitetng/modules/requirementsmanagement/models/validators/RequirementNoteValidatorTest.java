@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Sergey Zolotyhk
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 
@@ -24,7 +36,6 @@ import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.MockData;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -66,7 +77,7 @@ public class RequirementNoteValidatorTest {
 
 		mainRequirement = new RequirementModel(
 				1, // int id
-				new ReleaseNumber(1, 1000, testproject), //ReleaseNumber releaseNumber,
+				new ReleaseNumber(1, "1000", testproject), //ReleaseNumber releaseNumber,
 				RequirementStatus.IN_PROGRESS, //RequirementStatus status,
 				RequirementPriority.HIGH, //RequirementPriority priority,
 				"goodRequirement", //String name,
@@ -86,7 +97,7 @@ public class RequirementNoteValidatorTest {
 		// RequirementNote(int requirementId, User user, String body)
 		goodNote = new RequirementNote(1, currentUser, noteBody);
 		
-		db = new MockData(new HashSet<Object>());
+		db = new edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.MockData(new HashSet<Object>());
 		db.save(currentUser);
 		db.save(mainRequirement);
 		
@@ -122,6 +133,7 @@ public class RequirementNoteValidatorTest {
 		assertEquals(fieldName, issues.get(0).getFieldName());
 		return issues;
 	}
+
 	@Test
 	public void testGoodNote() {
 		checkNoIssues(defaultSession, goodNote);

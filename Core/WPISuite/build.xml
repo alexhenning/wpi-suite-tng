@@ -49,7 +49,7 @@
 	</target>
 	
 	<target name="war" depends="clean,compile">
-		<war destfile="build/WPISuite.war" webxml="WebContent/WEB-INF/web.xml">
+		<war destfile="build/WPISuite-team4.war" webxml="WebContent/WEB-INF/web.xml">
 			<fileset dir="WebContent"/>
 			<lib dir="WebContent/WEB-INF/lib"/>
 			<classes dir="build/"/>
@@ -57,7 +57,7 @@
 	</target>
 
 	<target name="dist" depends="war">
-		<copy file="build/WPISuite.war" todir="${dist}/core" overwrite="true"/>
+		<copy file="build/WPISuite-team4.war" todir="${dist}/core" overwrite="true"/>
 	</target>
 
 </project>

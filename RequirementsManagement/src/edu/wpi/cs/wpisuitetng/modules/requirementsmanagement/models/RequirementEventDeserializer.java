@@ -26,19 +26,27 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementE
  * Responsible for deserializing a RequirementEvent.
  */
 class RequirementEventDeserializer implements JsonDeserializer<RequirementEvent> {
+	/**
+	 *TODO: DOCUMENT THIS
+	 *
+	 * @param element
+	 * @param type
+	 * @param context
+	 * @return
+	 * @throws JsonParseException
+	 */
 	@Override
+	
 	public RequirementEvent deserialize(JsonElement element, Type type,
 			JsonDeserializationContext context) throws JsonParseException {
 		// we need to switch on the type field to figure out the concrete class to instantiate
 		JsonObject object = element.getAsJsonObject();
 		if(!object.has("type")) {
-			throw new JsonParseException("DefectEvent does not have type information");
+			throw new JsonParseException("RequirementEvent does not have type information");
 		}
 		EventType eType = context.deserialize(object.get("type"), EventType.class);
 		if(eType != null) { // type could be any garbage string, eType null if not in enum
 			switch(eType) {
-			case CHANGESET:
-				return context.deserialize(element, RequirementChangeset.class);
 			case NOTE:
 				return context.deserialize(element, RequirementNote.class);
 			}

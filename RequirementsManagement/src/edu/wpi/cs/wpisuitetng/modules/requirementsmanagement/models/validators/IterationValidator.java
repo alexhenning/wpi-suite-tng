@@ -13,6 +13,8 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -25,12 +27,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 
 /**
+ * validator for iterations
  * @author jpalnick
  *
  */
 public class IterationValidator {
 
+	/** the database */
 	private Data data;
+	/** the last existing iteration model */
 	private Iteration lastExistingIteration;
 	
 	/**
@@ -80,7 +85,7 @@ public class IterationValidator {
 	 * Return all Iterations of the specified project.
 	 * 
 	 * @param project the project this Iteration belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if iteration doesn't exist
 	 * @return all Iterations in the project
 	 * @throws WPISuiteException 
 	 */
@@ -96,7 +101,7 @@ public class IterationValidator {
 	 * 
 	 * @param id the id of the Iteration
 	 * @param project the project this Iteration belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if iteration doesn't exist
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The Iteration with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
@@ -117,7 +122,7 @@ public class IterationValidator {
 	 * from the Data given in the constructor.
 	 * 
 	 * @param session The session to validate against
-	 * @param defect The defect model to validate
+	 * @param iteration The iteration model to validate
 	 * @param mode The mode to validate for
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException 
@@ -136,7 +141,6 @@ public class IterationValidator {
 			for(Iteration it : allIterations) {
 				if(it.getId() == iteration.getId()) {
 					issues.add(new ValidationIssue("Unable to create an Iteration with the provided id ("+iteration.getId()+") since there is already an iteration with that id"));
-	//				return issues;
 				}
 			}
 		}
@@ -144,9 +148,8 @@ public class IterationValidator {
 		//check if the iterationNumber is unique for the project
 		if(mode == Mode.CREATE) {
 			for(Iteration it : allIterations) {
-				if(it.getIterationNumber() == iteration.getIterationNumber()) {
+				if(it.getIterationNumber().equals(iteration.getIterationNumber())) {
 					issues.add(new ValidationIssue("Unable to create an Iteration with the provided iterationNumber ("+iteration.getIterationNumber()+") since there is already an iteration with that iterationNumber"));
-//				return issues;
 				}
 			}
 		}
@@ -157,66 +160,11 @@ public class IterationValidator {
 		}
 		lastExistingIteration = oldIteration;
 		
-//		// make sure Name and description size are within constraints
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
-//		if(requirement.getDescription() == null) {
-//			// empty descriptions are okay
-//			requirement.setDescription("");
-//		} else if(requirement.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
+		// make sure Name and description size are within constraints
+		if(iteration.getIterationNumber() == null || iteration.getIterationNumber().length() == 0) {
+			issues.add(new ValidationIssue("Required, must not be blank", "name"));
+		}
 		
-//		// make sure the creator and assignee exist and aren't duplicated
-//		if(mode == Mode.EDIT) {
-//			if(oldRequirement != null) {
-//				requirement.setCreator(oldRequirement.getCreator());
-//			}
-//		} else if(requirement.getCreator() == null) {
-//			issues.add(new ValidationIssue("Required", "creator"));
-//		} else {
-//			User creator = getExistingUser(requirement.getCreator().getUsername(), issues, "creator");
-//			if(creator != null) {
-//				if(!creator.getUsername().equals(session.getUsername())) {
-//					issues.add(new ValidationIssue("Must match currently logged in user", "creator"));
-//				} else {
-//					requirement.setCreator(creator);
-//				}
-//			}
-//		}
-//		
-//		if(requirement.getAssignee() != null) { // requirements can be missing an assignee
-//			User assignee = getExistingUser(requirement.getAssignee().getUsername(), issues, "assignee");
-//			if(assignee != null) {
-//				requirement.setAssignee(assignee);
-//			}
-//		}
-		
-//		// make sure start/endDates are not null
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
-//		if(requirement.getDescription() == null) {
-//			// empty descriptions are okay
-//			requirement.setDescription("");
-//		} else if(requirement.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
-
-		
-//		// make sure we're not being spoofed with some weird dates
-//		final Date now = new Date();
-//		if(oldIteration != null) {
-//			iteration.setStartDate(oldIteration.getStartDate());
-//			iteration.setEndDate(oldIteration.getEndDate());
-//		} else {
-//			iteration.setStartDate(now);
-//			iteration.setEndDate(now);
-//		}
-
 		// make sure startDate is before the endDate
 		if(iteration.getStartDate() == null) {
 			issues.add(new ValidationIssue("Required, must not be null", "startDate"));
@@ -226,53 +174,109 @@ public class IterationValidator {
 		}
 		if(iteration.getStartDate() != null && iteration.getEndDate() != null && 
 				iteration.getStartDate().after(iteration.getEndDate())) {
-//			System.out.println("start: "+iteration.getStartDate().getTime());
-//			System.out.println("end: "+iteration.getEndDate().getTime());
-			
-//			issues.add(new ValidationIssue("startDate must be before endDate", "startDate"));
 			issues.add(new ValidationIssue("startDate must be before endDate", "endDate"));
 		}
 		
 		//TODO make sure this works. I think it should but I've been wrong before....
 		//check if dates overlap with other iterations
 		if(iteration.getStartDate() != null && iteration.getEndDate() != null){
+			Date iterationStart = iteration.getStartDate();
+			Calendar noTime = Calendar.getInstance();
+			noTime.setTime(iterationStart);
+			noTime.set(Calendar.HOUR_OF_DAY, 0);  
+			noTime.set(Calendar.MINUTE, 0);  
+			noTime.set(Calendar.SECOND, 0);  
+			noTime.set(Calendar.MILLISECOND, 0);
+			iterationStart = noTime.getTime();
+			Date iterationEnd = iteration.getEndDate();
+			noTime.setTime(iterationEnd);
+			noTime.set(Calendar.HOUR_OF_DAY, 0);  
+			noTime.set(Calendar.MINUTE, 0);  
+			noTime.set(Calendar.SECOND, 0);  
+			noTime.set(Calendar.MILLISECOND, 0);
+			iterationEnd = noTime.getTime();
 			for (Iteration i : allIterations) {
+				Date iStart = i.getStartDate();
+				noTime.setTime(iStart);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iStart = noTime.getTime();
+				Date iEnd = i.getEndDate();
+				noTime.setTime(iEnd);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iEnd = noTime.getTime();
 				if(i != null && i.getId() != iteration.getId()) {
-					if(iteration.getStartDate().after(i.getStartDate()) && iteration.getStartDate().before(i.getEndDate())) {
+					if(iterationStart.after(iStart) && iterationStart.before(iEnd)) {
 						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
 					}
-					if(iteration.getEndDate().after(i.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
+					if(iterationEnd.after(iStart) && iterationEnd.before(iEnd)) {
 						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
 					}
-					if((i.getStartDate().after(iteration.getStartDate()) && i.getStartDate().before(iteration.getEndDate())) ||
-							(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate())) ||
-							(i.getStartDate().equals(iteration.getStartDate()) || i.getEndDate().equals(iteration.getEndDate()))) {
+					if((iStart.after(iterationStart) && iStart.before(iterationEnd)) ||
+							(iEnd.after(iterationStart) && iEnd.before(iterationEnd)) ||
+							(iStart.equals(iterationStart) || iEnd.equals(iterationEnd))) {
 						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
 					}
 				}
 			}
 		}
-
-//		// make sure we're not being spoofed with some weird date
-//		final Date now = new Date();
-//		if(oldRequirement != null) {
-//			requirement.setCreationDate(oldRequirement.getCreationDate());
-//		} else {
-//			requirement.setCreationDate(now);
-//		}
-//		requirement.setLastModifiedDate((Date)now.clone());
-		
-//		if(oldRequirement != null) {
-//			requirement.setEvents(oldRequirement.getEvents());
-//		} else {
-//			// new defects should never have any events
-//			requirement.setEvents(new ArrayList<RequirementEvent>());
-//		}
 		
 		if (issues.size() > 0){
 			System.out.println("iteration json: "+iteration.toJSON());
 		}
 		return issues;
+	}
+	public void checkForOverlap(Iteration iteration1, Iteration iteration2, List<ValidationIssue> issues) {
+		if(iteration1 != null && iteration1.getId() != iteration2.getId()) {
+			Calendar it1Start = Calendar.getInstance();
+			Calendar it1End = Calendar.getInstance();
+			Calendar it2Start = Calendar.getInstance();
+			Calendar it2End = Calendar.getInstance();
+			
+			it1Start.setTime(iteration1.getStartDate());
+			it1End.setTime(iteration1.getEndDate());
+			it2Start.setTime(iteration2.getStartDate());
+			it2End.setTime(iteration2.getEndDate());
+
+			it1Start.set(Calendar.HOUR_OF_DAY, 0);
+			it1Start.set(Calendar.MINUTE, 0);
+			it1Start.set(Calendar.SECOND, 0);
+
+			it1End.set(Calendar.HOUR_OF_DAY, 0);
+			it1End.set(Calendar.MINUTE, 0);
+			it1End.set(Calendar.SECOND, 0);
+
+			it2Start.set(Calendar.HOUR_OF_DAY, 0);
+			it2Start.set(Calendar.MINUTE, 0);
+			it2Start.set(Calendar.SECOND, 0);
+
+			it2End.set(Calendar.HOUR_OF_DAY, 0);
+			it2End.set(Calendar.MINUTE, 0);
+			it2End.set(Calendar.SECOND, 0);
+			
+			if(it2Start.compareTo(it1Start) >= 0 && it2Start.compareTo(it1End) <= 0) {
+				issues.add(new ValidationIssue("startDate overlaps with Iteration "+iteration1.getIterationNumber(), "startDate"));
+			}
+			
+			
+			if(iteration2.getStartDate().after(iteration1.getStartDate()) && iteration2.getStartDate().before(iteration1.getEndDate())) {
+				issues.add(new ValidationIssue("startDate overlaps with Iteration "+iteration1.getIterationNumber(), "startDate"));
+			}
+			if(iteration2.getEndDate().after(iteration1.getStartDate()) && iteration2.getEndDate().before(iteration1.getEndDate())) {
+				issues.add(new ValidationIssue("endDate overlaps with Iteration "+iteration1.getIterationNumber(), "endDate"));
+			}
+			if((iteration1.getStartDate().after(iteration2.getStartDate()) && iteration1.getStartDate().before(iteration2.getEndDate())) ||
+					(iteration1.getEndDate().after(iteration2.getStartDate()) && iteration1.getEndDate().before(iteration2.getEndDate())) ||
+					(iteration1.getStartDate().equals(iteration2.getStartDate()) || iteration1.getEndDate().equals(iteration2.getEndDate()))) {
+				
+				issues.add(new ValidationIssue("iteration overlaps with Iteration "+iteration1.getIterationNumber()));
+			}
+		}
 	}
 
 	/**

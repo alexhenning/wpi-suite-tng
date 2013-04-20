@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 
 /**
  * Action to bring up the list requirement tab
@@ -32,7 +32,7 @@ public class ListRequirementsAction extends AbstractAction {
 	private final MainTabController controller;
 	
 	/**
-	 * Create a CreateDefectAction
+	 * Create a ListRequirementsAction
 	 * @param controller When the action is performed, controller.addListRequirementsTab() is called
 	 */
 	public ListRequirementsAction(MainTabController controller) {

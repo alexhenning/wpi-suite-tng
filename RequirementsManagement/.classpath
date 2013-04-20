@@ -8,5 +8,21 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/WPISuite-Interfaces"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container/WPISuite"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/Janeway/swingx/swingx-all-1.6.4.jar" sourcepath="/Janeway/swingx/swingx-all-1.6.4-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Janeway/swingx/swingx-all-1.6.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Janeway/jfreechart/lib/gnujaxp.jar"/>
+	<classpathentry kind="lib" path="/Janeway/jfreechart/lib/iText-2.1.5.jar"/>
+	<classpathentry kind="lib" path="/Janeway/jfreechart/lib/jcommon-1.0.17.jar"/>
+	<classpathentry kind="lib" path="/Janeway/jfreechart/lib/jfreechart-1.0.14.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/Janeway/jfreechart/jfreechart-1.0.14-javadocs.jar!/jfreechart-1.0.14-javadocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Janeway/jfreechart/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/Janeway/jfreechart/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="/Janeway/jfreechart/lib/swtgraphics2d.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

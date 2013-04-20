@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Jacob Palnick
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import java.util.ArrayList;
@@ -16,12 +25,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 
 /**
+ * Validator for project events
  * @author jpalnick
  *
  */
 public class ProjectEventValidator {
 
+	/** the database */
 	private Data data;
+	/** the last existing project event model */
 	private ProjectEvent lastExistingProjectEvent;
 	
 	/**
@@ -81,27 +93,6 @@ public class ProjectEventValidator {
 		return projectEvents;
 	}
 		
-//	/**
-//	 * Return the Iteration with the given id if it already exists in the database.
-//	 * 
-//	 * @param id the id of the Iteration
-//	 * @param project the project this Iteration belongs to
-//	 * @param issues list of errors to add to if defect doesn't exist
-//	 * @param fieldName name of field to use in error if necessary
-//	 * @return The Iteration with the given id, or null if it doesn't exist
-//	 * @throws WPISuiteException 
-//	 */
-//	Iteration getExistingIteration(int id, Project project, List<ValidationIssue> issues, String fieldName)
-//			throws WPISuiteException {
-//		List<Model> oldIterations = data.retrieve(Iteration.class, "id", id, project);
-//		if(oldIterations.size() < 1 || oldIterations.get(0) == null) {
-//			issues.add(new ValidationIssue("Iteration with id does not exist in project", fieldName));
-//			return null;
-//		} else {
-//			return (Iteration) oldIterations.get(0);
-//		}
-//	}
-		
 	/**
 	 * Validate the given model such that any nested models point to appropriate existing models
 	 * from the Data given in the constructor.
@@ -131,13 +122,7 @@ public class ProjectEventValidator {
 				}
 			}
 		}
-//
-//		Iteration oldIteration = null;
-//		if(mode == Mode.EDIT) {
-//			oldIteration = getExistingIteration(projectEvent.getId(), session.getProject(), issues, "id");
-//		}
-//		lastExistingProjectEvent = oldIteration;
-//		
+
 		// make sure the user is not duplicated
 		User user = getExistingUser(projectEvent.getUser().getUsername(), issues, "creator");
 		if(user != null) {
@@ -147,47 +132,10 @@ public class ProjectEventValidator {
 				projectEvent.setUser(user);
 			}
 		}
-//
-////		// make sure start/endDates are not null
-////		if(requirement.getName() == null || requirement.getName().length() > 150
-////				|| requirement.getName().length() < 5) {
-////			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-////		}
-////		if(requirement.getDescription() == null) {
-////			// empty descriptions are okay
-////			requirement.setDescription("");
-////		} else if(requirement.getDescription().length() > 5000) {
-////			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-////		}
-//
-//		//TODO make sure this works. I think it should but I've been wrong before....
-//		//check if dates overlap with other iterations
-//		for (Iteration i : allIterations) {
-//			if(i.getId() != projectEvent.getId()) {
-//				if(projectEvent.getStartDate().after(i.getStartDate()) && projectEvent.getStartDate().before(i.getEndDate())) {
-//					issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
-//				}
-//				if(projectEvent.getEndDate().after(i.getStartDate()) && projectEvent.getEndDate().before(i.getEndDate())) {
-//					issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
-//				}
-//				if(i.getStartDate().after(projectEvent.getStartDate()) && projectEvent.getStartDate().before(i.getEndDate()) ||
-//						i.getEndDate().after(projectEvent.getStartDate()) && projectEvent.getEndDate().before(i.getEndDate())) {
-//					issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-//				}
-//			}
-//		}
 
 		if (issues.size() > 0){
 			System.out.println("ProjectEvent json: "+projectEvent.toJSON());
 		}
 		return issues;
 	}
-
-//	/**
-//	 * @return The last existing Iteration the validator fetched if in edit mode
-//	 */
-//	public Iteration getLastExistingIteration() {
-//		return lastExistingIteration;
-//	}
-	
 }

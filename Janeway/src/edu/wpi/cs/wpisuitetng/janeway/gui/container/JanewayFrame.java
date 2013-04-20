@@ -50,7 +50,8 @@ public class JanewayFrame extends JFrame {
 	private JanewayFrame(List<IJanewayModule> modules) {
 		// Set window properties
 		setTitle("Janeway - WPI Suite Desktop Client");
-		setMinimumSize(new Dimension(800, 600)); // minimum window size is 800 x 600
+		// Minimum window size is 800 x 650 (800 x 600 earlier)
+		setMinimumSize(new Dimension(800, 650));
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		// Clean up when the window is closed

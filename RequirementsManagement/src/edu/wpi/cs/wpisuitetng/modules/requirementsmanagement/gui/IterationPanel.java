@@ -14,35 +14,56 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddIterationController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.IterationCallback;
+import org.jdesktop.swingx.JXDatePicker;
+
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddIterationController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
+/**
+ *
+ * The view for creating an iteration
+ * @author TODO
+ *
+ */
 @SuppressWarnings("serial")
-public class IterationPanel extends JPanel{
+public class IterationPanel extends JPanel implements ScrollablePanel {
 	
+	/** the model to hold the iteration */
 	Iteration model;
 	
-	IterationTab parent;
+	/** the tab that created this panel */
+	ScrollableTab parent;
+	/** the layout for this panel */
 	private GridBagLayout panelLayout;
+	/** labels to describe the text fields */
 	JLabel lbl1, lbl2, lbl3;
-	JTextField startDate, endDate, iterationNumber;
+	/** text fields for the iteration's data to be entered into */
+	JTextField iterationNumber;
+	/** text field that displays if the iteration was saved or not */
+	JTextField result;
+	/** button to submit the iteration */
 	JButton submit;
+	
+	JXDatePicker startDatePicker;
+	JXDatePicker endDatePicker;
 
 	/** An enum indicating if the form is in create mode or edit mode */
 	protected Mode editMode;
@@ -50,9 +71,12 @@ public class IterationPanel extends JPanel{
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
 
-	public IterationPanel(IterationTab iterationTab){
-		this.parent = iterationTab;
-		model = parent.iteration;
+	/**
+	 * Constructor
+	 * @param iterationTab the tab that created this panel
+	 */
+	public IterationPanel(Iteration iteration){
+		model = iteration;
 		
 		editMode = Mode.CREATE;
 		
@@ -65,14 +89,21 @@ public class IterationPanel extends JPanel{
 		
 		// Add all components to this panel
 		addComponents();
-//		parent.buttonGroup.update(mode, model);
-
 		
 		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
 		updateFields();
 	}
 
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
+	}
+
 	
+	/**
+	 * add all the components (labels, text fields, buttons) to this panel's view
+	 *
+	 */
 	private void addComponents(){
 		panelLayout =new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -82,8 +113,12 @@ public class IterationPanel extends JPanel{
 		lbl2 = new JLabel("End Date (mm/dd/yyyy)");
 		lbl3 = new JLabel ("Iteration Number");
 		
-		startDate = new JTextField();
-		endDate = new JTextField();
+		Date startDate = model.getStartDate();
+		Date endDate = model.getEndDate();
+		startDatePicker = new JXDatePicker(startDate != null ? startDate : new Date());
+		endDatePicker = new JXDatePicker(endDate != null ? endDate : new Date());
+
+		result = new JTextField(25);
 		iterationNumber = new JTextField();
 		
 		if(editMode == Mode.CREATE) {
@@ -91,19 +126,19 @@ public class IterationPanel extends JPanel{
 		} else {
 			submit = new JButton("Update");
 		}
-		submit.addActionListener(new AddIterationController(this));
+		submit.addActionListener(new ValidateIterationActionListener());
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
 		add(lbl1, c);
 		c.gridx = 1;
-		add(startDate, c);
+		add(startDatePicker, c);
 		c.gridy = 1;
 		c.gridx = 0;
 		add(lbl2, c);
 		c.gridx = 1;
-		add(endDate, c);
+		add(endDatePicker, c);
 		c.gridy = 2;
 		c.gridx = 0;
 		add(lbl3, c);
@@ -111,10 +146,18 @@ public class IterationPanel extends JPanel{
 		add(iterationNumber, c);
 		c.gridy = 3;
 		add(submit, c);
+		c.gridy = 4;
+		add(result, c);
+		
+		result.setEditable(false);
 	}
 	
+	/**
+	 * close this tab/panel
+	 *
+	 */
 	public void close() {
-		parent.tabController.closeCurrentTab();
+		parent.getTabController().closeCurrentTab();
 	}
 	
 	/**
@@ -129,6 +172,12 @@ public class IterationPanel extends JPanel{
 		// TODO: implement
 	}
 	
+	/**
+	 * Check if dates overlap
+	 * TODO: IS THIS WHAT WE REALLY WANT THIS TO DO? DO WE WE EVEN USE THIS?
+	 *
+	 * @return if dates overlap
+	 */
 	public boolean doDatesOverlap() {
 		return false;
 	}
@@ -174,9 +223,9 @@ public class IterationPanel extends JPanel{
 	}
 
 	/**
-	 * Returns a boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * Returns a boolean representing whether or not input is enabled for the IterationPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * @return	A boolean representing whether or not input is enabled for the IterationPanel and its children.
 	 */
 	public boolean getInputEnabled() {
 		return inputEnabled;
@@ -184,27 +233,14 @@ public class IterationPanel extends JPanel{
 
 	/**
 	 * Gets the IterationPanel's internal model.
-	 * @return
+	 * @return the iteration model
 	 */
 	public Iteration getModel() {
-//		System.out.println("getting model from panel");
 		model.setIterationNumber(iterationNumber.getText());
 
 		//TODO handle the exceptions better
-		try {
-			Date start = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(startDate.getText());
-			model.setStartDate(start);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			model.setStartDate(null);
-		}
-		try {
-			Date end = new SimpleDateFormat("MM/d/yyyy", Locale.ENGLISH).parse(endDate.getText());
-			model.setEndDate(end);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			model.setEndDate(null);
-		}
+		model.setStartDate(startDatePicker.getDate());
+		model.setEndDate(endDatePicker.getDate());
 		
 		return model;
 	}
@@ -214,7 +250,7 @@ public class IterationPanel extends JPanel{
 	 * 
 	 * @return the parent IterationTab.
 	 */
-	public IterationTab getParent() {
+	public ScrollableTab getParent() {
 		return parent;
 	}
 
@@ -227,51 +263,129 @@ public class IterationPanel extends JPanel{
 		return editMode;
 	}
 
-//	public void setStatus(String string) {
-//		results.setText(string);
-//	}
+	public void setStatus(String string) {
+		result.setText(string);
+	}
 	
-//	class EditRequirementAction extends AbstractAction {
-//		@Override
-//		public void actionPerformed(ActionEvent arg0) {
-//			DB.updateIteration(model, new SingleIterationCallback() {
-//				@Override
-//				public void callback(Iteration iteration) {
-//					setStatus("Iteration Updated");
-//				}
-//			});
-//		}
-//	}
+	public IterationPanel getThisIterationPanel() {
+		return this;
+	}
 	
-	
+	/**
+	 *
+	 * callback class to update the iteration's id
+	 * @author TODO
+	 *
+	 */
 	class UpdateIterationIdCallback implements IterationCallback {
 		@Override
 		public void callback(List<Iteration> iterationList) {
 			model.setId(iterationList.size()+1);
 		}
 	}
-
-	class CheckDateOvelapCallback implements IterationCallback {
+	
+	class ValidateIterationActionListener implements ActionListener {
+		
+		/**
+		 * Validate the iteratin being created, if its valid send it to the DB
+		 *
+		 * @param e action that happened
+		 */
 		@Override
-		public void callback(List<Iteration> iterationList) {
-			List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
-			for (Iteration i : iterationList) {
-				if(i.getId() != model.getId()) {
-					if(model.getStartDate().after(i.getStartDate()) && model.getStartDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
-					}
-					if(model.getEndDate().after(i.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
-					}
-					if(i.getStartDate().after(model.getStartDate()) && model.getStartDate().before(i.getEndDate()) ||
-							i.getEndDate().after(model.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-					}
-				}
-			}
-			//TODO figure out how to display the issues...
-
+		public void actionPerformed(ActionEvent e) {
+			getModel();
+			DB.getAllIterations(new ValidateIterationCallback(e));
 		}
+		
 	}
 
+	/**
+	 *
+	 * Callback class to make sure that the iteration is valid
+	 * @author TODO
+	 *
+	 */
+	class ValidateIterationCallback implements IterationCallback {
+		
+		ActionEvent e;
+		
+		public ValidateIterationCallback(ActionEvent e) {
+			this.e = e;
+		}
+		
+		/**
+		 * Callback function to validate the fields, if they are valid send it to the DB
+		 *
+		 * @param iterationList list of all iterations
+		 */
+		@Override
+		public void callback(List<Iteration> iterationList) {
+			boolean isValid = true;
+			if(model.getIterationNumber() == null || model.getIterationNumber().length() == 0) {
+				result.setText("An iteration must have a name");
+				isValid = false;
+			}
+			else if(model.getStartDate() != null && model.getEndDate() != null && model.getStartDate().after(model.getEndDate())) {
+				result.setText("The start date must be before the end date");
+				isValid = false;
+			}
+			else {
+				Date iterationStart = model.getStartDate();
+				Calendar noTime = Calendar.getInstance();
+				noTime.setTime(iterationStart);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iterationStart = noTime.getTime();
+				Date iterationEnd = model.getEndDate();
+				noTime.setTime(iterationEnd);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iterationEnd = noTime.getTime();
+				for (Iteration i : iterationList) {
+					if(i != null && i.getId() != model.getId()) {
+						if(i.getIterationNumber().equals(model.getIterationNumber())) {
+							result.setText("An iteration with this name already exists");
+							isValid = false;
+						}
+						Date iStart = i.getStartDate();
+						noTime.setTime(iStart);
+						noTime.set(Calendar.HOUR_OF_DAY, 0);  
+						noTime.set(Calendar.MINUTE, 0);  
+						noTime.set(Calendar.SECOND, 0);  
+						noTime.set(Calendar.MILLISECOND, 0);
+						iStart = noTime.getTime();
+						Date iEnd = i.getEndDate();
+						noTime.setTime(iEnd);
+						noTime.set(Calendar.HOUR_OF_DAY, 0);  
+						noTime.set(Calendar.MINUTE, 0);  
+						noTime.set(Calendar.SECOND, 0);  
+						noTime.set(Calendar.MILLISECOND, 0);
+						iEnd = noTime.getTime();
+							if(iterationStart.after(iStart) && iterationStart.before(iEnd)) {
+								result.setText("start date overlaps with Iteration "+i.getIterationNumber());
+								isValid = false;
+							}
+							if(iterationEnd.after(iStart) && iterationEnd.before(iEnd)) {
+								result.setText("end date overlaps with Iteration "+i.getIterationNumber());
+								isValid = false;
+							}
+							if((iStart.after(iterationStart) && iStart.before(iterationEnd)) ||
+									(iEnd.after(iterationStart) && iEnd.before(iterationEnd)) ||
+									(iStart.equals(iterationStart) || iEnd.equals(iterationEnd))) {
+								result.setText("iteration overlaps with Iteration "+i.getIterationNumber());
+								isValid = false;
+							}
+					}
+				}
+				if(isValid) {
+					// if there's no problems, add the iteration
+					new AddIterationController(getThisIterationPanel()).actionPerformed(e);
+				}
+			}
+		}
+	}
 }

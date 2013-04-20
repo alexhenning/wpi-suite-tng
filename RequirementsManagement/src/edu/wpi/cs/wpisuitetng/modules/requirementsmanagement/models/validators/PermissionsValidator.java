@@ -32,16 +32,17 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  *
  */
 public class PermissionsValidator {
+	/** the database */
 	private Data data;
+	/** the last existing permissions model */
 	private Permissions lastExistingPermissions;
 	
 	/**
-	 * Create a IterationValidator
+	 * Create a Permissions Validator
 	 * 
 	 * @param data The Data implementation to use
 	 */
 	public PermissionsValidator(Data data) {
-		//TODO: "strict" mode for returning *all* issues, rather than ignoring and overwriting?
 		this.data = data;
 	}
 	
@@ -120,7 +121,7 @@ public class PermissionsValidator {
 	/**
 	 * Return all Permissions of the specified project.
 	 * 
-	 * @param project the project this Iteration belongs to
+	 * @param project the project this Permission belongs to
 	 * @return all Permissions in the project
 	 * @throws WPISuiteException 
 	 */
@@ -146,9 +147,15 @@ public class PermissionsValidator {
 		if (permissions == null) {
 			issues.add(new ValidationIssue("Permissions cannot be null"));
 			return issues;
+		} else if(permissions.getUsername() == null) {
+			issues.add(new ValidationIssue("Username cannot be null"));
+			return issues;
+		} else if(permissions.getPermissionLevel() == null) {
+			issues.add(new ValidationIssue("PermissionLevel cannot be null"));
+			return issues;
 		}
 
-		System.out.println("validate this (" + mode.toString() + ") : " + permissions.getUsername());
+		System.out.println("validate this (" + mode.toString() + ") : " + permissions.toJSON());
 		Permissions oldPermissions = null;
 		
 		//check if user is in the db
@@ -203,7 +210,7 @@ public class PermissionsValidator {
 	}
 
 	/**
-	 * @return The last existing Iteration the validator fetched if in edit mode
+	 * @return The last existing Permissions the validator fetched if in edit mode
 	 */
 	public Permissions getLastExistingPermissions() {
 		return lastExistingPermissions;

@@ -11,7 +11,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddNoteController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddNoteController;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  */
 public class AddNoteObserver implements RequestObserver {
 	
+	/** the controller that created the observer */
 	private final AddNoteController controller;
 	
 	/**

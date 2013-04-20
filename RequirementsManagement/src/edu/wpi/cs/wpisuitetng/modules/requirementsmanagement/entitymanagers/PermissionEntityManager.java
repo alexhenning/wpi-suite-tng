@@ -38,10 +38,17 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 public class PermissionEntityManager implements
 		EntityManager<Permissions> {
 	
+	/** database */
 	private final Data db;
+	/** validator for permissions */
 	private final PermissionsValidator validator;
+	/** model mapper for copying properties */
 	private final ModelMapper updateMapper;
 	
+	/**
+	 * Constructor
+	 * @param data dataabase
+	 */
 	public PermissionEntityManager(Data data) {
 		db = data;
 		validator = new PermissionsValidator(data);
@@ -196,22 +203,54 @@ public class PermissionEntityManager implements
 		return db.retrieveAll(new Permissions()).size();
 	}
 
+	/**
+	 * return the number of permissions in the database
+	 *
+	 * @return the number of permissions in the database
+	 * @throws WPISuiteException
+	 */
 	public int CountEvents() throws WPISuiteException {
 		return db.retrieveAll(new ProjectEvent()).size();
 	}
 	
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param string
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)
 			throws NotImplementedException {

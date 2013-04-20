@@ -18,23 +18,39 @@ import com.google.gson.GsonBuilder;
 import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 
+/**
+ *
+ * Class for release numbers
+ *
+ */
 public class ReleaseNumber extends AbstractModel {
 
+	/** id */
 	private int id;
-	private int releaseNumber;
+	/** the release number */
+	private String releaseNumber;
 	//TODO add any addition fields for the ReleaseNumber
 
-	public ReleaseNumber(int id, int releaseNumber, Project project) {
+	/**
+	 * Constructor
+	 * @param id the id number
+	 * @param releaseNumber the release number
+	 * @param project the project
+	 */
+	public ReleaseNumber(int id, String releaseNumber, Project project) {
 		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
 		this.setProject(project);
 	}
 
+	/**
+	 * Constructor
+	 */
 	public ReleaseNumber() {
 		super();
 		id = -1;
-		releaseNumber = -1;
+		releaseNumber = "";
 		
 		this.setProject(new Project("", "-1"));
 		// TODO Auto-generated constructor stub
@@ -57,14 +73,14 @@ public class ReleaseNumber extends AbstractModel {
 	/**
 	 * @return the releaseNumber
 	 */
-	public int getReleaseNumber() {
+	public String getReleaseNumber() {
 		return releaseNumber;
 	}
 
 	/**
 	 * @param releaseNumber the releaseNumber to set
 	 */
-	public void setReleaseNumber(int releaseNumber) {
+	public void setReleaseNumber(String releaseNumber) {
 		this.releaseNumber = releaseNumber;
 	}
 	
@@ -80,17 +96,24 @@ public class ReleaseNumber extends AbstractModel {
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
+	 *
+	 * @return
 	 */
 	@Override
 	public String toJSON() {
 		String json;
 		Gson gson = new Gson();
-		json = gson.toJson(this, Iteration.class);
+		json = gson.toJson(this, ReleaseNumber.class);
 		return json;
 	}
 	
+	/**
+	 *toString() method
+	 *
+	 * @return the JSON string
+	 */
 	@Override
 	public String toString() {
 		return toJSON();
@@ -102,7 +125,6 @@ public class ReleaseNumber extends AbstractModel {
 	 */
 	public static ReleaseNumber fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
 		return builder.create().fromJson(json, ReleaseNumber.class);
 	}
 	
@@ -112,12 +134,14 @@ public class ReleaseNumber extends AbstractModel {
 	 */
 	public static ReleaseNumber[] fromJSONArray(String json) {
 		GsonBuilder builder = new GsonBuilder();
-//		addGsonDependencies(builder);
 		return builder.create().fromJson(json, ReleaseNumber[].class);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object)
+	 *
+	 * @param o
+	 * @return
 	 */
 	@Override
 	public Boolean identify(Object o) {

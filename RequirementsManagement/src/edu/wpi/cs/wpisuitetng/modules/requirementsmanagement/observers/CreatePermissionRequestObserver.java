@@ -14,7 +14,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddPermissionController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -28,12 +28,22 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class CreatePermissionRequestObserver implements RequestObserver {
 
+	/** the controller that created the observer */
 	private AddPermissionController controller;
 	
+	/**
+	 * Constructor
+	 * @param controller the controller that created the observer
+	 */
 	public CreatePermissionRequestObserver(AddPermissionController controller){
 		this.controller = controller;
 	}
 
+	/**
+	 * Indicate a successful response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		// Get the response to the given request
@@ -46,6 +56,11 @@ public class CreatePermissionRequestObserver implements RequestObserver {
 		controller.receivedAddConfirmation(permission);
 	}
 
+	/**
+	 * indicate an error in the response
+	 *
+	 * @param iReq a request
+	 */
 	@Override
 	public void responseError(IRequest iReq) {
 		// Tells the controller that an error occurred
@@ -56,6 +71,12 @@ public class CreatePermissionRequestObserver implements RequestObserver {
 							+iReq.getResponse().getBody());
 	}
 
+	/**
+	 *indicate the response failed
+	 *
+	 * @param iReq a request
+	 * @param exception the exception
+	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to create a permission has failed.");

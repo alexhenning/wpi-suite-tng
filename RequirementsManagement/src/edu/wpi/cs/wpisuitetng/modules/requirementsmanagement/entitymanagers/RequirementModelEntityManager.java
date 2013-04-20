@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEventObjectType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.RequirementModelValidator;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
@@ -42,11 +43,19 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  */
 public class RequirementModelEntityManager implements EntityManager<RequirementModel> {
-	Queue<Integer> availableIds;  // A queue of any Ids that are available for recycling
+	/** A queue of any Ids that are available for recycling */
+	Queue<Integer> availableIds;
+	/** the database */
 	Data db;
+	/** validator for requirements */
 	RequirementModelValidator validator;
+	/** the model mapper */
 	ModelMapper updateMapper;
 	
+	/**
+	 * Constructor
+	 * @param db the database
+	 */
 	public RequirementModelEntityManager(Data db) {
 		this.db = db;
 		validator = new RequirementModelValidator(db);
@@ -55,8 +64,16 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		availableIds = new LinkedList<Integer>();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
+	 * TODO: DOCUMENT THIS
+	 *
+	 * @param s
+	 * @param content
+	 * @return
+	 * @throws BadRequestException
+	 * @throws ConflictException
+	 * @throws WPISuiteException
 	 */
 	@Override
 	public RequirementModel makeEntity(Session s, String content)
@@ -76,9 +93,6 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		
 		List<ValidationIssue> issues = validator.validate(s, newRequirementModel, Mode.CREATE);
 		if(issues.size() > 0) {
-			for (ValidationIssue issue : issues) {
-				System.out.println("Validation issue: " + issue.getMessage());
-			}
 			throw new BadRequestException();
 		}
 		
@@ -94,8 +108,15 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		return newRequirementModel;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
+	 * TODO: DOCUMENT THIS
+	 *
+	 * @param s
+	 * @param id
+	 * @return
+	 * @throws NotFoundException
+	 * @throws WPISuiteException
 	 */
 	@Override
 	public RequirementModel[] getEntity(Session s, String id)
@@ -116,26 +137,37 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		return requirements;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(edu.wpi.cs.wpisuitetng.Session)
+	 * Get the requirments models from a session
+	 *
+	 * @param s
+	 * @return
+	 * @throws WPISuiteException
 	 */
 	@Override
 	public RequirementModel[] getAll(Session s) throws WPISuiteException {
 		return db.retrieveAll(new RequirementModel(), s.getProject()).toArray(new RequirementModel[0]);
 	}
 
-
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
+	 * TODO: DOCUMENT THIS
+	 *
+	 * @param s
+	 * @param content
+	 * @return
+	 * @throws WPISuiteException
+	 * @throws NotFoundException
 	 */
 	@Override
 	public RequirementModel update(Session s, String content)
 			throws WPISuiteException, NotFoundException {		
 		
 		/* [This comment is from DefectManager.  The problem still applies, so it must be worked around]
-		 * Because of the disconnected objects problem in db4o, we can't just save updatedDefect.
-		 * We have to get the original defect from db4o, copy properties from updatedDefect,
-		 * then save the original defect again.
+		 * Because of the disconnected objects problem in db4o, we can't just save updatedRequirement
+		 * We have to get the original requirement from db4o, copy properties from updatedRequirement,
+		 * then save the original requirement again.
 		 */
 		
 		RequirementModel updatedRequirement = RequirementModel.fromJSON(content);
@@ -148,10 +180,6 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		RequirementModel existingRequirement = validator.getLastExistingRequirement();
 		Date originalLastModified = existingRequirement.getLastModifiedDate();
 		
-//		RequirementChangeset changeset = new RequirementChangeset();
-//		// make sure the user exists
-//		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
-//		RequirementChangesetCallback callback = new RequirementChangesetCallback(changeset);
 		ProjectEvent changeset = ProjectEvent.createProjectChangesetEvent(ProjectEventObjectType.REQUIREMENT, existingRequirement.getId()+"");
 		// make sure the user exists
 		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
@@ -166,8 +194,6 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 			existingRequirement.setLastModifiedDate(originalLastModified);
 		} else {
 			// add changeset to events
-//			existingRequirement.getEvents().add(changeset);
-//			DB.createProjectEvent(changeset, new AddProjectEventController());
 			if(!db.save(existingRequirement, s.getProject()) || !db.save(changeset, s.getProject()) || !db.save(existingRequirement.getEvents())) {
 				throw new WPISuiteException();
 			}
@@ -176,8 +202,13 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		return existingRequirement;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#save(edu.wpi.cs.wpisuitetng.Session, edu.wpi.cs.wpisuitetng.modules.Model)
+	 * Save a requirements model from a session
+	 *
+	 * @param s
+	 * @param model
+	 * @throws WPISuiteException
 	 */
 	@Override
 	public void save(Session s, RequirementModel model)
@@ -185,8 +216,14 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		db.save(model, s.getProject());		
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
+	 * TODO: DOCUMENT THIS
+	 *
+	 * @param s
+	 * @param id
+	 * @return
+	 * @throws WPISuiteException
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
@@ -194,8 +231,12 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		return (db.delete(getEntity(s, id)[0]) != null);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(edu.wpi.cs.wpisuitetng.Session)
+	 * TODO: DOCUMENT THIS
+	 *
+	 * @param s
+	 * @throws WPISuiteException
 	 */
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
@@ -203,11 +244,23 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		availableIds.clear();
 	}
 
+	/**
+	 * get the number of requirement models in the database
+	 *
+	 * @return the number of requirment models in the database
+	 * @throws WPISuiteException
+	 */
 	@Override
 	public int Count() throws WPISuiteException {
 		return db.retrieveAll(new RequirementModel()).size();
 	}
 	
+	/**
+	 * get the number of project events in the database
+	 *
+	 * @return the number of project events in the database
+	 * @throws WPISuiteException
+	 */
 	public int CountEvents() throws WPISuiteException {
 		return db.retrieveAll(new ProjectEvent()).size();
 	}
@@ -215,14 +268,109 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(edu.wpi.cs.wpisuitetng.Session, java.lang.String[])
 	 */
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @return
+	 * @throws WPISuiteException 
+	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
-			throws NotImplementedException {
+			throws WPISuiteException {
+		if(args[2].equals("canClose")) {
+			boolean canClose = true;
+			RequirementModel[] tmp = null;
+			try {
+				tmp = getEntity(s, args[3]);
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			} catch (WPISuiteException e) {
+				e.printStackTrace();
+			}
+			if(tmp.length != 1) {
+				//TODO this is bad. figure out what to do....
+				canClose = false;
+			}
+			if (canClose) {
+				for(String subId : tmp[0].getSubRequirements()) {
+					String res = advancedGet(s, new String[] {args[0], args[1], "subsClosed", subId});
+					if(res.equals("false")) {
+						canClose = false;
+					}
+				}
+			}
+			return ""+canClose;
+		} else if(args[2].equals("subsClosed")) {
+			boolean isClosed = true;
+			RequirementModel[] tmp = null;
+			try {
+				tmp = getEntity(s, args[3]);
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			} catch (WPISuiteException e) {
+				e.printStackTrace();
+			}
+			if(tmp.length != 1) {
+				//TODO figure out what to do if a requirement was not returned...
+				isClosed = false;
+			} else {
+				isClosed = tmp[0].getStatus().equals(RequirementStatus.COMPLETE);
+			}
+			if (isClosed) {
+				for(String subId : tmp[0].getSubRequirements()) {
+					String res = advancedGet(s, new String[] {args[0], args[1], "subsClosed", subId});
+					if(res.equals("false")) {
+						isClosed = false;
+					}
+				}
+			}
+			return ""+isClosed;
+		} else if(args[2].equals("closeSub")) {
+			boolean canClose = true;
+			RequirementModel[] tmp = null;
+			try {
+				tmp = getEntity(s, args[3]);
+			} catch (NotFoundException e) {
+				e.printStackTrace();
+			} catch (WPISuiteException e) {
+				e.printStackTrace();
+			}
+			if(tmp.length != 1) {
+				//TODO figure out what to do if a requirement was not returned...
+				canClose = false;
+			}
+			if (canClose) {
+				for(String subId : tmp[0].getSubRequirements()) {
+					String res = advancedGet(s, new String[] {args[0], args[1], "closeSub", subId});
+					if(res.equals("false")) {
+						canClose = false;
+					}
+				}
+			}
+			if(canClose) {
+				tmp[0].setStatus(RequirementStatus.COMPLETE);
+				update(s, tmp[0].toJSON());
+			}
+			//TODO should probably throw some exception if false...
+			return ""+canClose;
+		}
+		
 		throw new NotImplementedException();
 	}
 
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPut(edu.wpi.cs.wpisuitetng.Session, java.lang.String[], java.lang.String)
+	 */
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
 	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
@@ -232,6 +380,15 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 
 	/* (non-Javadoc)
 	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPost(edu.wpi.cs.wpisuitetng.Session, java.lang.String, java.lang.String)
+	 */
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param string
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
 	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)

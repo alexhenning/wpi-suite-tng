@@ -26,23 +26,26 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRequirementAction;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
- * The Defect tab's toolbar panel.
- * Always has a group of global commands (Create Defect, Search).
+ * The Requirements Management tab's toolbar panel.
+ * Always has a group of global commands (Create Requirement, Create Iteration, Search, List Requirements).
  */
 @SuppressWarnings("serial")
 public class ToolbarView extends DefaultToolbarView {
 
 //	private JButton createRequirement;
+	/** search requirements button */
 	private JButton searchRequirements;
+	/** search field for searching requirements */
 	private JPlaceholderTextField searchField;
 	
 	/**
+	 * Constructor
 	 * Create a ToolbarView.
 	 * @param tabController The MainTabController this view should open tabs with
 	 */
@@ -61,10 +64,6 @@ public class ToolbarView extends DefaultToolbarView {
 		JButton CrtIteration = new JButton("Create Iteration");
 		CrtIteration.setAction(new CreateIterationAction(tabController));
 				
-//		// Construct the create defect button
-//		createRequirement = new JButton();
-//		//createDefect.setAction(new CreateDefectAction(tabController));
-		
 		// Construct the search button
 		searchRequirements = new JButton("Lookup by ID");
 		
@@ -81,7 +80,6 @@ public class ToolbarView extends DefaultToolbarView {
 			}
 		});
 		searchRequirements.setText("Search Requirements");
-		//searchField.addActionListener(new LookupDefectController(tabController, searchField, this));
 		
 		// Add buttons to the content panel
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -96,7 +94,6 @@ public class ToolbarView extends DefaultToolbarView {
 		c.gridx = 0;
 		c.gridy = 1;
 		c.gridwidth = 1;
-		//content.add(createDefect);
 		content.add(searchField, c);
 		c.gridx = 1;
 		content.add(searchRequirements, c);
