@@ -29,5 +29,5 @@ public interface RequirementsCallback {
 	 * @param reqs
 	 *            The requirements being returned
 	 */
-	public void callback(List<RequirementModel> reqs);
+	void callback(List<RequirementModel> reqs);
 }

@@ -35,6 +35,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -71,10 +73,13 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	public static final int ESTIMATE = 6;
 	public static final int RELEASE = 7;
 	public static final int ROWS = 7;
+
+	/** An estimate must be less than one million */
+	public static final int MAX_ESTIMATE_VALUE = 999999;
 	
 	/** the tab that created this*/
 	ScrollableTab parent;
-	/** is inpute enabled*/
+	/** is input enabled*/
 	boolean inputEnabled;
 	/** the table that displays the requirements*/
 	JTable table;
@@ -118,6 +123,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						}
                 	});
                 }
+                parent.repaint();
 			}
 			@Override public void mouseReleased(MouseEvent arg0) {}
 			@Override public void mouseExited(MouseEvent arg0) {}
@@ -155,6 +161,8 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getColumnModel().getSelectionModel().
+			addListSelectionListener(new ColumnChangeListener(this));
 		
 		// create panel and button to change table to edit mode
 		editPanel = new JPanel();
@@ -470,7 +478,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		boolean lastReq = false;
 		
 		
-		public UpdateRequirementCallback(boolean lastReq) {
+		protected UpdateRequirementCallback(boolean lastReq) {
 			this.lastReq = lastReq;
 		}
 
@@ -526,7 +534,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Constructor for the class
 		 * @param reqs List of requirements just retrieved from the db
 		 */
-		public RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
+		protected RetrieveAllIterationsCallback(List<RequirementModel> reqs) {
 			this.reqs = reqs;
 		}
 
@@ -534,11 +542,11 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Updates the requirements to what the user edited and then
 		 * sends them to the database
 		 *
-		 * @param iterationss Iterations retrieved from the database
+		 * @param iterations Iterations retrieved from the database
 		 */
 		@Override
-		public void callback(List<Iteration> iterationss) {
-			List<RequirementModel> requirements = updateModels(reqs, iterationss);
+		public void callback(List<Iteration> iterations) {
+			List<RequirementModel> requirements = updateModels(reqs, iterations);
 			sendRequirementsToDatabase(requirements);
 			
 		}
@@ -568,7 +576,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 					entries[i][NAME] = req.getName();
 					entries[i][DESCRIPTION] = req.getDescription();
 					if (req.getIteration() != null) {
-						entries[i][ITERATION] = req.getIteration().getIterationNumber().toString();	
+						entries[i][ITERATION] = req.getIteration().getIterationNumber();
 					}
 					else {
 						entries[i][ITERATION] = "Backlog";
@@ -633,7 +641,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Constructor
 		 * @param iterationBox the combobox that will get filled in
 		 */
-		public FillIterationDropdown(JComboBox iterationBox) {
+		protected FillIterationDropdown(JComboBox iterationBox) {
 			this.iterationBox = iterationBox;
 			iterationBox.addItem("Backlog");
 		}
@@ -642,15 +650,15 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Go through the list of iterations and add their name to the combobox
 		 * it does not add iterations that are already over as it would be invalid to set a project to those iterations
 		 *
-		 * @param iterationss the list of iterations
+		 * @param iterations the list of iterations
 		 */
 		@Override
-		public void callback(List<Iteration> iterationss) {
-			if(iterationss.size() > 0) {
+		public void callback(List<Iteration> iterations) {
+			if(iterations.size() > 0) {
 				final Date now = new Date();
-				for(Iteration iteration : iterationss) {
+				for(Iteration iteration : iterations) {
 					// Make sure the iteration the only iterations that are added are still in progress
-					if(now.before(iteration.getEndDate()) || now == iteration.getEndDate()) {
+					if(now.before(iteration.getEndDate()) || now.equals(iteration.getEndDate())) {
 						iterationBox.addItem("" + iteration.getIterationNumber());
 					}
 				}
@@ -693,9 +701,11 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 					removeInvalidCell(new Point(row, column));
 				}
 				if(column == NAME) {
-					if(((String)value).length() < 1 || ((String)value).length() > 100) {
+					int nameLength = ((String)value).length();
+					if(nameLength < 1 || nameLength > 100) {
+						// Mark the cell if the name length is invalid
 						c.setBackground(Color.RED);
-						setToolTipText("A requirement must have a name between 1 and 100 charecters.");
+						setToolTipText("A requirement must have a name between 1 and 100 charecters, inclusive.");
 						saveButton.setEnabled(false);
 						if(!invalidCells.contains(new Point(row, column))){
 							invalidCells.add(new Point(row, column));
@@ -703,6 +713,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 					}
 				} else if(column == DESCRIPTION) {
 					if(((String)value).length() < 1) {
+						// Mark the cell if the description length is invalid
 						c.setBackground(Color.RED);
 						setToolTipText("A requirement must have a description.");
 						saveButton.setEnabled(false);
@@ -711,42 +722,57 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 						}
 					}
 				} else if(column == ITERATION) {
+					boolean isIterationValid = true;
+
 					try {
-						if(((Integer.valueOf((String)tableModel.getValueAt(row, ESTIMATE)) <= 0) &&
-								!value.equals(data[row][column]) && !value.equals("Backlog"))) {
-							c.setBackground(Color.RED);
-							setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
-							saveButton.setEnabled(false);
-							if(!invalidCells.contains(new Point(row, column))){
-								invalidCells.add(new Point(row, column));
-							}
+						// Try parsing the estimate for this row
+						int reqEstimate = Integer.valueOf((String)tableModel.getValueAt(row, ESTIMATE));
+
+						// Check if the iteration and estimate are valid
+						if((reqEstimate <= 0 || reqEstimate > MAX_ESTIMATE_VALUE) &&
+								!value.equals("Backlog")) {
+							isIterationValid = false;
 						}
 					} catch (NumberFormatException e) {
 						// still an error
+						if(tableModel.getValueAt(row, ESTIMATE) == null) {
+							// estimate is empty, so it isn't the iteration's fault; don't highlight
+							isIterationValid = false;
+						}
+					}
+
+					// Mark the cell if the iteration is invalid
+					if(!isIterationValid) {
 						c.setBackground(Color.RED);
-						setToolTipText("A requirement cannot be changed to an iteration without a valid, positive, estimate.");
+						setToolTipText("A requirement cannot be scheduled to an iteration without a valid positive estimate.");
 						saveButton.setEnabled(false);
 						if(!invalidCells.contains(new Point(row, column))){
 							invalidCells.add(new Point(row, column));
 						}
 					}
 				} else if(column == ESTIMATE) {
+					boolean isEstimateValid = true;
+
 					try {
-						if(((Integer.valueOf((String)value) < 0))) {
-							c.setBackground(Color.RED);
-							setToolTipText("A requirement estimate must be a positive number.");
-							saveButton.setEnabled(false);
-							if(!invalidCells.contains(new Point(row, column))){
-								invalidCells.add(new Point(row, column));
-							}
-						} else if(Integer.valueOf((String)value) > 0) {
-							//if this fixes an iteration assaignment error, remove that from the invalid cells
+						// Try parsing the estimate cell
+						int reqEstimate = Integer.valueOf((String)tableModel.getValueAt(row, ESTIMATE));
+
+						// Check if the estimate is within the valid range (0-999999, inclusive)
+						if(reqEstimate < 0 || reqEstimate > MAX_ESTIMATE_VALUE) {
+							isEstimateValid = false;
+						} else if(reqEstimate > 0) {
+							// If this fixes an iteration assignment error, remove that from the invalid cells
 							removeInvalidCell(new Point(row, ITERATION));
 						}
 					} catch (NumberFormatException e) {
 						// still an error
+						isEstimateValid = false;
+					}
+
+					// Mark the cell if the estimate is invalid
+					if(!isEstimateValid) {
 						c.setBackground(Color.RED);
-						setToolTipText("A requirement estimate must be a positive number.");
+						setToolTipText("A requirement estimate must be a non-negative number (0-999999, inclusive).");
 						saveButton.setEnabled(false);
 						if(!invalidCells.contains(new Point(row, column))){
 							invalidCells.add(new Point(row, column));
@@ -756,6 +782,42 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			}
 			
 			return c;
+		}
+		
+	}
+	
+	/**
+	 *
+	 * Listener to detect if the user changes columns so that the renderers
+	 * can be updated
+	 * 
+	 * @author Tim Calvert
+	 *
+	 */
+	class ColumnChangeListener implements ListSelectionListener {
+
+		/** The list requirements panel */
+		ListRequirementsPanel panel;
+		
+		/**
+		 * Default constructor
+		 * @param panel The main panel
+		 */
+		public ColumnChangeListener(ListRequirementsPanel panel) {
+			this.panel = panel;
+		}
+		
+		/**
+		 * Interface method to listen for change in list selection
+		 *
+		 * @param e Event
+		 */
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(e.getValueIsAdjusting()) {
+				return;
+			}
+			panel.repaint();
 		}
 		
 	}

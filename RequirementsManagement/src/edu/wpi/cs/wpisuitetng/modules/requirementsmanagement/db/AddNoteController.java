@@ -20,8 +20,6 @@ import javax.swing.AbstractAction;
 
 import com.google.gson.Gson;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.NoteMainPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -64,7 +62,7 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	/**
 	 * Called by pressing add note button
 	 *
-	 * @param e
+	 * @param e The action performed when pressing add note
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

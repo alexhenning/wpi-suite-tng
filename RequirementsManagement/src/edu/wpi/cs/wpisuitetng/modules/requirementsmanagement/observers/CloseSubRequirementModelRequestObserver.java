@@ -14,12 +14,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import java.util.Arrays;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CanCloseRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CloseSubRequirementsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;

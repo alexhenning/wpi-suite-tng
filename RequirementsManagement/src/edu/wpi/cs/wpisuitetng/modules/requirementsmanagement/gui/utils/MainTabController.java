@@ -36,10 +36,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirement
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReleaseNumberPanel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ReportsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleIterationPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports.ReportsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationOnFocusListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
@@ -158,7 +158,7 @@ public class MainTabController {
 	public Tab addCreateReleaseNumberTab() {
 		// If the tab is already opened, switch to that tab.
 		for (int i = 0; i < this.mainView.getTabCount(); i++) {
-			// TODO: May have to refactor "View Iteration"
+			// TODO: May have to refactor "Release Number"
 			if (mainView.getTitleAt(i).equals("Release Number")) {
 				switchToTab(i);
 				// TODO: figure out what to return
@@ -291,6 +291,7 @@ public class MainTabController {
 		}
 		catch (IndexOutOfBoundsException e) {
 			// do nothing, tried to close tab that does not exist
+			System.out.println("Attempted to close tab that does not exist");
 		}
 	}
 	
@@ -304,6 +305,7 @@ public class MainTabController {
 		}
 		catch (IndexOutOfBoundsException e) {
 			// an invalid tab was requested, do nothing
+			System.out.println("Request for invalid tab failed.");
 		}
 	}
 	
@@ -392,7 +394,7 @@ public class MainTabController {
 		// If the tab is already opened, switch to that tab.
 		for (int i = 0; i < this.mainView.getTabCount(); i++) {
 			// TODO: May have to refactor "View Iteration"
-			if (mainView.getTitleAt(i).equals("View Iteration")) {
+			if (mainView.getTitleAt(i).equals("All Iterations")) {
 				switchToTab(i);
 				// TODO: figure out what to return
 				return null;
@@ -402,7 +404,7 @@ public class MainTabController {
 		// Otherwise, create a new one.
 		Tab tab = addTab();
 		ScrollableTab<ViewIterationPanel> view
-			= new ScrollableTab<ViewIterationPanel>(this, tab, "View Iteration", new ViewIterationPanel());
+			= new ScrollableTab<ViewIterationPanel>(this, tab, "All Iterations", new ViewIterationPanel());
 		addChangeListener(new UpdateViewIterationOnFocusListener(view));
 		tab.setComponent(view);
 		view.requestFocus();

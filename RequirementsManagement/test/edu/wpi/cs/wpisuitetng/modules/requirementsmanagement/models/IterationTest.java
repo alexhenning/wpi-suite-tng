@@ -1,6 +1,15 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    milk3dfx
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import static org.junit.Assert.assertEquals;
@@ -17,10 +26,11 @@ import org.junit.Test;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 
 /**
- * @author milk3dfx
+ * Test cases for the iteration model
  *
+ * @author milk3dfx
  */
-public class IterationeTest {
+public class IterationTest {
 	Iteration goodIteration;
 	int iterationId = 1;
 	Calendar calendar;
@@ -33,10 +43,10 @@ public class IterationeTest {
 
 		startDate = newDate("04/09/13 9:41:10");
 		endDate = newDate("04/20/13 9:41:10");
-		
+
 		iterationNumber = "First";
 		testProject = new Project("TestProject", "1");
-		
+
 		goodIteration = new Iteration(iterationId, startDate, endDate, iterationNumber, testProject);
 	}
 	@Test
@@ -71,7 +81,7 @@ public class IterationeTest {
 		goodIteration.setEndDate(newDate("04/10/13 20:41:10"));
 		assertEquals(newDate("04/10/13 23:59:59"), goodIteration.getEndDate());
 	}
-	
+
 	Date newDate(String strDate){
 		Date newDate;
 		try{

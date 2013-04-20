@@ -131,7 +131,7 @@ public class Permissions extends AbstractModel {
 
 	/**
 	 * @param json Json string to parse containing Permissions
-	 * @return The Iteration given by json
+	 * @return The permissions given by json
 	 */
 	public static Permissions fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();

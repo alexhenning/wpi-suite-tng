@@ -29,5 +29,5 @@ public interface SingleIterationCallback {
 	 * @param iteration
 	 *            The iteration being returned
 	 */
-	public void callback(Iteration iteration);
+	void callback(Iteration iteration);
 }

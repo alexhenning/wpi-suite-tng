@@ -101,7 +101,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		JLabel subLabel = new JLabel("Sub requirements");
-		JLabel posLabel = new JLabel("possible sub requirements");
+		JLabel posLabel = new JLabel("Possible sub requirements");
 
 		subrequirementsTableModel = new ViewReqTable();
 		subrequirementsTableModel.setMode(Mode.VIEW);
@@ -235,7 +235,7 @@ public class RequirementSubrequirementTab extends JPanel {
 	 * @param selectedId the id of the selected requirement
 	 */
 	private void updateSelectedPossible(String selectedId) {
-		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED) {
+		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED || parent.submit.getText().equals("Save")) {
 			addChildButton.setEnabled(false);
 			setParrentButton.setEnabled(false);
 		} else {
@@ -408,7 +408,7 @@ public class RequirementSubrequirementTab extends JPanel {
 					String id = String.valueOf(req.getId());
 					String name = req.getName();
 					String description = req.getDescription();
-					String iteraton = (req.getIteration() == null ? "Backlog" : req.getIteration().getIterationNumber().toString());
+					String iteraton = (req.getIteration() == null ? "Backlog" : req.getIteration().getIterationNumber());
 					String status = (req.getStatus() == null ? "Error: Status set to null" : req.getStatus().toString());
 					String priority = (req.getPriority() == null ? "" : req.getPriority().toString());
 					String estimate = req.getEstimate()+"";
@@ -418,7 +418,7 @@ public class RequirementSubrequirementTab extends JPanel {
 						subEntry[ID] = id;
 						subEntry[NAME] = name;
 						subEntry[DESCRIPTION] = description;
-						subEntry[ITERATION] = iteraton;	
+						subEntry[ITERATION] = iteraton;
 						subEntry[STATUS] = status;
 						subEntry[PRIORITY] = priority;
 						subEntry[ESTIMATE] = estimate;
@@ -435,7 +435,7 @@ public class RequirementSubrequirementTab extends JPanel {
 							posEntry[ID] = id;
 							posEntry[NAME] = name;
 							posEntry[DESCRIPTION] = description;
-							posEntry[ITERATION] = iteraton;	
+							posEntry[ITERATION] = iteraton;
 							posEntry[STATUS] = status;
 							posEntry[PRIORITY] = priority;
 							posEntry[ESTIMATE] = estimate;

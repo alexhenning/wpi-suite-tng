@@ -14,6 +14,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -179,18 +180,46 @@ public class IterationValidator {
 		//TODO make sure this works. I think it should but I've been wrong before....
 		//check if dates overlap with other iterations
 		if(iteration.getStartDate() != null && iteration.getEndDate() != null){
+			Date iterationStart = iteration.getStartDate();
+			Calendar noTime = Calendar.getInstance();
+			noTime.setTime(iterationStart);
+			noTime.set(Calendar.HOUR_OF_DAY, 0);  
+			noTime.set(Calendar.MINUTE, 0);  
+			noTime.set(Calendar.SECOND, 0);  
+			noTime.set(Calendar.MILLISECOND, 0);
+			iterationStart = noTime.getTime();
+			Date iterationEnd = iteration.getEndDate();
+			noTime.setTime(iterationEnd);
+			noTime.set(Calendar.HOUR_OF_DAY, 0);  
+			noTime.set(Calendar.MINUTE, 0);  
+			noTime.set(Calendar.SECOND, 0);  
+			noTime.set(Calendar.MILLISECOND, 0);
+			iterationEnd = noTime.getTime();
 			for (Iteration i : allIterations) {
+				Date iStart = i.getStartDate();
+				noTime.setTime(iStart);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iStart = noTime.getTime();
+				Date iEnd = i.getEndDate();
+				noTime.setTime(iEnd);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iEnd = noTime.getTime();
 				if(i != null && i.getId() != iteration.getId()) {
-					if(iteration.getStartDate().after(i.getStartDate()) && iteration.getStartDate().before(i.getEndDate())) {
+					if(iterationStart.after(iStart) && iterationStart.before(iEnd)) {
 						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
 					}
-					if(iteration.getEndDate().after(i.getStartDate()) && iteration.getEndDate().before(i.getEndDate())) {
+					if(iterationEnd.after(iStart) && iterationEnd.before(iEnd)) {
 						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
 					}
-					if((i.getStartDate().after(iteration.getStartDate()) && i.getStartDate().before(iteration.getEndDate())) ||
-							(i.getEndDate().after(iteration.getStartDate()) && i.getEndDate().before(iteration.getEndDate())) ||
-							(i.getStartDate().equals(iteration.getStartDate()) || i.getEndDate().equals(iteration.getEndDate()))) {
-						
+					if((iStart.after(iterationStart) && iStart.before(iterationEnd)) ||
+							(iEnd.after(iterationStart) && iEnd.before(iterationEnd)) ||
+							(iStart.equals(iterationStart) || iEnd.equals(iterationEnd))) {
 						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
 					}
 				}

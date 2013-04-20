@@ -26,5 +26,5 @@ public interface PermissionsCallback {
 	 *
 	 * @param req The requirement being returned
 	 */
-	public void callback(List<Permissions> profiles);
+	void callback(List<Permissions> profiles);
 }

@@ -27,5 +27,5 @@ public interface SingleReleaseNumberCallback {
 	 *
 	 * @param releaseNumbers Release numbers returned from the database
 	 */
-	public void callback(ReleaseNumber releaseNumber);
+	void callback(ReleaseNumber releaseNumber);
 }

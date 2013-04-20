@@ -27,5 +27,5 @@ public interface SingleRequirementCallback {
 	 * @param req
 	 *            The requirement being returned
 	 */
-	public void callback(RequirementModel req);
+	void callback(RequirementModel req);
 }

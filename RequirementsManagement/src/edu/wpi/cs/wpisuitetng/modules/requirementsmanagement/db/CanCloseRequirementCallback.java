@@ -12,9 +12,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
-import java.util.List;
-
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
 /**
  * An interface for callbacks that return all of the requirements.
@@ -29,5 +26,5 @@ public interface CanCloseRequirementCallback {
 	 * @param result
 	 *            boolean of if it can be closed
 	 */
-	public void callback(boolean result);
+	void callback(boolean result);
 }

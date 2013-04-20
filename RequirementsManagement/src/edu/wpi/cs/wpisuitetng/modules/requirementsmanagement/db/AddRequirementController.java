@@ -18,8 +18,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
+
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreateRequirementModelRequestObserver;
@@ -76,7 +75,7 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 				panel.updateModel(req);
 			}
 		});
-		panel.setStatus("Requirement saved!");
+		panel.setStatusMessage("Requirement saved!");
 	}
 
 }

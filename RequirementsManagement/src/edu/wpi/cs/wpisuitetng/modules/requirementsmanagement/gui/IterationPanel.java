@@ -14,7 +14,10 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -116,7 +119,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		//startDatePicker.
 		endDatePicker = new JXDatePicker(endDate != null ? endDate : new Date());
 
-		result = new JTextField();
+		result = new JTextField(25);
 		iterationNumber = new JTextField();
 		
 		if(editMode == Mode.CREATE) {
@@ -124,7 +127,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		} else {
 			submit = new JButton("Update");
 		}
-		submit.addActionListener(new AddIterationController(this));
+		submit.addActionListener(new ValidateIterationActionListener());
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
@@ -271,6 +274,10 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		result.setText(string);
 	}
 	
+	public IterationPanel getThisIterationPanel() {
+		return this;
+	}
+	
 	/**
 	 *
 	 * callback class to update the iteration's id
@@ -283,33 +290,109 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 			model.setId(iterationList.size()+1);
 		}
 	}
+	
+	class ValidateIterationActionListener implements ActionListener {
+		
+		/**
+		 * Validate the iteratin being created, if its valid send it to the DB
+		 *
+		 * @param e action that happened
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			getModel();
+			DB.getAllIterations(new ValidateIterationCallback(e));
+		}
+		
+	}
 
 	/**
 	 *
-	 * Callback class to make sure that the iterations dates don't overlap with other dates
+	 * Callback class to make sure that the iteration is valid
 	 * @author TODO
 	 *
 	 */
-	class CheckDateOvelapCallback implements IterationCallback {
+	class ValidateIterationCallback implements IterationCallback {
+		
+		ActionEvent e;
+		
+		public ValidateIterationCallback(ActionEvent e) {
+			this.e = e;
+		}
+		
+		/**
+		 * Callback function to validate the fields, if they are valid send it to the DB
+		 *
+		 * @param iterationList list of all iterations
+		 */
 		@Override
 		public void callback(List<Iteration> iterationList) {
-			List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
-			for (Iteration i : iterationList) {
-				if(i.getId() != model.getId()) {
-					if(model.getStartDate().after(i.getStartDate()) && model.getStartDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
-					}
-					if(model.getEndDate().after(i.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
-					}
-					if(i.getStartDate().after(model.getStartDate()) && model.getStartDate().before(i.getEndDate()) ||
-							i.getEndDate().after(model.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
+			boolean isValid = true;
+			if(model.getIterationNumber() == null || model.getIterationNumber().length() == 0) {
+				result.setText("An iteration must have a name");
+				isValid = false;
+			}
+			else if(model.getStartDate() != null && model.getEndDate() != null && model.getStartDate().after(model.getEndDate())) {
+				result.setText("The start date must be before the end date");
+				isValid = false;
+			}
+			else {
+				Date iterationStart = model.getStartDate();
+				Calendar noTime = Calendar.getInstance();
+				noTime.setTime(iterationStart);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iterationStart = noTime.getTime();
+				Date iterationEnd = model.getEndDate();
+				noTime.setTime(iterationEnd);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iterationEnd = noTime.getTime();
+				for (Iteration i : iterationList) {
+					if(i != null && i.getId() != model.getId()) {
+						if(i.getIterationNumber().equals(model.getIterationNumber())) {
+							result.setText("An iteration with this name already exists");
+							isValid = false;
+						}
+						Date iStart = i.getStartDate();
+						noTime.setTime(iStart);
+						noTime.set(Calendar.HOUR_OF_DAY, 0);  
+						noTime.set(Calendar.MINUTE, 0);  
+						noTime.set(Calendar.SECOND, 0);  
+						noTime.set(Calendar.MILLISECOND, 0);
+						iStart = noTime.getTime();
+						Date iEnd = i.getEndDate();
+						noTime.setTime(iEnd);
+						noTime.set(Calendar.HOUR_OF_DAY, 0);  
+						noTime.set(Calendar.MINUTE, 0);  
+						noTime.set(Calendar.SECOND, 0);  
+						noTime.set(Calendar.MILLISECOND, 0);
+						iEnd = noTime.getTime();
+							if(iterationStart.after(iStart) && iterationStart.before(iEnd)) {
+								result.setText("start date overlaps with Iteration "+i.getIterationNumber());
+								isValid = false;
+							}
+							if(iterationEnd.after(iStart) && iterationEnd.before(iEnd)) {
+								result.setText("end date overlaps with Iteration "+i.getIterationNumber());
+								isValid = false;
+							}
+							if((iStart.after(iterationStart) && iStart.before(iterationEnd)) ||
+									(iEnd.after(iterationStart) && iEnd.before(iterationEnd)) ||
+									(iStart.equals(iterationStart) || iEnd.equals(iterationEnd))) {
+								result.setText("iteration overlaps with Iteration "+i.getIterationNumber());
+								isValid = false;
+							}
 					}
 				}
+				if(isValid) {
+					// if there's no problems, add the iteration
+					new AddIterationController(getThisIterationPanel()).actionPerformed(e);
+				}
 			}
-			//TODO figure out how to display the issues...
-
 		}
 	}
 }

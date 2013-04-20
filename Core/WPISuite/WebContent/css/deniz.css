@@ -1,0 +1,141 @@
+#photto{
+	height:100%;
+	background: url(img/blurred1.jpg) no-repeat center center fixed;	
+	min-height: 113%;
+	min-width: 1039px;
+	width: 100%;
+	height: auto;
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+html {
+	
+	background: url(img/blurred1.jpg) no-repeat center center fixed;
+	
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+
+body{
+	background: #D07D5F;
+	/*    background: -moz-linear-gradient(top, #F4CCA0 100%, #D07D5F 100%);
+	*/
+    background: -webkit-linear-gradient(top, #F4CCA0 0%, #D07D5F 100%);
+	/*    background: linear-gradient(to bottom, #F4CCA0 100%, #D07D5F 100%);
+	*/
+	min-height:100%;
+	color:#FFF;
+	font-size:2em;
+	font-family:quicksand;
+	
+	//height:inherit;
+}
+
+body {
+	margin: 0;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 1.1em;	
+	color: #333333;
+	background: none;
+	
+}
+
+/*
+#loginresponsespan{
+color:rgba(193, 0, 0, 0.54);
+}
+*/
+
+
+.footer {
+	
+	font-family: Bryant, Verdana, Geneva, sans-serif;
+	font-size: 0.5em;
+	text-align:center;
+	color: #fff;
+	
+	padding-top:100px;
+	
+	
+}
+
+
+::-webkit-input-placeholder {
+	text-align:center}
+::-moz-placeholder {
+	text-align:center}
+/* firefox 19+ */
+:-ms-input-placeholder {
+	text-align:center}
+/* ie */
+input:-moz-placeholder {
+	text-align:center}
+
+
+label{
+	color:#ddd;
+}
+
+input[type="text"],input[type="password"]{
+	height:2em;
+	text-align:center;
+	background:rgba(255, 255, 255, 0.39);
+	
+	
+}
+
+
+.large-limit{
+	max-width:550px;
+}
+
+
+
+#bigTitle{
+	text-align:center;
+	font-family:lobster;
+	font-size: 3.1em;
+	color:#eee;
+	line-height:0.9em;
+	
+}
+
+#smallTitle{
+	text-align:center;
+	font-size: 0.9em;
+	color:#ccc;
+	line-height:0.8em;
+	padding-top:0px;
+	margin-top:-56px;
+	
+}
+
+fieldset{
+	border:none;
+}
+
+
+.warning{
+	margin-top:16px;
+	height:74px;
+	text-align:center;
+	color:#f8f8f8;
+	-webkit-transition: 0.7s ease-out;
+    -moz-transition: 0.7s ease-out;
+    -o-transition: 0.7s ease-out;
+    transition: 0.7s ease-out;	
+}
+
+.warningField{
+	background:rgba(227, 110, 110, 0.31) !important;
+	
+	border-color:#d17070 !important;
+	
+}
+
+
+

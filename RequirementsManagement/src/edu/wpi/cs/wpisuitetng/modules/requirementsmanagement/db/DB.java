@@ -13,16 +13,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CanCloseRequirementCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.PermissionsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ProjectEventsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleIterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleReleaseNumberCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -80,6 +70,7 @@ public class DB {
 	 * Checks if a requirement has all of it's subrequirements closed
 	 *
 	 * @param callback the class that has the callback function to be run on the list of requirements
+	 * @param id
 	 */
 	public static void canCloseRequirements(CanCloseRequirementCallback callback, String id) {
 		final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/canClose/"+id,  HttpMethod.GET);

@@ -10,6 +10,7 @@
  *    vpatara
  *    Sergey
  *    Josh
+ *    vpatara
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
 
@@ -127,7 +128,7 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 		c.gridx = 0;
 		c.gridy = notes.size();
 		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weighty = 0;
 		
 		noteViewer.removeAll();
 		
@@ -158,20 +159,40 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 
 		ta.setEditable(enabled);
 		ta.setEnabled(enabled);
-		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note") && enabled);
+		addButton.setEnabled(!isTextAreaEmpty() && enabled);
 	}
-	
-	//checked for input from keyboard
-	public void keyTyped ( KeyEvent e ){
-		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note"));
+
+	/**
+	 * Invoked when a key has been typed, though it does nothing
+	 *
+	 * @param e key stroke event
+	 */
+	public void keyTyped (KeyEvent e) {}
+
+	/**
+	 * Invoked when a key has been pressed, though it does nothing
+	 *
+	 * @param e key stroke event
+	 */
+	public void keyPressed (KeyEvent e) {}
+
+	/**
+	 * Invoked when a key has been released. Enables the add button accordingly
+	 *
+	 * @param e key stroke event
+	 */
+	public void keyReleased (KeyEvent e) {
+		addButton.setEnabled(!isTextAreaEmpty());
 	}
-	//check if key is pressed. Doesn't really do anything now, but needs to be included 
-	public void keyPressed ( KeyEvent e){  
 
-	}  
-	//check if key is released. Doesn't really do anything now, but needs to be included 
-	public void keyReleased ( KeyEvent e ){  
-		addButton.setEnabled(ta.getText().length() > 0 && !ta.getText().equals("New note"));
-	}  
-
+	/**
+	 * Determines whether the hinted text area is empty (or contains the hinted
+	 * "New note")
+	 *
+	 * @return true if the text area is empty or contains "New note"; false,
+	 *         otherwise
+	 */
+	public boolean isTextAreaEmpty() {
+		return ta.isEmpty();
+	}
 }
