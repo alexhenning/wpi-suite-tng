@@ -15,9 +15,13 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
+
+/**
+ * TODO Description
+ * @author TODO
+ */
 
 public class UpdateViewIterationOnFocusListener implements ChangeListener {
 	ScrollableTab<ViewIterationPanel> attentiveTab;

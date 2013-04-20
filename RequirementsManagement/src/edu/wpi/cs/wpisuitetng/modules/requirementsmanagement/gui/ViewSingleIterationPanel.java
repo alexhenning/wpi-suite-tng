@@ -43,7 +43,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 /**
  *
  * The view for creating an iteration
- * @author TODO
+ * @author Josh
  *
  */
 @SuppressWarnings("serial")
@@ -183,7 +183,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		add(topPanel, BorderLayout.PAGE_START);
 		
 		/** adding bottom panel */
-		bottomPanel = new ListFilteredRequirementsPanel(parent);
+		bottomPanel = new ListFilteredRequirementsPanel(this);
 		add(bottomPanel, BorderLayout.CENTER);
 	}
 	

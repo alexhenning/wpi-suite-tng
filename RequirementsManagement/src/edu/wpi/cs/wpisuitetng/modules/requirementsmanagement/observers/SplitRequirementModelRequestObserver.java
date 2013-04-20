@@ -57,13 +57,11 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 		// Tells the controller the success and sends the child id (only if id
 		// is valid, or non-negative)
 		if(childId >= 0)
-			controller.receivedSplitConfirmation(true, childId);
+			controller.receivedSplitConfirmation(requirement);
 		else {
 			System.err.println("The request to split a requirement was successful, "
-							+ "although the child id is invalid ("
-							+ childId
-							+ ").");
-			controller.receivedSplitConfirmation(false, -1);
+							+ "although the child id is invalid (" + childId + ").");
+			controller.receivedSplitConfirmation(null); // failure
 		}
 	}
 
@@ -79,7 +77,7 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 							+ iReq.getResponse().getBody());
 
 		// Tells the controller that the request was unsuccessful
-		controller.receivedSplitConfirmation(false, -1);
+		controller.receivedSplitConfirmation(null);
 	}
 
 	/**
@@ -93,6 +91,6 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 		System.err.println("The request to split a requirement has failed.");
 
 		// Tells the controller that the request was unsuccessful
-		controller.receivedSplitConfirmation(false, -1);
+		controller.receivedSplitConfirmation(null);
 	}
 }

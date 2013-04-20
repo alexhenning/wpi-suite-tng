@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //TODO who did this
+ *    Josh
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -41,7 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 /**
  *
  * The view for creating an iteration
- * @author TODO
+ * @author Josh
  *
  */
 @SuppressWarnings("serial")
