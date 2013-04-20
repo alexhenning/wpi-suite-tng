@@ -43,7 +43,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
 /**
  *
  * The view for creating an iteration
- * @author TODO
+ * @author Josh
  *
  */
 @SuppressWarnings("serial")
