@@ -87,8 +87,8 @@ public class RequirementHistoryTab extends JPanel {
 		c.insets = new Insets(3, 0, 3, 0);
 		c.gridx = 0;
 		c.gridy = events.size();
-		c.weightx = 0.5;
-		c.weighty = 0.5;
+		c.weightx = 1.0;
+		c.weighty = 0;
 		
 		noteViewer.removeAll();
 		
