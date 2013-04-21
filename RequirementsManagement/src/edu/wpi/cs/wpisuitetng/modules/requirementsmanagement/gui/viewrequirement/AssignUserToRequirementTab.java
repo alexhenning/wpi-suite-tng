@@ -397,5 +397,10 @@ public class AssignUserToRequirementTab extends JPanel {
 		public void callback(Permissions profile) {
 			permissionLevel = profile.getPermissionLevel().toString();
 		}
+
+		@Override
+		public void failure() {
+			// TODO: show an error message
+		}
 	}
 }

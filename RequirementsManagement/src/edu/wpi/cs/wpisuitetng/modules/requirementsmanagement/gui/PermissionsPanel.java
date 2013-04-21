@@ -294,6 +294,11 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 						public void callback(Permissions profile) {
 							updateModel(profile);
 						}
+						@Override
+						public void failure() {
+							// TODO: may have to remove "Add"
+							setAddPermissionStatus("Error while retrieving the permission object");
+						}
                 	});
                 }
 			}

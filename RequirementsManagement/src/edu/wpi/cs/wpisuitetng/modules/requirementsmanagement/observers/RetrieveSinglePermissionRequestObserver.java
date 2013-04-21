@@ -56,6 +56,7 @@ public class RetrieveSinglePermissionRequestObserver implements
 	@Override
 	public void responseError(IRequest iReq) {
 		System.err.println("The request to get a permissions profile failed.");
+		callback.failure();
 	}
 
 	/**
@@ -67,6 +68,7 @@ public class RetrieveSinglePermissionRequestObserver implements
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		System.err.println("The request to get a permissions failed.\nError: " + exception.getMessage());
+		callback.failure();
 	}
 
 

@@ -7,15 +7,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //TODO who wrote this?
+ *    alexhenning
+ *    TCalvert93
+ *    jpalnick
+ *    William Terry
+ *    vpatara
+ *    jbmorse
+ *    jlmegin
  ******************************************************************************/
 //TODO Documentation of this file
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreatePermissionRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditIterationRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.EditRequirementModelRequestObserver;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.RetrieveAllReleaseNumbersObserver;
@@ -35,10 +43,9 @@ import edu.wpi.cs.wpisuitetng.network.Request;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
- *
  * Handles retrieving and updating data in the database
+ *
  * @author Alex Henning
- * @contributor William Terry
  *
  */
 public class DB {
@@ -138,6 +145,20 @@ public class DB {
 	public static void getSinglePermission(String username, SinglePermissionCallback callback) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions/" + username, HttpMethod.GET);
 		request.addObserver(new RetrieveSinglePermissionRequestObserver(callback));
+		request.send();
+	}
+
+	/**
+	 * Adds a new permission profile to the database
+	 *
+	 * @param profile A new permission profile to be added to the database
+	 * @param callback The request observer to receive the response, or null if
+	 *        there should be no observer
+	 */
+	public static void addSinglePermission(Permissions profile, CreatePermissionRequestObserver observer) {
+		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions",  HttpMethod.PUT);
+		request.setBody(profile.toJSON());
+		if(observer != null) request.addObserver(observer);
 		request.send();
 	}
 

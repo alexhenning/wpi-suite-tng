@@ -16,11 +16,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
 /**
  * The Requirements Management tab's toolbar panel to display information about
@@ -31,9 +32,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
 @SuppressWarnings("serial")
 public class UserToolbarView extends ToolbarGroupView {
 
-	/** Text fields for the current user's info */
-	private JTextField usernameField;
-	private JTextField permissionField;
+	/** Text fields (labels) for the current user's info */
+	private JLabel usernameField;
+	private JLabel permissionField;
+	/** Labels for the fields above */
+	private JLabel usernameLabel;
+	private JLabel permissionLabel;
 
 	/**
 	 * Constructs the toolbar panel displaying info about the current user
@@ -46,21 +50,17 @@ public class UserToolbarView extends ToolbarGroupView {
 		// Construct the content panel
 		JPanel content = new JPanel();
 		GridBagLayout layout  = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
 		content.setLayout(layout);
 		content.setOpaque(false);
 
 		// Fields to be displayed on the toolbar view
-		JLabel usernameLabel = new JLabel("Username: ");
-		JLabel permissionLabel = new JLabel("Permission: ");
-		usernameField = new JTextField("user?");
-		usernameField.setEditable(false);
-		usernameField.setOpaque(true);
-		permissionField = new JTextField("permission?");
-		permissionField.setEditable(false);
-		permissionField.setOpaque(true);
+		usernameLabel = new JLabel("Username: ");
+		permissionLabel = new JLabel("Permission: ");
+		usernameField = new JLabel("?");
+		permissionField = new JLabel("NONE");
 
 		// Add display fields to the content panel
+		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridwidth = 1;
 		c.gridy = 0;
@@ -80,6 +80,30 @@ public class UserToolbarView extends ToolbarGroupView {
 
 		// Add the content panel into the toolbar
 		add(content);
+
+		// Displays the stub message
+		setUserPermission("user?", "permission?");
+		// .. until the new profile is ready
+		CurrentUserPermissionManager.getInstance().addCallback(
+				new SinglePermissionCallback() {
+			@Override
+			public void callback(Permissions profile) {
+				setUserPermission(profile.getUsername(), profile.getPermissionLevel().toString());
+			}
+			@Override
+			public void failure() {} // Never gets called
+		});
+	}
+
+	/**
+	 * Sets current username and permission level and display on the toolbar
+	 *
+	 * @param username The current user's username
+	 * @param level Permission level of the current user
+	 */
+	private void setUserPermission(String username, String permission) {
+		usernameField.setText(username);
+		permissionField.setText(permission);
 
 		// Calculate the width of the toolbar
 		double usernameWidth = usernameLabel.getPreferredSize().getWidth()
