@@ -21,7 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 /**
  *
  * Class for release numbers
- *
+ * @author TODO
  */
 public class ReleaseNumber extends AbstractModel {
 

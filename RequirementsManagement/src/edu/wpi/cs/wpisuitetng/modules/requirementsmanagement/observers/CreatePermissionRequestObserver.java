@@ -25,7 +25,8 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * to the server to create (assign) a permission.
  *
  * @author vpatara
- *
+ * @author David Modica
+ * @author Tim Calvert
  */
 public class CreatePermissionRequestObserver implements RequestObserver {
 

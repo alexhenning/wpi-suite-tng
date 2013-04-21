@@ -31,11 +31,13 @@ public class IterationDataProvider implements ReportDataProvider {
 	
 		for (RequirementModel req : model) {
 			Iteration iteration = req.getIteration();
-			if (iteration == null) iteration = backlog;
-			if (map.containsKey(iteration)) {
-				map.put(iteration, 1 + map.get(iteration));
+			String name;
+			if (iteration == null) name = "Backlog";
+			else name = iteration.getIterationNumber();
+			if (map.containsKey(name)) {
+				map.put(name, 1 + map.get(name));
 			} else {
-				map.put(iteration, 1);
+				map.put(name, 1);
 			}
 		}
 		

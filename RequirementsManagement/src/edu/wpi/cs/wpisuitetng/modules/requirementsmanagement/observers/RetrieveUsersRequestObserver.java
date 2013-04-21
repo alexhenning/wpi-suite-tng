@@ -13,14 +13,18 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import java.util.Arrays;
-
 import com.google.gson.GsonBuilder;
-
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
+
+/**
+ * TODO Description
+ * @author TODO
+ *
+ */
 
 public class RetrieveUsersRequestObserver implements RequestObserver {
 	

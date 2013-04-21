@@ -13,9 +13,9 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 /**
- *
+ * TODO Document this class
  * the types of project event objects
- *
+ *@author TODO
  */
 public enum ProjectEventObjectType {
 	REQUIREMENT ("requirementmodel", "id"),

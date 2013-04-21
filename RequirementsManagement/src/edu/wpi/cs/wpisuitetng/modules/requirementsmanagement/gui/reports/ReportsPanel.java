@@ -31,7 +31,9 @@ import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -105,6 +107,8 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 				true,
 				false
         );
+		NumberAxis rangeAxis = (NumberAxis) ((CategoryPlot) barChart.getPlot()).getRangeAxis();
+		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits()); 
 		
 		ReportDataProvider[] dataProviders = {new StatusDataProvider(),
 				new IterationDataProvider(), new AssigneeDataProvider()};

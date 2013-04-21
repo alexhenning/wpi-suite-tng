@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * to edit a requirement.
  * 
  * @author David
+ * @author Tim Calvert
  *
  */
 public class EditRequirementModelRequestObserver implements RequestObserver {

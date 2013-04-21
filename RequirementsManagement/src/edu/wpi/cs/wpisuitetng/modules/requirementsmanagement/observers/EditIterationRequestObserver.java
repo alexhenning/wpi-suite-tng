@@ -25,7 +25,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * 
  * @author David
  * @author Jacob Palnick
- *
+ * @author Tim Calvert
  */
 public class EditIterationRequestObserver implements RequestObserver {
 

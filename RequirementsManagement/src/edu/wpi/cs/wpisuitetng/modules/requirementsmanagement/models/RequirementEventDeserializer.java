@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementE
 
 /**
  * Responsible for deserializing a RequirementEvent.
+ * @author TODO
  */
 class RequirementEventDeserializer implements JsonDeserializer<RequirementEvent> {
 	/**

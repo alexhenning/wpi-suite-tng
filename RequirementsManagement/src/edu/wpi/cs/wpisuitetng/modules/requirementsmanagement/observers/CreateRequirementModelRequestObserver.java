@@ -23,7 +23,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * to the server to create a requirement.
  * 
  * @author David
- *
+ * @author Tim Calvert
  */
 public class CreateRequirementModelRequestObserver implements RequestObserver {
 

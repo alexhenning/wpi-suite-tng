@@ -147,10 +147,18 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				comboboxModel.addElement(it.getIterationNumber());
 			}
 		}
+		boolean alreadyChanged = false;
+		int iIndex = iteration.getSelectedIndex();
 		iteration.setModel(comboboxModel);
-		iteration.setSelectedIndex(0);
+		if(iIndex >= 0) {
+			alreadyChanged = true;
+			iteration.setSelectedIndex(iIndex);
+		}
+		else {
+			iteration.setSelectedIndex(0);
+		}
 		if (iteration.getItemCount() > 1){
-			if(model.getIteration() != null) {
+			if(model.getIteration() != null && !alreadyChanged) {
 				String modelItStr = model.getIteration().getIterationNumber();
 				for(int i = 0; i < iteration.getItemCount(); i++) {  // Same as above
 					if(modelItStr.equals(iteration.getItemAt(i).toString())) {
@@ -174,10 +182,18 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				comboboxModel.addElement(rn.getReleaseNumber());
 			}
 		}
+		boolean alreadyChanged = false;
+		int rIndex = releaseNumbers.getSelectedIndex();
 		releaseNumbers.setModel(comboboxModel);
-		releaseNumbers.setSelectedIndex(0);
+		if(rIndex >= 0) {
+			alreadyChanged = true;
+			releaseNumbers.setSelectedIndex(rIndex);
+		}
+		else {
+			releaseNumbers.setSelectedIndex(0);
+		}
 		if(releaseNumbers.getItemCount() > 1) {
-			if(model.getReleaseNumber() != null) {
+			if(model.getReleaseNumber() != null && !alreadyChanged) {
 				String modelRN = model.getReleaseNumber().getReleaseNumber();
 				for(int i = 0; i < releaseNumbers.getItemCount(); ++i) {
 					if(modelRN.equals(releaseNumbers.getItemAt(i).toString())) {
@@ -838,14 +854,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 */
 	public boolean validateFields() {
 		if(namefield.getText().length()<1) {
-			namefield.setBackground(Color.RED);
+			//namefield.setBackground(Color.RED);
 			setStatusMessage("Name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
 		if(descriptionfield.getText().length()<1) {
-			descriptionfield.setBackground(Color.RED);
+			//descriptionfield.setBackground(Color.RED);
 			setStatusMessage("Description must be 1-5000 characters long.");
 			return false;
 		} else {

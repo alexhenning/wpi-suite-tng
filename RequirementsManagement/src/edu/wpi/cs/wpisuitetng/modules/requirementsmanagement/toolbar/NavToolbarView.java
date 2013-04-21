@@ -33,7 +33,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  * Always has a group of global commands (Show Reports, View Iterations,
  * User Permissions, View Release Numbers, Help).
  *
- * @author TODO
+ * @author Andrew Hurle
+ * @author Chis Casola
  */
 @SuppressWarnings("serial")
 public class NavToolbarView extends ToolbarGroupView {

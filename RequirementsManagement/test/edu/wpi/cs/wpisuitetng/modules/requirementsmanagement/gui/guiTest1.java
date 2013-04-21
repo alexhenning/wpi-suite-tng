@@ -13,18 +13,13 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import static org.junit.Assert.*;
-
 import org.junit.*;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Date;
-
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
@@ -45,6 +40,11 @@ import edu.wpi.cs.wpisuitetng.network.dummyserver.DummyServer;
 import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
+/**
+ * TODO Description
+ * @author dbozgoren
+ * @author vpatara
+ */
 
 public class guiTest1 {
 	class MockObserver implements RequestObserver {
@@ -169,7 +169,7 @@ public class guiTest1 {
 
 		mainTabController.addCreateReleaseNumberTab();
 
-		mainTabController.addIterationTab(null,"title2");
+		mainTabController.addIterationTab(new Iteration(),"title2");
 
 		mainTabController.addPermissionTab();
 

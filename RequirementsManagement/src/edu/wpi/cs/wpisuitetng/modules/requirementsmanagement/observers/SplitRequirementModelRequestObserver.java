@@ -25,6 +25,8 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * to the server to split a requirement.
  *
  * @author vpatara
+ * @author David
+ * @author Tim
  */
 public class SplitRequirementModelRequestObserver implements RequestObserver {
 
