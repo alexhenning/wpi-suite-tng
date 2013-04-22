@@ -320,7 +320,7 @@ public class AssignUserToRequirementTab extends JPanel {
 					String name = user.getName();
 					String username = user.getUsername();
 					if (assignees.contains(user)) {
-						DB.getSinglePermission(name, new PermissionLevelRetrivalCallback(assignedUserTableModel, joinedEntryList.size()));
+						DB.getSinglePermission(name, new PermissionLevelRetrievalCallback(assignedUserTableModel, joinedEntryList.size()));
 						Object[] joinedEntry = new Object[COLUMN];
 						joinedEntry[ID] = id;
 						joinedEntry[NAME] = name;
@@ -328,7 +328,7 @@ public class AssignUserToRequirementTab extends JPanel {
 						joinedEntry[PERMISSIONLEVEL] = null;
 						joinedEntryList.add(joinedEntry);
 					} else {
-						DB.getSinglePermission(name, new PermissionLevelRetrivalCallback(possibleUserTableModel, disjointEntryList.size()));
+						DB.getSinglePermission(name, new PermissionLevelRetrievalCallback(possibleUserTableModel, disjointEntryList.size()));
 						Object[] disjointEntry = new Object[COLUMN];
 						disjointEntry[ID] = id;
 						disjointEntry[NAME] = name;
@@ -401,11 +401,11 @@ public class AssignUserToRequirementTab extends JPanel {
 		
 	}
 	
-	class PermissionLevelRetrivalCallback implements SinglePermissionCallback {
+	class PermissionLevelRetrievalCallback implements SinglePermissionCallback {
 		ViewUserTable table;
 		int row;
 
-		PermissionLevelRetrivalCallback(ViewUserTable table, int row){
+		PermissionLevelRetrievalCallback(ViewUserTable table, int row){
 			this.table = table;
 			this.row = row;
 		}
