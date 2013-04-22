@@ -11,6 +11,7 @@
  *    Deniz
  *    William
  *    Jacob Palnick
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
@@ -34,6 +35,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.TableColumn;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback;
@@ -200,9 +202,22 @@ public class AssignUserToRequirementTab extends JPanel {
 		
 		// Add elements to the main panel
 		add(assignedUserTableScrollPane);
-		add(possibleUserTableScrollPane);
-		add(addUserButton);
-		add(removeUserButton);
+
+		// Allow access to users with certain permission levels
+		// The username info should be ready, so use the non-blocking version
+		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
+		case ADMIN:
+		case UPDATE:
+			// Administrator and "update" can edit assignees
+			add(possibleUserTableScrollPane);
+			add(addUserButton);
+			add(removeUserButton);
+			break;
+
+		default:
+			// "None" can't do anything, not even viewing possible assignees
+			break;
+		}
 	}
 	
 	
