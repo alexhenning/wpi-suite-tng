@@ -7,8 +7,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    Tim ?
+ *    vpatara
  ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
@@ -32,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddReleaseNumberController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleReleaseNumberCallback;
@@ -41,8 +44,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 
 /**
- *
  * The view for creating and editing ReleaseNumbers
+ *
  * @author Tim
  *
  */
@@ -153,7 +156,24 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 			submit.setText("Submit");
 		}
 		submit.addActionListener(new AddReleaseNumberController(this));
-		
+
+		// Allow access to users with certain permission levels
+		// The username info should be ready, so use the non-blocking version
+		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
+		case UPDATE:
+		case NONE:
+			// "Update" and "none" can't do anything
+			numberField.setEditable(false);
+			numberField.setOpaque(false);
+			submit.setVisible(false); // set invisible*
+			result.setVisible(false);
+			break;
+
+		default:
+			// Administrator can do everything
+			break;
+		}
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
@@ -272,7 +292,20 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	 */
 	private void updateComboBoxWithReleaseNumbers(List<ReleaseNumber> releaseNumbers) {
 		releaseNumbersComboBox.removeAllItems();
-		releaseNumbersComboBox.addItem("New Release Number");
+
+		// Allow access to users with certain permission levels
+		// The username info should be ready, so use the non-blocking version
+		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
+		case ADMIN:
+			// Administrator can do everything, even creating a new release number
+			releaseNumbersComboBox.addItem("New Release Number");
+			break;
+
+		default:
+			// "Update" and "none" can't do anything
+			break;
+		}
+
 		List<String> rns = new ArrayList<String>();
 		for(ReleaseNumber rn : releaseNumbers) {
 			rns.add(rn.getReleaseNumber());
