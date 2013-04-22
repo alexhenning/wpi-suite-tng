@@ -10,6 +10,7 @@
  *    Josh
  *    Deniz
  *    JacobPalnick
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
@@ -31,6 +32,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
 import javax.swing.table.TableColumn;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
@@ -75,7 +77,7 @@ public class RequirementSubrequirementTab extends JPanel {
 	/** list of subrequirements*/
 	List<String> subrequirements;
 	JButton addChildButton;
-	JButton setParrentButton;
+	JButton setParentButton;
 	JButton removeChildButton;
 
 	/**
@@ -162,8 +164,8 @@ public class RequirementSubrequirementTab extends JPanel {
 			
 		});
 
-		setParrentButton = new JButton("Add as child to selected");
-		setParrentButton.addActionListener(new ActionListener() {
+		setParentButton = new JButton("Add as child to selected");
+		setParentButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = possibleSubrequirementsTable.getSelectedRow();
@@ -186,13 +188,13 @@ public class RequirementSubrequirementTab extends JPanel {
 			
 		});
 		
-		int maxPreferedWidth = (addChildButton.getPreferredSize().width > setParrentButton.getPreferredSize().width ? addChildButton.getPreferredSize().width : setParrentButton.getPreferredSize().width);
+		int maxPreferedWidth = (addChildButton.getPreferredSize().width > setParentButton.getPreferredSize().width ? addChildButton.getPreferredSize().width : setParentButton.getPreferredSize().width);
 		
 		Dimension pref = new Dimension(maxPreferedWidth, addChildButton.getPreferredSize().height);
 		addChildButton.setPreferredSize(pref);
 		addChildButton.setMinimumSize(pref);
-		setParrentButton.setPreferredSize(pref);
-		setParrentButton.setMinimumSize(pref);
+		setParentButton.setPreferredSize(pref);
+		setParentButton.setMinimumSize(pref);
 		removeChildButton.setMaximumSize(removeChildButton.getPreferredSize());
 		removeChildButton.setMinimumSize(removeChildButton.getPreferredSize());
 		
@@ -218,17 +220,30 @@ public class RequirementSubrequirementTab extends JPanel {
 		layout.putConstraint(SpringLayout.EAST, addChildButton, -2, SpringLayout.HORIZONTAL_CENTER, this);
 		layout.putConstraint(SpringLayout.NORTH, addChildButton, 5, SpringLayout.SOUTH, possibleSubrequirementTableScrollPane);
 		
-		layout.putConstraint(SpringLayout.WEST, setParrentButton, 2, SpringLayout.HORIZONTAL_CENTER, this);
-		layout.putConstraint(SpringLayout.NORTH, setParrentButton, 0, SpringLayout.NORTH, addChildButton);
+		layout.putConstraint(SpringLayout.WEST, setParentButton, 2, SpringLayout.HORIZONTAL_CENTER, this);
+		layout.putConstraint(SpringLayout.NORTH, setParentButton, 0, SpringLayout.NORTH, addChildButton);
 		
 		// Add elements to the main panel
 		add(subrequirementTableScrollPane);
-		add(possibleSubrequirementTableScrollPane);
-		add(addChildButton);
-		add(setParrentButton);
 		add(subLabel);
-		add(posLabel);
-		add(removeChildButton);
+
+		// Allow access to users with certain permission levels
+		// The username info should be ready, so use the non-blocking version
+		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
+		case ADMIN:
+		case UPDATE:
+			// Administrator and "update" can edit sub-requirements
+			add(possibleSubrequirementTableScrollPane);
+			add(posLabel);
+			add(addChildButton);
+			add(setParentButton);
+			add(removeChildButton);
+			break;
+
+		default:
+			// "None" can't do anything, not even viewing possible sub-reqs
+			break;
+		}
 	}
 	
 	/**
@@ -238,14 +253,14 @@ public class RequirementSubrequirementTab extends JPanel {
 	private void updateSelectedPossible(String selectedId) {
 		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED || parent.submit.getText().equals("Save")) {
 			addChildButton.setEnabled(false);
-			setParrentButton.setEnabled(false);
+			setParentButton.setEnabled(false);
 		} else {
 			addChildButton.setEnabled(!subIdList.contains(selectedId));
-			setParrentButton.setEnabled(!parentIdList.contains(selectedId));
+			setParentButton.setEnabled(!parentIdList.contains(selectedId));
 			for (String req : subrequirements) {
 				if(req.equals(selectedId)) {
 					addChildButton.setEnabled(false);
-					setParrentButton.setEnabled(false);
+					setParentButton.setEnabled(false);
 				}
 			}
 		}
@@ -282,7 +297,7 @@ public class RequirementSubrequirementTab extends JPanel {
 			updateSelectedSub(getSelectedSubId());
 		} else {
 			addChildButton.setEnabled(false);
-			setParrentButton.setEnabled(false);
+			setParentButton.setEnabled(false);
 			removeChildButton.setEnabled(false);
 		}
 	}
@@ -299,7 +314,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		
 		//TODO figure out how to do sync network request.
 		addChildButton.setEnabled(false);
-		setParrentButton.setEnabled(false);
+		setParentButton.setEnabled(false);
 		removeChildButton.setEnabled(false);
 		subrequirementTableScrollPane.setEnabled(false);
 		possibleSubrequirementTableScrollPane.setEnabled(false);
