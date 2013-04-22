@@ -30,11 +30,11 @@ import javax.swing.JTextField;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleIterationCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ListRequirementsPanel.UpdateRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
@@ -153,7 +153,24 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 				submit.setEnabled(false);
 				iterationNumber.setEnabled(false);
 			}
-			
+
+			// Allow access to users with certain permission levels
+			// The username info should be ready, so use the non-blocking version
+			switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
+			case UPDATE:
+			case NONE:
+				// "Update" and "none" can't do anything
+				endDatePicker.setEnabled(false);
+				iterationNumber.setEnabled(false);
+				submit.setVisible(false); // set invisible*
+				result.setVisible(false);
+				break;
+
+			default:
+				// Administrator can do everything
+				break;
+			}
+
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.gridx = 0;
 			c.gridy = 0;
