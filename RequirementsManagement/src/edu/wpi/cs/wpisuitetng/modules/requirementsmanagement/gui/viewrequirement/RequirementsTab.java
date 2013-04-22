@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
@@ -52,8 +53,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	/**
 	 * Constructs a new CreateRequirementView where the user can enter the data for a new requirement.
 	 */
-	public RequirementsTab(MainTabController tabController) {
-		this(tabController, new RequirementModel(), Mode.CREATE, null);
+	public RequirementsTab(MainTabController tabController, MainTabView mainView) {
+		this(tabController, new RequirementModel(), Mode.CREATE, null, mainView);
 	}
 
 	/**
@@ -65,7 +66,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	 * @param editMode	The editMode for editing the Requirement
 	 * @param tab		The Tab holding this RequirementView (can be null)
 	 */
-	public RequirementsTab(MainTabController tabController, RequirementModel requirement, Mode editMode, Tab tab) {
+	public RequirementsTab(MainTabController tabController, RequirementModel requirement, Mode editMode, Tab tab, MainTabView mainView) {
 		containingTab = tab;
 		if(containingTab == null) {
 			containingTab = new DummyTab();
@@ -99,6 +100,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		// Instantiate the button panel
 		buttonGroup.getContent().add(saveButton);
 		buttonGroup.setPreferredWidth(150);
+		
+		mainPanel.users.addChangeListenerTo(mainView);
 	}
 	
 	/**
@@ -150,5 +153,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		// TODO: containingTab.setToolTipText("View Requirement " + requirement.getTitle());
 		buttonGroup.setName("Edit Requirement");
 	}
-
+	
+	public Tab getContainingTab(){
+		return containingTab;
+	}
 }

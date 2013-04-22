@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Josh
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -42,8 +43,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 /**
- *
  * The view for creating an iteration
+ *
  * @author Josh
  *
  */
@@ -138,7 +139,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			iterationNumber = new JTextField(model.getIterationNumber());
 			estimate = new JTextField();
 			estimate.setEditable(false);
-			//TODO: APPEARS THAT MODEL COULD BE NULL HERE, NOT GOOD
+
 			DB.getSingleIteration("" + model.getId(), new SetEstimateFieldCallback());
 			
 			submit = new JButton("Update");
@@ -186,7 +187,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		/** adding bottom panel */
 		bottomPanel = new ListFilteredRequirementsPanel(this);
 		add(bottomPanel, BorderLayout.CENTER);
-		bottomPanel.updateRequirementList();
+		updateIterReqs();
 	}
 	
 	/**
@@ -360,42 +361,45 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 
 		}
 	}
-	
+
 	public void updateEstimate() {
 		if (model != null) {
-		DB.getAllRequirements(new RequirementsCallback() {
-			
-			@Override
-			public void callback(List<RequirementModel> reqs) {
-				// TODO Auto-generated method stub
-				int estimate = 0;
-				for(RequirementModel req : reqs) {
-					Iteration it = req.getIteration();
-					if (it != null && model != null && it.getIterationNumber().equals(model.getIterationNumber())) {
-						estimate += req.getEstimate();
+			DB.getAllRequirements(new RequirementsCallback() {
+
+				@Override
+				public void callback(List<RequirementModel> reqs) {
+					// TODO Auto-generated method stub
+					int estimate = 0;
+					for(RequirementModel req : reqs) {
+						Iteration it = req.getIteration();
+						if (it != null && model != null && it.getIterationNumber().equals(model.getIterationNumber())) {
+							estimate += req.getEstimate();
+						}
 					}
+					setEstimate(estimate);
 				}
-				setEstimate(estimate);
-			}
-		});
+			});
 		}
 	}
-	
-	public void updateName(){
-		iterationNumber.setText(model.getIterationNumber());
+
+	public void updateName() {
+		iterationNumber.setText((model != null) ? model.getIterationNumber() : "Backlog");
 	}
-	
-	public void updateDates(){
-		startDatePicker.setDate(model.getStartDate());
-		endDatePicker.setDate(model.getEndDate());
+
+	public void updateDates() {
+		// For iterations other than the backlog (null)
+		if(model != null) {
+			startDatePicker.setDate(model.getStartDate());
+			endDatePicker.setDate(model.getEndDate());
+		}
 	}
-	
+
 	public void setEstimate(int est) {
-		estimate.setText(est+"");
+		estimate.setText(est + "");
 	}
-	
+
 	public Iteration getUpdatedModel() {
-		
+
 		editModel = new Iteration();
 		editModel.setId(model.getId());
 		String iterNumber = iterationNumber.getText();
@@ -404,13 +408,13 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		editModel.setIterationNumber(iterNumber);
 		editModel.setStartDate(start);
 		editModel.setEndDate(end);
-		
+
 		return editModel;
 	}
-	
+
 	/**
-	 *
 	 * Update the estimate text field to display the iterations estimate
+	 *
 	 * @author James
 	 *
 	 */
@@ -425,20 +429,19 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		public void callback(Iteration iteration) {
 			DB.getAllRequirements(new SetIterationEstimateFieldCallback(iteration));
 		}
-		
 	}
-	
+
 	/**
-	 *
 	 * Update the estimate text field to display the iterations estimate
+	 *
 	 * @author James
 	 *
 	 */
 	class SetIterationEstimateFieldCallback implements RequirementsCallback {
-		
+
 		/** the iteration that the estimate needs to be know for */
 		Iteration iteration;
-		
+
 		/**
 		 * Constructor
 		 * @param estimateField the estimate field
@@ -468,6 +471,5 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			}
 			estimate.setText("" + estimateAmount);
 		}
-		
 	}
 }

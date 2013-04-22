@@ -14,6 +14,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import javax.swing.table.AbstractTableModel;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
+
 /**
  *
  * The model for the permissions table
@@ -76,7 +78,8 @@ public class ViewUserTable extends AbstractTableModel {
 	 * @return the kind of class in that colum
 	 */
 	public Class<?> getColumnClass(int c) {
-		return getValueAt(0, c).getClass();
+		if (c == 3) return PermissionLevel.class;
+		else return getValueAt(0, c).getClass();
 	}
 
 	/**

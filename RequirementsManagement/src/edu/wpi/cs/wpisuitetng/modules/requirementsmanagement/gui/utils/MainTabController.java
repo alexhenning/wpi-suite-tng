@@ -136,7 +136,7 @@ public class MainTabController {
 	 */
 	private Tab addRequirementTab(RequirementModel requirement, Mode mode) {
 		Tab tab = addTab();
-		final RequirementsTab view = new RequirementsTab(this, requirement, mode, tab);
+		final RequirementsTab view = new RequirementsTab(this, requirement, mode, tab, mainView);
 		tab.setComponent(view);
 		view.requestFocus();
 		this.mainView.addChangeListener(new RequirementTabChangeListener(view));

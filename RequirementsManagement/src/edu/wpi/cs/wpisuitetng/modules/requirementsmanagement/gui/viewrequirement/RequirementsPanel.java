@@ -105,7 +105,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	private NoteMainPanel nt;
 	private RequirementHistoryTab hs;
 	private RequirementSubrequirementTab subs;
-	private AssignUserToRequirementTab users;
+	protected AssignUserToRequirementTab users;
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
