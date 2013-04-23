@@ -19,15 +19,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +45,7 @@ import javax.swing.event.DocumentListener;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ProjectEventsCallback;
@@ -57,9 +55,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleUserCallba
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SplitRequirementController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -110,7 +108,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
 	
-	private boolean unsavedChanges;
+//	private boolean unsavedChanges;
 	
 
 	/** A flag indicating if input is enabled on the form */
@@ -226,7 +224,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
-		unsavedChanges = false;
+//		unsavedChanges = false;
 		
 		updateIterationList();
 		updateReleaseNumberList();
@@ -413,25 +411,38 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		c.gridy = 8;
 		leftside.add(actualEffortField, c);
 
-		// TODO: Improve button arrangements
-		// Center bottom (gridx = 0, gridwidth = 3)
-		c.gridwidth = 3;
-		c.gridx = 0;
-		c.gridy = 9;
-		leftside.add(results, c);
-		//pointless to allow user to edit result text
-		results.setEditable(false);
+		// Allow access to users with certain permission levels
+		// The username info should be ready, so use the non-blocking version
+		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
+		case ADMIN:
+		case UPDATE:
+			// Administrator and "update" can edit a requirement and see results
 
-		c.gridwidth = 1;
-		c.gridy = 10;
-		c.gridx = 0;
-		leftside.add(submit, c);
-		c.gridx = 1;
-		c.weightx = 1;
-		leftside.add(resetButton, c);
-		c.gridx = 2;
-		c.weightx = 0.5;
-		leftside.add(splitButton, c);
+			// TODO: Improve button arrangements
+			// Center bottom (gridx = 0, gridwidth = 3)
+			c.gridwidth = 3;
+			c.gridx = 0;
+			c.gridy = 9;
+			leftside.add(results, c);
+			//pointless to allow user to edit result text
+			results.setEditable(false);
+
+			c.gridwidth = 1;
+			c.gridy = 10;
+			c.gridx = 0;
+			leftside.add(submit, c);
+			c.gridx = 1;
+			c.weightx = 1;
+			leftside.add(resetButton, c);
+			c.gridx = 2;
+			c.weightx = 0.5;
+			leftside.add(splitButton, c);
+			break;
+
+		default:
+			// "None" can't edit a requirement, so hide the buttons
+			break;
+		}
 
 		//sets the minimum size that the user can reduce the window to manually
 		leftside.setMinimumSize(new Dimension(520,700));
@@ -554,6 +565,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		estimateField.setText(oldEstimateString);
 		actualEffortField.setText(oldActualEffortString);
 
+		// Set an appropriate action for the submit button
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Save");
@@ -561,11 +573,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
 		}
-		
-		if (editMode.equals(Mode.EDIT)) {
-			parent.setEditModeDescriptors(model);
-		}
-		parent.buttonGroup.update(editMode, model);
 
 		// Reset all fields colors to white
 		type.setBackground(Color.WHITE);
@@ -574,66 +581,83 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		releaseNumbers.setBackground(Color.WHITE);
 		estimateField.setBackground(Color.WHITE);
 		actualEffortField.setBackground(Color.WHITE);
-		// Gray out the reset button after reseting or updating
-		resetButton.setEnabled(false);
 
-		if(editMode == Mode.CREATE) {
+		// Retrieve the current user's access level
+		PermissionLevel currentAccess = CurrentUserPermissionManager
+				.getInstance().getCurrentProfile().getPermissionLevel();
+
+		// Update the iteration combo box, enabling it only if the user is ADMIN
+		// Need to update this before
+		validateEstimate(currentAccess == PermissionLevel.ADMIN);
+
+		if (model.getStatus() == RequirementStatus.DELETED || currentAccess == PermissionLevel.NONE) {
+			// All fields are disabled for DELETED requirements and NONE users
+			namefield.setEnabled(false);
+			type.setEnabled(false);
+			priority.setEnabled(false);
+			releaseNumbers.setEnabled(false);
+			descriptionfield.setEnabled(false);
+			descriptionfield.setEnabled(false);
+			estimateField.setEnabled(false);
+			actualEffortField.setEnabled(false);
+			nt.setInputEnabled(false);
+
+		} else if (editMode == Mode.CREATE) {
+			// Admin and "Update" share accessible fields
 			namefield.setEnabled(true);
 			type.setEnabled(true);
 			priority.setEnabled(true);
-			iteration.setEnabled(true);
 			releaseNumbers.setEnabled(true);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
-			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 			nt.setInputEnabled(false);
-		} else if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
+
+			// Cannot assign to iteration even if the user is ADMIN
+			iteration.setEnabled(false);
+
+		} else if (model.getStatus() == RequirementStatus.COMPLETE) {
+			// Admin and "Update" share accessible fields
 			namefield.setEnabled(false);
 			type.setEnabled(false);
 			priority.setEnabled(false);
-			iteration.setEnabled(false);
 			releaseNumbers.setEnabled(false);
 			descriptionfield.setEnabled(false);
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(true);
-			submit.setEnabled(true);
 			nt.setInputEnabled(true);
-		} else if (model.getStatus().equals(RequirementStatus.DELETED)) {
-			namefield.setEnabled(false);
-			type.setEnabled(false);
-			priority.setEnabled(false);
+
+			// Cannot change iteration even if the user is ADMIN
 			iteration.setEnabled(false);
-			releaseNumbers.setEnabled(false);
-			descriptionfield.setEnabled(false);
-			descriptionfield.setEnabled(false);
-			estimateField.setEnabled(false);
-			actualEffortField.setEnabled(false);
-			submit.setEnabled(false);
-			nt.setInputEnabled(false);
-		} else {
+
+		} else { // Status == NEW or OPEN or IN_PROGRESS; Mode == EDIT
+			// Admin and "Update" share accessible fields (except iteration)
 			namefield.setEnabled(true);
 			type.setEnabled(true);
 			priority.setEnabled(true);
-			iteration.setEnabled(true);
 			releaseNumbers.setEnabled(true);
 			descriptionfield.setEnabled(true);
 			estimateField.setEnabled(true);
 			actualEffortField.setEnabled(false);
-			submit.setEnabled(!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
 			nt.setInputEnabled(true);
 		}
-		validateEstimate();
-		System.out.println("namefield: "+namefield.getText());
-		System.out.println("submit good: "+!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1));
+
+		// Update the submit, update, and split buttons
+		updateSubmitButton();
+
+		// Update the button group in the toolbar view for editing requirements
+		if (editMode.equals(Mode.EDIT)) {
+			parent.setEditModeDescriptors(model);
+		}
+		parent.buttonGroup.update(editMode, model);
+
+		// Update supplement (right-hand side) panels
 		nt.setNotes(Arrays.asList(model.getNotes()));
 		DB.getAllProjectEvents(new ListProjectEvents());
-		updateSubmitButton();
 		subs.update();
-		unsavedChanges = false;
-		parent.buttonGroup.update(this.editMode, model);
-		
 		users.update();
+
+//		unsavedChanges = false;
 	}
 	
 	/**
@@ -641,7 +665,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 */
 	public void updateSubmitButton() {
-		unsavedChanges = true;
+//		unsavedChanges = true;
 		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && 
 				!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) 
 				&& (editMode == Mode.EDIT && valuesHaveChanged() && validateFields()) ||
@@ -1125,11 +1149,14 @@ System.err.println("adduser reached***************************");
 			}
 		}
 	}
-	
+
 	/**
 	 * Validate the estimate and make the appropriate updates
+	 *
+	 * @param mayIterationBeEnabled
+	 * @return true if the entered estimate is valid
 	 */
-	private boolean validateEstimate() {
+	private boolean validateEstimate(boolean mayIterationBeEnabled) {
 		int estimate;
 		try {
 			estimate = Integer.parseInt(estimateField.getText());
@@ -1143,7 +1170,7 @@ System.err.println("adduser reached***************************");
 			iteration.setBackground(Color.LIGHT_GRAY);
 			if (iteration.getModel().getSize() > 0) iteration.setSelectedIndex(0);
 		} else {
-			iteration.setEnabled(true);
+			iteration.setEnabled(mayIterationBeEnabled);
 			iteration.setBackground(Color.WHITE);
 		}
 		return estimate >= 0;
