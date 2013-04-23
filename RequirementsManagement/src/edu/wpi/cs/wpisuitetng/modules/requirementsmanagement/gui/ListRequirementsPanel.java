@@ -41,14 +41,17 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
@@ -173,7 +176,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 				setEditTable();
 			}
 		});
-		
+
 		// create the save and cancel buttons
 		saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
@@ -195,6 +198,29 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			
 		});
 		
+		// Allow access to users with certain permission levels
+		CurrentUserPermissionManager.getInstance().addCallback(
+				new SinglePermissionCallback() {
+			@Override
+			public void failure() {} // No need to implement
+
+			@Override
+			public void callback(Permissions profile) {
+				switch (profile.getPermissionLevel()) {
+				case NONE:
+					// "None" can't edit requirements
+					editButton.setVisible(false);
+					saveButton.setVisible(false);
+					cancelButton.setVisible(false);
+					break;
+
+				default:
+					// Administrator can do everything
+					break;
+				}
+			}
+		});
+
 		editPanel.add(editButton);
 		
 		//Add the table to a scrollpane and add it
