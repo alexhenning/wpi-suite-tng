@@ -259,15 +259,15 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		JScrollPane descScrollPane = new JScrollPane(descriptionfield);
 		descScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		JLabel statusArea = new JLabel("Status:");
-		// TODO: For now, it's disabled for creation view. Need to change when
-		// updating is available.
-		statusfield.setEnabled(false);
-		
+
+		// Make status field non-editable rather than disabled (for better vision)
+		statusfield.setEditable(false);
+		statusfield.setOpaque(true);
+
 		//estimate field
 		JLabel estimateArea = new JLabel("Estimate:");
-		
 		JLabel actualEffortArea = new JLabel("Actual Effort:");
-	
+
 		//submit panel
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
