@@ -415,8 +415,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		// The username info should be ready, so use the non-blocking version
 		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
 		case ADMIN:
-		case UPDATE:
-			// Administrator and "update" can edit a requirement and see results
+			// Administrator can edit a requirement and see results
 
 			// TODO: Improve button arrangements
 			// Center bottom (gridx = 0, gridwidth = 3)
@@ -603,7 +602,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			nt.setInputEnabled(false);
 
 		} else if (editMode == Mode.CREATE) {
-			// Admin and "Update" share accessible fields
 			namefield.setEnabled(true);
 			type.setEnabled(true);
 			priority.setEnabled(true);
@@ -617,7 +615,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			iteration.setEnabled(false);
 
 		} else if (model.getStatus() == RequirementStatus.COMPLETE) {
-			// Admin and "Update" share accessible fields
 			namefield.setEnabled(false);
 			type.setEnabled(false);
 			priority.setEnabled(false);
@@ -631,7 +628,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			iteration.setEnabled(false);
 
 		} else { // Status == NEW or OPEN or IN_PROGRESS; Mode == EDIT
-			// Admin and "Update" share accessible fields (except iteration)
 			namefield.setEnabled(true);
 			type.setEnabled(true);
 			priority.setEnabled(true);

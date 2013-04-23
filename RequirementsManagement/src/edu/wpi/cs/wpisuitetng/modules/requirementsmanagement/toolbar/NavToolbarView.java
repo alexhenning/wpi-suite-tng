@@ -77,7 +77,6 @@ public class NavToolbarView extends ToolbarGroupView {
 		
 		permissionButton = new JButton("User Permissions");
 		permissionButton.setAction(new ViewPermissionAction(tabController));
-		permissionButton.setEnabled(false); // This button is not for every user
 		c.gridy = 2;
 		content.add(permissionButton, c);
 		
@@ -109,13 +108,13 @@ public class NavToolbarView extends ToolbarGroupView {
 			@Override
 			public void callback(Permissions profile) {
 				switch (profile.getPermissionLevel()) {
-				case ADMIN:
-					// Administrator can do everything
-					permissionButton.setEnabled(true);
+				case NONE:
+					// "None" can't view permissions
+					permissionButton.setVisible(false);
 					break;
 
 				default:
-					// "Update" and "none" can't do anything
+					// Administrator can do everything
 					break;
 				}
 			}

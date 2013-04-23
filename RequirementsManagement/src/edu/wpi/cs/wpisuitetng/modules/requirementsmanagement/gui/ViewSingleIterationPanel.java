@@ -157,9 +157,8 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			// Allow access to users with certain permission levels
 			// The username info should be ready, so use the non-blocking version
 			switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
-			case UPDATE:
 			case NONE:
-				// "Update" and "none" can't do anything
+				// "None" can't do anything
 				endDatePicker.setEnabled(false);
 				iterationNumber.setEnabled(false);
 				submit.setVisible(false); // set invisible*

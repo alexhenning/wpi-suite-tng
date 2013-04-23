@@ -160,9 +160,8 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 		// Allow access to users with certain permission levels
 		// The username info should be ready, so use the non-blocking version
 		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
-		case UPDATE:
 		case NONE:
-			// "Update" and "none" can't do anything
+			// "None" can't do anything
 			numberField.setEditable(false);
 			numberField.setOpaque(false);
 			submit.setVisible(false); // set invisible*
@@ -302,7 +301,7 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 			break;
 
 		default:
-			// "Update" and "none" can't do anything
+			// "None" can't do anything
 			break;
 		}
 

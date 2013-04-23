@@ -231,8 +231,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		// The username info should be ready, so use the non-blocking version
 		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
 		case ADMIN:
-		case UPDATE:
-			// Administrator and "update" can edit sub-requirements
+			// Administrator can edit sub-requirements
 			add(possibleSubrequirementTableScrollPane);
 			add(posLabel);
 			add(addChildButton);

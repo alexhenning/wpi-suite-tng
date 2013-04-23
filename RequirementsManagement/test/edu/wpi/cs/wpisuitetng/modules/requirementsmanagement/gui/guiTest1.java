@@ -14,8 +14,6 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import static org.junit.Assert.*;
 import org.junit.*;
-import org.junit.Before;
-import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JPanel;
@@ -23,6 +21,7 @@ import javax.swing.JTabbedPane;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.HintedTextArea;
@@ -157,6 +156,8 @@ public class guiTest1 {
 
 	@Test
 	public void testCreateMainTabController() {
+		CurrentUserPermissionManager.getInstance().usernameReady();
+
 		MainTabView MainTabView1 = new MainTabView();
 		mainTabController = new MainTabController(MainTabView1);
 

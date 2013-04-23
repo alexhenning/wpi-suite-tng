@@ -207,8 +207,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		// The username info should be ready, so use the non-blocking version
 		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
 		case ADMIN:
-		case UPDATE:
-			// Administrator and "update" can edit assignees
+			// Administrator can edit assignees
 			add(possibleUserTableScrollPane);
 			add(addUserButton);
 			add(removeUserButton);

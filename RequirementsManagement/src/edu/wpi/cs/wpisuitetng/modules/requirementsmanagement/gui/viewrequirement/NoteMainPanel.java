@@ -113,8 +113,7 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 		// The username info should be ready, so use the non-blocking version
 		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
 		case ADMIN:
-		case UPDATE:
-			// Only Administrator and "update" can add notes
+			// Only Administrator can add notes
 			noteAdder = new JPanel(new BorderLayout());
 			noteAdder.add(textPane, BorderLayout.PAGE_START);
 			noteAdder.add(addButton, BorderLayout.LINE_START);

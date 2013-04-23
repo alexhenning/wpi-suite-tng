@@ -18,7 +18,5 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
  */
 public enum PermissionLevel {
 	ADMIN,		//Admin level
-	UPDATE,		//Team member level
 	NONE		//Customer level
-	//TBI		//User not associated with project
 }

@@ -69,11 +69,9 @@ public class ToolbarView extends DefaultToolbarView {
 
 		createRequirement = new JButton("Create Requirement");
 		createRequirement.setAction(new CreateRequirementAction(tabController));
-		createRequirement.setEnabled(false);
 
 		createIteration = new JButton("Create Iteration");
 		createIteration.setAction(new CreateIterationAction(tabController));
-		createIteration.setEnabled(false);
 
 		// Construct the search button
 		searchRequirements = new JButton("Lookup by ID");
@@ -126,19 +124,14 @@ public class ToolbarView extends DefaultToolbarView {
 			@Override
 			public void callback(Permissions profile) {
 				switch (profile.getPermissionLevel()) {
-				case ADMIN:
-					// Administrator can do everything
-					createIteration.setEnabled(true);
-					createRequirement.setEnabled(true);
-					break;
-
-				case UPDATE:
-					// "Update" can only create a new requirement (TODO: check this)
-					createRequirement.setEnabled(true);
+				case NONE:
+					// "None" can't create a requirement or an iteration
+					createIteration.setVisible(false);
+					createRequirement.setVisible(false);
 					break;
 
 				default:
-					// "None" can't do anything
+					// Administrator can do everything
 					break;
 				}
 			}

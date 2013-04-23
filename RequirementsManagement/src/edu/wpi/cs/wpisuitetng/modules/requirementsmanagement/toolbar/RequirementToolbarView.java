@@ -169,7 +169,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			break;
 
 		default:
-			// Administrator and "update" can do everything
+			// Administrator can do everything
 			break;
 		}
 	}
