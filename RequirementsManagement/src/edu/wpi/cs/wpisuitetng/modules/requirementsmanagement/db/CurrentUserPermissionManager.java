@@ -104,6 +104,12 @@ public class CurrentUserPermissionManager {
 			DB.getSinglePermission(username, new SinglePermissionCallback() {
 				@Override
 				public void callback(Permissions profile) {
+					// User named "admin" should always be given ADMIN permission
+					// although the database stores another permission value
+					// TODO: update the value in the database to ADMIN
+					if(username.equals("admin")) {
+						profile.setPermissionLevel(PermissionLevel.ADMIN);
+					}
 					setCurrentProfile(profile);
 				}
 
@@ -112,6 +118,11 @@ public class CurrentUserPermissionManager {
 					// The current user doesn't have the permission model,
 					// so add a new permission with level NONE
 					Permissions newProfile = new Permissions(username, PermissionLevel.NONE);
+
+					// User named "admin" should always be given ADMIN permission
+					if(username.equals("admin")) {
+						newProfile.setPermissionLevel(PermissionLevel.ADMIN);
+					}
 
 					// Doesn't care if the new profile fails to be saved
 					// because it can be recreated with level NONE anytime later
