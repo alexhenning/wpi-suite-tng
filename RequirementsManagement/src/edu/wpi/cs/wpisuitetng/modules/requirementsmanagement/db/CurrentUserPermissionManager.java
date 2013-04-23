@@ -44,7 +44,7 @@ public class CurrentUserPermissionManager {
 	private CurrentUserPermissionManager() {
 		waitList = new ArrayList <SinglePermissionCallback> ();
 		hasCurrentProfile = false;
-		currentProfile = null;
+		currentProfile = new Permissions("", PermissionLevel.NONE); // Stub
 		hasUsernameReadyBeenCalled = false;
 	}
 
