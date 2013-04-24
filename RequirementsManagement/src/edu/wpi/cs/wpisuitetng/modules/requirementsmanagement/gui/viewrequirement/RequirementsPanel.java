@@ -9,6 +9,7 @@
  * Contributors:
  *    Josh
  *    vpatara
+ *    Christina
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
@@ -68,6 +69,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementT
  * Panel for editing/creating a requirement
  * @author Josh
  * @author vpatara
+ * @author Christina
  */
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JSplitPane implements KeyListener {
@@ -271,7 +273,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		//submit panel
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
-			submit.setText("Save");
+			submit.setText("Create");
 		} else {
 			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
@@ -567,7 +569,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		// Set an appropriate action for the submit button
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
-			submit.setText("Save");
+			submit.setText("Create");
 		} else {
 			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
@@ -846,7 +848,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			setStatusMessage("Estimate must be non-negative integer (0-999999).");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
-		} else if(estimateField.getText().equals("0") && !iteration.getSelectedItem().equals("Backlog")) {
+		} else if(estimateField.getText().equals("0") && iteration.getSelectedItem() != null && 
+				!iteration.getSelectedItem().equals("Backlog")) {
 			estimateField.setBackground(Color.RED);
 			setStatusMessage("A requirement must have a positive estimate to be assigned to an iteration");
 			iteration.setEnabled(true);

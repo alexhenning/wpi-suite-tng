@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    Josh
+ *    Christina
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -42,6 +43,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  * The view for creating an iteration
  * @author Josh
+ * @author Christina
  *
  */
 @SuppressWarnings("serial")
@@ -125,7 +127,7 @@ endDatePicker.setEnabled(false);
 		iterationNumber = new JTextField();
 		
 		if(editMode == Mode.CREATE) {
-			submit = new JButton("Submit");
+			submit = new JButton("Create");
 		} else {
 			submit = new JButton("Update");
 		}

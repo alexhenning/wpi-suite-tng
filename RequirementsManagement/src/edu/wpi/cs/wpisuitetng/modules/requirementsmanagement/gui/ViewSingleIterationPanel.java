@@ -127,7 +127,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		else {
 			lbl1 = new JLabel("Start Date");
 			lbl2 = new JLabel("End Date");
-			lbl3 = new JLabel ("Iteration");
+			lbl3 = new JLabel ("Iteration Number ");
 			lbl4 = new JLabel ("Estimate");
 			
 			Date startDate = model.getStartDate();
