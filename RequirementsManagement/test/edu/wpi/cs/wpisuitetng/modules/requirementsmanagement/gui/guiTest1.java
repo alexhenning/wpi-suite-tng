@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
+import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
@@ -126,7 +128,7 @@ public class guiTest1 {
 			assertEquals(200, manualRequest.getResponse().getStatusCode());
 			assertEquals(true, "OK".equalsIgnoreCase(manualRequest.getResponse().getStatusMessage()));
 
-			assertTrue(body.equals(server.getLastReceived().getBody()));
+			assertEquals(body, server.getLastReceived().getBody());
 			assertEquals(manualRequest.getHttpMethod(), server.getLastReceived().getHttpMethod());
 
 		} 
@@ -156,6 +158,9 @@ public class guiTest1 {
 
 	@Test
 	public void testCreateMainTabController() {
+		// Sets the username to be "tester"
+		ConfigManager.getConfig().setUserName("tester");
+		// ... so that this manager can use
 		CurrentUserPermissionManager.getInstance().usernameReady();
 
 		MainTabView MainTabView1 = new MainTabView();

@@ -13,6 +13,7 @@
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -45,7 +46,15 @@ public class RetrieveSinglePermissionRequestObserver implements
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
 		final Permissions[] profile = Permissions.fromJSONArray(response.getBody());
-		callback.callback(profile[0]);
+
+		// During testing, null profile results from an empty response body,
+		// so it has to be checked
+		if(profile == null || profile.length == 0) {
+			callback.callback(new Permissions("tester", PermissionLevel.NONE)); // testing purpose
+		} else {
+			// When not testing, this will be called unless the server has an error
+			callback.callback(profile[0]);
+		}
 	}
 
 	/**

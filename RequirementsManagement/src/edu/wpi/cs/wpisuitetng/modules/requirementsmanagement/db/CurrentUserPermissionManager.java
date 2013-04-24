@@ -42,6 +42,15 @@ public class CurrentUserPermissionManager {
 	 * Constructs the manager for user
 	 */
 	private CurrentUserPermissionManager() {
+		resetManager();
+	}
+
+	/**
+	 * Resets the manager to the initial state (empty permission profile).
+	 * Mostly for testing purposes
+	 *
+	 */
+	public void resetManager() {
 		waitList = new ArrayList <SinglePermissionCallback> ();
 		hasCurrentProfile = false;
 		currentProfile = new Permissions("", PermissionLevel.NONE); // Stub
