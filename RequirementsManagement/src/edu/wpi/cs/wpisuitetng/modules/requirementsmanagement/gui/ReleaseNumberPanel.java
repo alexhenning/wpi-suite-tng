@@ -137,6 +137,7 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 						});
 					}
 					autoSelected = false;
+					setStatus("");
 				}
 			}
 			
