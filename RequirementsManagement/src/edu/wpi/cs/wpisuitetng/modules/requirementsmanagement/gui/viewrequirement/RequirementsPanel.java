@@ -9,6 +9,7 @@
  * Contributors:
  *    Josh
  *    vpatara
+ *    Christina
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
@@ -68,6 +69,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementT
  * Panel for editing/creating a requirement
  * @author Josh
  * @author vpatara
+ * @author Christina
  */
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JSplitPane implements KeyListener {
@@ -271,7 +273,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		//submit panel
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
-			submit.setText("Save");
+			submit.setText("Create");
 		} else {
 			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
@@ -567,7 +569,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		// Set an appropriate action for the submit button
 		if(this.editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
-			submit.setText("Save");
+			submit.setText("Create");
 		} else {
 			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
