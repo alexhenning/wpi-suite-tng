@@ -371,9 +371,7 @@ public class RequirementSubrequirementTab extends JPanel {
 			if (reqs.size() > 0) {
 				subIdList = new ArrayList<String>();
 				parentIdList = new ArrayList<String>();
-				System.out.println("subs: " + subIdList.toString());
-				System.out.println("parents: " + parentIdList.toString());
-
+				
 				//get a list of ids of requirements that are already sub requirements
 				for(RequirementModel req : reqs) {
 					for(String subId : req.getSubRequirements()) {
@@ -382,7 +380,6 @@ public class RequirementSubrequirementTab extends JPanel {
 						}
 					}
 				}
-				System.out.println("subs: " + subIdList.toString());
 				
 				//get a list of the parents of this requirement
 				String currentChildId = parent.model.getId()+"";
@@ -397,24 +394,6 @@ public class RequirementSubrequirementTab extends JPanel {
 					}
 					currentChildId = nextChildId;
 				}
-				System.out.println("parents: " + parentIdList.toString());
-				
-//				if(parent.model.getParentId() != null && !parent.model.getParentId().equals("")) {
-//					String currentParentId = parent.model.getParentId();
-//					String nextParentId = "";
-//					while (currentParentId != null && !currentParentId.equals("")) {
-//						parentIdList.add(currentParentId);
-//						for(RequirementModel req : reqs) {
-//							if((req.getId()+"").equals(currentParentId)) {
-//								nextParentId = req.getParentId();
-//							}
-//						}
-//						currentParentId = "";
-//						if(nextParentId != null && !nextParentId.equals("")) {
-//							currentParentId = nextParentId;
-//						}
-//					}
-//				}
 				
 				// put the data in the table
 				ArrayList<Object[]> subEntriesList = new ArrayList<Object[]>();
