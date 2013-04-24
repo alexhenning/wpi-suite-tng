@@ -851,8 +851,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else if(estimateField.getText().equals("0") && !iteration.getSelectedItem().equals("Backlog")) {
 			estimateField.setBackground(Color.RED);
 			setStatusMessage("A requirement must have a positive estimate to be assigned to an iteration");
+			iteration.setEnabled(true);
+			iteration.setBackground(Color.WHITE);
 			return false;
 		} else {
+			if(Integer.parseInt(estimateField.getText()) > 0) {
+				iteration.setEnabled(true);
+				iteration.setBackground(Color.WHITE);
+			} else {
+				iteration.setEnabled(false);
+			}
 			estimateField.setBackground(Color.WHITE);
 		}
 		if (!actualEffortField.getText().matches("[0-9]{1,6}")) {
