@@ -10,6 +10,7 @@
  *    //Josh
  *    //Tim C
  *    //James
+ *    //Jacob Palnick
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -22,6 +23,7 @@ import javax.swing.table.AbstractTableModel;
  * @author Josh
  * @author Tim C
  * @author James
+ * @author Jacob Palnick
  *
  */
 
@@ -115,12 +117,8 @@ public class ViewReqTable extends AbstractTableModel {
      * @return true if the cell is editable, false otherwise
      */
     public boolean isCellEditable(int row, int col) {
-    	if(editMode == Mode.VIEW || col == ID || col == STATUS || (getValueAt(row, STATUS) == "COMPLETE" && col != STATUS)
-    			|| (getValueAt(row,STATUS) == "DELETED" && col != STATUS)) { // Id cell should not be editable, even in edit mode
-    		return false;                                          
-    	} else {
-    		return true;
-    	}
+    	return !(editMode == Mode.VIEW || col == ID || col == STATUS || (getValueAt(row, STATUS) == "COMPLETE" && col != STATUS)
+    			|| (getValueAt(row,STATUS) == "DELETED" && col != STATUS));// Id cell should not be editable, even in edit mode
     }
 
     /**
