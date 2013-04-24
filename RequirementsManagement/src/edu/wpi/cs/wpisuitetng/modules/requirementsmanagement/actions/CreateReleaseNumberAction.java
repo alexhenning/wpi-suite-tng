@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  * @author Tim
  *
  */
+@SuppressWarnings("serial")
 public class CreateReleaseNumberAction extends AbstractAction {
 	
 	/** the main tab controller being used */
