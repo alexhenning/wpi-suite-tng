@@ -140,7 +140,7 @@
 						{
 							if(xmlProject.statusText == "OK"){
 								//document.getElementById("projectresponsespan").innerHTML = xmlProject.statusText;
-								window.location = "view.jsp";
+								window.location = "view2.jsp";
 							}
 							else{
 								document.getElementById("badproject").innerHTML = "Project does not exist";
