@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.DummyTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.AssignUserToRequirementTab.AssignedUserTabChangeListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.RequirementToolbarView;
@@ -49,6 +50,8 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	private Tab containingTab;
 	/** is input enabled*/
 	private boolean inputEnabled = true;
+	/** the listener to be removed after the tab closes */
+	private AssignedUserTabChangeListener assignedUserTabChangeListener = null;
 
 	/**
 	 * Constructs a new CreateRequirementView where the user can enter the data for a new requirement.
@@ -101,9 +104,9 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		buttonGroup.getContent().add(saveButton);
 		buttonGroup.setPreferredWidth(150);
 		
-		mainPanel.users.addChangeListenerTo(mainView);
+		assignedUserTabChangeListener = mainPanel.users.addChangeListenerTo(mainView);
 	}
-	
+
 	/**
 	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
 	 * JComponent#setEnabled because setEnabled does not affect its children.
@@ -156,5 +159,15 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	
 	public Tab getContainingTab(){
 		return containingTab;
+	}
+
+	/**
+	 * Returns the change listener for assignees, used for removing the listener
+	 * from MainTabView
+	 *
+	 * @return the change listener for assignees
+	 */
+	public AssignedUserTabChangeListener getAssignedUserTabChangeListener() {
+		return assignedUserTabChangeListener;
 	}
 }

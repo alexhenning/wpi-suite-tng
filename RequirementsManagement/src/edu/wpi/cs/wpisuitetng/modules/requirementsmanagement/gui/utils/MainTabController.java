@@ -102,6 +102,7 @@ public class MainTabController {
 			}
 			if(!tabExists) {
 				MainTabController.this.mainView.removeChangeListener(this);
+				MainTabController.this.mainView.removeChangeListener(tab.getAssignedUserTabChangeListener());
 			}
 		}
 		

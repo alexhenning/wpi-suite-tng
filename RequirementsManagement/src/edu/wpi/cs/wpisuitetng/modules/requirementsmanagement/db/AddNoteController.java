@@ -96,7 +96,7 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 		Gson gson = new Gson();
 		RequirementNote note = gson.fromJson(response.getBody(), RequirementNote.class);
 		
-		DB.getSingleRequirement((new Integer(note.getRequirementId()).toString()), new SingleRequirementCallback() {
+		DB.getSingleRequirement(Integer.toString(note.getRequirementId()), new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel req) {
 				parentView.updateModel(req);

@@ -43,6 +43,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewUserTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel.ListProjectEvents;
 
 
 /**
@@ -274,12 +275,15 @@ public class AssignUserToRequirementTab extends JPanel {
 		assignedUserTable.setEnabled(false);
 		possibleUserTable.setEnabled(false);
 		DB.getAllUsers(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
+		DB.getAllProjectEvents(parent.new ListProjectEvents());
 	}
-	
-	public void addChangeListenerTo(MainTabView mainView){
-		mainView.addChangeListener(new AssignedUserTabChangeListener());
+
+	public AssignedUserTabChangeListener addChangeListenerTo (MainTabView mainView) {
+		AssignedUserTabChangeListener l = new AssignedUserTabChangeListener();
+		mainView.addChangeListener(l);
+		return l;
 	}
-	
+
 	private String getSelectedSubId() {
 		selectedRow = assignedUserTable.getSelectedRow();
 		if (selectedRow >= 0 && selectedRow < assignedUserTable.getRowCount()) {
