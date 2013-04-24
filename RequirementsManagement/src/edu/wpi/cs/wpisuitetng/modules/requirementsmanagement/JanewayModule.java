@@ -76,8 +76,10 @@ public class JanewayModule implements IJanewayModule {
 			}
 			@Override public void ancestorAdded(AncestorEvent e) {
 				callUsernameReadyOnce();
-				System.out.println("Showing all requirements.");
-				mainTabController.addListRequirementsTab();
+				if(mainTabController.getMainView().getTabCount() <= 1) {
+					System.out.println("Showing all requirements.");
+					mainTabController.addListRequirementsTab();
+				}
 			}
 		});
 	}

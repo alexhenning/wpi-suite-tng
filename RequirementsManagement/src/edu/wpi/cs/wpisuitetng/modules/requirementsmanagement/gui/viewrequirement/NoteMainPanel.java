@@ -10,6 +10,7 @@
  *    vpatara
  *    Sergey
  *    Josh
+ *    Christina
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
 
@@ -37,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  * @author vpatara
  * @author Sergey
  * @author Josh
+ * @author Christina
  */
 @SuppressWarnings("serial")
 public class NoteMainPanel extends JPanel implements KeyListener {

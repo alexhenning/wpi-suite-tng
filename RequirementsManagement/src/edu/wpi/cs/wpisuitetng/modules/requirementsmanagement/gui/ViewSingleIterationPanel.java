@@ -19,6 +19,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import javax.swing.JTextField;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddIterationController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
@@ -58,7 +60,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	/** the tab that created this panel */
 	ScrollableTab parent;
 	/** labels to describe the text fields */
-	JLabel lbl1, lbl2, lbl3, lbl4;
+	JLabel lbl1, lbl2, lbl3, lbl4, lbl5;
 	/** text fields for the iteration's data to be entered into */
 	JTextField iterationNumber;
 	/** text field that displays if the iteration was saved or not */
@@ -125,8 +127,9 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		else {
 			lbl1 = new JLabel("Start Date");
 			lbl2 = new JLabel("End Date");
-			lbl3 = new JLabel ("Iteration");
+			lbl3 = new JLabel ("Iteration Number ");
 			lbl4 = new JLabel ("Estimate");
+			lbl5 = new JLabel("Schedualed Requirements:");
 			
 			Date startDate = model.getStartDate();
 			Date endDate = model.getEndDate();
@@ -134,7 +137,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			startDatePicker = new JXDatePicker(startDate != null ? startDate : currentDate);
 			endDatePicker = new JXDatePicker(endDate != null ? endDate : currentDate);
 			
-			result = new JTextField();
+			result = new JTextField(25);
 			
 			iterationNumber = new JTextField(model.getIterationNumber());
 			estimate = new JTextField();
@@ -196,6 +199,8 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			topPanel.add(submit, c);
 			c.gridy = 5;
 			topPanel.add(result, c);
+			c.gridy = 6;
+			topPanel.add(lbl5, c);
 			result.setEditable(false);
 		}
 		
@@ -324,19 +329,6 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		result.setText(string);
 	}
 	
-	class EditIterationAction extends AbstractAction {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			DB.updateIteration(getUpdatedModel(), new SingleIterationCallback() {
-				@Override
-				public void callback(Iteration iteration) {
-					setStatus("Iteration Updated");
-				}
-			});
-		}
-	}
-	
-	
 	/**
 	 *
 	 * callback class to update the iteration's id
@@ -347,35 +339,6 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		@Override
 		public void callback(List<Iteration> iterationList) {
 			model.setId(iterationList.size()+1);
-		}
-	}
-
-	/**
-	 *
-	 * Callback class to make sure that the iterations dates don't overlap with other dates
-	 * @author TODO
-	 *
-	 */
-	class CheckDateOvelapCallback implements IterationCallback {
-		@Override
-		public void callback(List<Iteration> iterationList) {
-			List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
-			for (Iteration i : iterationList) {
-				if(i.getId() != model.getId()) {
-					if(model.getStartDate().after(i.getStartDate()) && model.getStartDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("startDate overlaps with Iteration "+i.getIterationNumber(), "startDate"));
-					}
-					if(model.getEndDate().after(i.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("endDate overlaps with Iteration "+i.getIterationNumber(), "endDate"));
-					}
-					if(i.getStartDate().after(model.getStartDate()) && model.getStartDate().before(i.getEndDate()) ||
-							i.getEndDate().after(model.getStartDate()) && model.getEndDate().before(i.getEndDate())) {
-						issues.add(new ValidationIssue("iteration overlaps with Iteration "+i.getIterationNumber()));
-					}
-				}
-			}
-			//TODO figure out how to display the issues...
-
 		}
 	}
 
@@ -428,6 +391,106 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 
 		return editModel;
 	}
+	
+	/**
+	 * Action to make sure the changes to the iteration are valid, and then update it
+	 * @author James
+	 *
+	 */
+	class EditIterationAction extends AbstractAction {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			DB.getAllIterations(new ValidateSingleIterationUpdateCallback());
+		}
+	}
+	
+	/**
+	 * Validate the changes to the iteration, if they are all valid update the iteration
+	 * @author James
+	 *
+	 */
+	class ValidateSingleIterationUpdateCallback implements IterationCallback {
+
+		@Override
+		public void callback(List<Iteration> iterations) {
+			Iteration updateModel = getUpdatedModel();
+			boolean isValid = true;
+			if(updateModel.getIterationNumber() == null || updateModel.getIterationNumber().length() == 0) {
+				setStatus("An iteration must have a name");
+				isValid = false;
+			}
+			else if(updateModel.getStartDate() != null && updateModel.getEndDate() != null && updateModel.getStartDate().after(updateModel.getEndDate())) {
+				setStatus("The start date must be before the end date");
+				isValid = false;
+			}
+			else {
+				Date iterationStart = updateModel.getStartDate();
+				Calendar noTime = Calendar.getInstance();
+				noTime.setTime(iterationStart);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iterationStart = noTime.getTime();
+				Date iterationEnd = updateModel.getEndDate();
+				noTime.setTime(iterationEnd);
+				noTime.set(Calendar.HOUR_OF_DAY, 0);  
+				noTime.set(Calendar.MINUTE, 0);  
+				noTime.set(Calendar.SECOND, 0);  
+				noTime.set(Calendar.MILLISECOND, 0);
+				iterationEnd = noTime.getTime();
+				for (Iteration i : iterations) {
+					if(i != null && i.getId() != updateModel.getId()) {
+						if(i.getIterationNumber().equals(updateModel.getIterationNumber())) {
+							setStatus("An iteration with this name already exists");
+							isValid = false;
+						}
+						Date iStart = i.getStartDate();
+						noTime.setTime(iStart);
+						noTime.set(Calendar.HOUR_OF_DAY, 0);  
+						noTime.set(Calendar.MINUTE, 0);  
+						noTime.set(Calendar.SECOND, 0);  
+						noTime.set(Calendar.MILLISECOND, 0);
+						iStart = noTime.getTime();
+						Date iEnd = i.getEndDate();
+						noTime.setTime(iEnd);
+						noTime.set(Calendar.HOUR_OF_DAY, 0);  
+						noTime.set(Calendar.MINUTE, 0);  
+						noTime.set(Calendar.SECOND, 0);  
+						noTime.set(Calendar.MILLISECOND, 0);
+						iEnd = noTime.getTime();
+						if(iterationStart.after(iStart) && iterationStart.before(iEnd)) {
+							setStatus("start date overlaps with Iteration "+i.getIterationNumber());
+							isValid = false;
+						}
+						if(iterationEnd.after(iStart) && iterationEnd.before(iEnd)) {
+							setStatus("end date overlaps with Iteration "+i.getIterationNumber());
+							isValid = false;
+						}
+						if((iStart.after(iterationStart) && iStart.before(iterationEnd)) ||
+								(iEnd.after(iterationStart) && iEnd.before(iterationEnd)) ||
+								(iStart.equals(iterationStart) || iEnd.equals(iterationEnd))) {
+							setStatus("iteration overlaps with Iteration "+i.getIterationNumber());
+							isValid = false;
+						}
+					}
+				}
+				if(isValid) {
+					// if there's no problems, update the iteration
+					DB.updateIteration(updateModel, new SingleIterationCallback() {
+
+						@Override
+						public void callback(Iteration iteration) {
+							setStatus("Iteation updated");
+						}
+						
+					});
+				}
+			}
+
+		}
+	}
+	
 
 	/**
 	 * Update the estimate text field to display the iterations estimate

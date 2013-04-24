@@ -11,6 +11,7 @@
  *    Chris Casola
  *    JPage
  *    Josh
+ *    Jacob Palnick
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
@@ -20,6 +21,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
  * AHurle
  * JPage
  * Josh
+ * Jacob Palnick
  */
 
 import java.awt.Component;
@@ -63,7 +65,7 @@ public class MainTabController {
 	private final MainTabView mainView;
 	/** a list requirements tab */
 	private ScrollableTab<ListRequirementsPanel> listReqsView = null;
-	
+
 	/**
 	 * @param view Create a controller that controls this MainTabView
 	 */
@@ -90,7 +92,6 @@ public class MainTabController {
 		public void stateChanged(ChangeEvent e) {
 			if (MainTabController.this.mainView.getSelectedComponent() instanceof RequirementsTab) {
 				RequirementsTab tmpTab = (RequirementsTab)MainTabController.this.mainView.getSelectedComponent();
-				System.out.println("is match: " + (tab == tmpTab));
 				if(tab == tmpTab) {
 					tmpTab.getRequirementPanel().updateLists();
 				}
@@ -416,5 +417,14 @@ public class MainTabController {
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
+	}
+	
+	/**
+	 * Getter for mainView for access in JanewayModule
+	 *
+	 * @return mainView
+	 */
+	public MainTabView getMainView() {
+		return mainView;
 	}
 }
