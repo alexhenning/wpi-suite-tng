@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //TODO who did this?
+ *    //Alex Henning
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
@@ -23,8 +23,8 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 
 /**
  *
- * The tab for iterations
- * @author TODO
+ * TODO
+ * @author Alex Henning
  *
  */
 @SuppressWarnings("serial")
