@@ -63,7 +63,7 @@ public class MainTabController {
 	private final MainTabView mainView;
 	/** a list requirements tab */
 	private ScrollableTab<ListRequirementsPanel> listReqsView = null;
-	
+
 	/**
 	 * @param view Create a controller that controls this MainTabView
 	 */
@@ -415,5 +415,14 @@ public class MainTabController {
 		tab.setComponent(view);
 		view.requestFocus();
 		return tab;
+	}
+	
+	/**
+	 * Getter for mainView for access in JanewayModule
+	 *
+	 * @return mainView
+	 */
+	public MainTabView getMainView() {
+		return mainView;
 	}
 }
