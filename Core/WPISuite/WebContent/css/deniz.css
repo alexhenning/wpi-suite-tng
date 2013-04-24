@@ -30,8 +30,7 @@ body{
 	*/
 	min-height:100%;
 	color:#FFF;
-	font-size:2em;
-	font-family:quicksand;
+	
 	
 	//height:inherit;
 }
@@ -150,7 +149,7 @@ fieldset{
 	background:rgba(255, 255, 255, 0.74);
 	
 	
-	font-size: 14px;
+	font-size: 0.8em;
 	line-height: 20px;
 	color: #333333;
 	text-align: center;
@@ -187,7 +186,6 @@ fieldset{
 	border: none;
 	background: #f8f8f8;
 	/*  color: white;*/
-	font-size: 16.3px;
 	text-decoration: none;
 	text-shadow: none;
 	-webkit-box-shadow: none;
@@ -227,9 +225,10 @@ fieldset{
 }
 
 .title{
+	text-transform:uppercase;
 	padding-top:7px;
 	text-align: left;
-	font-size:1.3em;
+	font-size:1.2em !important;
 }
 
 .description{

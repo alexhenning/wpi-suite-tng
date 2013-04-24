@@ -15,6 +15,8 @@
 		<script>var __adobewebfontsappname__ = "code"</script>
 		<script src="http://use.edgefonts.net/lobster:n4:all;quicksand:i4,n3,i7,n7,n4,i3:all.js">
 		</script>
+		<script>var __adobewebfontsappname__ = "code"</script>
+<script src="http://use.edgefonts.net/lato:n9,i4,n1,i7,i9,n7,i1,i3,n4,n3:all;lobster:n4:all;quicksand:i4,n3,i7,n7,n4,i3:all.js"></script>
 		<link href="css/normalize.css" rel="stylesheet">
 		<link href="css/foundation.css" rel="stylesheet">
 		
@@ -35,6 +37,7 @@ xmlReqList.onreadystatechange = function()
 			// document.getElementById("divBuffer").innerHTML = xmlReqList.responseText;
 			reqList = eval(xmlReqList.responseText);
 			displayReqs();
+			MEDIUM();
 		}else{
 			window.location = "login2.jsp";
 		}
@@ -43,6 +46,8 @@ xmlReqList.onreadystatechange = function()
 };
 
 function displayReqs(){
+	
+	
 	for(var i = 0; i<reqList.length; i++){
 		var iterationName;
 		if(reqList[i].iteration != null)
@@ -56,16 +61,16 @@ function displayReqs(){
 			"<div class='small-1   columns section gray'>"+
 				reqList[i].id+
 			"</div>"+
-			"<div class='small-7  columns section title'>"+
+			"<div class='small-6  columns section title'>"+
 				reqList[i].name+
 			"</div>"+
-			"<div class='small-2   columns section'>"+
+			"<div class='small-2   columns section gray'>"+
 				iterationName+
 			"</div>"+
-			"<div class='small-1   columns section gray'>"+
+			"<div class='small-2   columns section gray'>"+
 				reqList[i].status+
 			"</div>"+
-			"<div class='small-1  columns section priorityM'>"+
+			"<div class='small-1  columns section'>"+
 				reqList[i].priority+
 			"</div>"+
 		"</div>"+
@@ -96,6 +101,22 @@ function displayReqs(){
 		*/
 		
 	}
+	
+	$('div.section:contains("LOW")').each(function() {
+		$(this).addClass("priorityL"); 
+	});
+	$('div.section:contains("MEDIUM")').each(function() {
+		$(this).addClass("priorityM"); 
+	});
+	$('div.section:contains("HIGH")').each(function() {
+		$(this).addClass("priorityH"); 
+	});
+	
+	$("div.section").text(function () {
+	    return $(this).text().replace("MEDIUM", "MED"); 
+	});
+	
+	
 }
 
 function ChangeStyle(ind){
@@ -157,13 +178,16 @@ function sortByStatus(){
 		return (a.status>b.status);
 	});
 	displayReqs();
+	
 }
 
 function sortByPriority(){
 	$("#reqContainer").html("");
 	reqList.sort(function(a, b){
 		if(a.priority != b.priority){
-			if(a.priority == "LOW")
+			if(a.priority == "NONE")
+				return true;
+			if(a.priority == "LOW" && b.priority != "NONE")
 				return true;
 			if(a.priority == "MEDIUM" && b.priority != "LOW")
 				return true;
@@ -174,6 +198,10 @@ function sortByPriority(){
 		}
 	});
 	displayReqs();
+	
+	
+	
+	
 }
 
 function init(){
@@ -183,8 +211,13 @@ function init(){
 	xmlReqList.send();
 }
 </script>
-		
-	</head>
+
+
+
+
+
+
+</head>
 	
 	<body onload="init()">
 		
@@ -218,13 +251,13 @@ function init(){
 					<div class="small-1   columns  sectionHeader " onclick="sortById();">
 						ID
 					</div>
-					<div class="small-7  columns  sectionHeader " onclick="sortByName();">
+					<div class="small-6  columns  sectionHeader " onclick="sortByName();">
 						TITLE
 					</div>
 					<div class="small-2   columns  sectionHeader" onclick="sortByIteration();">
 						ITERATION
 					</div>
-					<div class="small-1   columns  sectionHeader" onclick="sortByStatus();">
+					<div class="small-2   columns  sectionHeader" onclick="sortByStatus();">
 						STATUS
 					</div>
 					<div class="small-1  columns  sectionHeader" onclick="sortByPriority();">
@@ -235,5 +268,34 @@ function init(){
 		</div>
 		
 		<div id = "reqContainer"></div>
-	</body>
+
+
+	<script>
+		$(function() {
+			$('div.section:contains("LOW")').each(function() {
+				$(this).addClass("priorityL"); 
+			});
+		});
+
+		$(function() {
+			$('div.section:contains	("MED")').each(function() {
+				$(this).addClass("priorityM"); 
+			});
+		});
+
+		$(function() {
+			$('div.section:contains("MEDIUM")').each(function() {
+				$(this).addClass("priorityM");
+			});
+		});
+
+		$(function() {
+			$('div.section:contains("HIGH")').each(function() {
+				$(this).addClass("priorityH"); 
+			});
+		});
+	</script>
+
+
+</body>
 </html>
