@@ -159,7 +159,6 @@ public class ListFilteredRequirementsPanel extends JPanel {
 						}
 					}
 				}
-				System.out.println(reqnumber);
 				Object[][] entries = new Object[reqnumber][ROWS];
 				int i = 0;
 				boolean sameIter;
