@@ -11,6 +11,7 @@
  *    Chris Casola
  *    JPage
  *    Josh
+ *    Jacob Palnick
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
@@ -20,6 +21,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
  * AHurle
  * JPage
  * Josh
+ * Jacob Palnick
  */
 
 import java.awt.Component;
