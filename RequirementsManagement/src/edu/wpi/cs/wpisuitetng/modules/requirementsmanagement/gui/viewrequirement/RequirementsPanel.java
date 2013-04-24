@@ -876,6 +876,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		} else {
 			actualEffortField.setBackground(Color.WHITE);
 		}
+		setStatusMessage("");
 		return true;
 	}
 
