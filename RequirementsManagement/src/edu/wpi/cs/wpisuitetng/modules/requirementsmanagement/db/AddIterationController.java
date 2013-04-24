@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Iteration to send to the server
  * @author Tim Calvert
  * @author Jacob Palnick
+ * @author Tim Defreitas
  *
  */
 @SuppressWarnings("serial")

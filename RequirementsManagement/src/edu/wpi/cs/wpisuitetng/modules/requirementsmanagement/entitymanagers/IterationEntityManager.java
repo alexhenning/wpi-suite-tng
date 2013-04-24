@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  * Entity manager for Iterations
  * @author Tim
+ * @author Tim D
  *
  */
 public class IterationEntityManager implements EntityManager<Iteration> {

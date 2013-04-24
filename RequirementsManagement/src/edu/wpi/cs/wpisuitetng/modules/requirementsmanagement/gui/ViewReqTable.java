@@ -7,10 +7,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //Josh
- *    //Tim C
- *    //James
- *    //Jacob Palnick
+ *    Josh
+ *    Tim C
+ *    James
+ *    Jacob Palnick
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;

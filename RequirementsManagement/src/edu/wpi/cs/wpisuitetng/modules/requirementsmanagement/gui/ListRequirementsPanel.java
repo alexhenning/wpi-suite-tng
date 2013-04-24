@@ -62,7 +62,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  * @author Josh
  * @author Tim C
  * @author James
- *
+ * @author vpatara
  */
 @SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel implements ScrollablePanel {

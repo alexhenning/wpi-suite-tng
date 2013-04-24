@@ -24,7 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.Model;
 /**
  * Responsible for copying properties from one Model to another.
  * 
- * @author TODO
+ * @author Andrew Hurle
  */
 public class ModelMapper {
 

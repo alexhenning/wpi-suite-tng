@@ -42,7 +42,9 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * GUI for a project manager to view and manage iterations 
  *
  * @author Josh
- * 
+ * @author William Terry
+ * @author vpatara
+ * @author jlmegin
  */
 @SuppressWarnings("serial")
 public class ViewIterationPanel extends JPanel implements ScrollablePanel {

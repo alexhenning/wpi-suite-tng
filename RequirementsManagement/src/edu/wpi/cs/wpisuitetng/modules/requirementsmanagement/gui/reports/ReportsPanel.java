@@ -50,7 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 
 /**
  * The view for viewing reports.
- * @author TODO
+ * @author alex henning
  */
 @SuppressWarnings("serial")
 public class ReportsPanel extends JPanel implements ScrollablePanel {
