@@ -828,6 +828,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			setStatusMessage("Estimate must be non-negative integer (0-999999).");
 			System.out.println("Estimate value is " + estimateField.getText());
 			return false;
+		} else if(estimateField.getText().equals("0") && !iteration.getSelectedItem().equals("Backlog")) {
+			estimateField.setBackground(Color.RED);
+			setStatusMessage("A requirement must have a positive estimate to be assigned to an iteration");
+			return false;
 		} else {
 			estimateField.setBackground(Color.WHITE);
 		}
