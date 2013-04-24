@@ -835,9 +835,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * @return
 	 */
 	public boolean validateEstimateFields() {
-		if (estimateField.getText().equals("")) { estimateField.setText("0"); }
-		if (actualEffortField.getText().equals("")) { actualEffortField.setText("0"); }
-		
+
 		if (!estimateField.getText().matches("[0-9]{1,6}")) {
 			estimateField.setBackground(Color.RED);
 			setStatusMessage("Estimate must be non-negative integer (0-999999).");
