@@ -60,7 +60,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	/** the tab that created this panel */
 	ScrollableTab parent;
 	/** labels to describe the text fields */
-	JLabel lbl1, lbl2, lbl3, lbl4;
+	JLabel lbl1, lbl2, lbl3, lbl4, lbl5;
 	/** text fields for the iteration's data to be entered into */
 	JTextField iterationNumber;
 	/** text field that displays if the iteration was saved or not */
@@ -129,6 +129,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			lbl2 = new JLabel("End Date");
 			lbl3 = new JLabel ("Iteration Number ");
 			lbl4 = new JLabel ("Estimate");
+			lbl5 = new JLabel("Schedualed Requirements:");
 			
 			Date startDate = model.getStartDate();
 			Date endDate = model.getEndDate();
@@ -198,6 +199,8 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			topPanel.add(submit, c);
 			c.gridy = 5;
 			topPanel.add(result, c);
+			c.gridy = 6;
+			topPanel.add(lbl5, c);
 			result.setEditable(false);
 		}
 		
