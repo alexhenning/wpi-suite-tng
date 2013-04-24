@@ -90,7 +90,6 @@ public class MainTabController {
 		public void stateChanged(ChangeEvent e) {
 			if (MainTabController.this.mainView.getSelectedComponent() instanceof RequirementsTab) {
 				RequirementsTab tmpTab = (RequirementsTab)MainTabController.this.mainView.getSelectedComponent();
-				System.out.println("is match: " + (tab == tmpTab));
 				if(tab == tmpTab) {
 					tmpTab.getRequirementPanel().updateLists();
 				}
