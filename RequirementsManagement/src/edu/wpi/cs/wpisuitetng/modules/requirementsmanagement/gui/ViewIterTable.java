@@ -26,7 +26,7 @@ import javax.swing.table.AbstractTableModel;
 public class ViewIterTable extends AbstractTableModel {
 	
     /** name of the columns */
-    private String[] columnNames = {"ID", "Name", "Start Date", "End Date", "Estimate"};
+    private String[] columnNames = {"ID", "Iteration Number", "Start Date", "End Date", "Estimate"};
     //first list is row, second list is column data
     
     /** data in each cell*/

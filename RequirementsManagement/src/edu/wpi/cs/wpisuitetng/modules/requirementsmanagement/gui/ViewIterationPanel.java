@@ -48,7 +48,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	
 	public static final int ID = 0;
-	public static final int NAME = 1;
+	public static final int ITERATION_NUMBER = 1;
 	public static final int STARTDATE = 2;
 	public static final int ENDDATE = 3;
 	public static final int ESTIMATE = 4;
@@ -189,7 +189,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 			// put the data in the table
 			Object[][] entries = new Object[iterations.size() + 1][COLUMNS];
 			entries[0][ID] = 0;
-			entries[0][NAME] = "Backlog";
+			entries[0][ITERATION_NUMBER] = "Backlog";
 			entries[0][STARTDATE] = "N/A";
 			entries[0][ENDDATE] = "N/A";
 
@@ -206,7 +206,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 			if (iterations.size() > 0) {
 				for(Iteration iteration : iterations) {
 					entries[i][ID] = iteration.getId();
-					entries[i][NAME] = iteration.getIterationNumber();
+					entries[i][ITERATION_NUMBER] = iteration.getIterationNumber();
 					entries[i][STARTDATE] = df.format(iteration.getStartDate());
 					entries[i][ENDDATE] = df.format(iteration.getEndDate());
 
@@ -241,7 +241,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 				if (i == ID) {
 					column.setPreferredWidth(30);
 				}
-				else if (i == NAME) {
+				else if (i == ITERATION_NUMBER) {
 					column.setPreferredWidth(700);
 				}
 				else {
