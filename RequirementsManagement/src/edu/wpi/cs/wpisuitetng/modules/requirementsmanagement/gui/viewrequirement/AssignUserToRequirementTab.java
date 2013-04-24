@@ -275,11 +275,13 @@ public class AssignUserToRequirementTab extends JPanel {
 		possibleUserTable.setEnabled(false);
 		DB.getAllUsers(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
 	}
-	
-	public void addChangeListenerTo(MainTabView mainView){
-		mainView.addChangeListener(new AssignedUserTabChangeListener());
+
+	public AssignedUserTabChangeListener addChangeListenerTo (MainTabView mainView) {
+		AssignedUserTabChangeListener l = new AssignedUserTabChangeListener();
+		mainView.addChangeListener(l);
+		return l;
 	}
-	
+
 	private String getSelectedSubId() {
 		selectedRow = assignedUserTable.getSelectedRow();
 		if (selectedRow >= 0 && selectedRow < assignedUserTable.getRowCount()) {
