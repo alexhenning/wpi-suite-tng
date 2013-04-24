@@ -8,6 +8,7 @@
  *
  * Contributors:
  *    William Terry
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
@@ -23,9 +24,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 public interface SinglePermissionCallback {
 	/**
 	 * Implements an action to be performed on the permissions profile being passed back.
-	 * 
-	 * @param req
-	 *            The requirement being returned
+	 *
+	 * @param profile The permission model being returned
 	 */
 	void callback(Permissions profile);
+
+	/**
+	 * Implements an action to be performed when the retrieval failed
+	 */
+	void failure();
 }

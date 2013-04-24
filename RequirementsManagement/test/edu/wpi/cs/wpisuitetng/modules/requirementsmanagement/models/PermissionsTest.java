@@ -35,11 +35,6 @@ public class PermissionsTest {
 		assertEquals(PermissionLevel.ADMIN, goodPermissions.getPermissionLevel());
 	}
 	@Test
-	public void testSetPermissionLevelUPDATE() {
-		goodPermissions.setPermissionLevel(PermissionLevel.UPDATE);
-		assertEquals(PermissionLevel.UPDATE, goodPermissions.getPermissionLevel());
-	}
-	@Test
 	public void testSetPermissionLevelNONE() {
 		goodPermissions.setPermissionLevel(PermissionLevel.NONE);
 		assertEquals(PermissionLevel.NONE, goodPermissions.getPermissionLevel());

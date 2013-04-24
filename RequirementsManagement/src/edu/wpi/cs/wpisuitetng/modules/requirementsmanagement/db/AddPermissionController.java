@@ -7,7 +7,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    vpatara
+ *    William Terry
+ *    jlmegin
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
@@ -15,19 +17,14 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-//import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
-//import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.PermissionsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreatePermissionRequestObserver;
-import edu.wpi.cs.wpisuitetng.network.Network;
-import edu.wpi.cs.wpisuitetng.network.Request;
-import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
+ * Responds to an action to add a user permission to the server
  *
- * Handles saving permissions to the server
- * @author TODO
+ * @author vpatara
  *
  */
 public class AddPermissionController implements ActionListener {
@@ -36,13 +33,13 @@ public class AddPermissionController implements ActionListener {
 	private final PermissionsPanel panel;
 
 	/**
-	 * constructor
-	 * @param panel the permissions panel
+	 * Constructs the controller for adding a new permission model
+	 *
+	 * @param panel the permissions panel where the action is taking place
 	 */
 	public AddPermissionController(PermissionsPanel panel) {
 		this.panel = panel;
 	}
-
 
 	/**
 	 * This will be called when the user clicks an add button
@@ -54,24 +51,16 @@ public class AddPermissionController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		panel.setAddPermissionStatus("");
-		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions",  HttpMethod.PUT);
-		request.setBody(panel.getNewModel().toJSON());
-		request.addObserver(new CreatePermissionRequestObserver(this));
-		request.send();
+		DB.addSinglePermission(panel.getNewModel(), new CreatePermissionRequestObserver(this));
 	}
 
 	/**
-	 * Response if everything worked
+	 * Responds if the new permission has been added
 	 *
-	 * @param profile
+	 * @param profile the newly added permission
 	 */
 	public void receivedAddConfirmation(Permissions profile) {
-		DB.getSinglePermission(profile.getUsername(), new SinglePermissionCallback() {
-			@Override
-			public void callback(Permissions profile) {
-				panel.updateAllPermissionsList();
-			}
-		});
+		panel.updateAllPermissionsList();
 		panel.resetCreationFields();
 		panel.setAddPermissionStatus("New permission added for "
 				+ profile.getUsername() + " with "

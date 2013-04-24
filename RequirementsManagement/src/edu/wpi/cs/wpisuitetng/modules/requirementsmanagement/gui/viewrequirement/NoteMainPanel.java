@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddNoteController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.HintedTextArea;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementNote;
 
@@ -107,12 +108,22 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 		
 		// Add elements to the main panel
 		add(noteScrollPane, BorderLayout.CENTER);
-		
-		noteAdder = new JPanel(new BorderLayout());
-		
-		noteAdder.add(textPane, BorderLayout.PAGE_START);
-		noteAdder.add(addButton, BorderLayout.LINE_START);
-		add(noteAdder, BorderLayout.PAGE_END);
+
+		// Allow access to users with certain permission levels
+		// The username info should be ready, so use the non-blocking version
+		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
+		case ADMIN:
+			// Only Administrator can add notes
+			noteAdder = new JPanel(new BorderLayout());
+			noteAdder.add(textPane, BorderLayout.PAGE_START);
+			noteAdder.add(addButton, BorderLayout.LINE_START);
+			add(noteAdder, BorderLayout.PAGE_END);
+			break;
+
+		default:
+			// "None" can only view notes
+			break;
+		}
 	}
 	
 	/**

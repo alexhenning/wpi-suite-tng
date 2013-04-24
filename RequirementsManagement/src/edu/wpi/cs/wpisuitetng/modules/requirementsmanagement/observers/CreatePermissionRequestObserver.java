@@ -19,10 +19,11 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
+
 /**
  * This observer is called when a response is received from a request 
  * to the server to create (assign) a permission.
- * 
+ *
  * @author vpatara
  * @author David Modica
  * @author Tim Calvert
@@ -80,7 +81,9 @@ public class CreatePermissionRequestObserver implements RequestObserver {
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
+		// Tells the controller that an error occurred
+		controller.receivedAddError();
+
 		System.err.println("The request to create a permission has failed.");
 	}
-	
 }

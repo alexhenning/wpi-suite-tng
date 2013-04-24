@@ -9,6 +9,7 @@
  * Contributors:
  *    Andrew Hurle
  *    Chris Casola
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar;
@@ -26,7 +27,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.CreateRelea
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ShowHelpAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewIterationAction;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.actions.ViewPermissionAction;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
 /**
  * The Requirements Management tab's toolbar panel.
@@ -94,6 +98,27 @@ public class NavToolbarView extends ToolbarGroupView {
 		Double toolbarGroupWidth = permissionButton.getPreferredSize().getWidth() + 
 				viewReleaseNumbers.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		setPreferredWidth(toolbarGroupWidth.intValue());
+
+		// Allow access to users with certain permission levels
+		CurrentUserPermissionManager.getInstance().addCallback(
+				new SinglePermissionCallback() {
+			@Override
+			public void failure() {} // No need to implement
+
+			@Override
+			public void callback(Permissions profile) {
+				switch (profile.getPermissionLevel()) {
+				case NONE:
+					// "None" can't view permissions
+					permissionButton.setVisible(false);
+					break;
+
+				default:
+					// Administrator can do everything
+					break;
+				}
+			}
+		});
 	}
 
 	class ShowReportsAction extends AbstractAction {

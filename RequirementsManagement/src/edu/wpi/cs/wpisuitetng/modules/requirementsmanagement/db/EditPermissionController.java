@@ -33,8 +33,9 @@ public class EditPermissionController implements ActionListener {
 	private final PermissionsPanel panel;
 
 	/**
-	 * Constructor
-	 * @param panel the permissions panel
+	 * Constructs the controller for updating a permission model
+	 *
+	 * @param panel the permissions panel where the action is taking place
 	 */
 	public EditPermissionController(PermissionsPanel panel) {
 		this.panel = panel;
@@ -56,17 +57,12 @@ public class EditPermissionController implements ActionListener {
 	}
 
 	/**
-	 * confirm that the permission was edited
+	 * Confirm that the permission has been updated
 	 *
-	 * @param profile
+	 * @param profile the newly updated permission
 	 */
 	public void receivedEditConfirmation(Permissions profile) {
-		DB.getSinglePermission(profile.getUsername(), new SinglePermissionCallback() {
-			@Override
-			public void callback(Permissions profile) {
-				panel.updateAllPermissionsList();
-			}
-		});
+		panel.updateAllPermissionsList();
 		panel.resetUpdateFields();
 	}
 }

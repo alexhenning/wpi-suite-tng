@@ -9,6 +9,7 @@
  * Contributors:
  *    Andrew Hurle
  *    Chris Casola
+ *    vpatara
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CanCloseRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CloseSubRequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
@@ -156,6 +158,20 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		// Calculate the width of the toolbar
 		Double toolbarGroupWidth = closeButton.getPreferredSize().getWidth() + 40; // 40 accounts for margins between the buttons
 		setPreferredWidth(toolbarGroupWidth.intValue());
+
+		// Allow access to users with certain permission levels
+		// The username info should be ready, so use the non-blocking version
+		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
+		case NONE:
+			// "None" can't close (make complete), delete, or restore the requirement
+			closeButton.setVisible(false);
+			deleteButton.setVisible(false);
+			break;
+
+		default:
+			// Administrator can do everything
+			break;
+		}
 	}
 	
 	class CanCloseCallback implements CanCloseRequirementCallback {
