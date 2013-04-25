@@ -157,7 +157,7 @@ public class guiTest1 {
 	}
 
 	@Test
-	public void testCreateMainTabController() {
+	public void testCreateMainTabController() throws InterruptedException {
 		// Sets the username to be "tester"
 		ConfigManager.getConfig().setUserName("tester");
 		// ... so that this manager can use
@@ -190,15 +190,29 @@ public class guiTest1 {
 		mainTabController.switchToLeftTab();
 
 		mainTabController.switchToRightTab();
+
+		for(int i = 0; i < 10; i++) {
+			mainTabController.switchToLeftTab();
+		}
+		for(int i = 0; i < 20; i++) {
+			mainTabController.switchToRightTab();
+		}
+		for(int i = 0; i < 20; i++) {
+			mainTabController.switchToLeftTab();
+		}
+
+		Object sync = new Object();
+		synchronized (sync) {
+			sync.wait(1000);
+		}
 	}
 
 	@Test
 	public void testCreateRequirementModel() {
-		RequirementModel requirementModel2 = new RequirementModel(3, null,
-				RequirementStatus.NEW, null, "name3", "description3", 0, 0,
-				new User("", "", "", -1), new ArrayList<User>(), new Date(),
-				new Date(), new ArrayList<RequirementEvent>(),
-				new ArrayList<String>(), null, RequirementType.EPIC);
+		new RequirementModel(3, null, RequirementStatus.NEW, null, "name3",
+				"description3", 0, 0, new User("", "", "", -1),
+				new ArrayList<User>(), new Date(), new Date(),
+				new ArrayList<RequirementEvent>(), new ArrayList<String>(), null, RequirementType.EPIC);
 	}
 
 	@Test
