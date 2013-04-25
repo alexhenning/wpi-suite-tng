@@ -19,7 +19,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
  */
 public enum ProjectEventObjectType {
 	REQUIREMENT ("requirementmodel", "id"),
-	PERMISIONS ("permissions", "username");
+	PERMISSIONS ("permissions", "username");
 
 	private final String modelName;
     private final String idFieldName;
