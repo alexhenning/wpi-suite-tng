@@ -37,7 +37,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel.ListProjectEvents;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 
@@ -321,7 +320,6 @@ public class RequirementSubrequirementTab extends JPanel {
 		subrequirementsTable.setEnabled(false);
 		possibleSubrequirementsTable.setEnabled(false);
 		DB.getAllRequirements(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
-		DB.getAllProjectEvents(parent.new ListProjectEvents());
 	}
 	
 	private String getSelectedSubId() {

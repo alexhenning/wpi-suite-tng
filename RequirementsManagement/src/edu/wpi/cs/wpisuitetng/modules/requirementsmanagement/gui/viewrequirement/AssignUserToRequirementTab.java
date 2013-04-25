@@ -288,7 +288,6 @@ public class AssignUserToRequirementTab extends JPanel {
 		assignedUserTable.setEnabled(false);
 		possibleUserTable.setEnabled(false);
 		DB.getAllUsers(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
-		DB.getAllProjectEvents(parent.new ListProjectEvents());
 	}
 
 	public AssignedUserTabChangeListener addChangeListenerTo (MainTabView mainView) {
