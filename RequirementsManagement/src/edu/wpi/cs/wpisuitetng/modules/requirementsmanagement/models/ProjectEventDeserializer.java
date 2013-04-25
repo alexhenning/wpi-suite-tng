@@ -69,7 +69,7 @@ class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 				JsonObject changeSet = object;
 				if (changeSet.has("changes")) {
 					JsonObject changes = changeSet.get("changes").getAsJsonObject();
-					if(oType == ProjectEventObjectType.PERMISSIONS) {
+					if(oType == ProjectEventObjectType.PERMISIONS) {
 						addFieldChange("permissionLevel", PermissionLevel.class, changes, context, changesMap);
 						addFieldChange("username", String.class, changes, context, changesMap);
 					} else if (oType == ProjectEventObjectType.REQUIREMENT) {

@@ -74,7 +74,7 @@ public class PermissionEntityManager implements
 			throw new BadRequestException();
 		}
 		
-		ProjectEvent creation = ProjectEvent.createProjectCreationEvent(ProjectEventObjectType.PERMISSIONS, newPermission.getUsername()+"");
+		ProjectEvent creation = ProjectEvent.createProjectCreationEvent(ProjectEventObjectType.PERMISIONS, newPermission.getUsername()+"");
 		// make sure the user exists
 		creation.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
 		creation.setId(CountEvents() + 1);
@@ -141,7 +141,7 @@ public class PermissionEntityManager implements
 		
 		Permissions existingPermissions = validator.getLastExistingPermissions();
 		
-		ProjectEvent changeset = ProjectEvent.createProjectChangesetEvent(ProjectEventObjectType.PERMISSIONS, existingPermissions.getUsername()+"");
+		ProjectEvent changeset = ProjectEvent.createProjectChangesetEvent(ProjectEventObjectType.PERMISIONS, existingPermissions.getUsername()+"");
 		// make sure the user exists
 		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
 		changeset.setId(CountEvents() + 1);
