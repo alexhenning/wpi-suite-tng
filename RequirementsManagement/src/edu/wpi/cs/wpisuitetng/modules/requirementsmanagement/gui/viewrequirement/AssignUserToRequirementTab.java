@@ -43,7 +43,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewUserTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel.ListProjectEvents;
 
 
 /**
@@ -338,7 +337,7 @@ public class AssignUserToRequirementTab extends JPanel {
 					String name = user.getName();
 					String username = user.getUsername();
 					if (assignees.contains(user)) {
-						DB.getSinglePermission(name, new PermissionLevelRetrievalCallback(assignedUserTableModel, joinedEntryList.size()));
+						DB.getSinglePermission(username, new PermissionLevelRetrievalCallback(assignedUserTableModel, joinedEntryList.size()));
 						Object[] joinedEntry = new Object[COLUMN];
 						joinedEntry[ID] = id;
 						joinedEntry[NAME] = name;
@@ -346,7 +345,7 @@ public class AssignUserToRequirementTab extends JPanel {
 						joinedEntry[PERMISSIONLEVEL] = null;
 						joinedEntryList.add(joinedEntry);
 					} else {
-						DB.getSinglePermission(name, new PermissionLevelRetrievalCallback(possibleUserTableModel, disjointEntryList.size()));
+						DB.getSinglePermission(username, new PermissionLevelRetrievalCallback(possibleUserTableModel, disjointEntryList.size()));
 						Object[] disjointEntry = new Object[COLUMN];
 						disjointEntry[ID] = id;
 						disjointEntry[NAME] = name;

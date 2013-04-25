@@ -12,6 +12,7 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
@@ -64,8 +65,23 @@ public class RetrieveSinglePermissionRequestObserver implements
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
-		System.err.println("The request to get a permissions profile failed.");
-		callback.failure();
+		System.err.println("The request to get a permissions profile failed, so now creating a new one");
+
+		boolean resolved = false;
+		// If the error was "Not Found," add a new user
+		if(iReq.getResponse().getStatusCode() == 404) {
+			// Gets the username put at the end of the URL
+			String parts[] = iReq.getUrl().toString().split("/");
+			if(parts.length > 0) {
+				String username = parts[parts.length - 1];
+				System.err.println("Adding a new profile for [" + username + "]");
+				Permissions newProfile = CurrentUserPermissionManager.getInstance().addNewPermissionForNewUser(username);
+				resolved = true;
+				callback.callback(newProfile);
+			}
+		}
+
+		if(!resolved) callback.failure();
 	}
 
 	/**
