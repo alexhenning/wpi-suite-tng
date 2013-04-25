@@ -100,7 +100,7 @@ public class RequirementHistoryPanel extends JPanel {
 				}
 			}
 		} else {
-			message = "Created";
+			message = "Requirement created";
 		}
 		this.message = message;
 
@@ -164,30 +164,28 @@ public class RequirementHistoryPanel extends JPanel {
 	}
 
 	/**
-	 * Adds GUI components to display a note (including a message, an author,
-	 * and a date)
-	 * 
+	 * Adds GUI components to display one transaction log (including a message,
+	 * an author, and a date)
 	 */
 	protected void addComponents() {
-		
-		//set layout
+
+		// Set layout
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		setLayout(new BorderLayout());
 
-		//creates area for message and adds to note panel
+		// Creates area for logs and adds to history panel
 		messageArea = new JTextArea(message);
 		messageArea.setLineWrap(true);
 		messageArea.setEditable(false);
 		messageArea.setFocusable(false);
-		messageArea.setOpaque(false);
+		messageArea.setBackground(Color.getHSBColor(0f, 0f, 0.98f)); // Very light gray
 		add(messageArea, BorderLayout.CENTER);
-		
-		//creates area for creation information and adds to note panel
+
+		// Creates area for logging information and adds to history panel
 		infoText = new JTextField(author + " changed on " + date.toString());
 		infoText.setEditable(false);
 		infoText.setFocusable(false);
 		infoText.setOpaque(false);
 		add(infoText, BorderLayout.PAGE_END);
-		
 	}
 }

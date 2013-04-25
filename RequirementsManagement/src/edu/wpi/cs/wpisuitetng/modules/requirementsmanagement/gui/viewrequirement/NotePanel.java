@@ -77,30 +77,30 @@ public class NotePanel extends JPanel {
 	 */
 	protected void addComponents() {
 		
-		//set layout
+		// Set layout
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		setLayout(new BorderLayout());
-		
-		authorText = new JTextField(author);
+
+		// Creates area for author and adds to note panel
+		authorText = new JTextField("Note by " + author);
 		authorText.setEditable(false);
 		authorText.setFocusable(false);
 		authorText.setOpaque(false);
 		add(authorText, BorderLayout.PAGE_START);
 
-		//creates area for message and adds to note panel
+		// Creates area for message and adds to note panel
+		// This area is focusable so that users can copy texts right from the note
 		messageArea = new JTextArea(message);
 		messageArea.setLineWrap(true);
 		messageArea.setEditable(false);
-		messageArea.setFocusable(false);
-		messageArea.setOpaque(false);
+		messageArea.setBackground(Color.getHSBColor(0f, 0f, 0.98f)); // Very light gray
 		add(messageArea, BorderLayout.CENTER);
-		
-		//creates area for creation information and adds to note panel
-		infoText = new JTextField("added note on " + date.toString());
+
+		// Creates area for creation information and adds to note panel
+		infoText = new JTextField("Added on " + date.toString());
 		infoText.setEditable(false);
 		infoText.setFocusable(false);
 		infoText.setOpaque(false);
 		add(infoText, BorderLayout.PAGE_END);
-		
 	}
 }
