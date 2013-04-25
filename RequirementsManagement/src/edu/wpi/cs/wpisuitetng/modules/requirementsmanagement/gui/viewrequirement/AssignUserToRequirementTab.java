@@ -12,6 +12,7 @@
  *    William
  *    Jacob Palnick
  *    vpatara
+ *    Cindy
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement;
@@ -51,6 +52,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
  * @author Deniz
  * @author Jacob Palnick
  * @author William Terry
+ * @author cynthia
  */
 @SuppressWarnings("serial")
 public class AssignUserToRequirementTab extends JPanel {
