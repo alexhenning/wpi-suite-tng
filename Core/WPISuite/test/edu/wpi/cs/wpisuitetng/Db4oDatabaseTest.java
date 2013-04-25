@@ -18,7 +18,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.database.Data;
@@ -28,8 +28,14 @@ import edu.wpi.cs.wpisuitetng.modules.Model;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 
+@SuppressWarnings("unused")
 public class Db4oDatabaseTest {
-	
+
+	@Before
+	public void setUp() {
+		DataStore.getDataStore().deleteAll(new User("", "", "", 0));
+		DataStore.getDataStore().deleteAll(new Project("", ""));
+	}
 
 	@Test
 	public void testSaveandRetrieve() throws WPISuiteException {
@@ -41,8 +47,7 @@ public class Db4oDatabaseTest {
 		assertEquals(me, firstUser);
 		db.delete(me);
 	}
-	
-	@Ignore
+
 	@Test
 	public void testDelete() throws WPISuiteException{
 		Data db = DataStore.getDataStore();
@@ -64,8 +69,6 @@ public class Db4oDatabaseTest {
 		User Mjolnir = db.retrieve(User.class, "username", "rchamer").toArray(arr)[0];
 		assertEquals(firstUser, Mjolnir);
 		db.delete(Mjolnir);
-		
-		
 	}
 	
 	@Test
