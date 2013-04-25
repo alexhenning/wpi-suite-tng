@@ -48,7 +48,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * The view for creating an iteration
  *
  * @author Josh
- *
+ * @author vpatara
  */
 @SuppressWarnings("serial")
 public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel {

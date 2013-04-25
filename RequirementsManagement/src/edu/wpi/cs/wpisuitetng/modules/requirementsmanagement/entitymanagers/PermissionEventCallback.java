@@ -25,7 +25,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
 /**
  * Responsible for filling in a changeset after being passed to
  * {@link ModelMapper#map(Model, Model, MapCallback)} 
- * @author TODO
+ * @author Chris Casola
+ * @author Andrew Hurle
  */
 class PermissionEventCallback implements MapCallback {
 	

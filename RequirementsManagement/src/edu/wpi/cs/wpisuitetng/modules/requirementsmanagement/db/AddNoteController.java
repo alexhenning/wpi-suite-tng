@@ -9,6 +9,7 @@
  * Contributors:
  *    Chris Casola
  *    Andrew Hurle
+ *    Tim Calvert
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
@@ -34,7 +35,8 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  *
  * Handles saving requirement notes to the server
  * @author Tim
- *
+ * @author andrew hurle
+ * @author Chris Casola
  */
 @SuppressWarnings("serial")
 public class AddNoteController extends AbstractAction implements ActionListener{

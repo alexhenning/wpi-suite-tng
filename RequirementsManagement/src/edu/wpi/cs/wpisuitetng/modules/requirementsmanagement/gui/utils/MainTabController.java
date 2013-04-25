@@ -16,6 +16,8 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
 
+<<<<<<< HEAD
+=======
 /**
  * Contributors:
  * AHurle
@@ -24,6 +26,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
  * Jacob Palnick
  */
 
+>>>>>>> 27e735491c4f1963c482cf2904e4aa10dd9bb4f2
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -58,6 +61,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * 
  * @author Andrew Hurle
  * @author Josh Morse
+ * @author Jacob Palnick
  */
 public class MainTabController {
 	

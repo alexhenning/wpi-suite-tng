@@ -33,7 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.Requirement
 
 /**
  * This view is responsible for showing the form for creating or viewing a new requirements.
- * @author TODO
+ * @author andrew hurle
  */
 @SuppressWarnings("serial")
 public class RequirementsTab extends JPanel implements IToolbarGroupProvider {

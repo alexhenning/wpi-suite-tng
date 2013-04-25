@@ -30,7 +30,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Controller responds to a click of an add button to create a new
  * Requirement to send to the server
  * @author Tim Calvert
- *
+ * @author Tim Defreitas
  */
 @SuppressWarnings("serial")
 public class AddRequirementController extends AbstractAction implements ActionListener {
