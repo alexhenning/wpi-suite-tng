@@ -16,17 +16,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
 
-<<<<<<< HEAD
-=======
-/**
- * Contributors:
- * AHurle
- * JPage
- * Josh
- * Jacob Palnick
- */
-
->>>>>>> 27e735491c4f1963c482cf2904e4aa10dd9bb4f2
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
