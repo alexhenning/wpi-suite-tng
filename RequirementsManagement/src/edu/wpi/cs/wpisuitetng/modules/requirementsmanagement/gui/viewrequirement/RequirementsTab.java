@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.RequirementToolbarView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel;
 
 /**
  * This view is responsible for showing the form for creating or viewing a new requirements.
