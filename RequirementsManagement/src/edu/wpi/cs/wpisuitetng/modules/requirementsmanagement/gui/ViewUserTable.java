@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    william
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
@@ -19,7 +19,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLe
 /**
  *
  * The model for the permissions table
- * @author TODO
+ * @author William
  *
  */
 @SuppressWarnings("serial")

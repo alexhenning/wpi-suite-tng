@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -108,6 +109,8 @@ public class AssignUserToRequirementTab extends JPanel {
 	protected void addComponents() {
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
+		JLabel asgnULabel = new JLabel("Assigned Users");
+		JLabel otherULabel = new JLabel("All Other Users");
 
 		assignedUserTableModel = new ViewUserTable();
 		assignedUserTable = new JTable(assignedUserTableModel);// {
@@ -187,13 +190,19 @@ public class AssignUserToRequirementTab extends JPanel {
 		removeUserButton.setMinimumSize(pref);
 		
 		//layout the components
+		layout.putConstraint(SpringLayout.WEST, asgnULabel, 4, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, asgnULabel, 4, SpringLayout.NORTH, this);
+		
 		layout.putConstraint(SpringLayout.WEST, assignedUserTableScrollPane, 4, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, assignedUserTableScrollPane, -4, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.NORTH, assignedUserTableScrollPane, 4, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.NORTH, assignedUserTableScrollPane, 4, SpringLayout.SOUTH, asgnULabel);
+		
+		layout.putConstraint(SpringLayout.WEST, otherULabel, 4, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, otherULabel, 5, SpringLayout.SOUTH, assignedUserTableScrollPane);
 		
 		layout.putConstraint(SpringLayout.WEST, possibleUserTableScrollPane, 4, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.EAST, this, 4, SpringLayout.EAST, possibleUserTableScrollPane);
-		layout.putConstraint(SpringLayout.NORTH, possibleUserTableScrollPane, 5, SpringLayout.SOUTH, assignedUserTableScrollPane);
+		layout.putConstraint(SpringLayout.NORTH, possibleUserTableScrollPane, 4, SpringLayout.SOUTH, otherULabel);
 		layout.putConstraint(SpringLayout.SOUTH, this, 3 + 4 + addUserButton.getPreferredSize().height, SpringLayout.SOUTH, possibleUserTableScrollPane);
 		
 		layout.putConstraint(SpringLayout.EAST, addUserButton, -2, SpringLayout.HORIZONTAL_CENTER, this);
@@ -202,15 +211,18 @@ public class AssignUserToRequirementTab extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, removeUserButton, 2, SpringLayout.HORIZONTAL_CENTER, this);
 		layout.putConstraint(SpringLayout.NORTH, removeUserButton, 0, SpringLayout.NORTH, addUserButton);
 		
+		
 		// Add elements to the main panel
+		add(asgnULabel);
 		add(assignedUserTableScrollPane);
-
+		
 		// Allow access to users with certain permission levels
 		// The username info should be ready, so use the non-blocking version
 		switch (CurrentUserPermissionManager.getInstance().getCurrentProfile().getPermissionLevel()) {
 		case ADMIN:
 			// Administrator can edit assignees
 			add(possibleUserTableScrollPane);
+			add(otherULabel);
 			add(addUserButton);
 			add(removeUserButton);
 			break;
