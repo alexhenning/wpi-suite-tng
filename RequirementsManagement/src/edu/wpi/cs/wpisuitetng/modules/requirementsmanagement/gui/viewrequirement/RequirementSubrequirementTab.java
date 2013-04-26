@@ -18,6 +18,8 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequiremen
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -94,6 +96,8 @@ public class RequirementSubrequirementTab extends JPanel {
 	private ArrayList<String> directSubIdList;
 	/** All children (descendants) of this requirement (including child's child) */
 	private ArrayList<String> allSubIdList;
+	/** List of requirements having parents */
+	private ArrayList <String> hasParent;
 
 	/**
 	 * Constructs a panel for notes
@@ -161,6 +165,16 @@ public class RequirementSubrequirementTab extends JPanel {
 			@Override public void mouseEntered(MouseEvent arg0) {}
 			@Override public void mouseClicked(MouseEvent arg0) {}
 		});
+		possibleSubrequirementsTable.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				updateSelectedPossible(getSelectedPosId());
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {}
+		});
 		possibleSubrequirementTableScrollPane = new JScrollPane(possibleSubrequirementsTable);
 		possibleSubrequirementTableScrollPane.setPreferredSize(new Dimension(300, 300));
 		possibleSubrequirementTableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -171,11 +185,12 @@ public class RequirementSubrequirementTab extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = possibleSubrequirementsTable.getSelectedRow();
-				if (selectedRow >= 0 && selectedRow < possibleSubrequirementsTable.getRowCount()) {
+				if (selectedRow >= 0 && selectedRow < possibleSubrequirementsTable.getRowCount() &&
+						((Boolean) possibleSubrequirementsTable.getModel().getValueAt(selectedRow, THIS_AS_CHILD))) {
 					parent.addChild(new Integer((String) possibleSubrequirementsTable.getModel().getValueAt(selectedRow, ID)));
 				}
+				updateSelectedPossible(getSelectedPosId());
 			}
-			
 		});
 
 		setParentButton = new JButton("Add as child to selected");
@@ -183,11 +198,12 @@ public class RequirementSubrequirementTab extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = possibleSubrequirementsTable.getSelectedRow();
-				if (selectedRow >= 0 && selectedRow < possibleSubrequirementsTable.getRowCount()) {
+				if (selectedRow >= 0 && selectedRow < possibleSubrequirementsTable.getRowCount() &&
+						((Boolean) possibleSubrequirementsTable.getModel().getValueAt(selectedRow, THIS_AS_PARENT))) {
 					parent.addToParent(new Integer((String) possibleSubrequirementsTable.getModel().getValueAt(selectedRow, ID)));
 				}
+				updateSelectedPossible(getSelectedPosId());
 			}
-			
 		});
 		
 		removeChildButton = new JButton("Remove selected child");
@@ -199,7 +215,6 @@ public class RequirementSubrequirementTab extends JPanel {
 					parent.removeChild((String) subrequirementsTable.getModel().getValueAt(selectedRow, ID));
 				}
 			}
-			
 		});
 		
 		int maxPreferedWidth = (addChildButton.getPreferredSize().width > setParentButton.getPreferredSize().width ? addChildButton.getPreferredSize().width : setParentButton.getPreferredSize().width);
@@ -271,8 +286,11 @@ public class RequirementSubrequirementTab extends JPanel {
 			addChildButton.setEnabled(false);
 			setParentButton.setEnabled(false);
 		} else {
-			addChildButton.setEnabled(!directSubIdList.contains(selectedId) && !allParentIdList.contains(selectedId));
-			setParentButton.setEnabled(!directParentIdList.contains(selectedId) && !allSubIdList.contains(selectedId));
+			addChildButton.setEnabled(!allSubIdList.contains(selectedId) &&
+									!allParentIdList.contains(selectedId) &&
+									!hasParent.contains(selectedId));
+			setParentButton.setEnabled(!hasParent.contains(parent.model.getId() + "") &&
+									!allSubIdList.contains(selectedId));
 		}
 	}
 	
@@ -365,23 +383,27 @@ public class RequirementSubrequirementTab extends JPanel {
 		public void callback(List<RequirementModel> reqs) {
 			System.out.println("updateTablesCallback "+reqs.size());
 			if (reqs.size() > 0) {
+				String thisId = parent.model.getId() + "";
 				directSubIdList = new ArrayList<String>();
 				allSubIdList = new ArrayList<String>();
 				directParentIdList = new ArrayList<String>();
 				allParentIdList = new ArrayList<String>();
 
-				// For simplicity, assume this requirement is both its own sub and parent
-				directSubIdList.add(parent.model.getId() + "");
-				directParentIdList.add(parent.model.getId() + "");
+				hasParent = new ArrayList <String>();
+				for(RequirementModel req : reqs) {
+					for(String id : req.getSubRequirements()) {
+						if(!hasParent.contains(id))
+							hasParent.add(id);
+					}
+				}
 
 				// Collects its immediate sub-requirements (children),
 				// i.e., requirements that are already this one's sub-requirements
 				directSubIdList.addAll(subrequirements);
 
-				// Collects its immediate parents
+				// Collects its immediate parents (only one allowed)
 				for(RequirementModel req : reqs) {
 					String parentId = req.getId() + "";
-					String thisId = parent.model.getId() + "";
 
 					// Add it if it's a parent but not yet added
 					if(!directParentIdList.contains(parentId) &&
@@ -389,6 +411,11 @@ public class RequirementSubrequirementTab extends JPanel {
 						directParentIdList.add(parentId);
 					}
 				}
+
+				// The graph is a forest, a group of trees, so at most one parent allowed
+				if (directParentIdList.size() > 1)
+					System.err.println("Requirement " + parent.model.getId()
+							+ "has more than one parent");
 
 				// Get a list of all children of this requirement (including subs of subs)
 				allSubIdList.addAll(directSubIdList);
@@ -461,8 +488,11 @@ public class RequirementSubrequirementTab extends JPanel {
 							req.getStatus() == RequirementStatus.IN_PROGRESS)) {
 
 						// Determines possibilities for this requirement
-						boolean canThisBeChild = (!directSubIdList.contains(id) && !allParentIdList.contains(id));
-						boolean canThisBeParent = (!directParentIdList.contains(id) && !allSubIdList.contains(id));
+						boolean canThisBeChild = (!allSubIdList.contains(id) &&
+												!allParentIdList.contains(id) &&
+												!hasParent.contains(id));
+						boolean canThisBeParent = (!hasParent.contains(thisId) &&
+												!allSubIdList.contains(id));
 
 						if (canThisBeChild || canThisBeParent) {
 							Object[] posEntry = new Object[EXTENDED_COLUMNS];
