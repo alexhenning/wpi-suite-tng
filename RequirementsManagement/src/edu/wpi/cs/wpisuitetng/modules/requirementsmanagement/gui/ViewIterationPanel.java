@@ -260,6 +260,6 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	 * @return the table model
 	 */
 	public ViewIterTable getTable(){
-		return this.tableModel;
+		return tableModel;
 	}
 }

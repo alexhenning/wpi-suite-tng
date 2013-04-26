@@ -81,9 +81,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	protected RequirementModel model;
 
 	/** text field for the name */
-	public JTextField namefield = new JTextField(35);
+	JTextField namefield = new JTextField(35);
 	/** text field for the description */
-	public JTextArea descriptionfield = new JTextArea(6, 0);
+	JTextArea descriptionfield = new JTextArea(6, 0);
 	/** the priorities that a requirement can have */
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
 	/** the types that a requirement can have */
@@ -97,21 +97,21 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/** the old actual effort */
 	String oldActualEffortString;
 	/** combo box for displaying priorities*/
-	public JComboBox priority = new JComboBox(priorityStrings);
+	JComboBox priority = new JComboBox(priorityStrings);
 	/** combo box for displaying types*/
-	public JComboBox type = new JComboBox(typeStrings);
+	JComboBox type = new JComboBox(typeStrings);
 	/** combo box for displaying iterations*/
-	public JComboBox iteration = new JComboBox();
+	JComboBox iteration = new JComboBox();
 	/** combo box for selecting release numbers*/
-	public JComboBox releaseNumbers = new JComboBox();
+	JComboBox releaseNumbers = new JComboBox();
 	/** field to display the requirements status*/
-	public JTextField statusfield = new JTextField();
+	JTextField statusfield = new JTextField();
 	/** text field for the estimate*/
-	public JTextField estimateField = new JTextField("0", 35);
+	JTextField estimateField = new JTextField("0", 35);
 	/** text field for the actual effort*/
-	public JTextField actualEffortField = new JTextField("0", 35);
+	JTextField actualEffortField = new JTextField("0", 35);
 	/** field to display messages*/
-	public JTextField results = new JTextField(35);
+	JTextField results = new JTextField(35);
 	/** submit button */
 	JButton submit = new JButton("Submit");
 	/** reset button*/
@@ -131,7 +131,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/** the scroll pane*/
 	JScrollPane leftScrollPane;
 	/** the supplement pane*/
-	public JTabbedPane supplementPane = new JTabbedPane();
+	JTabbedPane supplementPane = new JTabbedPane();
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -241,7 +241,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		setRightComponent(supplementPane);
 		
 		this.parent = parent;
-		this.model = requirement;
+		model = requirement;
 		editMode = mode;
 		
 		// Indicate that input is enabled
@@ -290,7 +290,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		JLabel actualEffortArea = new JLabel("Actual Effort:");
 
 		//submit panel
-		if(this.editMode == Mode.CREATE) { 
+		if(editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Create");
 		} else {
@@ -325,7 +325,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		supplementPane.add("Transaction Log", hs);
 		supplementPane.add("Sub-Requirements", subs);
 		supplementPane.add("Assigned Users", users);
-		if(this.editMode == Mode.CREATE) {
+		if(editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
 		} else {
 			nt.setInputEnabled(true);
@@ -586,7 +586,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		actualEffortField.setText(oldActualEffortString);
 
 		// Set an appropriate action for the submit button
-		if(this.editMode == Mode.CREATE) { 
+		if(editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Create");
 		} else {

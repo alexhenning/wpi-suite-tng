@@ -63,8 +63,8 @@ public class MainTabController {
 	 * @param view Create a controller that controls this MainTabView
 	 */
 	public MainTabController(MainTabView view) {
-		this.mainView = view;
-		this.mainView.addMouseListener(new MouseAdapter() {
+		mainView = view;
+		mainView.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				MainTabController.this.onMouseClick(event);
@@ -78,7 +78,7 @@ public class MainTabController {
 		
 		public RequirementTabChangeListener(final RequirementsTab view) {
 			super();
-			this.tab = view;
+			tab = view;
 		}
 
 		@Override
@@ -134,7 +134,7 @@ public class MainTabController {
 		final RequirementsTab view = new RequirementsTab(this, requirement, mode, tab, mainView);
 		tab.setComponent(view);
 		view.requestFocus();
-		this.mainView.addChangeListener(new RequirementTabChangeListener(view));
+		mainView.addChangeListener(new RequirementTabChangeListener(view));
 
 		return tab;
 	}
@@ -156,7 +156,7 @@ public class MainTabController {
 	
 	public Tab addCreateReleaseNumberTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.mainView.getTabCount(); i++) {
+		for (int i = 0; i < mainView.getTabCount(); i++) {
 			// TODO: May have to refactor "Release Number"
 			if (mainView.getTitleAt(i).equals("Release Number")) {
 				switchToTab(i);
@@ -215,7 +215,7 @@ public class MainTabController {
 	 */
 	public Tab addPermissionTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.mainView.getTabCount(); i++) {
+		for (int i = 0; i < mainView.getTabCount(); i++) {
 
 			// TODO: May have to refactor "Manage Permissions"
 			if (mainView.getTitleAt(i).equals("Manage Permissions")) {
@@ -393,7 +393,7 @@ public class MainTabController {
 
 	public Tab addViewIterationTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.mainView.getTabCount(); i++) {
+		for (int i = 0; i < mainView.getTabCount(); i++) {
 			// TODO: May have to refactor "View Iteration"
 			if (mainView.getTitleAt(i).equals("All Iterations")) {
 				switchToTab(i);

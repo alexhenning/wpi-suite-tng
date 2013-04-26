@@ -414,7 +414,7 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 	 * @return the current table model
 	 */
 	public ViewPermissionsTable getTable(){
-		return this.tableModel;
+		return tableModel;
 	}
 	
 	/**

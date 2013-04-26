@@ -78,7 +78,7 @@ public class guiTest1 {
 	private ArrayList<JanewayTabModel> tabs;
 
 	/** The panel for Requirements management */
-	public JPanel buttonPanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
 
 	/** The main tab controller for this tab */
 	private MainTabController mainTabController;

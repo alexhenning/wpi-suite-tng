@@ -93,7 +93,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	 * @param requirementsPanel NoteTab that contains this object
 	 */
 	public AssignUserToRequirementTab(RequirementsPanel requirementsPanel) {
-		this.parent = requirementsPanel;
+		parent = requirementsPanel;
 		assignees = requirementsPanel.model.getAssignees();
 		// Add all components to this panel
 		addComponents();

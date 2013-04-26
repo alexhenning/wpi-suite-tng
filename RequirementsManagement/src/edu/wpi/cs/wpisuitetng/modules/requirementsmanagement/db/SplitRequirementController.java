@@ -45,7 +45,7 @@ public class SplitRequirementController extends AbstractAction implements Action
 	 * @param panel The panel that contains the requirement being split
 	 */
 	public SplitRequirementController(RequirementsPanel panel) {
-		this.requirementsPanel = panel;
+		requirementsPanel = panel;
 	}
 
 	/**

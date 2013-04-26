@@ -255,7 +255,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @return the table model
 	 */
 	public ViewReqTable getTable(){
-		return this.tableModel;
+		return tableModel;
 	}
 	
 	/**
