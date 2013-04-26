@@ -142,7 +142,7 @@ endDatePicker.setEnabled(false);
 		c.gridy = 1;
 		add(startDatePicker, c);
 		c.gridy = 2;
-		add(startDatePicker.getMonthView(),c);
+		add(startDatePicker.getMonthView(), c);
 		c.gridy = 0;
 		c.gridx = 2;
 		c.insets = new Insets(0, 5, 0, 0);
@@ -150,7 +150,7 @@ endDatePicker.setEnabled(false);
 		c.gridy = 1;
 		add(endDatePicker, c);
 		c.gridy = 2;
-		add(endDatePicker.getMonthView(),c);
+		add(endDatePicker.getMonthView(), c);
 		c.gridx = 0;
 		c.gridy = 3;
 		c.insets = new Insets(10, 0, 10, 5);
@@ -298,7 +298,7 @@ endDatePicker.setEnabled(false);
 	class UpdateIterationIdCallback implements IterationCallback {
 		@Override
 		public void callback(List<Iteration> iterationList) {
-			model.setId(iterationList.size()+1);
+			model.setId(iterationList.size() + 1);
 		}
 	}
 	
@@ -384,17 +384,17 @@ endDatePicker.setEnabled(false);
 						noTime.set(Calendar.MILLISECOND, 0);
 						iEnd = noTime.getTime();
 							if(iterationStart.after(iStart) && iterationStart.before(iEnd)) {
-								result.setText("start date overlaps with Iteration "+i.getIterationNumber());
+								result.setText("start date overlaps with Iteration " + i.getIterationNumber());
 								isValid = false;
 							}
 							if(iterationEnd.after(iStart) && iterationEnd.before(iEnd)) {
-								result.setText("end date overlaps with Iteration "+i.getIterationNumber());
+								result.setText("end date overlaps with Iteration " + i.getIterationNumber());
 								isValid = false;
 							}
 							if((iStart.after(iterationStart) && iStart.before(iterationEnd)) ||
 									(iEnd.after(iterationStart) && iEnd.before(iterationEnd)) ||
 									(iStart.equals(iterationStart) || iEnd.equals(iterationEnd))) {
-								result.setText("iteration overlaps with Iteration "+i.getIterationNumber());
+								result.setText("iteration overlaps with Iteration " + i.getIterationNumber());
 								isValid = false;
 							}
 					}

@@ -164,8 +164,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getColumnModel().getSelectionModel().
-			addListSelectionListener(new ColumnChangeListener(this));
+		table.getColumnModel().getSelectionModel().addListSelectionListener(new ColumnChangeListener(this));
 		
 		// create panel and button to change table to edit mode
 		editPanel = new JPanel();

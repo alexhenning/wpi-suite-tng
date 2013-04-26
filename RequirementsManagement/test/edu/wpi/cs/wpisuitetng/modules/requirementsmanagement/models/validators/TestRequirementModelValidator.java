@@ -86,7 +86,7 @@ public class TestRequirementModelValidator {
 		
 		otherProject = new Project("other", "2");
 		
-		testProject = new Project("test","1");
+		testProject = new Project("test", "1");
 		mockSsid = "abcde";
 		defaultSession = new Session(bob, testProject, mockSsid);
 		

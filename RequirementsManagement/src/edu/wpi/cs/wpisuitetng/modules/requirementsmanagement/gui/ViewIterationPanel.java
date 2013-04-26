@@ -103,7 +103,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
                 if (e.getClickCount() == 2 ) {
-                	if (table.getModel().getValueAt(table.getSelectedRow(),ID).toString().equals("0")) {
+                	if (table.getModel().getValueAt(table.getSelectedRow(), ID).toString().equals("0")) {
                 		parent.getTabController().addIterationTab(null, "View Backlog");
                 	}
                 	else DB.getSingleIteration(table.getModel().getValueAt(table.getSelectedRow(), ID).toString(),

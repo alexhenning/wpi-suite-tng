@@ -465,9 +465,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		}
 
 		//sets the minimum size that the user can reduce the window to manually
-		leftside.setMinimumSize(new Dimension(520,700));
-		leftScrollPane.setMinimumSize(new Dimension(520,700));
-		supplementPane.setMinimumSize(new Dimension(520,700));
+		leftside.setMinimumSize(new Dimension(520, 700));
+		leftScrollPane.setMinimumSize(new Dimension(520, 700));
+		supplementPane.setMinimumSize(new Dimension(520, 700));
 	}
 
 	/**

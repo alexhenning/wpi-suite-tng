@@ -15,23 +15,18 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 import static org.junit.Assert.*;
 import org.junit.*;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.janeway.modules.JanewayTabModel;
-import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.JanewayModule;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.HintedTextArea;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementEvent;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.ToolbarController;
 import edu.wpi.cs.wpisuitetng.network.Network;
 import edu.wpi.cs.wpisuitetng.network.Request;
@@ -49,9 +44,6 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
 
 public class guiTest1 {
 	class MockObserver implements RequestObserver {
-
-		public MockObserver() {
-		}
 
 		@Override
 		public void responseSuccess(IRequest iReq) {
@@ -173,7 +165,7 @@ public class guiTest1 {
 
 		mainTabController.addCreateReleaseNumberTab();
 
-		mainTabController.addIterationTab(new Iteration(),"title2");
+		mainTabController.addIterationTab(new Iteration(), "title2");
 
 		mainTabController.addPermissionTab();
 

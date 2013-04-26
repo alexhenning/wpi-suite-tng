@@ -57,8 +57,8 @@ public class ShowHelpAction extends AbstractAction{
 		    		in = ShowHelpAction.class.getResourceAsStream("/help.pdf");
 		    		out = new FileOutputStream(pdfFile);
 		    		
-		    		System.out.println("Help Input Stream: "+in);
-		    		System.out.println("Help Out Stream: "+out);
+		    		System.out.println("Help Input Stream: " + in);
+		    		System.out.println("Help Out Stream: " + out);
 		    		
 		    		IOUtils.getInstance().copyStreams(in, out);
 		    		out.close();
