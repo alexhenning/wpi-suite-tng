@@ -56,8 +56,6 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	ReleaseNumber model;
 	/** the tab that created this panel */
 	ScrollableTab parent;
-	/** layout for this panel */
-	//private GridBagLayout panelLayout;
 	/** combo box holding all release numbers */
 	JComboBox releaseNumbersComboBox;
 	/** field representing the name of the release number */

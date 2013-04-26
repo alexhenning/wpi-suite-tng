@@ -113,7 +113,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		JLabel otherULabel = new JLabel("All Other Users");
 
 		assignedUserTableModel = new ViewUserTable();
-		assignedUserTable = new JTable(assignedUserTableModel);// {
+		assignedUserTable = new JTable(assignedUserTableModel);
 		assignedUserTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		assignedUserTable.setFillsViewportHeight(true);
 		assignedUserTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -161,8 +161,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		addUserButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//int selectedRow = possibleUserTable.getSelectedRow();
-				if (selectedRow >= 0 && selectedRow < rowsInPossibleTable) {//possibleUserTable.getRowCount()) {
+				if (selectedRow >= 0 && selectedRow < rowsInPossibleTable) {
 					parent.addUser((String) possibleUserTable.getModel().getValueAt(selectedRow, USERNAME));
 				}
 			}
@@ -173,8 +172,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		removeUserButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//int selectedRow = possibleUserTable.getSelectedRow();
-				if (selectedRow >= 0 && selectedRow < rowsInAssignedTable) {//possibleUserTable.getRowCount()) {
+				if (selectedRow >= 0 && selectedRow < rowsInAssignedTable) {
 					parent.remUser((String) assignedUserTable.getModel().getValueAt(selectedRow, USERNAME));
 				}
 			}
@@ -274,7 +272,6 @@ public class AssignUserToRequirementTab extends JPanel {
 		update(parent.model);
 	}
 	
-//	private boolean gotUpdatedList;
 	public void update(RequirementModel model) {
 		assignees = model.getAssignees();
 		String selectedSubId = getSelectedSubId();

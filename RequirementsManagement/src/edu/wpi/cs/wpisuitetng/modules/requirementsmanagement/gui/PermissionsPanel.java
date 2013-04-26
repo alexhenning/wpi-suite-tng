@@ -120,7 +120,7 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 		lblname = new JLabel("Name: ");
 		lblusername = new JLabel("Username: ");
 		
-		usernameTextArea =  new JPlaceholderTextField("Username", 20);//new HintedTextArea(1, 20, "Username");
+		usernameTextArea =  new JPlaceholderTextField("Username", 20);
 		usernameTextArea.addMouseListener(new MouseListener() {
 			@Override public void mousePressed(MouseEvent arg0) {}
 			@Override public void mouseReleased(MouseEvent arg0) {}

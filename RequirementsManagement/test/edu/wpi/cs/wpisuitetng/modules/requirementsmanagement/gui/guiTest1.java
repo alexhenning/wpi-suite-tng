@@ -124,7 +124,6 @@ public class guiTest1 {
 				requestObserver.wait(2000);
 			}
 
-			//assertEquals(true, (body+"\n").equals(manualRequest.getResponse().getBody()));
 			assertEquals(200, manualRequest.getResponse().getStatusCode());
 			assertEquals(true, "OK".equalsIgnoreCase(manualRequest.getResponse().getStatusMessage()));
 

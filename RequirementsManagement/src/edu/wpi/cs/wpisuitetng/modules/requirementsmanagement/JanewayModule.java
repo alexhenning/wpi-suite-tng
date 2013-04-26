@@ -55,7 +55,6 @@ public class JanewayModule implements IJanewayModule {
 
 		MainTabView mainTabView = new MainTabView();
 		mainTabController = new MainTabController(mainTabView);
-		//mainTabController.addListRequirementsTab();
 
 		ToolbarView toolbarView = new ToolbarView(mainTabController);
 

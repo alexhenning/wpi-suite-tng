@@ -109,9 +109,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	private JPanel leftside = new JPanel();
 	JScrollPane leftScrollPane;
 	public JTabbedPane supplementPane = new JTabbedPane();
-	
-//	private boolean unsavedChanges;
-	
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -226,7 +223,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
-//		unsavedChanges = false;
 		
 		updateIterationList();
 		updateReleaseNumberList();
@@ -655,7 +651,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		subs.update();
 		users.update();
 
-//		unsavedChanges = false;
 	}
 	
 	/**
@@ -663,7 +658,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 */
 	public void updateSubmitButton() {
-//		unsavedChanges = true;
 		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && 
 				!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) 
 				&& (editMode == Mode.EDIT && valuesHaveChanged() && validateFields()) ||
@@ -878,14 +872,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 */
 	public boolean validateFields() {
 		if(namefield.getText().length()<1) {
-			//namefield.setBackground(Color.RED);
 			setStatusMessage("Name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
 		if(descriptionfield.getText().length()<1) {
-			//descriptionfield.setBackground(Color.RED);
 			setStatusMessage("Description must be 1-5000 characters long.");
 			return false;
 		} else {
@@ -905,9 +897,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		@Override
 		public void callback(List<ProjectEvent> projectEvents) {
 			System.out.println("project event size : " + projectEvents.size());
-//			for(ProjectEvent event : projectEvents) {
-//				System.out.println("project event: "+event.toJSON());
-//			}
 			setHistory(projectEvents);
 		}
 	}
@@ -927,7 +916,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 */
 	public void keyPressed ( KeyEvent e){  
 		System.out.println("key pressed : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
-//		updateSubmitButton();
 	}  
 	/**
 	 * Check if key is released. If so, validate fields and update buttons

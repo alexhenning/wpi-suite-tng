@@ -123,7 +123,7 @@ public class RequirementSubrequirementTab extends JPanel {
 
 		subrequirementsTableModel = new ViewReqTable();
 		subrequirementsTableModel.setMode(Mode.VIEW);
-		subrequirementsTable = new JTable(subrequirementsTableModel);// {
+		subrequirementsTable = new JTable(subrequirementsTableModel);
 		subrequirementsTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		subrequirementsTable.setFillsViewportHeight(true);
 		subrequirementsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -145,7 +145,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		subrequirementTableScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		possibleSubrequirementsTableModel = new ViewPossibleSubReqTable();
-		possibleSubrequirementsTable = new JTable(possibleSubrequirementsTableModel);// {
+		possibleSubrequirementsTable = new JTable(possibleSubrequirementsTableModel);
 		possibleSubrequirementsTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		possibleSubrequirementsTable.setFillsViewportHeight(true);
 		possibleSubrequirementsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -305,7 +305,6 @@ public class RequirementSubrequirementTab extends JPanel {
 		update(parent.model);
 	}
 	
-//	private boolean gotUpdatedList;
 	public void update(RequirementModel model) {
 		subrequirements = model.getSubRequirements();
 		String selectedSubId = getSelectedSubId();

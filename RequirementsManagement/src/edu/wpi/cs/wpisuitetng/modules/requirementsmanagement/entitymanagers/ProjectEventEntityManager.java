@@ -198,8 +198,6 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
 		throw new NotImplementedException();
-//		ProjectEvent[] projectEvents = getAll(s);
-//		return db.retrieveAll(new ProjectEvent(), s.getProject()).toArray(new ProjectEvent[0]);
 
 	}
 
