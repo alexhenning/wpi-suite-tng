@@ -208,14 +208,6 @@ public class guiTest1 {
 	}
 
 	@Test
-	public void testCreateRequirementModel() {
-		new RequirementModel(3, null, RequirementStatus.NEW, null, "name3",
-				"description3", 0, 0, new User("", "", "", -1),
-				new ArrayList<User>(), new Date(), new Date(),
-				new ArrayList<RequirementEvent>(), new ArrayList<String>(), null, RequirementType.EPIC);
-	}
-
-	@Test
 	public void testListRequirementPanel() {
 		ListRequirementsPanel ListRequirementsPanel1 = new ListRequirementsPanel();
 		// Try saving edits
