@@ -913,22 +913,18 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 	
 	/**
-	 * checked for input from keyboard
+	 * checked for input from keyboard. Doesn't really do anything now, but
+	 * needs to be included
 	 *
 	 * @param e a key event
 	 */
-	public void keyTyped ( KeyEvent e ){
-		System.out.println("key typed : " + e.getKeyCode());
-	}
+	public void keyTyped ( KeyEvent e ) {}
 	/**
 	 * check if key is pressed. Doesn't really do anything now, but needs to be included 
 	 *
 	 * @param e a key event
 	 */
-	public void keyPressed ( KeyEvent e){  
-		System.out.println("key pressed : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
-//		updateSubmitButton();
-	}  
+	public void keyPressed ( KeyEvent e) {}
 	/**
 	 * Check if key is released. If so, validate fields and update buttons
 	 *
@@ -938,7 +934,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		System.out.println("key released : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
 		validateFields();
 		updateSubmitButton();
-	}  
+	}
 
 	public void addToParent(int parentId) {
 		DB.getSingleRequirement(parentId+"", new SingleRequirementCallback() {
@@ -949,6 +945,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 					@Override
 					public void callback(RequirementModel req) {
 						if (req.getSubRequirements().contains(model.getId()+"")) {
+							// TODO: update the parent's model if it's already open in some tab
+							subs.update();
 							setStatusMessage("added to parent");
 						} else {
 							setStatusMessage("failed to add to parent");
