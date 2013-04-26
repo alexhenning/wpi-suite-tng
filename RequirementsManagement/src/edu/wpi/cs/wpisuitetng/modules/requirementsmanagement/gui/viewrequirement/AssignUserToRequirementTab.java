@@ -325,7 +325,6 @@ public class AssignUserToRequirementTab extends JPanel {
 		String selectedPos;
 		
 		public UpdateTablesCallback(String selectedSub, String selectedPos) {
-			super();
 			this.selectedSub = selectedSub;
 			this.selectedPos = selectedPos;
 			

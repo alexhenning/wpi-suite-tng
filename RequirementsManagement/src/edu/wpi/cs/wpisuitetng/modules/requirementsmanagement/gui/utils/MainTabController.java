@@ -77,7 +77,6 @@ public class MainTabController {
 		private RequirementsTab tab;
 		
 		public RequirementTabChangeListener(final RequirementsTab view) {
-			super();
 			tab = view;
 		}
 

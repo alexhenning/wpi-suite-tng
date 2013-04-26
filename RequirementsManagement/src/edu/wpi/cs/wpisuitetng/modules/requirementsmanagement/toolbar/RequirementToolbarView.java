@@ -179,7 +179,6 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		MainTabController tabController;
 
 		public CanCloseCallback(RequirementModel model, final MainTabController tabController) {
-			super();
 			this.model = model;
 			this.tabController = tabController;
 		}

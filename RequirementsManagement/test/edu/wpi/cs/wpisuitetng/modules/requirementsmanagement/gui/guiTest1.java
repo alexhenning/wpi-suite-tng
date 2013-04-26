@@ -51,7 +51,6 @@ public class guiTest1 {
 	class MockObserver implements RequestObserver {
 
 		public MockObserver() {
-			super();
 		}
 
 		@Override

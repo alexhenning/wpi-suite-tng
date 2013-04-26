@@ -119,7 +119,6 @@ public class RequirementModel extends AbstractModel {
 			int estimate, int actualEffort, User creator, List<User> assignees,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
 			List<String> subRequirements, Iteration iteration, RequirementType type) {
-		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
 		this.status = status;

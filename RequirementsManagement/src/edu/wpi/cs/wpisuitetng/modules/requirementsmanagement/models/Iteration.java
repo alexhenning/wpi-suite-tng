@@ -49,7 +49,6 @@ public class Iteration extends AbstractModel {
 	 */
 	public Iteration(int id, Date startDate, Date endDate, String iterationNumber,
 			Project project) {
-		super();
 		this.id = id;
 		this.startDate = startDate;
 		this.endDate = setTimeToEndOfDay(endDate); // Set the time on the end date to be 11:59:59 P.M.
@@ -61,7 +60,6 @@ public class Iteration extends AbstractModel {
 	 * Constructor
 	 */
 	public Iteration() {
-		super();
 		id = -1;
 		startDate = new Date();
 		endDate = new Date(); //TODO should probably make this set to the next day...
