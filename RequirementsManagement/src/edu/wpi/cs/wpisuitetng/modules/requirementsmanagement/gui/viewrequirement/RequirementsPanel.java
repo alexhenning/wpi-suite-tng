@@ -877,14 +877,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * @return if the fields are valid
 	 */
 	public boolean validateFields() {
-		if(namefield.getText().length()<1) {
+		if(namefield.getText().length()<1 || namefield.getText().length() > 100) {
 			//namefield.setBackground(Color.RED);
 			setStatusMessage("Name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
-		if(descriptionfield.getText().length()<1) {
+		if(descriptionfield.getText().length()<1 || descriptionfield.getText().length() > 5000) {
 			//descriptionfield.setBackground(Color.RED);
 			setStatusMessage("Description must be 1-5000 characters long.");
 			return false;
