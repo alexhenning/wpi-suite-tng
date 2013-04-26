@@ -16,14 +16,6 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils;
 
-/**
- * Contributors:
- * AHurle
- * JPage
- * Josh
- * Jacob Palnick
- */
-
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -58,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * 
  * @author Andrew Hurle
  * @author Josh Morse
+ * @author Jacob Palnick
  */
 public class MainTabController {
 	
@@ -102,6 +95,7 @@ public class MainTabController {
 			}
 			if(!tabExists) {
 				MainTabController.this.mainView.removeChangeListener(this);
+				MainTabController.this.mainView.removeChangeListener(tab.getAssignedUserTabChangeListener());
 			}
 		}
 		

@@ -994,6 +994,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				}
 			}
 			if (added) {
+				// Update the transaction log only after the child is attached
+				DB.getAllProjectEvents(new ListProjectEvents());
 				subs.update();
 				model.setSubRequirements(currentReq.getSubRequirements());
 				parent.buttonGroup.update(editMode, model);
@@ -1030,6 +1032,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				}
 			}
 			if (removed) {
+				// Update the transaction log only after the child is detached
+				DB.getAllProjectEvents(new ListProjectEvents());
 				subs.update();
 				model.setSubRequirements(currentReq.getSubRequirements());
 				parent.buttonGroup.update(editMode, model);
@@ -1096,6 +1100,8 @@ System.err.println("adduser reached***************************");
 				}
 			}
 			if (added) {
+				// Update the transaction log only after the assignee is added
+				DB.getAllProjectEvents(new ListProjectEvents());
 				users.update();
 				setStatusMessage("added user");
 			} else {
@@ -1142,6 +1148,8 @@ System.err.println("adduser reached***************************");
 				}
 			}
 			if (removed) {
+				// Update the transaction log only after the assignee is removed
+				DB.getAllProjectEvents(new ListProjectEvents());
 				users.update();
 				setStatusMessage("removed user");
 			} else {

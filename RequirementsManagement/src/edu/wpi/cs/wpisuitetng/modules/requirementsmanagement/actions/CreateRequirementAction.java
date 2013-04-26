@@ -25,8 +25,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  *
  * Action that calls {@link MainTabController#addCreateRequirementTab()}, default mnemonic key is C
  * adds the create Requirement tab
- * @author TODO
- *
+ * @author andrew hurle
+ * 
  */
 @SuppressWarnings("serial")
 public class CreateRequirementAction extends AbstractAction {

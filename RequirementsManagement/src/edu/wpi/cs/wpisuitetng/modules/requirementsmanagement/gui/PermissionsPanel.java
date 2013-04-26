@@ -47,7 +47,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  * GUI for a project manager to manage user permissions 
  *
  * @author William Terry
- *
+ * @author vpatara
+ * @author josh
  */
 @SuppressWarnings("serial")
 public class PermissionsPanel extends JPanel implements ScrollablePanel {

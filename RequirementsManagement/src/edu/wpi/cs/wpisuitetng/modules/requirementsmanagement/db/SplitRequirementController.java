@@ -30,6 +30,8 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Responds to a click to split a requirement to be sent to the server
  *
  * @author vpatara
+ * @author Tim Calvert
+ * @author Tim Defreitas
  */
 @SuppressWarnings("serial")
 public class SplitRequirementController extends AbstractAction implements ActionListener {

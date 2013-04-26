@@ -33,7 +33,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * Entity manager for Permissions
  *
  * @author vpatara
- *
+ * @author Tim
  */
 public class PermissionEntityManager implements
 		EntityManager<Permissions> {

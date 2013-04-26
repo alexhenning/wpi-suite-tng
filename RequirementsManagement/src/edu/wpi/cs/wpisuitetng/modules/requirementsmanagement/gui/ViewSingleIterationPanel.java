@@ -48,7 +48,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * The view for creating an iteration
  *
  * @author Josh
- *
+ * @author vpatara
  */
 @SuppressWarnings("serial")
 public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel {
@@ -129,7 +129,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			lbl2 = new JLabel("End Date");
 			lbl3 = new JLabel ("Iteration Number ");
 			lbl4 = new JLabel ("Estimate");
-			lbl5 = new JLabel("Schedualed Requirements:");
+			lbl5 = new JLabel("Scheduled Requirements:");
 			
 			Date startDate = model.getStartDate();
 			Date endDate = model.getEndDate();

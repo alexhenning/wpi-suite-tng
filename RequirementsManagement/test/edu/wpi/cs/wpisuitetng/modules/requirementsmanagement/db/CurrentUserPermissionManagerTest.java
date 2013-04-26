@@ -19,6 +19,7 @@ import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.guiTest1;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
 /**
@@ -269,5 +270,33 @@ public class CurrentUserPermissionManagerTest {
 		manager.usernameReady();
 		manager.usernameReady();
 		manager.usernameReady();
+	}
+
+	@Test
+	public void testAddNewPermissionForNewUserWithNONEPermission() {
+		Permissions userProfile = manager.addNewPermissionForNewUser("tester");
+		assertEquals("tester", userProfile.getUsername());
+		assertEquals(PermissionLevel.NONE, userProfile.getPermissionLevel());
+	}
+
+	@Test
+	public void testAddNewPermissionForAdminWithADMINPermission() {
+		Permissions adminProfile = manager.addNewPermissionForNewUser("admin");
+		assertEquals("admin", adminProfile.getUsername());
+		assertEquals(PermissionLevel.ADMIN, adminProfile.getPermissionLevel());
+	}
+
+	@Test
+	public void testAddNewPermissionMultipleTimes() {
+		Permissions profile1 = manager.addNewPermissionForNewUser("tester");
+		Permissions profile2 = manager.addNewPermissionForNewUser("tester");
+		Permissions profile3 = manager.addNewPermissionForNewUser("tester");
+
+		assertEquals("tester", profile1.getUsername());
+		assertEquals(PermissionLevel.NONE, profile1.getPermissionLevel());
+
+		// Check if they are the same objects, not just their values
+		assertEquals(profile1, profile2);
+		assertEquals(profile1, profile3);
 	}
 }

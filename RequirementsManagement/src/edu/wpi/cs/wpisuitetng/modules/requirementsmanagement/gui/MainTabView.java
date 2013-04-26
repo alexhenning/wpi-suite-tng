@@ -27,7 +27,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement
 /**
  * This tabbed pane will appear as the main content of the Requirements tab.
  * It starts out showing the single Dashboard tab.
- * @author TODO
+ * @author andrew hurle
+ * @author Chris Casola
  */
 @SuppressWarnings("serial")
 public class MainTabView extends JTabbedPane {

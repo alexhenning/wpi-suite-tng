@@ -11,6 +11,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -37,6 +38,8 @@ public class CurrentUserPermissionManager {
 	private Permissions currentProfile;
 	/** Indicates whether function profileReady() has been called */
 	private boolean hasUsernameReadyBeenCalled;
+	/** Stores added usernames along with their new profiles */
+	private HashMap <String, Permissions> addedUsernameProfiles;
 
 	/**
 	 * Constructs the manager for user
@@ -55,6 +58,38 @@ public class CurrentUserPermissionManager {
 		hasCurrentProfile = false;
 		currentProfile = new Permissions("", PermissionLevel.NONE); // Stub
 		hasUsernameReadyBeenCalled = false;
+		addedUsernameProfiles = new HashMap <String, Permissions>();
+	}
+
+	/**
+	 * Creates a new permission profile for a given username.
+	 * This is intended to be called by RetrieveSinglePermissionRequestObserver
+	 * when the profile for the user doesn't exist in the database yet.
+	 *
+	 * @param username new user whose permission to be added
+	 * @return new permissions model for the given user's username
+	 */
+	public synchronized Permissions addNewPermissionForNewUser(String username) {
+		// Don't add profiles that have been added recently
+		if(addedUsernameProfiles.containsKey(username)) {
+			return addedUsernameProfiles.get(username);
+		} else {
+			// The new user doesn't have the permission model,
+			// so add a new permission with level NONE
+			Permissions newProfile = new Permissions(username, PermissionLevel.NONE);
+
+			// User named "admin" should always be given ADMIN permission
+			if(username.equals("admin")) {
+				newProfile.setPermissionLevel(PermissionLevel.ADMIN);
+			}
+
+			// Doesn't care if the new profile fails to be saved
+			// because it can be recreated with level NONE anytime later
+			DB.addSinglePermission(newProfile, null);
+			addedUsernameProfiles.put(username, newProfile);
+
+			return newProfile;
+		}
 	}
 
 	/**
@@ -124,18 +159,8 @@ public class CurrentUserPermissionManager {
 
 				@Override
 				public void failure() {
-					// The current user doesn't have the permission model,
-					// so add a new permission with level NONE
-					Permissions newProfile = new Permissions(username, PermissionLevel.NONE);
-
-					// User named "admin" should always be given ADMIN permission
-					if(username.equals("admin")) {
-						newProfile.setPermissionLevel(PermissionLevel.ADMIN);
-					}
-
-					// Doesn't care if the new profile fails to be saved
-					// because it can be recreated with level NONE anytime later
-					DB.addSinglePermission(newProfile, null);
+					// Creates a new profile for the user, adding it to the database
+					Permissions newProfile = addNewPermissionForNewUser(username);
 					setCurrentProfile(newProfile);
 				}
 			});

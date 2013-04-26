@@ -26,7 +26,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 /**
  * Responsible for filling in a changeset after being passed to
  * {@link ModelMapper#map(Model, Model, MapCallback)} 
- * @author TODO
+ * @author andrew Hurle
+ * @author Chris Casola
  */
 class RequirementModelEventCallback implements MapCallback {
 	
