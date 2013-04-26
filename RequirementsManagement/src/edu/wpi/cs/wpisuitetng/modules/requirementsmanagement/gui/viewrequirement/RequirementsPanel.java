@@ -80,34 +80,57 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/** The requirement displayed in this panel */
 	protected RequirementModel model;
 
-	/*
-	 * Form elements
-	 */
+	/** text field for the name */
 	public JTextField namefield = new JTextField(35);
+	/** text field for the description */
 	public JTextArea descriptionfield = new JTextArea(6, 0);
+	/** the priorities that a requirement can have */
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
+	/** the types that a requirement can have */
 	RequirementType[] typeStrings = RequirementType.values();
+	/** the possible iterations*/
 	Iteration[] iterations;
+	/** the possible release numbers*/
 	ReleaseNumber[] releaseNums;
+	/** the old estimate */
 	String oldEstimateString;
+	/** the old actual effort */
 	String oldActualEffortString;
+	/** combo box for displaying priorities*/
 	public JComboBox priority = new JComboBox(priorityStrings);
+	/** combo box for displaying types*/
 	public JComboBox type = new JComboBox(typeStrings);
+	/** combo box for displaying iterations*/
 	public JComboBox iteration = new JComboBox();
+	/** combo box for selecting release numbers*/
 	public JComboBox releaseNumbers = new JComboBox();
+	/** field to display the requirements status*/
 	public JTextField statusfield = new JTextField();
+	/** text field for the estimate*/
 	public JTextField estimateField = new JTextField("0", 35);
+	/** text field for the actual effort*/
 	public JTextField actualEffortField = new JTextField("0", 35);
+	/** field to display messages*/
 	public JTextField results = new JTextField(35);
+	/** submit button */
 	JButton submit = new JButton("Submit");
+	/** reset button*/
 	JButton resetButton = new JButton("Reset");
+	/** button to split the requirements*/
 	JButton splitButton = new JButton("Split Requirement");
+	/** panel to show the notes*/
 	private NoteMainPanel nt;
+	/** tab to show the history*/
 	private RequirementHistoryTab hs;
+	/** tab to show sub requirements*/
 	private RequirementSubrequirementTab subs;
+	/** tab to show assigned users*/
 	protected AssignUserToRequirementTab users;
+	/** panel to hold the sub panels*/
 	private JPanel leftside = new JPanel();
+	/** the scroll pane*/
 	JScrollPane leftScrollPane;
+	/** the supplement pane*/
 	public JTabbedPane supplementPane = new JTabbedPane();
 	
 //	private boolean unsavedChanges;
