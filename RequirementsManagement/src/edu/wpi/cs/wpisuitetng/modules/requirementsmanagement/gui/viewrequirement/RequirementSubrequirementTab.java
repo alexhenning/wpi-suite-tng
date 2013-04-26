@@ -9,7 +9,7 @@
  * Contributors:
  *    Josh
  *    Deniz
- *    JacobPalnick
+ *    Jacob Palnick
  *    vpatara
  ******************************************************************************/
 
@@ -35,6 +35,7 @@ import javax.swing.table.TableColumn;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewPossibleSubReqTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -57,15 +58,19 @@ public class RequirementSubrequirementTab extends JPanel {
 	public static final int STATUS = 4;
 	public static final int PRIORITY = 5;
 	public static final int ESTIMATE = 6;
-	public static final int RELEASE = 7;
-	public static final int ROWS = 7;
+	public static final int COLUMNS = 7;
+
+	// These two are for the possible sub-requirement table
+	public static final int THIS_AS_CHILD = 7;
+	public static final int THIS_AS_PARENT = 8;
+	public static final int EXTENDED_COLUMNS = 9;
 
 	/** the panel this is shown in */
 	RequirementsPanel parent;
 	/** tableModle to display current subrequirements */
 	ViewReqTable subrequirementsTableModel;
 	/** tableModel to display other possible subrequirements */
-	ViewReqTable possibleSubrequirementsTableModel;
+	ViewPossibleSubReqTable possibleSubrequirementsTableModel;
 	/** tableModle to display current subrequirements */
 	JTable subrequirementsTable;
 	/** tableModel to display other possible subrequirements */
@@ -79,6 +84,16 @@ public class RequirementSubrequirementTab extends JPanel {
 	JButton addChildButton;
 	JButton setParentButton;
 	JButton removeChildButton;
+
+	/** Direct (immediate) parents of this requirement */
+	private ArrayList<String> directParentIdList;
+	/** All parents of this requirement (including parent's parent) */
+	private ArrayList<String> allParentIdList;
+
+	/** Direct (immediate) children of this requirement (this = subrequirements)*/
+	private ArrayList<String> directSubIdList;
+	/** All children (descendants) of this requirement (including child's child) */
+	private ArrayList<String> allSubIdList;
 
 	/**
 	 * Constructs a panel for notes
@@ -129,8 +144,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		subrequirementTableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		subrequirementTableScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		possibleSubrequirementsTableModel = new ViewReqTable();
-		possibleSubrequirementsTableModel.setMode(Mode.VIEW);
+		possibleSubrequirementsTableModel = new ViewPossibleSubReqTable();
 		possibleSubrequirementsTable = new JTable(possibleSubrequirementsTableModel);// {
 		possibleSubrequirementsTable.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		possibleSubrequirementsTable.setFillsViewportHeight(true);
@@ -250,18 +264,15 @@ public class RequirementSubrequirementTab extends JPanel {
 	 * @param selectedId the id of the selected requirement
 	 */
 	private void updateSelectedPossible(String selectedId) {
-		if (selectedId == null || selectedId.equals("") || parent.model.getStatus() == RequirementStatus.COMPLETE || parent.model.getStatus() == RequirementStatus.DELETED || parent.submit.getText().equals("Save")) {
+		if (selectedId == null || selectedId.equals("")
+				|| parent.model.getStatus() == RequirementStatus.COMPLETE
+				|| parent.model.getStatus() == RequirementStatus.DELETED
+				|| parent.submit.getText().equals("Save")) {
 			addChildButton.setEnabled(false);
 			setParentButton.setEnabled(false);
 		} else {
-			addChildButton.setEnabled(!subIdList.contains(selectedId));
-			setParentButton.setEnabled(!parentIdList.contains(selectedId));
-			for (String req : subrequirements) {
-				if(req.equals(selectedId)) {
-					addChildButton.setEnabled(false);
-					setParentButton.setEnabled(false);
-				}
-			}
+			addChildButton.setEnabled(!directSubIdList.contains(selectedId) && !allParentIdList.contains(selectedId));
+			setParentButton.setEnabled(!directParentIdList.contains(selectedId) && !allSubIdList.contains(selectedId));
 		}
 	}
 	
@@ -270,18 +281,7 @@ public class RequirementSubrequirementTab extends JPanel {
 	 * @param selectedId the id of the selected requirement
 	 */
 	private void updateSelectedSub(String selectedId) {
-		if (selectedId == null || selectedId.equals("")) {
-			removeChildButton.setEnabled(false);
-		} else {
-			removeChildButton.setEnabled(true);
-//			setParrentButton.setEnabled(true);
-//			for (String req : subrequirements) {
-//				if(req.equals(selectedId)) {
-//					addChildButton.setEnabled(false);
-//					setParrentButton.setEnabled(false);
-//				}
-//			}
-		}
+		removeChildButton.setEnabled(selectedId != null && !selectedId.equals(""));
 	}
 	
 	@Override
@@ -339,10 +339,7 @@ public class RequirementSubrequirementTab extends JPanel {
 			return "";
 		}
 	}
-	
-	ArrayList<String> parentIdList;
-	ArrayList<String> subIdList;
-	
+
 	/**
 	 *
 	 * Callback to populate the table with all the requirements
@@ -369,32 +366,74 @@ public class RequirementSubrequirementTab extends JPanel {
 		public void callback(List<RequirementModel> reqs) {
 			System.out.println("updateTablesCallback "+reqs.size());
 			if (reqs.size() > 0) {
-				subIdList = new ArrayList<String>();
-				parentIdList = new ArrayList<String>();
-				
-				//get a list of ids of requirements that are already sub requirements
+				directSubIdList = new ArrayList<String>();
+				allSubIdList = new ArrayList<String>();
+				directParentIdList = new ArrayList<String>();
+				allParentIdList = new ArrayList<String>();
+
+				// For simplicity, assume this requirement is both its own sub and parent
+				directSubIdList.add(parent.model.getId() + "");
+				directParentIdList.add(parent.model.getId() + "");
+
+				// Collects its immediate sub-requirements (children),
+				// i.e., requirements that are already this one's sub-requirements
+				directSubIdList.addAll(subrequirements);
+
+				// Collects its immediate parents
 				for(RequirementModel req : reqs) {
-					for(String subId : req.getSubRequirements()) {
-						if(!subIdList.contains(subId)) {
-							subIdList.add(subId);
+					String parentId = req.getId() + "";
+					String thisId = parent.model.getId() + "";
+
+					// Add it if it's a parent but not yet added
+					if(!directParentIdList.contains(parentId) &&
+							req.getSubRequirements().contains(thisId)) {
+						directParentIdList.add(parentId);
+					}
+				}
+
+				// Get a list of all children of this requirement (including subs of subs)
+				allSubIdList.addAll(directSubIdList);
+				boolean changed = true;
+				while(changed) {
+					changed = false;
+
+					// For each requirement that is a descendant (not necessary direct) ...
+					for(RequirementModel thisNode : reqs) {
+						if(allSubIdList.contains(thisNode.getId() + "")) {
+							// Add this sub's subs
+							for(String subId : thisNode.getSubRequirements()) {
+								if(!allSubIdList.contains(subId)) {
+									allSubIdList.add(subId);
+									changed = true;
+								}
+							}
 						}
 					}
 				}
-				
-				//get a list of the parents of this requirement
-				String currentChildId = parent.model.getId()+"";
-				String nextChildId = "";
-				while(currentChildId != null && !currentChildId.equals("")) {
-					nextChildId = "";
-					for(RequirementModel req : reqs) {
-						if(req.getSubRequirements().contains(currentChildId)) {
-							nextChildId = req.getId()+"";
-							parentIdList.add(nextChildId);
+
+				// Get a list of the parents (ancestors) of this requirement
+				allParentIdList.addAll(directParentIdList);
+				changed = true;
+				while(changed) {
+					changed = false;
+
+					// Check for all requirements not yet in the parent list...
+					for(RequirementModel potentialParent : reqs) {
+						if (!allParentIdList.contains(potentialParent.getId() + "")) {
+
+							// Check if this requirement is a parent of any one already in the list
+							for(String parentId : allParentIdList) {
+								// If so, add that requirement into the list
+								if(potentialParent.getSubRequirements().contains(parentId)) {
+									allParentIdList.add(potentialParent.getId() + "");
+									changed = true;
+									break;
+								}
+							}
 						}
 					}
-					currentChildId = nextChildId;
 				}
-				
+
 				// put the data in the table
 				ArrayList<Object[]> subEntriesList = new ArrayList<Object[]>();
 				ArrayList<Object[]> posEntriesList = new ArrayList<Object[]>();
@@ -407,8 +446,8 @@ public class RequirementSubrequirementTab extends JPanel {
 					String priority = (req.getPriority() == null ? "" : req.getPriority().toString());
 					String estimate = req.getEstimate()+"";
 					
-					if (subrequirements.contains(id)) {
-						Object[] subEntry = new Object[ROWS];
+					if (subrequirements.contains(id)) { // same as directSubIdList.contains(id)
+						Object[] subEntry = new Object[COLUMNS];
 						subEntry[ID] = id;
 						subEntry[NAME] = name;
 						subEntry[DESCRIPTION] = description;
@@ -417,15 +456,17 @@ public class RequirementSubrequirementTab extends JPanel {
 						subEntry[PRIORITY] = priority;
 						subEntry[ESTIMATE] = estimate;
 						subEntriesList.add(subEntry);
-					} else {
-						//TODO make sure the requirement is not a parent of the current requirement
-						if (req.getId() != parent.model.getId() && 
-								!subIdList.contains(id) && 
-								!parentIdList.contains(id) &&
-								(req.getStatus() == RequirementStatus.NEW ||
-								req.getStatus() == RequirementStatus.OPEN ||
-								req.getStatus() == RequirementStatus.IN_PROGRESS)) {
-							Object[] posEntry = new Object[ROWS];
+					} else if(req.getId() != parent.model.getId() &&
+							(req.getStatus() == RequirementStatus.NEW ||
+							req.getStatus() == RequirementStatus.OPEN ||
+							req.getStatus() == RequirementStatus.IN_PROGRESS)) {
+
+						// Determines possibilities for this requirement
+						boolean canThisBeChild = (!directSubIdList.contains(id) && !allParentIdList.contains(id));
+						boolean canThisBeParent = (!directParentIdList.contains(id) && !allSubIdList.contains(id));
+
+						if (canThisBeChild || canThisBeParent) {
+							Object[] posEntry = new Object[EXTENDED_COLUMNS];
 							posEntry[ID] = id;
 							posEntry[NAME] = name;
 							posEntry[DESCRIPTION] = description;
@@ -433,10 +474,14 @@ public class RequirementSubrequirementTab extends JPanel {
 							posEntry[STATUS] = status;
 							posEntry[PRIORITY] = priority;
 							posEntry[ESTIMATE] = estimate;
+							posEntry[THIS_AS_CHILD] = canThisBeChild;
+							posEntry[THIS_AS_PARENT] = canThisBeParent;
 							posEntriesList.add(posEntry);
 						} else {
 							System.out.println("bad: " + id);
 						}
+					} else {
+						System.out.println("bad: " + id);
 					}
 				}
 
@@ -460,7 +505,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		
 			TableColumn column = null;
 			TableColumn column2 = null;
-			for (int i = 0; i < ROWS; i++) {
+			for (int i = 0; i < COLUMNS; i++) {
 				column = subrequirementsTable.getColumnModel().getColumn(i);
 				column2 = possibleSubrequirementsTable.getColumnModel().getColumn(i);
 				if (i == ID) {
@@ -480,6 +525,12 @@ public class RequirementSubrequirementTab extends JPanel {
 					column2.setPreferredWidth(200);
 				}
 			}
+
+			// Sets the sizes for the (two) new columns
+			for (int i = COLUMNS; i < EXTENDED_COLUMNS; i++) {
+				possibleSubrequirementsTable.getColumnModel().getColumn(i).setPreferredWidth(30);
+			}
+
 			subrequirementTableScrollPane.setEnabled(true);
 			possibleSubrequirementTableScrollPane.setEnabled(true);
 			subrequirementsTable.setEnabled(true);
