@@ -159,17 +159,22 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 */
 	private void updateIterationComboBox() {
-		DefaultComboBoxModel comboboxModel = new DefaultComboBoxModel();
+		DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
+		// Adds "Backlog" and all iterations that are not finished (passed end
+		// dates), including the iteration this requirement is scheduled, even
+		// if that iteration is already finished.
 		for(Iteration it : iterations) {
 			if (it == null) {
-				comboboxModel.addElement("Backlog");
-			} else if (it.getEndDate().after(new Date())) {
-				comboboxModel.addElement(it.getIterationNumber());
+				comboBoxModel.addElement("Backlog");
+			} else if (it.getEndDate().after(new Date()) || (model.getIteration() != null
+					&& model.getIteration().getIterationNumber().equals(it.getIterationNumber()))) {
+				// open iterations and this requirement's current iteration
+				comboBoxModel.addElement(it.getIterationNumber());
 			}
 		}
 		boolean alreadyChanged = false;
 		int iIndex = iteration.getSelectedIndex();
-		iteration.setModel(comboboxModel);
+		iteration.setModel(comboBoxModel);
 		if(iIndex >= 0) {
 			alreadyChanged = true;
 			iteration.setSelectedIndex(iIndex);
