@@ -505,11 +505,7 @@ public class RequirementSubrequirementTab extends JPanel {
 							posEntry[THIS_AS_CHILD] = canThisBeChild;
 							posEntry[THIS_AS_PARENT] = canThisBeParent;
 							posEntriesList.add(posEntry);
-						} else {
-							System.out.println("bad: " + id);
 						}
-					} else {
-						System.out.println("bad: " + id);
 					}
 				}
 

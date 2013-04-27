@@ -692,7 +692,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) 
 				&& (editMode == Mode.EDIT && valuesHaveChanged() && validateFields()) ||
 				(editMode ==Mode.CREATE && validateFields()));
-		System.out.println("set reset : " + valuesHaveChanged());
 		resetButton.setEnabled(valuesHaveChanged());
 		splitButton.setEnabled(editMode == Mode.EDIT
 				&& (model.getStatus() == RequirementStatus.NEW
@@ -945,9 +944,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 * @param e a key event
 	 */
-	public void keyPressed (KeyEvent e) {
-		System.out.println("key pressed : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
-	}  
+	public void keyPressed (KeyEvent e) {}
 
 	/**
 	 * Check if key is released. If so, validate fields and update buttons
@@ -955,7 +952,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * @param e a key event
 	 */
 	public void keyReleased (KeyEvent e) {
-		System.out.println("key released : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
 		validateFields();
 		updateSubmitButton();
 	}

@@ -46,9 +46,7 @@ public class RetrieveProjectEventsRequestObserver implements RequestObserver {
 	public void responseSuccess(IRequest iReq) {
 		final ResponseModel response = iReq.getResponse();
 		final ProjectEvent[] reqs = ProjectEvent.fromJSONArray(response.getBody());
-		System.out.println(reqs.toString());
 		callback.callback(Arrays.asList(reqs));
-
 	}
 
 	/**
