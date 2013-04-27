@@ -348,37 +348,47 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @param iterColumn the iteration column
 	 */
 	private void setUpIterationColumn(JTable table, TableColumn iterColumn) {
-		JComboBox iterationBox = new JComboBox();
+		final JComboBox iterationBox = new JComboBox();
+		final JComboBox newComboBox = new JComboBox();
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
 		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox) {
 			@Override
+			public Object getCellEditorValue() {
+				// Ensures the cell displays the selected item from the list
+				return newComboBox.getSelectedItem();
+			}
+			@Override
 			public Component getTableCellEditorComponent(JTable table,
 					Object value, boolean isSelected, int row, int column) {
-				JComboBox thisComboBox = (JComboBox) super.getTableCellEditorComponent(table, value, isSelected, row, column);
-				JComboBox newComboBox = new JComboBox();
+				newComboBox.removeAllItems();
 				boolean containsValue = false;
-				for(int i = 0; i < thisComboBox.getItemCount(); i++) {
-					String stringAtRowI = (String) thisComboBox.getItemAt(i);
+				boolean containsOriginalData = false;
+				for(int i = 0; i < iterationBox.getItemCount(); i++) {
+					String stringAtRowI = (String) iterationBox.getItemAt(i);
 					newComboBox.addItem(stringAtRowI);
 					if(stringAtRowI.equals((String) value)) {
 						containsValue = true;
 					}
+					if(stringAtRowI.equals((String) data[row][column])) {
+						containsOriginalData = true;
+					}
 				}
 
+				// Make sure the current value appears in the list
 				if(!containsValue) {
 					newComboBox.addItem(value);
+					newComboBox.setSelectedItem(value);
+					return newComboBox;
+				}
+				// Also make sure the original value appears in the list
+				if(!containsOriginalData && !((String) data[row][column]).equals((String) value)) {
+					newComboBox.addItem(data[row][column]);
 					return newComboBox;
 				}
 
-				return thisComboBox;
+				return newComboBox;
 			}
-//			@Override
-//			public Object getCellEditorValue() {
-//				Object o = delegate.getCellEditorValue();
-//				System.out.println(o.getClass());
-//		        return o;
-//		    }
 		});
 	}
 	
