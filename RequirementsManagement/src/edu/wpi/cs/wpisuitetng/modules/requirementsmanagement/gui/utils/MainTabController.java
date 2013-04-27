@@ -34,6 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPa
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports.ReportsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationOnFocusListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationReqList;
@@ -410,7 +411,36 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
-	
+
+	/**
+	 * Updates the parent requirement's model after adding another (child)
+	 * requirement as the model's sub-requirement, if the parent requirement is
+	 * open in some tab
+	 *
+	 * @param parentId The parent requirement's ID
+	 * @param childId The child requirement's ID added to the parent's list
+	 */
+	public void updateSubRequirementInParentModel(String parentId, String childId) {
+		// If the parent tab is opened, add childId into the parent tab's model
+		for (int i = 0; i < mainView.getTabCount(); i++) {
+			if (mainView.getTitleAt(i).equals("Requirement #" + parentId)) {
+				// The parent tab is open, so update its model
+				Component tab = mainView.getComponentAt(i);
+				if (tab instanceof RequirementsTab) {
+					RequirementsTab parentTab = (RequirementsTab) tab;
+					RequirementsPanel parentPanel = parentTab.getRequirementPanel();
+					RequirementModel parentModel = parentPanel.getModel();
+
+					if(parentModel != null) {
+						parentModel.addSubRequirement(childId);
+						parentPanel.updateSubRequirementList();
+						return;
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Getter for mainView for access in JanewayModule
 	 *

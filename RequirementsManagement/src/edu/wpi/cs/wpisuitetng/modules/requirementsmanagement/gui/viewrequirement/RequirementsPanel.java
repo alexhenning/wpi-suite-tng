@@ -478,7 +478,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		updateReleaseNumberList();
 		subs.update(model);
 	}
-	
+
+	/**
+	 * Updates the sub-requirement list of this panel
+	 */
+	public void updateSubRequirementList() {
+		subs.update();
+	}
+
 	/**
 	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
 	 * JComponent#setEnabled because setEnabled does not affect its children.
@@ -932,13 +939,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 * @param e a key event
 	 */
-	public void keyTyped ( KeyEvent e ) {}
+	public void keyTyped (KeyEvent e) {}
 	/**
 	 * check if key is pressed. Doesn't really do anything now, but needs to be included 
 	 *
 	 * @param e a key event
 	 */
-	public void keyPressed ( KeyEvent e){  
+	public void keyPressed (KeyEvent e) {
 		System.out.println("key pressed : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
 	}  
 
@@ -947,40 +954,50 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 * @param e a key event
 	 */
-	public void keyReleased ( KeyEvent e ){  
+	public void keyReleased (KeyEvent e) {
 		System.out.println("key released : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
 		validateFields();
 		updateSubmitButton();
 	}
 
+	/**
+	 * Adds the current requirement as a sub-requirement (child) of another
+	 * requirement and updates the models in their tabs if open
+	 *
+	 * @param parentId Another requirement to which this requirement is attached
+	 */
 	public void addToParent(int parentId) {
-		DB.getSingleRequirement(parentId+"", new SingleRequirementCallback() {
+		// Get the parent requirement model
+		DB.getSingleRequirement(parentId + "", new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel req) {
-				req.getSubRequirements().add(model.getId()+"");
+
+				// Then, add the current as a child to the parent model
+				req.getSubRequirements().add(model.getId() + "");
 				DB.updateRequirements(req, new SingleRequirementCallback() {
 					@Override
 					public void callback(RequirementModel req) {
-						if (req.getSubRequirements().contains(model.getId()+"")) {
-							// TODO: update the parent's model if it's already open in some tab
+
+						// Update models and tabs if this has been added to the parent
+						if (req.getSubRequirements().contains(model.getId() + "")) {
 							subs.update();
-							setStatusMessage("added to parent");
+							parent.mainTabController.updateSubRequirementInParentModel(req.getId() + "", model.getId() + "");
+							setStatusMessage("This requirement has been added to the parent");
 						} else {
-							setStatusMessage("failed to add to parent");
+							setStatusMessage("Failed to add this requirement to the parent");
 						}
-						
 					}
 				});
 			}
     	});
 	}
-	
+
 	//TODO improve the add child code to minimize network calls.
 	public void addChild(int childId) {
-		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
+		DB.getSingleRequirement(childId + "", new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel child) {
-				model.getSubRequirements().add(child.getId()+"");
+				model.getSubRequirements().add(child.getId() + "");
 				DB.updateRequirements(model, new AddChildRequirementCallback(child));
 
 			}
@@ -989,7 +1006,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	
 	
 	public void addChild(RequirementModel child) {
-		model.getSubRequirements().add(child.getId()+"");
+		model.getSubRequirements().add(child.getId() + "");
 		DB.updateRequirements(model, new AddChildRequirementCallback(child));
 	}
 	
@@ -1004,7 +1021,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		public void callback(RequirementModel currentReq) {
 			boolean added = false;
 			for (String subReq : currentReq.getSubRequirements()) {
-				if(subReq.equals(childReq.getId()+"")) {
+				if(subReq.equals(childReq.getId() + "")) {
 					added = true;
 				}
 			}
@@ -1022,8 +1039,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 	
 	public void removeChild(RequirementModel child) {
-		model.getSubRequirements().remove(child.getId()+"");
-		DB.updateRequirements(model, new RemoveChildRequirementCallback(child.getId()+""));
+		model.getSubRequirements().remove(child.getId() + "");
+		DB.updateRequirements(model, new RemoveChildRequirementCallback(child.getId() + ""));
 	}
 	
 	public void removeChild(String childId) {
