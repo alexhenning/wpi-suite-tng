@@ -635,6 +635,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
 			nt.setInputEnabled(false);
+			iteration.setEnabled(false);
 
 		} else if (editMode == Mode.CREATE) {
 			namefield.setEnabled(true);
