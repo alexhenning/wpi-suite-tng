@@ -256,8 +256,10 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 			// Update fields and enable elements
 			lblusername.setText("Username: " + editModel.getUsername());
 			permissionSelectExisting.setSelectedIndex(editModel.getPermissionLevel().ordinal());
-			permissionSelectExisting.setEnabled(true);
-			updateButton.setEnabled(true);
+			if(!editModel.getUsername().equals("admin")) {
+				permissionSelectExisting.setEnabled(true);
+				updateButton.setEnabled(true);
+			}
 			
 		} else {
 			
