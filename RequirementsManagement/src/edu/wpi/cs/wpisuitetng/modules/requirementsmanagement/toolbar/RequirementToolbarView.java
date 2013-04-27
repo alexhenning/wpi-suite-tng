@@ -126,7 +126,6 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				RequirementModel model = tab.getRequirementPanel().getModel();
-				if (model.getStatus().equals(RequirementStatus.IN_PROGRESS)) return;
 				if (!model.getSubRequirements().isEmpty()) return;
 				if (model.getStatus() != RequirementStatus.DELETED) {
 					model.setStatus(RequirementStatus.DELETED);
