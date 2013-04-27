@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<meta name="viewport" content="width=625">
+		<meta name="viewport" content="width=950">
 		<title>
 			Requirements viewer
 		</title>
@@ -145,6 +145,10 @@ function displayReqs(){
 	
 	$("div.section").text(function () {
 	    return $(this).text().replace("MEDIUM", "MED"); 
+	});
+	
+	$("div.section").text(function () {
+	    return $(this).text().replace("IN_PROGRESS", "IN PROGRESS"); 
 	});
 	
 	
