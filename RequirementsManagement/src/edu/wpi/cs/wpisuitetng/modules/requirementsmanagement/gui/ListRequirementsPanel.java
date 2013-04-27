@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -350,7 +351,35 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		JComboBox iterationBox = new JComboBox();
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
-		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox));
+		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox) {
+			@Override
+			public Component getTableCellEditorComponent(JTable table,
+					Object value, boolean isSelected, int row, int column) {
+				JComboBox thisComboBox = (JComboBox) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+				JComboBox newComboBox = new JComboBox();
+				boolean containsValue = false;
+				for(int i = 0; i < thisComboBox.getItemCount(); i++) {
+					String stringAtRowI = (String) thisComboBox.getItemAt(i);
+					newComboBox.addItem(stringAtRowI);
+					if(stringAtRowI.equals((String) value)) {
+						containsValue = true;
+					}
+				}
+
+				if(!containsValue) {
+					newComboBox.addItem(value);
+					return newComboBox;
+				}
+
+				return thisComboBox;
+			}
+//			@Override
+//			public Object getCellEditorValue() {
+//				Object o = delegate.getCellEditorValue();
+//				System.out.println(o.getClass());
+//		        return o;
+//		    }
+		});
 	}
 	
 	/**
