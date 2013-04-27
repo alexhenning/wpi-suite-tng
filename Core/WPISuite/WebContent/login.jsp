@@ -4,6 +4,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<meta name="viewport" content="width=400">
 		<title>
 			Requirements Management
 		</title>
@@ -140,7 +141,7 @@
 						{
 							if(xmlProject.statusText == "OK"){
 								//document.getElementById("projectresponsespan").innerHTML = xmlProject.statusText;
-								window.location = "view2.jsp";
+								window.location = "view.jsp";
 							}
 							else{
 								document.getElementById("badproject").innerHTML = "Project does not exist";

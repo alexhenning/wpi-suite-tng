@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<meta name="viewport" content="width=600">
+		<meta name="viewport" content="width=625">
 		<title>
 			Requirements viewer
 		</title>
@@ -40,7 +40,7 @@ xmlReqList.onreadystatechange = function()
 			displayReqs();
 			
 		}else{
-			window.location = "login2.jsp";
+			window.location = "login.jsp";
 		}
 	}
 	
