@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import edu.wpi.cs.wpisuitetng.janeway.config.ConfigManager;
+import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 
@@ -34,6 +35,8 @@ public class CurrentUserPermissionManager {
 	private List <SinglePermissionCallback> waitList;
 	/** Indicates whether the permission model is ready */
 	private boolean hasCurrentProfile;
+	/** The permission model of the current user */
+	private User currentUser;
 	/** The permission model of the current user */
 	private Permissions currentProfile;
 	/** Indicates whether function profileReady() has been called */
@@ -57,6 +60,7 @@ public class CurrentUserPermissionManager {
 		waitList = new ArrayList <SinglePermissionCallback> ();
 		hasCurrentProfile = false;
 		currentProfile = new Permissions("", PermissionLevel.NONE); // Stub
+		currentUser = new User("", "", "", -1); // Stub
 		hasUsernameReadyBeenCalled = false;
 		addedUsernameProfiles = new HashMap <String, Permissions>();
 	}
@@ -164,6 +168,15 @@ public class CurrentUserPermissionManager {
 					setCurrentProfile(newProfile);
 				}
 			});
+			// If user retrieval fails, then don't care
+			DB.getSingleUser(username, new SingleUserCallback() {
+				@Override
+				public void callback(User user) {
+					synchronized (currentUser) {
+						currentUser = user;
+					}
+				}
+			});
 		}
 	}
 
@@ -198,5 +211,15 @@ public class CurrentUserPermissionManager {
 	 */
 	public Permissions getCurrentProfile() {
 		return currentProfile;
+	}
+
+	/**
+	 * Returns the current user, but it is not guaranteed to be valid. This is a
+	 * non-blocking version.
+	 *
+	 * @return the current user
+	 */
+	public User getCurrentUser() {
+		return currentUser;
 	}
 }
