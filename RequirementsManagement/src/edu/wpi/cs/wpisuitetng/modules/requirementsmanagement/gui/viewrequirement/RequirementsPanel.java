@@ -487,6 +487,13 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 
 	/**
+	 * Updates notes using the current model
+	 */
+	public void updateNotes() {
+		nt.setNotes(Arrays.asList(model.getNotes()));
+	}
+
+	/**
 	 * Updates the sub-requirement list of this panel
 	 */
 	public void updateSubRequirementList() {
@@ -684,7 +691,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		parent.buttonGroup.update(editMode, model);
 
 		// Update supplement (right-hand side) panels
-		nt.setNotes(Arrays.asList(model.getNotes()));
+		updateNotes();
 		DB.getAllProjectEvents(new ListProjectEvents());
 		subs.update();
 		users.update();
@@ -769,7 +776,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		model.setActualEffort(new Integer(actualEffortField.getText())); // TODO: Should be an integer
 		return model;
 	}
-	
+
+	/**
+	 * Replaces the current requirement model with a new model
+	 *
+	 * @param model new requirement model
+	 */
+	public void setModel(RequirementModel model) {
+		this.model = model;
+	}
+
 	/**
 	 * Returns the parent RequirementView.
 	 * 
