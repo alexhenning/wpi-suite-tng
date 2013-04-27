@@ -3,6 +3,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<meta name="viewport" content="width=600">
 		<title>
 			Requirements viewer
 		</title>
@@ -37,7 +38,7 @@ xmlReqList.onreadystatechange = function()
 			// document.getElementById("divBuffer").innerHTML = xmlReqList.responseText;
 			reqList = eval(xmlReqList.responseText);
 			displayReqs();
-			MEDIUM();
+			
 		}else{
 			window.location = "login2.jsp";
 		}
@@ -77,12 +78,42 @@ function displayReqs(){
 		"<div class='row collapse' id='details"+ i +"'>"+
 			"<div class=' small-1   columns section '>"+
 			"</div>"+
-			"<div class='small-7   columns section description'>"+
+			"<div class='small-7  columns section description'>"+
 				reqList[i].description+
 			"</div>"+
-			"<div class=' small-4   columns section '>"+
+			
+			
+		
+			
+			"<div class=' small-4   columns  '>"+
+			
+			
+				"<div class='row'>"+
+				"<div class=' small-12   columns gray'>"+
+				"Estimate:   <span class='darker'>"+ reqList[i].estimate +	
+				"</span> </div>"+
+				"</div>"+
+				
+				"<div class='row'>"+
+				"<div class=' small-12   columns gray' id='cutDate'>"+
+				"Type: <span class='darker'>"+ reqList[i].type + 
+				"</span> </div>"+
+				"</div>"+
+			
+				"<div class='row'>"+
+				"<div class=' small-12   columns gray'>"+
+				"Created by <span class='darker'>"+ reqList[i].creator.username +	
+				"</span> </div>"+
+				"</div>"+
+				
 			"</div>"+
 		"</div>"+
+		
+		
+		
+	
+	
+		
 		"</div>"+
 		"</div>");
 		
@@ -117,7 +148,22 @@ function displayReqs(){
 	});
 	
 	
+	
 }
+
+
+	/*
+	element = document.getElementById('cutDate');
+	var dateToCut = element.textContent || element.innerText;
+
+	var newDate = dateToCut.split(",")[0];
+	
+	
+	$("div.#cutDate").text(function () {
+		
+	    return $(this).text().replace(dateToCut, newDate); 
+	});
+	*/
 
 function ChangeStyle(ind){
 	
@@ -135,6 +181,8 @@ function ChangeStyle(ind){
 	else
 		details.addClass("extend");
 }
+
+
 
 function sortByName(){
 	$("#reqContainer").html("");
