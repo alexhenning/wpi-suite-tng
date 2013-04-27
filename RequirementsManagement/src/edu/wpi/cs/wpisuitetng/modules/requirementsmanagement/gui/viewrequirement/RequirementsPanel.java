@@ -26,6 +26,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -810,10 +812,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				DB.updateRequirements(model, new SingleRequirementCallback() {
 					@Override
 					public void callback(RequirementModel req) {
+						Calendar currentTime = Calendar.getInstance();
+						SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
 						if(model.getStatus() == RequirementStatus.DELETED) {
-							setStatusMessage("Requirement Deleted");
+							setStatusMessage("Requirement Deleted (" + sdf.format(currentTime.getTime()) + ")");
 						} else {
-							setStatusMessage("Requirement Updated");
+							setStatusMessage("Requirement Updated (" + sdf.format(currentTime.getTime()) + ")");
 						}
 					}
 				});

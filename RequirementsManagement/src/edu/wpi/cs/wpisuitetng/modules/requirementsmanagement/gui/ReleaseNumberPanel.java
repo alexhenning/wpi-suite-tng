@@ -23,7 +23,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -474,7 +476,9 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 			updateComboBoxWithReleaseNumbers(releaseNumbers);
 			if(rn != null) {
 				updateModel(rn);
-				setStatus("Release Number Saved");
+				Calendar currentTime = Calendar.getInstance();
+				SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
+				setStatus("Release Number Saved (" + sdf.format(currentTime.getTime()) + ")");
 			}
 			enableSubmitButton();
 		}

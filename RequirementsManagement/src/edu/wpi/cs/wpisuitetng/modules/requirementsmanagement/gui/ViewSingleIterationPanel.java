@@ -18,6 +18,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -481,7 +482,9 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 
 						@Override
 						public void callback(Iteration iteration) {
-							setStatus("Iteation updated");
+							Calendar currentTime = Calendar.getInstance();
+							SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
+							setStatus("Iteation updated (" + sdf.format(currentTime.getTime()) + ")");
 						}
 						
 					});
