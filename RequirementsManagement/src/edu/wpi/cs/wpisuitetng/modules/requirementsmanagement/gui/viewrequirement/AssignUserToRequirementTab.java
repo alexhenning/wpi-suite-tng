@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
@@ -41,6 +42,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermi
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Tab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewUserTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
@@ -291,7 +293,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	}
 
 	public AssignedUserTabChangeListener addChangeListenerTo (MainTabView mainView) {
-		AssignedUserTabChangeListener l = new AssignedUserTabChangeListener();
+		AssignedUserTabChangeListener l = new AssignedUserTabChangeListener(this.parent.parent);
 		mainView.addChangeListener(l);
 		return l;
 	}
@@ -453,10 +455,20 @@ public class AssignUserToRequirementTab extends JPanel {
 	}
 	
 	class AssignedUserTabChangeListener implements ChangeListener{
+		RequirementsTab attentiveTab;
+		
+		public AssignedUserTabChangeListener(RequirementsTab parent){
+			this.attentiveTab = parent;
+		}
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			DB.getAllUsers(new UpdateTablesCallback(getSelectedSubId(), getSelectedPosId()));
+			if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){
+				//TODO: find a way to remove this listener if tab has been closed
+			} else if( ((JTabbedPane) e.getSource()).getSelectedComponent().equals(attentiveTab) ){
+				DB.getAllUsers(new UpdateTablesCallback(getSelectedSubId(), getSelectedPosId()));
+			}
+			
 		}
 		
 	}
