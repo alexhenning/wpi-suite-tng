@@ -47,7 +47,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	/** the main panel */
 	private RequirementsPanel mainPanel;
 	/** the containing tab*/
-	private Tab containingTab;
+	protected Tab containingTab;
 	/** is input enabled*/
 	private boolean inputEnabled = true;
 	/** the listener to be removed after the tab closes */
