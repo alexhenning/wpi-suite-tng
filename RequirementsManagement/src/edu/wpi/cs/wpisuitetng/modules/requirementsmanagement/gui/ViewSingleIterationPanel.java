@@ -19,7 +19,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -123,6 +122,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			iterationNumber.setFont(font);
 			iterationNumber.setEditable(false);
 			iterationNumber.setFocusable(false);
+			iterationNumber.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 			topPanel.add(iterationNumber, c);
 		}
 		/** iteration is not null, retrieve and display iteration values */
