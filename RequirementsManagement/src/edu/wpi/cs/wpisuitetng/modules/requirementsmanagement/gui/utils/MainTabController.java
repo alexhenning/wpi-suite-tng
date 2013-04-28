@@ -40,7 +40,6 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateVie
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationReqList;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
@@ -190,7 +189,7 @@ public class MainTabController {
 			}
 		} else {
 			for (int i=0; i<mainView.getTabCount(); i++) {
-				if (("Edit "+(iteration.getIterationNumber())).equals(mainView.getTitleAt(i))) {
+				if (("Edit Iteration \"" + (iteration.getIterationNumber()) + "\"").equals(mainView.getTitleAt(i))) {
 					switchToTab(i);
 					return null;//TODO figure out what to return
 				}
@@ -226,7 +225,6 @@ public class MainTabController {
 		}
 
 		// Otherwise, create a new one.
-		Permissions profile = new Permissions();
 		Tab tab = addTab();
 		ScrollableTab<PermissionsPanel> view = 
 				new ScrollableTab<PermissionsPanel>(this, tab, "Manage Permissions",

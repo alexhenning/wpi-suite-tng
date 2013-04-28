@@ -122,6 +122,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			Font font = new Font("Verdana", Font.BOLD, 25);
 			iterationNumber.setFont(font);
 			iterationNumber.setEditable(false);
+			iterationNumber.setFocusable(false);
 			topPanel.add(iterationNumber, c);
 		}
 		/** iteration is not null, retrieve and display iteration values */
@@ -484,7 +485,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 						public void callback(Iteration iteration) {
 							Calendar currentTime = Calendar.getInstance();
 							SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
-							setStatus("Iteation updated (" + sdf.format(currentTime.getTime()) + ")");
+							setStatus("Iteration updated (" + sdf.format(currentTime.getTime()) + ")");
 						}
 						
 					});

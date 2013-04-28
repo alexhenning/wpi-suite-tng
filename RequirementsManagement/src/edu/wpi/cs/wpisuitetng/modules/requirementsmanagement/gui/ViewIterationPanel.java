@@ -102,7 +102,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 		table.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-                if (e.getClickCount() == 2 ) {
+                if (e.getClickCount() == 2) {
                 	if (table.getModel().getValueAt(table.getSelectedRow(), ID).toString().equals("0")) {
                 		parent.getTabController().addIterationTab(null, "View Backlog");
                 	}
@@ -110,7 +110,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
                 			new SingleIterationCallback() {
 						@Override
 						public void callback(Iteration iter) {
-							parent.getTabController().addIterationTab(iter, "Edit " + iter.getIterationNumber());
+							parent.getTabController().addIterationTab(iter, "Edit Iteration \"" + iter.getIterationNumber() + "\"");
 						}
                 	});
                 }
