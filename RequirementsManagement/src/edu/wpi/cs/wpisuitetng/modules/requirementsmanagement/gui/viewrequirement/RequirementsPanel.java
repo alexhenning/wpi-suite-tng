@@ -883,6 +883,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 */
 	public boolean validateEstimateFields() {
 
+		boolean requirementNotClosed = (model.getStatus() != RequirementStatus.COMPLETE);
 		if (!estimateField.getText().matches("[0-9]{1,6}") || Integer.parseInt(estimateField.getText()) < 0) {
 			estimateField.setBackground(Color.RED);
 			setStatusMessage("Estimate must be non-negative integer (0-999999).");
@@ -892,12 +893,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				!iteration.getSelectedItem().equals("Backlog")) {
 			estimateField.setBackground(Color.RED);
 			setStatusMessage("A requirement must have a positive estimate to be assigned to an iteration");
-			iteration.setEnabled(true);
+			iteration.setEnabled(requirementNotClosed);
 			iteration.setBackground(Color.WHITE);
 			return false;
 		} else {
 			if(Integer.parseInt(estimateField.getText()) > 0) {
-				iteration.setEnabled(true);
+				iteration.setEnabled(requirementNotClosed);
 				iteration.setBackground(Color.WHITE);
 			} else {
 				iteration.setEnabled(false);
