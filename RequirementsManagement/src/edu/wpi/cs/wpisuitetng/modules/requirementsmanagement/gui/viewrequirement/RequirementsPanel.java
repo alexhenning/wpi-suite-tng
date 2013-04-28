@@ -292,6 +292,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		// Make status field non-editable rather than disabled (for better vision)
 		statusfield.setEditable(false);
 		statusfield.setOpaque(true);
+		statusfield.setFocusable(false);
 
 		//estimate field
 		JLabel estimateArea = new JLabel("Estimate:");
@@ -449,6 +450,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			leftside.add(results, c);
 			//pointless to allow user to edit result text
 			results.setEditable(false);
+			results.setFocusable(false);
 
 			c.gridwidth = 1;
 			c.gridy = 10;
