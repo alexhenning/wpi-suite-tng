@@ -127,7 +127,7 @@ public class ListFilteredRequirementsPanel extends JPanel {
 	 * @return the table model
 	 */
 	public ViewFilteredReqTable getTable(){
-		return this.tableModel;
+		return tableModel;
 	}
 	
 	/**

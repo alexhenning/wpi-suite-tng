@@ -75,7 +75,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 			containingTab = new DummyTab();
 		}
 
-		this.mainTabController = tabController;
+		mainTabController = tabController;
 		buttonGroup = new RequirementToolbarView(tabController, this);
 		
 		containingTab.setIcon(new ImageIcon());

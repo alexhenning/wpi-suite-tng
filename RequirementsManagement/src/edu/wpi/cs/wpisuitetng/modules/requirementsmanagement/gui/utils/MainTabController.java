@@ -34,12 +34,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewIterationPa
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewReqTable;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.ViewSingleIterationPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports.ReportsPanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsPanel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement.RequirementsTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationOnFocusListener;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.listeners.UpdateViewIterationReqList;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 
@@ -63,8 +63,8 @@ public class MainTabController {
 	 * @param view Create a controller that controls this MainTabView
 	 */
 	public MainTabController(MainTabView view) {
-		this.mainView = view;
-		this.mainView.addMouseListener(new MouseAdapter() {
+		mainView = view;
+		mainView.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				MainTabController.this.onMouseClick(event);
@@ -77,8 +77,7 @@ public class MainTabController {
 		private RequirementsTab tab;
 		
 		public RequirementTabChangeListener(final RequirementsTab view) {
-			super();
-			this.tab = view;
+			tab = view;
 		}
 
 		@Override
@@ -134,7 +133,7 @@ public class MainTabController {
 		final RequirementsTab view = new RequirementsTab(this, requirement, mode, tab, mainView);
 		tab.setComponent(view);
 		view.requestFocus();
-		this.mainView.addChangeListener(new RequirementTabChangeListener(view));
+		mainView.addChangeListener(new RequirementTabChangeListener(view));
 
 		return tab;
 	}
@@ -156,7 +155,7 @@ public class MainTabController {
 	
 	public Tab addCreateReleaseNumberTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.mainView.getTabCount(); i++) {
+		for (int i = 0; i < mainView.getTabCount(); i++) {
 			// TODO: May have to refactor "Release Number"
 			if (mainView.getTitleAt(i).equals("Release Number")) {
 				switchToTab(i);
@@ -190,7 +189,7 @@ public class MainTabController {
 			}
 		} else {
 			for (int i=0; i<mainView.getTabCount(); i++) {
-				if (("Edit "+(iteration.getIterationNumber())).equals(mainView.getTitleAt(i))) {
+				if (("Edit Iteration \"" + (iteration.getIterationNumber()) + "\"").equals(mainView.getTitleAt(i))) {
 					switchToTab(i);
 					return null;//TODO figure out what to return
 				}
@@ -215,7 +214,7 @@ public class MainTabController {
 	 */
 	public Tab addPermissionTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.mainView.getTabCount(); i++) {
+		for (int i = 0; i < mainView.getTabCount(); i++) {
 
 			// TODO: May have to refactor "Manage Permissions"
 			if (mainView.getTitleAt(i).equals("Manage Permissions")) {
@@ -226,7 +225,6 @@ public class MainTabController {
 		}
 
 		// Otherwise, create a new one.
-		Permissions profile = new Permissions();
 		Tab tab = addTab();
 		ScrollableTab<PermissionsPanel> view = 
 				new ScrollableTab<PermissionsPanel>(this, tab, "Manage Permissions",
@@ -393,7 +391,7 @@ public class MainTabController {
 
 	public Tab addViewIterationTab() {
 		// If the tab is already opened, switch to that tab.
-		for (int i = 0; i < this.mainView.getTabCount(); i++) {
+		for (int i = 0; i < mainView.getTabCount(); i++) {
 			// TODO: May have to refactor "View Iteration"
 			if (mainView.getTitleAt(i).equals("All Iterations")) {
 				switchToTab(i);
@@ -411,7 +409,36 @@ public class MainTabController {
 		view.requestFocus();
 		return tab;
 	}
-	
+
+	/**
+	 * Updates the parent requirement's model after adding another (child)
+	 * requirement as the model's sub-requirement, if the parent requirement is
+	 * open in some tab
+	 *
+	 * @param parentId The parent requirement's ID
+	 * @param childId The child requirement's ID added to the parent's list
+	 */
+	public void updateSubRequirementInParentModel(String parentId, String childId) {
+		// If the parent tab is opened, add childId into the parent tab's model
+		for (int i = 0; i < mainView.getTabCount(); i++) {
+			if (mainView.getTitleAt(i).equals("Requirement #" + parentId)) {
+				// The parent tab is open, so update its model
+				Component tab = mainView.getComponentAt(i);
+				if (tab instanceof RequirementsTab) {
+					RequirementsTab parentTab = (RequirementsTab) tab;
+					RequirementsPanel parentPanel = parentTab.getRequirementPanel();
+					RequirementModel parentModel = parentPanel.getModel();
+
+					if(parentModel != null) {
+						parentModel.addSubRequirement(childId);
+						parentPanel.updateSubRequirementList();
+						return;
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Getter for mainView for access in JanewayModule
 	 *

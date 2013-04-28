@@ -1,6 +1,6 @@
 #photto{
 	height:100%;
-	background: url(img/blurred1.jpg) no-repeat center center fixed;	
+	background: url(img/blurred2.jpg) no-repeat center center fixed;	
 	min-height: 113%;
 	min-width: 1039px;
 	width: 100%;
@@ -13,11 +13,12 @@
 
 html {
 	
-	background: url(img/blurred1.jpg) no-repeat center center fixed;
+	background: url(img/blurred2.jpg) no-repeat center center fixed;
 	
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+	min-width:600px;
 }
 
 
@@ -248,10 +249,10 @@ fieldset{
 
 .collapse{
 	display:block ;
-	-webkit-transition: 0.7s ease-out;
-    -moz-transition: 0.7s ease-out;
-    -o-transition: 0.7s ease-out;
-    transition: 0.7s ease-out;
+	-webkit-transition: 0.4s ease-out;
+    -moz-transition: 0.4s ease-out;
+    -o-transition: 0.4s ease-out;
+    transition: 0.4s ease-out;
 	opacity: 0;
 	max-height:0px;
 	overflow: hidden;
@@ -264,10 +265,11 @@ fieldset{
 	
 	opacity: 1;
 	display:block ;
-	-webkit-transition: 0.7s ease-out;
-    -moz-transition: 0.7s ease-out;
-    -o-transition: 0.7s ease-out;
-    transition: 0.7s ease-out;
+	-webkit-transition: 0.4s ease-out;
+    -moz-transition: 0.4s ease-out;
+    -o-transition: 0.4s ease-out;
+    transition: 0.4s ease-out;
+    
 
 }
 
@@ -297,6 +299,10 @@ fieldset{
 	font-size: 16.5px;
 	color: #000000;
 	
+}
+
+.darker{
+	color:#111 !important;
 }
 
 

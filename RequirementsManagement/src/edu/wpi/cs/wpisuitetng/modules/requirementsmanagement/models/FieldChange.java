@@ -71,7 +71,7 @@ public class FieldChange<T> {
 	 */
 	public Class<T> getPersistentClass() {
         if (type == null) {
-            this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         }
         return type;
     }

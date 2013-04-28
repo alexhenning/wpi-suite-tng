@@ -152,8 +152,6 @@ public class RequirementModelEntityManagerTest {
 		RequirementModel created2 = manager.makeEntity(defaultSession, newRequirement2.toJSON());
 		assertEquals(2, created2.getId());
 
-		//assertNotNull(db.retrieve(RequirementModel.class, "ID", 2));
-
 	}
 
 

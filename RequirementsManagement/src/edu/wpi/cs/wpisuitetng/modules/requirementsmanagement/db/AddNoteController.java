@@ -16,6 +16,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 
@@ -78,11 +79,12 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	 */
 	public void saveNote() {
 		final String noteText = view.ta.getText();
-		view.ta.setText("");
 		if (noteText.length() > 0) {
 			final Request request = Network.getInstance().makeRequest(
 					"requirementsmanagement/requirementnote", HttpMethod.PUT);
-			request.setBody((new RequirementNote(model.getId(), model.getCreator(), noteText)).toJSON());
+			request.setBody((new RequirementNote(model.getId(),
+					CurrentUserPermissionManager.getInstance().getCurrentUser(),
+					noteText)).toJSON());
 			request.addObserver(new AddNoteObserver(this));
 			request.send();
 		} 
@@ -97,11 +99,16 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	public void receivedAddConfirmation(ResponseModel response) {
 		Gson gson = new Gson();
 		RequirementNote note = gson.fromJson(response.getBody(), RequirementNote.class);
+		// Update the text area and the button after successfully adding a note
+		view.ta.setText("");
+		view.setInputEnabled(true);
 		
 		DB.getSingleRequirement(Integer.toString(note.getRequirementId()), new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel req) {
-				parentView.updateModel(req);
+				// Update only the model and notes but not other (possibly unsaved) fields
+				parentView.setModel(req);
+				parentView.updateNotes();
 			}
 		});
 	}

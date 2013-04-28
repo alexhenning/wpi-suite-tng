@@ -102,15 +102,15 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 		table.addMouseListener(new MouseListener() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-                if (e.getClickCount() == 2 ) {
-                	if (table.getModel().getValueAt(table.getSelectedRow(),ID).toString().equals("0")) {
+                if (e.getClickCount() == 2) {
+                	if (table.getModel().getValueAt(table.getSelectedRow(), ID).toString().equals("0")) {
                 		parent.getTabController().addIterationTab(null, "View Backlog");
                 	}
                 	else DB.getSingleIteration(table.getModel().getValueAt(table.getSelectedRow(), ID).toString(),
                 			new SingleIterationCallback() {
 						@Override
 						public void callback(Iteration iter) {
-							parent.getTabController().addIterationTab(iter, "Edit " + iter.getIterationNumber());
+							parent.getTabController().addIterationTab(iter, "Edit Iteration \"" + iter.getIterationNumber() + "\"");
 						}
                 	});
                 }
@@ -260,6 +260,6 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	 * @return the table model
 	 */
 	public ViewIterTable getTable(){
-		return this.tableModel;
+		return tableModel;
 	}
 }

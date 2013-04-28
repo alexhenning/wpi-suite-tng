@@ -119,7 +119,6 @@ public class RequirementModel extends AbstractModel {
 			int estimate, int actualEffort, User creator, List<User> assignees,
 			Date creationDate, Date lastModifiedDate, List<RequirementEvent> events,
 			List<String> subRequirements, Iteration iteration, RequirementType type) {
-		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
 		this.status = status;
@@ -150,8 +149,8 @@ public class RequirementModel extends AbstractModel {
 	public void addNote(User user, String body, Date date) {
 		RequirementNote note = new RequirementNote(id, user, body);
 		note.setDate(date);
-		this.events.add(note);
-		this.lastModifiedDate = date;
+		events.add(note);
+		lastModifiedDate = date;
 	}
 
 	/**
@@ -163,8 +162,8 @@ public class RequirementModel extends AbstractModel {
 	public void addNote(User user, String body) {
 		RequirementNote note = new RequirementNote(id, user, body);
 		note.setDate(new Date());
-		this.events.add(note);
-		this.lastModifiedDate = new Date();
+		events.add(note);
+		lastModifiedDate = new Date();
 	}
 	
 	/**
@@ -541,8 +540,8 @@ public class RequirementModel extends AbstractModel {
 	 * @param subreq Requirement to add to list of sub-requirements
 	 */
 	public void addSubRequirement(String subreqID){
-		if (!this.subRequirements.contains(subreqID)) {
-			this.subRequirements.add(subreqID);
+		if (!subRequirements.contains(subreqID)) {
+			subRequirements.add(subreqID);
 		}
 	}
 	

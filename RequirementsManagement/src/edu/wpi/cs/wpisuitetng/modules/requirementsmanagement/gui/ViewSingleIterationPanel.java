@@ -18,6 +18,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -121,13 +122,14 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 			Font font = new Font("Verdana", Font.BOLD, 25);
 			iterationNumber.setFont(font);
 			iterationNumber.setEditable(false);
+			iterationNumber.setFocusable(false);
 			topPanel.add(iterationNumber, c);
 		}
 		/** iteration is not null, retrieve and display iteration values */
 		else {
 			lbl1 = new JLabel("Start Date");
 			lbl2 = new JLabel("End Date");
-			lbl3 = new JLabel ("Iteration Number ");
+			lbl3 = new JLabel ("Iteration ");
 			lbl4 = new JLabel ("Estimate");
 			lbl5 = new JLabel("Scheduled Requirements:");
 			
@@ -481,7 +483,9 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 
 						@Override
 						public void callback(Iteration iteration) {
-							setStatus("Iteation updated");
+							Calendar currentTime = Calendar.getInstance();
+							SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
+							setStatus("Iteration updated (" + sdf.format(currentTime.getTime()) + ")");
 						}
 						
 					});

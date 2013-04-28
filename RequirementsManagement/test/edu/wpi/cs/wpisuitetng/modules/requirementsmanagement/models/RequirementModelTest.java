@@ -25,8 +25,10 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import static edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus.*;
 import static edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority.*;
+
 /**
- * TODO Description
+ * Test cases for RequirementModel
+ *
  * @author vpatara
  * @author Tim
  */
@@ -47,13 +49,6 @@ public class RequirementModelTest {
 						"username", "password", 1), new ArrayList<User>(),
 				new Date(), new Date(), new ArrayList<RequirementEvent>(),
 				new ArrayList<String>(), null, RequirementType.EPIC);
-	}
-
-	/**
-	 * @throws Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
 	}
 
 	// TODO: add a test case for combined assignments (sets-gets)	

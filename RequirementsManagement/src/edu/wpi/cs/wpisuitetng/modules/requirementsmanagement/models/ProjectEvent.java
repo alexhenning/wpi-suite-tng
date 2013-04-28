@@ -135,7 +135,7 @@ public class ProjectEvent extends AbstractModel {
 	 */
 	protected ProjectEvent(User user, ProjectEventObjectType objectType, String objectId) {
 		this();
-		this.changes = new HashMap<String, FieldChange<?>>();
+		changes = new HashMap<String, FieldChange<?>>();
 		this.user = user;
 		this.objectId = objectId;
 		this.objectType = objectType;
@@ -150,7 +150,7 @@ public class ProjectEvent extends AbstractModel {
 	 */
 	protected ProjectEvent(ProjectEventObjectType objectType, String objectId) {
 		this();
-		this.changes = new HashMap<String, FieldChange<?>>();
+		changes = new HashMap<String, FieldChange<?>>();
 		this.objectId = objectId;
 		this.objectType = objectType;
 	}

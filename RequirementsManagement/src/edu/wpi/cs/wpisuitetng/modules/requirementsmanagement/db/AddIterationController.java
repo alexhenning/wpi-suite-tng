@@ -69,7 +69,7 @@ public class AddIterationController extends AbstractAction implements ActionList
 	 * @param req
 	 */
 	public void receivedAddConfirmation(Iteration req) {
-		panel.close();//setStatus("Requirement saved!");
+		panel.close();
 	}
 
 }

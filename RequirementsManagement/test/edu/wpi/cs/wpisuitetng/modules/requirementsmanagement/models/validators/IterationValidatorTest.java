@@ -13,8 +13,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+
 
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +22,6 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.wpi.cs.wpisuitetng.Session;
@@ -34,8 +32,6 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.MockData;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.IterationValidator;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 /**
  * @author Sergey Zolotykh (szolotykh)(milk3dfx)

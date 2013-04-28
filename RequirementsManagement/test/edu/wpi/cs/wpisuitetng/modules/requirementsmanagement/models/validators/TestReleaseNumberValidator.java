@@ -147,7 +147,6 @@ public class TestReleaseNumberValidator {
 	@Test
 	public void testGoodNewReleaseNumber(){
 		//TODO Fix validation issue of checking whether a new id is in the db
-		//checkNoIssues(defaultSession, goodNewReleaseNum, Mode.CREATE);
 		assertSame(2, goodNewReleaseNum.getId());
 		assertSame(testProject, goodNewReleaseNum.getProject());
 	}

@@ -49,9 +49,13 @@ public class RetrieveUsersRequestObserver implements RequestObserver {
 		final ResponseModel response = iReq.getResponse();
 		GsonBuilder builder = new GsonBuilder();
 		final User[] users = builder.create().fromJson(response.getBody(), User[].class);
-		System.out.println(users.toString());
+//		String s = "Users: [";
+//		for(int i = 0; i < users.length; i++)
+//			s += users[i].getUsername() + ", ";
+//		s = s.substring(0, s.length() - 2);
+//		s += "]";
+//		System.out.println(s);
 		callback.callback(Arrays.asList(users));
-
 	}
 
 	/**

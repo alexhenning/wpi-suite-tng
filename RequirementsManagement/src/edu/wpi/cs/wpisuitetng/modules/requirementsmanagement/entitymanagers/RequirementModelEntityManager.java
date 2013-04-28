@@ -96,7 +96,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 			throw new BadRequestException();
 		}
 		
-		ProjectEvent creation = ProjectEvent.createProjectCreationEvent(ProjectEventObjectType.REQUIREMENT, newRequirementModel.getId()+"");
+		ProjectEvent creation = ProjectEvent.createProjectCreationEvent(ProjectEventObjectType.REQUIREMENT, newRequirementModel.getId() + "");
 		// make sure the user exists
 		creation.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
 		creation.setId(CountEvents() + 1);
@@ -180,7 +180,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 		RequirementModel existingRequirement = validator.getLastExistingRequirement();
 		Date originalLastModified = existingRequirement.getLastModifiedDate();
 		
-		ProjectEvent changeset = ProjectEvent.createProjectChangesetEvent(ProjectEventObjectType.REQUIREMENT, existingRequirement.getId()+"");
+		ProjectEvent changeset = ProjectEvent.createProjectChangesetEvent(ProjectEventObjectType.REQUIREMENT, existingRequirement.getId() + "");
 		// make sure the user exists
 		changeset.setUser((User) db.retrieve(User.class, "username", s.getUsername()).get(0));
 		changeset.setId(CountEvents() + 1);
@@ -301,7 +301,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 					}
 				}
 			}
-			return ""+canClose;
+			return "" + canClose;
 		} else if(args[2].equals("subsClosed")) {
 			boolean isClosed = true;
 			RequirementModel[] tmp = null;
@@ -326,7 +326,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 					}
 				}
 			}
-			return ""+isClosed;
+			return "" + isClosed;
 		} else if(args[2].equals("closeSub")) {
 			boolean canClose = true;
 			RequirementModel[] tmp = null;
@@ -354,7 +354,7 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 				update(s, tmp[0].toJSON());
 			}
 			//TODO should probably throw some exception if false...
-			return ""+canClose;
+			return "" + canClose;
 		}
 		
 		throw new NotImplementedException();

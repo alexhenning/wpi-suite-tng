@@ -307,10 +307,11 @@ public class RequirementModelValidator {
 			// new requirements should never have any events
 			requirement.setEvents(new ArrayList<RequirementEvent>());
 		}
-		
-		// Check if the iteration is still in progress
+
+		// Check if the iteration is still in progress but allow updating a
+		// requirement that has already been scheduled to a finished iteration
 		if(requirement.getIteration() != null) {
-			if(now.after(requirement.getIteration().getEndDate()) && now != requirement.getIteration().getEndDate()) {
+			if(mode == Mode.CREATE && !now.before(requirement.getIteration().getEndDate())) {
 				issues.add(new ValidationIssue("iteration must not be over", "iteration"));
 			}
 		}

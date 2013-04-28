@@ -38,7 +38,6 @@ public class ReleaseNumber extends AbstractModel {
 	 * @param project the project
 	 */
 	public ReleaseNumber(int id, String releaseNumber, Project project) {
-		super();
 		this.id = id;
 		this.releaseNumber = releaseNumber;
 		this.setProject(project);
@@ -48,7 +47,6 @@ public class ReleaseNumber extends AbstractModel {
 	 * Constructor
 	 */
 	public ReleaseNumber() {
-		super();
 		id = -1;
 		releaseNumber = "";
 		

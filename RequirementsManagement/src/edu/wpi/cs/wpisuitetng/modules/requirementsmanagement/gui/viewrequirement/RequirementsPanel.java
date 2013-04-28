@@ -20,12 +20,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
@@ -80,38 +83,58 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/** The requirement displayed in this panel */
 	protected RequirementModel model;
 
-	/*
-	 * Form elements
-	 */
-	public JTextField namefield = new JTextField(35);
-	public JTextArea descriptionfield = new JTextArea(6, 0);
+	/** text field for the name */
+	JTextField namefield = new JTextField(35);
+	/** text field for the description */
+	JTextArea descriptionfield = new JTextArea(6, 0);
+	/** the priorities that a requirement can have */
 	RequirementPriority[] priorityStrings = RequirementPriority.values();
+	/** the types that a requirement can have */
 	RequirementType[] typeStrings = RequirementType.values();
+	/** the possible iterations*/
 	Iteration[] iterations;
+	/** the possible release numbers*/
 	ReleaseNumber[] releaseNums;
+	/** the old estimate */
 	String oldEstimateString;
+	/** the old actual effort */
 	String oldActualEffortString;
-	public JComboBox priority = new JComboBox(priorityStrings);
-	public JComboBox type = new JComboBox(typeStrings);
-	public JComboBox iteration = new JComboBox();
-	public JComboBox releaseNumbers = new JComboBox();
-	public JTextField statusfield = new JTextField();
-	public JTextField estimateField = new JTextField("0", 35);
-	public JTextField actualEffortField = new JTextField("0", 35);
-	public JTextField results = new JTextField(35);
+	/** combo box for displaying priorities*/
+	JComboBox priority = new JComboBox(priorityStrings);
+	/** combo box for displaying types*/
+	JComboBox type = new JComboBox(typeStrings);
+	/** combo box for displaying iterations*/
+	JComboBox iteration = new JComboBox();
+	/** combo box for selecting release numbers*/
+	JComboBox releaseNumbers = new JComboBox();
+	/** field to display the requirements status*/
+	JTextField statusfield = new JTextField();
+	/** text field for the estimate*/
+	JTextField estimateField = new JTextField("0", 35);
+	/** text field for the actual effort*/
+	JTextField actualEffortField = new JTextField("0", 35);
+	/** field to display messages*/
+	JTextField results = new JTextField(35);
+	/** submit button */
 	JButton submit = new JButton("Submit");
+	/** reset button*/
 	JButton resetButton = new JButton("Reset");
+	/** button to split the requirements*/
 	JButton splitButton = new JButton("Split Requirement");
+	/** panel to show the notes*/
 	private NoteMainPanel nt;
+	/** tab to show the history*/
 	private RequirementHistoryTab hs;
+	/** tab to show sub requirements*/
 	private RequirementSubrequirementTab subs;
+	/** tab to show assigned users*/
 	protected AssignUserToRequirementTab users;
+	/** panel to hold the sub panels*/
 	private JPanel leftside = new JPanel();
+	/** the scroll pane*/
 	JScrollPane leftScrollPane;
-	public JTabbedPane supplementPane = new JTabbedPane();
-	
-//	private boolean unsavedChanges;
-	
+	/** the supplement pane*/
+	JTabbedPane supplementPane = new JTabbedPane();
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
@@ -139,17 +162,22 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 */
 	private void updateIterationComboBox() {
-		DefaultComboBoxModel comboboxModel = new DefaultComboBoxModel();
+		DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel();
+		// Adds "Backlog" and all iterations that are not finished (passed end
+		// dates), including the iteration this requirement is scheduled, even
+		// if that iteration is already finished.
 		for(Iteration it : iterations) {
 			if (it == null) {
-				comboboxModel.addElement("Backlog");
-			} else if (it.getEndDate().after(new Date())) {
-				comboboxModel.addElement(it.getIterationNumber());
+				comboBoxModel.addElement("Backlog");
+			} else if (it.getEndDate().after(new Date()) || (model.getIteration() != null
+					&& model.getIteration().getIterationNumber().equals(it.getIterationNumber()))) {
+				// open iterations and this requirement's current iteration
+				comboBoxModel.addElement(it.getIterationNumber());
 			}
 		}
 		boolean alreadyChanged = false;
 		int iIndex = iteration.getSelectedIndex();
-		iteration.setModel(comboboxModel);
+		iteration.setModel(comboBoxModel);
 		if(iIndex >= 0) {
 			alreadyChanged = true;
 			iteration.setSelectedIndex(iIndex);
@@ -221,12 +249,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		setRightComponent(supplementPane);
 		
 		this.parent = parent;
-		this.model = requirement;
+		model = requirement;
 		editMode = mode;
 		
 		// Indicate that input is enabled
 		inputEnabled = true;
-//		unsavedChanges = false;
 		
 		updateIterationList();
 		updateReleaseNumberList();
@@ -271,25 +298,20 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		JLabel actualEffortArea = new JLabel("Actual Effort:");
 
 		//submit panel
-		if(this.editMode == Mode.CREATE) { 
+		if(editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Create");
 		} else {
 			submit.setAction(new EditRequirementAction());
 			submit.setText("Update");
 		}
-		
+
 		// Reset panel
 		resetButton.setEnabled(false);
-		resetButton.addMouseListener(new MouseListener() {
-			@Override public void mousePressed(MouseEvent arg0) {}
-			@Override public void mouseReleased(MouseEvent arg0) {}
-			@Override public void mouseExited(MouseEvent arg0) {}
-			@Override public void mouseEntered(MouseEvent arg0) {}
-			@Override public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() >= 1) {
-					updateFields();
-				}
+		resetButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateFields();
 			}
 		});
 
@@ -306,7 +328,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		supplementPane.add("Transaction Log", hs);
 		supplementPane.add("Sub-Requirements", subs);
 		supplementPane.add("Assigned Users", users);
-		if(this.editMode == Mode.CREATE) {
+		if(editMode == Mode.CREATE) {
 			nt.setInputEnabled(false);
 		} else {
 			nt.setInputEnabled(true);
@@ -446,9 +468,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		}
 
 		//sets the minimum size that the user can reduce the window to manually
-		leftside.setMinimumSize(new Dimension(520,700));
-		leftScrollPane.setMinimumSize(new Dimension(520,700));
-		supplementPane.setMinimumSize(new Dimension(520,700));
+		leftside.setMinimumSize(new Dimension(520, 700));
+		leftScrollPane.setMinimumSize(new Dimension(520, 700));
+		supplementPane.setMinimumSize(new Dimension(520, 700));
 	}
 
 	/**
@@ -459,7 +481,21 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		updateReleaseNumberList();
 		subs.update(model);
 	}
-	
+
+	/**
+	 * Updates notes using the current model
+	 */
+	public void updateNotes() {
+		nt.setNotes(Arrays.asList(model.getNotes()));
+	}
+
+	/**
+	 * Updates the sub-requirement list of this panel
+	 */
+	public void updateSubRequirementList() {
+		subs.update();
+	}
+
 	/**
 	 * Sets whether input is enabled for this panel and its children. This should be used instead of 
 	 * JComponent#setEnabled because setEnabled does not affect its children.
@@ -567,7 +603,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		actualEffortField.setText(oldActualEffortString);
 
 		// Set an appropriate action for the submit button
-		if(this.editMode == Mode.CREATE) { 
+		if(editMode == Mode.CREATE) { 
 			submit.setAction(new AddRequirementController(this));
 			submit.setText("Create");
 		} else {
@@ -602,6 +638,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			estimateField.setEnabled(false);
 			actualEffortField.setEnabled(false);
 			nt.setInputEnabled(false);
+			iteration.setEnabled(false);
 
 		} else if (editMode == Mode.CREATE) {
 			namefield.setEnabled(true);
@@ -650,12 +687,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		parent.buttonGroup.update(editMode, model);
 
 		// Update supplement (right-hand side) panels
-		nt.setNotes(Arrays.asList(model.getNotes()));
+		updateNotes();
 		DB.getAllProjectEvents(new ListProjectEvents());
 		subs.update();
 		users.update();
 
-//		unsavedChanges = false;
 	}
 	
 	/**
@@ -663,12 +699,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 *
 	 */
 	public void updateSubmitButton() {
-//		unsavedChanges = true;
 		submit.setEnabled(!model.getStatus().equals(RequirementStatus.DELETED) && 
 				!(namefield.getText().length() < 1 || descriptionfield.getText().length() < 1) 
 				&& (editMode == Mode.EDIT && valuesHaveChanged() && validateFields()) ||
 				(editMode ==Mode.CREATE && validateFields()));
-		System.out.println("set reset : " + valuesHaveChanged());
 		resetButton.setEnabled(valuesHaveChanged());
 		splitButton.setEnabled(editMode == Mode.EDIT
 				&& (model.getStatus() == RequirementStatus.NEW
@@ -738,7 +772,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		model.setActualEffort(new Integer(actualEffortField.getText())); // TODO: Should be an integer
 		return model;
 	}
-	
+
+	/**
+	 * Replaces the current requirement model with a new model
+	 *
+	 * @param model new requirement model
+	 */
+	public void setModel(RequirementModel model) {
+		this.model = model;
+	}
+
 	/**
 	 * Returns the parent RequirementView.
 	 * 
@@ -782,10 +825,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				DB.updateRequirements(model, new SingleRequirementCallback() {
 					@Override
 					public void callback(RequirementModel req) {
+						Calendar currentTime = Calendar.getInstance();
+						SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
 						if(model.getStatus() == RequirementStatus.DELETED) {
-							setStatusMessage("Requirement Deleted");
+							setStatusMessage("Requirement Deleted (" + sdf.format(currentTime.getTime()) + ")");
 						} else {
-							setStatusMessage("Requirement Updated");
+							setStatusMessage("Requirement Updated (" + sdf.format(currentTime.getTime()) + ")");
 						}
 					}
 				});
@@ -877,15 +922,15 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * @return if the fields are valid
 	 */
 	public boolean validateFields() {
-		if(namefield.getText().length()<1) {
-			//namefield.setBackground(Color.RED);
+
+		if(namefield.getText().length()<1 || namefield.getText().length() > 100) {
 			setStatusMessage("Name must be 1-100 characters long.");
 			return false;
 		} else {
 			namefield.setBackground(Color.WHITE);
 		}
-		if(descriptionfield.getText().length()<1) {
-			//descriptionfield.setBackground(Color.RED);
+
+		if(descriptionfield.getText().length()<1 || descriptionfield.getText().length() > 5000) {
 			setStatusMessage("Description must be 1-5000 characters long.");
 			return false;
 		} else {
@@ -905,67 +950,72 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		@Override
 		public void callback(List<ProjectEvent> projectEvents) {
 			System.out.println("project event size : " + projectEvents.size());
-//			for(ProjectEvent event : projectEvents) {
-//				System.out.println("project event: "+event.toJSON());
-//			}
 			setHistory(projectEvents);
 		}
 	}
 	
 	/**
-	 * checked for input from keyboard
+	 * checked for input from keyboard. Doesn't really do anything now, but
+	 * needs to be included
 	 *
 	 * @param e a key event
 	 */
-	public void keyTyped ( KeyEvent e ){
-		System.out.println("key typed : " + e.getKeyCode());
-	}
+	public void keyTyped (KeyEvent e) {}
 	/**
 	 * check if key is pressed. Doesn't really do anything now, but needs to be included 
 	 *
 	 * @param e a key event
 	 */
-	public void keyPressed ( KeyEvent e){  
-		System.out.println("key pressed : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
-//		updateSubmitButton();
-	}  
+	public void keyPressed (KeyEvent e) {}
+
 	/**
 	 * Check if key is released. If so, validate fields and update buttons
 	 *
 	 * @param e a key event
 	 */
-	public void keyReleased ( KeyEvent e ){  
-		System.out.println("key released : " + e.getKeyCode() + "[" + estimateField.getText() + "]");
+	public void keyReleased (KeyEvent e) {
 		validateFields();
 		updateSubmitButton();
-	}  
+	}
 
+	/**
+	 * Adds the current requirement as a sub-requirement (child) of another
+	 * requirement and updates the models in their tabs if open
+	 *
+	 * @param parentId Another requirement to which this requirement is attached
+	 */
 	public void addToParent(int parentId) {
-		DB.getSingleRequirement(parentId+"", new SingleRequirementCallback() {
+		// Get the parent requirement model
+		DB.getSingleRequirement(parentId + "", new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel req) {
-				req.getSubRequirements().add(model.getId()+"");
+
+				// Then, add the current as a child to the parent model
+				req.getSubRequirements().add(model.getId() + "");
 				DB.updateRequirements(req, new SingleRequirementCallback() {
 					@Override
 					public void callback(RequirementModel req) {
-						if (req.getSubRequirements().contains(model.getId()+"")) {
-							setStatusMessage("added to parent");
+
+						// Update models and tabs if this has been added to the parent
+						if (req.getSubRequirements().contains(model.getId() + "")) {
+							subs.update();
+							parent.mainTabController.updateSubRequirementInParentModel(req.getId() + "", model.getId() + "");
+							setStatusMessage("This requirement has been added to the parent");
 						} else {
-							setStatusMessage("failed to add to parent");
+							setStatusMessage("Failed to add this requirement to the parent");
 						}
-						
 					}
 				});
 			}
     	});
 	}
-	
+
 	//TODO improve the add child code to minimize network calls.
 	public void addChild(int childId) {
-		DB.getSingleRequirement(childId+"", new SingleRequirementCallback() {
+		DB.getSingleRequirement(childId + "", new SingleRequirementCallback() {
 			@Override
 			public void callback(RequirementModel child) {
-				model.getSubRequirements().add(child.getId()+"");
+				model.getSubRequirements().add(child.getId() + "");
 				DB.updateRequirements(model, new AddChildRequirementCallback(child));
 
 			}
@@ -974,7 +1024,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	
 	
 	public void addChild(RequirementModel child) {
-		model.getSubRequirements().add(child.getId()+"");
+		model.getSubRequirements().add(child.getId() + "");
 		DB.updateRequirements(model, new AddChildRequirementCallback(child));
 	}
 	
@@ -989,7 +1039,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		public void callback(RequirementModel currentReq) {
 			boolean added = false;
 			for (String subReq : currentReq.getSubRequirements()) {
-				if(subReq.equals(childReq.getId()+"")) {
+				if(subReq.equals(childReq.getId() + "")) {
 					added = true;
 				}
 			}
@@ -1007,8 +1057,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 	
 	public void removeChild(RequirementModel child) {
-		model.getSubRequirements().remove(child.getId()+"");
-		DB.updateRequirements(model, new RemoveChildRequirementCallback(child.getId()+""));
+		model.getSubRequirements().remove(child.getId() + "");
+		DB.updateRequirements(model, new RemoveChildRequirementCallback(child.getId() + ""));
 	}
 	
 	public void removeChild(String childId) {

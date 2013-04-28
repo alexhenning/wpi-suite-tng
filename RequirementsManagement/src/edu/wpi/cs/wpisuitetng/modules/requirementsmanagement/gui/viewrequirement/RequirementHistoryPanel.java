@@ -86,8 +86,8 @@ public class RequirementHistoryPanel extends JPanel {
 	 * @param event a ProjectEvent for the viewed requirement
 	 */
 	public RequirementHistoryPanel(ProjectEvent event) {
-		this.author = event.getUser().getName();
-		this.date = event.getDate();
+		author = event.getUser().getName();
+		date = event.getDate();
 		String eol = System.getProperty("line.separator");
 		String message = "";
 		if (event.getType() == ProjectEventType.CHANGES) {

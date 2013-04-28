@@ -126,7 +126,6 @@ public class RequirementToolbarView extends ToolbarGroupView {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				RequirementModel model = tab.getRequirementPanel().getModel();
-				if (model.getStatus().equals(RequirementStatus.IN_PROGRESS)) return;
 				if (!model.getSubRequirements().isEmpty()) return;
 				if (model.getStatus() != RequirementStatus.DELETED) {
 					model.setStatus(RequirementStatus.DELETED);
@@ -179,7 +178,6 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		MainTabController tabController;
 
 		public CanCloseCallback(RequirementModel model, final MainTabController tabController) {
-			super();
 			this.model = model;
 			this.tabController = tabController;
 		}

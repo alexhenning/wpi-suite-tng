@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -164,8 +165,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		table.setPreferredScrollableViewportSize(new Dimension(500, 100));
 		table.setFillsViewportHeight(true);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getColumnModel().getSelectionModel().
-			addListSelectionListener(new ColumnChangeListener(this));
+		table.getColumnModel().getSelectionModel().addListSelectionListener(new ColumnChangeListener(this));
 		
 		// create panel and button to change table to edit mode
 		editPanel = new JPanel();
@@ -255,7 +255,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @return the table model
 	 */
 	public ViewReqTable getTable(){
-		return this.tableModel;
+		return tableModel;
 	}
 	
 	/**
@@ -348,10 +348,48 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @param iterColumn the iteration column
 	 */
 	private void setUpIterationColumn(JTable table, TableColumn iterColumn) {
-		JComboBox iterationBox = new JComboBox();
+		final JComboBox iterationBox = new JComboBox();
+		final JComboBox newComboBox = new JComboBox();
 		FillIterationDropdown iterationDropdown = new FillIterationDropdown(iterationBox);
 		DB.getAllIterations(iterationDropdown);
-		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox));
+		iterColumn.setCellEditor(new DefaultCellEditor(iterationBox) {
+			@Override
+			public Object getCellEditorValue() {
+				// Ensures the cell displays the selected item from the list
+				return newComboBox.getSelectedItem();
+			}
+			@Override
+			public Component getTableCellEditorComponent(JTable table,
+					Object value, boolean isSelected, int row, int column) {
+				newComboBox.removeAllItems();
+				boolean containsValue = false;
+				boolean containsOriginalData = false;
+				for(int i = 0; i < iterationBox.getItemCount(); i++) {
+					String stringAtRowI = (String) iterationBox.getItemAt(i);
+					newComboBox.addItem(stringAtRowI);
+					if(stringAtRowI.equals((String) value)) {
+						containsValue = true;
+					}
+					if(stringAtRowI.equals((String) data[row][column])) {
+						containsOriginalData = true;
+					}
+				}
+
+				// Make sure the current value appears in the list
+				if(!containsValue) {
+					newComboBox.addItem(value);
+					newComboBox.setSelectedItem(value);
+					return newComboBox;
+				}
+				// Also make sure the original value appears in the list
+				if(!containsOriginalData && !((String) data[row][column]).equals((String) value)) {
+					newComboBox.addItem(data[row][column]);
+					return newComboBox;
+				}
+
+				return newComboBox;
+			}
+		});
 	}
 	
 	/**

@@ -80,7 +80,7 @@ public class DB {
 	 * @param id
 	 */
 	public static void canCloseRequirements(CanCloseRequirementCallback callback, String id) {
-		final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/canClose/"+id,  HttpMethod.GET);
+		final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/canClose/" + id,  HttpMethod.GET);
 		request.addObserver(new RetrieveCanCloseRequirementModelRequestObserver(callback));
 		request.send();
 	}

@@ -95,7 +95,7 @@ public class RequirementHistoryTab extends JPanel {
 		for (ProjectEvent event : events) {
 			if (event != null && event.getObjectType() == ProjectEventObjectType.REQUIREMENT) {
 				int id = Integer.parseInt(event.getObjectId());
-				if (id == this.parent.model.getId()) {
+				if (id == parent.model.getId()) {
 					noteViewer.add(new RequirementHistoryPanel(event), c);
 					c.gridy -= 1;
 				}
