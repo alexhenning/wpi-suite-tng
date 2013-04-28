@@ -25,8 +25,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +36,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -49,6 +48,8 @@ import javax.swing.event.DocumentListener;
 
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CanCloseRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CloseSubRequirementsCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CurrentUserPermissionManager;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback;
@@ -57,6 +58,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCal
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleUserCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SplitRequirementController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
@@ -66,6 +68,10 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementPriority;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementStatus;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementType;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CloseSubRequirementModelRequestObserver;
+import edu.wpi.cs.wpisuitetng.network.Network;
+import edu.wpi.cs.wpisuitetng.network.Request;
+import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
 
 /**
  *
@@ -73,6 +79,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementT
  * @author Josh
  * @author vpatara
  * @author Christina
+ * @contributor William Terry
  */
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JSplitPane implements KeyListener {
@@ -121,6 +128,12 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	JButton resetButton = new JButton("Reset");
 	/** button to split the requirements*/
 	JButton splitButton = new JButton("Split Requirement");
+	/** cancel button */
+	private JButton cancelButton;
+	/** close button */
+	private JButton closeButton;
+	/** delete button */
+	private JButton deleteButton;
 	/** panel to show the notes*/
 	private NoteMainPanel nt;
 	/** tab to show the history*/
@@ -260,7 +273,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 
 		// Add all components to this panel
 		addComponents();
-		parent.buttonGroup.update(mode, model);
+		updateButtonGroup();
 		
 		// TODO: prevent tab key from inserting tab characters into the description field
 		
@@ -276,6 +289,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	protected void addComponents() {
 		leftside.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+		final MainTabController tabController = parent.mainTabController;
 		
 		//name field
 		JLabel nameArea = new JLabel("Name:");
@@ -306,7 +320,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			submit.setText("Update");
 		}
 
-		// Reset panel
+		// Reset button
 		resetButton.setEnabled(false);
 		resetButton.addActionListener(new ActionListener() {
 			@Override
@@ -318,6 +332,72 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		// Requirement-split button
 		splitButton.setEnabled(false);
 		splitButton.addActionListener(new SplitRequirementController(this));
+		
+		deleteButton = new JButton("Delete");
+		deleteButton.setAction(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RequirementModel model = parent.getRequirementPanel().getModel();
+				if (!model.getSubRequirements().isEmpty()) return;
+				if (model.getStatus() != RequirementStatus.DELETED) {
+					model.setStatus(RequirementStatus.DELETED);
+					DB.updateRequirements(model, new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							tabController.closeCurrentTab();
+							tabController.addListRequirementsTab();
+						}
+					});
+				} else {
+					model.setStatus(RequirementStatus.OPEN);
+					DB.updateRequirements(model, new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							parent.getRequirementPanel().updateModel(req);
+						}
+					});
+				}
+			}
+		});
+		
+		// cancel button
+		cancelButton = new JButton("Cancel");
+		cancelButton.setAction(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tabController.closeCurrentTab();
+			}
+		});
+		
+		closeButton = new JButton("Complete!");
+		closeButton.setAction(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RequirementModel model = parent.getRequirementPanel().getModel();
+				if (!model.getSubRequirements().isEmpty()) {
+					//Check that the sub requirements are closed
+					DB.canCloseRequirements(new CanCloseCallback(model, tabController), ""+model.getId());
+				} else {
+					if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
+						model.setStatus(RequirementStatus.OPEN);
+					} else {
+						model.setStatus(RequirementStatus.COMPLETE);
+					}
+					DB.updateRequirements(model, new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
+								tabController.closeCurrentTab();
+								tabController.addListRequirementsTab();
+							} else {
+								parent.getRequirementPanel().updateModel(req);
+							}
+						}
+					});
+				}
+			}
+		});
+		closeButton.setText("Complete!");
 
 		// Supplement Pane (i.e., notes, history, attachments)
 		nt = new NoteMainPanel(this);
@@ -454,12 +534,20 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			c.gridy = 10;
 			c.gridx = 0;
 			leftside.add(submit, c);
+			c.gridy = 11;
+			leftside.add(deleteButton, c);
+			c.gridy = 10;
 			c.gridx = 1;
 			c.weightx = 1;
+			leftside.add(cancelButton, c);
+			c.gridy = 11;
 			leftside.add(resetButton, c);
+			c.gridy = 10;
 			c.gridx = 2;
 			c.weightx = 0.5;
 			leftside.add(splitButton, c);
+			c.gridy = 11;
+			leftside.add(closeButton, c);
 			break;
 
 		default:
@@ -681,10 +769,18 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		updateSubmitButton();
 
 		// Update the button group in the toolbar view for editing requirements
+		// Edit: toolbar buttons moved to requirement panel
 		if (editMode.equals(Mode.EDIT)) {
 			parent.setEditModeDescriptors(model);
+			closeButton.setEnabled(model.getStatus().equals(RequirementStatus.IN_PROGRESS) || model.getStatus().equals(RequirementStatus.COMPLETE));
+			closeButton.setText((model.getStatus().equals(RequirementStatus.COMPLETE) ? "Reopen" : "Complete!"));
+			deleteButton.setEnabled(model.getSubRequirements().isEmpty());
+			deleteButton.setText((model.getStatus().equals(RequirementStatus.DELETED) ? "Restore" : "Delete"));
+		} else {
+			closeButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 		}
-		parent.buttonGroup.update(editMode, model);
+		updateButtonGroup();
 
 		// Update supplement (right-hand side) panels
 		updateNotes();
@@ -692,6 +788,23 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		subs.update();
 		users.update();
 
+	}
+	
+	private void updateButtonGroup(){
+		if (editMode.equals(Mode.EDIT)) {
+			parent.setEditModeDescriptors(model);
+			closeButton.setEnabled(model.getStatus().equals(
+					RequirementStatus.IN_PROGRESS)
+					|| model.getStatus().equals(RequirementStatus.COMPLETE));
+			closeButton.setText((model.getStatus().equals(
+					RequirementStatus.COMPLETE) ? "Reopen" : "Complete!"));
+			deleteButton.setEnabled(model.getSubRequirements().isEmpty());
+			deleteButton.setText((model.getStatus().equals(
+					RequirementStatus.DELETED) ? "Restore" : "Delete"));
+		} else {
+			closeButton.setEnabled(false);
+			deleteButton.setEnabled(false);
+		}
 	}
 	
 	/**
@@ -761,11 +874,11 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			
 		} else if (model.getIteration() != null && (model.getStatus() == RequirementStatus.OPEN || model.getStatus() == RequirementStatus.NEW)) {
 			model.setStatus(RequirementStatus.IN_PROGRESS);
-			parent.buttonGroup.update(editMode, model);
+			updateButtonGroup();
 			updateStatusField();
 		} else if(model.getIteration() == null && model.getStatus() == RequirementStatus.IN_PROGRESS) {
 			model.setStatus(RequirementStatus.OPEN);
-			parent.buttonGroup.update(editMode, model);
+			updateButtonGroup();
 			updateStatusField();
 		}
 		model.setEstimate(new Integer(estimateField.getText())); // TODO: Should be an integer
@@ -1048,7 +1161,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				DB.getAllProjectEvents(new ListProjectEvents());
 				subs.update();
 				model.setSubRequirements(currentReq.getSubRequirements());
-				parent.buttonGroup.update(editMode, model);
+				updateButtonGroup();
 				setStatusMessage("added child");
 			} else {
 				setStatusMessage("failed to add child");
@@ -1086,7 +1199,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				DB.getAllProjectEvents(new ListProjectEvents());
 				subs.update();
 				model.setSubRequirements(currentReq.getSubRequirements());
-				parent.buttonGroup.update(editMode, model);
+				updateButtonGroup();
 				setStatusMessage("removed child");
 			} else {
 				setStatusMessage("failed to remove child");
@@ -1319,5 +1432,63 @@ System.err.println("adduser reached***************************");
 				updateFields();
 			}
 		});
+	}
+	
+	class CanCloseCallback implements CanCloseRequirementCallback {
+		RequirementModel model;
+		MainTabController tabController;
+
+		public CanCloseCallback(RequirementModel model, final MainTabController tabController) {
+			this.model = model;
+			this.tabController = tabController;
+		}
+
+		@Override
+		public void callback(boolean result) {
+			// TODO Auto-generated method stub
+			if(result){
+				if (model.getStatus().equals(RequirementStatus.COMPLETE)) {
+					model.setStatus(RequirementStatus.OPEN);
+				} else {
+					model.setStatus(RequirementStatus.COMPLETE);
+				}
+				DB.updateRequirements(model, new SingleRequirementCallback() {
+					@Override
+					public void callback(RequirementModel req) {
+						if (req.getStatus().equals(RequirementStatus.COMPLETE)) {
+							tabController.closeCurrentTab();
+							tabController.addListRequirementsTab();
+						} else {
+							parent.getRequirementPanel().updateModel(req);
+						}
+					}
+				});
+			} else {
+				//TODO what to do if false...
+				
+				boolean closeSub = false;
+				//TODO ask user if they want to close the sub requirements
+				int input = JOptionPane.showConfirmDialog(parent,
+						"Do you want to lose these changes?", 
+						"Unsaved Changes", 
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+System.out.println("Input to close: "+input);
+closeSub = (input == JOptionPane.YES_OPTION);
+				if(closeSub) {
+					final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/closeSub/"+model.getId(),  HttpMethod.GET);
+					request.addObserver(new CloseSubRequirementModelRequestObserver(new CloseSubRequirementsCallback() {
+						
+						@Override
+						public void callback(boolean result) {
+							// TODO Auto-generated method stub
+							
+						}
+					}));
+					request.send();
+
+				}
+			}
+		}
+		
 	}
 }

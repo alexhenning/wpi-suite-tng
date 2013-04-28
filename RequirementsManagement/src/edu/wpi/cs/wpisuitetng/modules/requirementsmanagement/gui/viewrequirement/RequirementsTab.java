@@ -34,14 +34,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.Requirement
 /**
  * This view is responsible for showing the form for creating or viewing a new requirements.
  * @author andrew hurle
+ * @contributor William Terry
  */
 @SuppressWarnings("serial")
-public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
+public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/ {
 
 	/** Controller for the MainTabView */
 	MainTabController mainTabController;
-	/** group of buttons to show */
-	RequirementToolbarView buttonGroup;
+	/** group of buttons to show (no longer used)*/
+//	RequirementToolbarView buttonGroup;
 	/** the save button */
 	private JButton saveButton;
 	/** the main panel */
@@ -76,7 +77,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		}
 
 		mainTabController = tabController;
-		buttonGroup = new RequirementToolbarView(tabController, this);
+		//buttonGroup = new RequirementToolbarView(tabController, this);
 		
 		containingTab.setIcon(new ImageIcon());
 		if(editMode == Mode.CREATE) {
@@ -97,12 +98,12 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 		this.add(mainPanel, BorderLayout.CENTER);
 
 		// Instantiate the save button and add it to the button panel
-		saveButton = new JButton();
+		//saveButton = new JButton();
 		// TODO: saveButton.setAction(new SaveChangesAction(controller));
 		
 		// Instantiate the button panel
-		buttonGroup.getContent().add(saveButton);
-		buttonGroup.setPreferredWidth(150);
+		//buttonGroup.getContent().add(saveButton);
+		//buttonGroup.setPreferredWidth(150);
 		
 		assignedUserTabChangeListener = mainPanel.users.addChangeListenerTo(mainView);
 	}
@@ -139,14 +140,15 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	}
 	
 	/**
+	 * no longer used
 	 * get the button group
 	 *
 	 * @return the button group
 	 */
-	@Override
-	public ToolbarGroupView getGroup() {
-		return buttonGroup;
-	}
+//	@Override
+//	public ToolbarGroupView getGroup() {
+//		return buttonGroup;
+//	}
 	
 	/**
 	 * @param requirement Set the tab title and group name according to this Requirement
@@ -154,7 +156,7 @@ public class RequirementsTab extends JPanel implements IToolbarGroupProvider {
 	public void setEditModeDescriptors(RequirementModel requirement) {
 		containingTab.setTitle("Requirement #" + requirement.getId());
 		// TODO: containingTab.setToolTipText("View Requirement " + requirement.getTitle());
-		buttonGroup.setName("Edit Requirement");
+		//buttonGroup.setName("Edit Requirement");
 	}
 	
 	public Tab getContainingTab(){
