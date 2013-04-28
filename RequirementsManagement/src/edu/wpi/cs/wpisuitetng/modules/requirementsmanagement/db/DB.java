@@ -47,6 +47,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *
  * @author Alex Henning
  *
+ * @version $Revision: 1.0 $
  */
 public class DB {
 	
@@ -152,7 +153,7 @@ public class DB {
 	 * Adds a new permission profile to the database
 	 *
 	 * @param profile A new permission profile to be added to the database
-	 * @param callback The request observer to receive the response, or null if
+	 * @param observer The request observer to receive the response, or null if
 	 *        there should be no observer
 	 */
 	public static void addSinglePermission(Permissions profile, CreatePermissionRequestObserver observer) {
@@ -223,7 +224,7 @@ public class DB {
 	/**
 	 * Retrieves a single user from the database and runs the callback function in the class passed
 	 *
-	 * @param id the id of the requirement
+	 * @param username the username of the requirement
 	 * @param callback the class that has the callback function to be run on the requirement
 	 */
 	public static void getSingleUser(String username, SingleUserCallback callback) {

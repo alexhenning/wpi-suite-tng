@@ -19,11 +19,16 @@ import org.junit.Test;
 /**
  * @author Sergey Zolotykh (szolotykh)
  *
+ * @version $Revision: 1.0 $
  */
 public class PermissionsTest {
 	Permissions goodPermissions;
 	String userName;
 	PermissionLevel userPermissionLevel;
+	/**
+	 * Method setUp.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		userName = "Admin";

@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * @author David
  * @author Tim Calvert
  *
+ * @version $Revision: 1.0 $
  */
 public class EditRequirementModelRequestObserver implements RequestObserver {
 
@@ -44,6 +45,7 @@ public class EditRequirementModelRequestObserver implements RequestObserver {
 	 * Server reported a successful request
 	 *
 	 * @param iReq Request returned from server
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(IRequest)
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
@@ -61,6 +63,7 @@ public class EditRequirementModelRequestObserver implements RequestObserver {
 	 * Server reported an error in the request
 	 *
 	 * @param iReq Request returned from the server
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(IRequest)
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
@@ -72,6 +75,7 @@ public class EditRequirementModelRequestObserver implements RequestObserver {
 	 *
 	 * @param iReq Request returned from the server
 	 * @param exception Exception thrown on the server
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(IRequest, Exception)
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {

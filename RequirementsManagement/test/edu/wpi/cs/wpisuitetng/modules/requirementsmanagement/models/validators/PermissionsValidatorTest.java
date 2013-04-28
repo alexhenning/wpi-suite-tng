@@ -35,6 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLe
  *
  * @author William Terry
  *
+ * @version $Revision: 1.0 $
  */
 public class PermissionsValidatorTest {
 
@@ -51,6 +52,10 @@ public class PermissionsValidatorTest {
 
 	Data db;
 	
+	/**
+	 * Method setUp.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {	
 
@@ -79,6 +84,10 @@ public class PermissionsValidatorTest {
 		assertEquals(db, validator.getData());
 	}
 
+	/**
+	 * Method testCatchNullPermissions.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testCatchNullPermissions() throws WPISuiteException {
 		issueList = validator.validate(defaultSession, null, Mode.EDIT);
@@ -87,6 +96,14 @@ public class PermissionsValidatorTest {
 		assertNotSame("Permissions cannot be null", issueList.get(0).getMessage());
 	}
 
+	/**
+	 * Method checkNumIssues.
+	 * @param num int
+	 * @param session Session
+	 * @param profile Permissions
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNumIssues(int num, Session session, Permissions profile, Mode mode) {
 		List<ValidationIssue> issues;
 		try {
@@ -102,20 +119,48 @@ public class PermissionsValidatorTest {
 		return issues;
 	}
 	
+	/**
+	 * Method checkNoIssues.
+	 * @param session Session
+	 * @param profile Permissions
+	 * @param mode Mode
+	 */
 	public void checkNoIssues(Session session, Permissions profile, Mode mode) {
 		checkNumIssues(0, session, profile, mode);
 	}
 	
+	/**
+	 * Method checkIssue.
+	 * @param session Session
+	 * @param profile Permissions
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkIssue(Session session, Permissions profile, Mode mode) {
 		return checkNumIssues(1, session, profile, mode);
 	}
 	
+	/**
+	 * Method checkNonFieldIssue.
+	 * @param session Session
+	 * @param profile Permissions
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNonFieldIssue(Session session, Permissions profile, Mode mode) {
 		List<ValidationIssue> issues = checkIssue(session, profile, mode);
 		assertFalse(issues.get(0).hasFieldName());
 		return issues;
 	}
 	
+	/**
+	 * Method checkFieldIssue.
+	 * @param session Session
+	 * @param profile Permissions
+	 * @param mode Mode
+	 * @param fieldName String
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkFieldIssue(Session session, Permissions profile, Mode mode, String fieldName) {
 		List<ValidationIssue> issues = checkNumIssues(1, session, profile, mode);
 		assertEquals(fieldName, issues.get(0).getFieldName());

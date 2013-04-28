@@ -34,6 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * @author Tim
  * @author Tim D
  *
+ * @version $Revision: 1.0 $
  */
 public class IterationEntityManager implements EntityManager<Iteration> {
 	/** the database */
@@ -59,10 +60,11 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 *
 	 * @param s
 	 * @param content
-	 * @return The iteration created
-	 * @throws BadRequestException
-	 * @throws ConflictException
-	 * @throws WPISuiteException
+	
+	
+	
+	
+	 * @return The iteration created * @throws BadRequestException * @throws ConflictException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(Session, String)
 	 */
 	@Override
 	public Iteration makeEntity(Session s, String content) throws BadRequestException,
@@ -91,9 +93,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 *
 	 * @param s
 	 * @param id
-	 * @return An array of iterations that match the id
-	 * @throws NotFoundException
-	 * @throws WPISuiteException
+	
+	
+	
+	 * @return An array of iterations that match the id * @throws NotFoundException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(Session, String)
 	 */
 	@Override
 	public Iteration[] getEntity(Session s, String id) throws NotFoundException,
@@ -126,8 +129,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 * Retrieves all iterations in the database
 	 *
 	 * @param s
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return Iteration[]
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(Session)
 	 */
 	@Override
 	public Iteration[] getAll(Session s) throws WPISuiteException {
@@ -139,8 +144,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return Iteration
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(Session, String)
 	 */
 	@Override
 	public Iteration update(Session s, String content) throws WPISuiteException {
@@ -167,8 +174,8 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 *
 	 * @param s
 	 * @param model
-	 * @throws WPISuiteException
-	 */
+	
+	 * @throws WPISuiteException */
 	@Override
 	public void save(Session s, Iteration model) throws WPISuiteException {
 		db.save(model, s.getProject());
@@ -179,8 +186,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 *
 	 * @param s
 	 * @param id
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return boolean
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(Session, String)
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
@@ -191,7 +200,8 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 * Deletes all iterations in the db
 	 *
 	 * @param s
-	 * @throws WPISuiteException
+	
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(Session)
 	 */
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
@@ -201,8 +211,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	/**
 	 * Returns the number of iterations in the db
 	 *
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return int
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#Count()
 	 */
 	@Override
 	public int Count() throws WPISuiteException {
@@ -214,8 +226,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 *
 	 * @param s
 	 * @param args
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[])
 	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
@@ -229,8 +243,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 * @param s
 	 * @param args
 	 * @param content
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPut(Session, String[], String)
 	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
@@ -244,8 +260,10 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	 * @param s
 	 * @param string
 	 * @param content
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPost(Session, String, String)
 	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)

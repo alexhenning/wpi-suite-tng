@@ -15,6 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 /**
  * Permission levels for different types of users
  * @author William Terry
+ * @version $Revision: 1.0 $
  */
 public enum PermissionLevel {
 	ADMIN,		//Admin level

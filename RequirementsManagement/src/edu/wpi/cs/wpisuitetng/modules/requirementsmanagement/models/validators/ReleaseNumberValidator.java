@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumbe
  * Validator for Release Numbers
  * @author TODO
  *
+ * @version $Revision: 1.0 $
  */
 public class ReleaseNumberValidator {
 	/** the database */
@@ -47,8 +48,8 @@ public class ReleaseNumberValidator {
 	}
 	
 	/**
-	 * @return the data
-	 */
+	
+	 * @return the data */
 	public Data getData() {
 		return data;
 	}
@@ -66,9 +67,9 @@ public class ReleaseNumberValidator {
 	 * @param username the username of the User
 	 * @param issues list of errors to add to if user doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The User with the given username, or null if they don't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The User with the given username, or null if they don't exist * @throws WPISuiteException  */
 	User getExistingUser(String username, List<ValidationIssue> issues, String fieldName) throws WPISuiteException {
 		final List<Model> existingUsers = data.retrieve(User.class, "username", username);
 		if(existingUsers.size() > 0 && existingUsers.get(0) != null) {
@@ -84,9 +85,9 @@ public class ReleaseNumberValidator {
 	 * 
 	 * @param project the project this ReleaseNumber belongs to
 	 * @param issues list of errors to add to if release number doesn't exist
-	 * @return all ReleaseNumbers in the project
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return all ReleaseNumbers in the project * @throws WPISuiteException  */
 	ReleaseNumber[] getAllExistingReleaseNumbers(Project project, List<ValidationIssue> issues)
 			throws WPISuiteException {
 		ReleaseNumber sample = new ReleaseNumber();
@@ -97,13 +98,14 @@ public class ReleaseNumberValidator {
 	/**
 	 * Return the ReleaseNumber with the given id if it already exists in the database.
 	 * 
-	 * @param string the id of the ReleaseNumber
+	
 	 * @param project the project this ReleaseNumber belongs to
 	 * @param issues list of errors to add to if release number doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The ReleaseNumber with the given id, or null if it doesn't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @param id int
+	 * @return The ReleaseNumber with the given id, or null if it doesn't exist * @throws WPISuiteException  */
 	ReleaseNumber getExistingReleaseNumber(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
 		List<Model> oldReleases = data.retrieve(ReleaseNumber.class, "id", id, project);
@@ -120,11 +122,13 @@ public class ReleaseNumberValidator {
 	 * from the Data given in the constructor.
 	 * 
 	 * @param session The session to validate against
-	 * @param ReleaseNumber The release number model to validate
+	
 	 * @param mode The mode to validate for
+	 * @param releaseNumber
+	
+	
 	 * @return A list of ValidationIssues (possibly empty)
-	 * @throws WPISuiteException 
-	 */
+	 *  @throws WPISuiteException  */
 	public List<ValidationIssue> validate(Session session, ReleaseNumber releaseNumber, Mode mode) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
 		if(releaseNumber == null) {
@@ -159,8 +163,8 @@ public class ReleaseNumberValidator {
 	}
 
 	/**
-	 * @return The last existing ReleaseNumber the validator fetched if in edit mode
-	 */
+	
+	 * @return The last existing ReleaseNumber the validator fetched if in edit mode */
 	public ReleaseNumber getLastExistingReleaseNumber() {
 		return lastExistingReleaseNumber;
 	}

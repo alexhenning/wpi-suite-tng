@@ -23,11 +23,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * assigned to which requirement.
  * 
  * @author alex
+ * @version $Revision: 1.0 $
  */
 public class AssigneeDataProvider implements ReportDataProvider {
 
 	/**
-	 * @return The name of this data provider
+	
+	 * @return The name of this data provider * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports.ReportDataProvider#getName()
 	 */
 	@Override public String getName() {
 		return "Requirement Assignees";
@@ -38,7 +40,8 @@ public class AssigneeDataProvider implements ReportDataProvider {
 	 * map.
 	 * 
 	 * @param model List of requirements.
-	 * @return some data to chart with a name and thecorresponding value
+	
+	 * @return some data to chart with a name and thecorresponding value * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports.ReportDataProvider#extractData(List<RequirementModel>)
 	 */
 	@Override public Map<Object, Integer> extractData(List<RequirementModel> model) {
 		Map<Object, Integer> map = new HashMap<Object, Integer>();

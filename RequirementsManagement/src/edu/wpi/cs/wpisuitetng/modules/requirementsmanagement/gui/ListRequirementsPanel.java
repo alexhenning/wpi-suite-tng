@@ -64,6 +64,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  * @author Tim C
  * @author James
  * @author vpatara
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
@@ -105,7 +106,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	
 	/**
 	 * Constructor
-	 * @param parent the tab that made this
+	
 	 */
 	public ListRequirementsPanel() {
 		// Indicate that input is enabled
@@ -136,6 +137,11 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		});
 	}
 
+	/**
+	 * Method setTab.
+	 * @param tab ScrollableTab
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel#setTab(ScrollableTab)
+	 */
 	@Override
 	public void setTab(ScrollableTab tab) {
 		parent = tab;
@@ -144,7 +150,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	/**
 	 * adds the components to the panel and places constraints on them
 	 * for the SpringLayout manager.
-	 * @param layout the layout manager
+	
 	 */
 	protected void addComponents() {
 		//borderlayout so the table can expand while the filter area remains constant
@@ -252,8 +258,8 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	/**
 	 * the the table model
 	 *
-	 * @return the table model
-	 */
+	
+	 * @return the table model */
 	public ViewReqTable getTable(){
 		return tableModel;
 	}
@@ -263,7 +269,8 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * clone() didn't seem to work correctly
 	 *
 	 * @param data data to copy
-	 * @return
+	
+	 * @return Object[][]
 	 */
 	private Object[][] copyData(Object[][] data) {
 		Object[][] copy = new Object[tableModel.getRowCount()][tableModel.getColumnCount()];
@@ -431,8 +438,8 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 *
 	 * @param reqs the list of requirements
 	 * @param iterations the list of all iterations
-	 * @return the updated list of requirements
-	 */
+	
+	 * @return the updated list of requirements */
 	public List<RequirementModel> updateModels(List<RequirementModel> reqs, List<Iteration> iterations) {
 		// TODO prune out unchanged requirements and just return those that need to be updated
 		if(reqs != null && reqs.size() >= 1) {
@@ -473,8 +480,8 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	/**
 	 * checks to see if all the changes made in the table are valid
 	 *
-	 * @return true if the changes made were all good, false otherwise
-	 */
+	
+	 * @return true if the changes made were all good, false otherwise */
 	public boolean validateModels() {
 		boolean noErrors = true;
 		// TODO add more robust validating
@@ -536,12 +543,17 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @author Tim Calvert
 	 * @author James Megin
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateRequirementCallback implements SingleRequirementCallback {
 		
 		boolean lastReq = false;
 		
 		
+		/**
+		 * Constructor for UpdateRequirementCallback.
+		 * @param lastReq boolean
+		 */
 		protected UpdateRequirementCallback(boolean lastReq) {
 			this.lastReq = lastReq;
 		}
@@ -550,6 +562,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Required callback, does nothing
 		 *
 		 * @param req Requirement returned from database
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback#callback(RequirementModel)
 		 */
 		@Override
 		public void callback(RequirementModel req) {
@@ -567,6 +580,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @author Tim Calvert
 	 * @author James Megin
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class RetrieveAllRequirementsCallback implements RequirementsCallback {
 		
@@ -574,6 +588,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Create RetrieveallIteratoinsCallback to update the requirments and send the to the database
 		 *
 		 * @param reqs a list of all requirements
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback#callback(List<RequirementModel>)
 		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
@@ -588,6 +603,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @author Tim Calvert
 	 * @author James Megin
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class RetrieveAllIterationsCallback implements IterationCallback {
 		
@@ -607,6 +623,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * sends them to the database
 		 *
 		 * @param iterations Iterations retrieved from the database
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback#callback(List<Iteration>)
 		 */
 		@Override
 		public void callback(List<Iteration> iterations) {
@@ -622,12 +639,14 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * Callback to populate the table with all the requirements
 	 * @author Josh
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateTableCallback implements RequirementsCallback {
 		/**
 		 * Callback function to populate the table with all the requirements
 		 *
 		 * @param reqs a list of all requirements
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback#callback(List<RequirementModel>)
 		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
@@ -693,6 +712,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @author Tim C
 	 * @author James
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class FillIterationDropdown implements IterationCallback {
 		
@@ -715,6 +735,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * it does not add iterations that are already over as it would be invalid to set a project to those iterations
 		 *
 		 * @param iterations the list of iterations
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback#callback(List<Iteration>)
 		 */
 		@Override
 		public void callback(List<Iteration> iterations) {
@@ -738,9 +759,14 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * @author Tim Calvert
 	 * @author James Megin
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class CustomCellRenderer extends DefaultTableCellRenderer {
 		
+		/**
+		 * Method removeInvalidCell.
+		 * @param invalidCell Point
+		 */
 		public void removeInvalidCell(Point invalidCell) {
 			invalidCells.remove(invalidCell);
 			if(invalidCells.size() <= 0) {
@@ -748,6 +774,17 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 			}
 		}
 
+		/**
+		 * Method getTableCellRendererComponent.
+		 * @param table JTable
+		 * @param value Object
+		 * @param isSelected boolean
+		 * @param hasFocus boolean
+		 * @param row int
+		 * @param column int
+		 * @return Component
+		 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(JTable, Object, boolean, boolean, int, int)
+		 */
 		@Override
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row,
@@ -857,6 +894,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 	 * 
 	 * @author Tim Calvert
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class ColumnChangeListener implements ListSelectionListener {
 
@@ -875,6 +913,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 		 * Interface method to listen for change in list selection
 		 *
 		 * @param e Event
+		 * @see javax.swing.event.ListSelectionListener#valueChanged(ListSelectionEvent)
 		 */
 		@Override
 		public void valueChanged(ListSelectionEvent e) {

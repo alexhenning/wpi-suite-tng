@@ -17,6 +17,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db;
  * An interface for callbacks that return all of the requirements.
  * 
  * @author alex
+ * @version $Revision: 1.0 $
  */
 public interface CanCloseRequirementCallback {
 

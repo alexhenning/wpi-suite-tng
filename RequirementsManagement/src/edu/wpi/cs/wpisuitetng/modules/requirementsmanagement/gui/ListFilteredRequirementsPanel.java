@@ -38,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * @author Tim C
  * @author James
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ListFilteredRequirementsPanel extends JPanel {
@@ -94,7 +95,7 @@ public class ListFilteredRequirementsPanel extends JPanel {
 	/**
 	 * adds the components to the panel and places constraints on them
 	 * for the SpringLayout manager.
-	 * @param layout the layout manager
+	
 	 */
 	protected void addComponents() {
 		//borderlayout so the table can expand while the filter area remains constant
@@ -124,8 +125,8 @@ public class ListFilteredRequirementsPanel extends JPanel {
 	/**
 	 * the the table model
 	 *
-	 * @return the table model
-	 */
+	
+	 * @return the table model */
 	public ViewFilteredReqTable getTable(){
 		return tableModel;
 	}
@@ -135,12 +136,14 @@ public class ListFilteredRequirementsPanel extends JPanel {
 	 * Callback to populate the table with all the requirements
 	 * @author Josh
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateTableCallback implements RequirementsCallback {
 		/**
 		 * Callback function to populate the table with all the requirements
 		 *
 		 * @param reqs a list of all requirements
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback#callback(List<RequirementModel>)
 		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {

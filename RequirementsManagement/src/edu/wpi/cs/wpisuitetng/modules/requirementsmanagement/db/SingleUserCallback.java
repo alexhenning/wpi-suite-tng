@@ -19,12 +19,13 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * An interface for callbacks that return a single user.
  * 
  * @author William Terry
+ * @version $Revision: 1.0 $
  */
 public interface SingleUserCallback {
 	/**
 	 * Implements an action to be performed on the permissions profile being passed back.
 	 * 
-	 * @param req
+	 * @param user
 	 *            The requirement being returned
 	 */
 	void callback(User user);

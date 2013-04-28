@@ -19,6 +19,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 /**
  * Persistent Model that represents a Comment on a Requirement 
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 public class RequirementNote extends RequirementEvent {
 
@@ -52,8 +53,8 @@ public class RequirementNote extends RequirementEvent {
 	}
 
 	/**
-	 * @return the id of the Requirement this RequirementComment is associated with
-	 */
+	
+	 * @return the id of the Requirement this RequirementComment is associated with */
 	public int getRequirementId() {
 		return requirementId;
 	}
@@ -66,8 +67,8 @@ public class RequirementNote extends RequirementEvent {
 	}
 
 	/**
-	 * @return the message body of this RequirementComment
-	 */
+	
+	 * @return the message body of this RequirementComment */
 	public String getBody() {
 		return body;
 	}
@@ -79,6 +80,11 @@ public class RequirementNote extends RequirementEvent {
 		this.body = body;
 	}
 
+	/**
+	 * Method toJSON.
+	 * @return String
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
+	 */
 	@Override
 	public String toJSON() {
 		String json;
@@ -90,8 +96,8 @@ public class RequirementNote extends RequirementEvent {
 	/**
 	 * Converts the given JSON string into a RequirementComment
 	 * @param json JSON string containing a serialized RequirementComment
-	 * @return a Comment deserialized from the given JSON string
-	 */
+	
+	 * @return a Comment deserialized from the given JSON string */
 	public static RequirementNote fromJson(String json) {
 		Gson parser = new Gson();
 		return parser.fromJson(json, RequirementNote.class);

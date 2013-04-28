@@ -41,6 +41,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * @author Tim Calvert
  * @author David Modica
  *
+ * @version $Revision: 1.0 $
  */
 public class RequirementModelEntityManager implements EntityManager<RequirementModel> {
 	/** A queue of any Ids that are available for recycling */
@@ -65,16 +66,13 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
-	 * TODO: DOCUMENT THIS
+	
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws BadRequestException
-	 * @throws ConflictException
-	 * @throws WPISuiteException
-	 */
+	 * @return RequirementModel
+	 * @throws BadRequestException * @throws ConflictException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
+	 * TODO: DOCUMENT THIS */
 	@Override
 	public RequirementModel makeEntity(Session s, String content)
 			throws BadRequestException, ConflictException, WPISuiteException {
@@ -109,15 +107,16 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
-	 * TODO: DOCUMENT THIS
+	
 	 *
 	 * @param s
 	 * @param id
-	 * @return
-	 * @throws NotFoundException
-	 * @throws WPISuiteException
-	 */
+	
+	
+	
+	 * @return RequirementModel[]
+	 * @throws NotFoundException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
+	 * TODO: DOCUMENT THIS */
 	@Override
 	public RequirementModel[] getEntity(Session s, String id)
 			throws NotFoundException, WPISuiteException {
@@ -138,28 +137,27 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(edu.wpi.cs.wpisuitetng.Session)
-	 * Get the requirments models from a session
+	
 	 *
 	 * @param s
-	 * @return
-	 * @throws WPISuiteException
-	 */
+	
+	
+	 * @return RequirementModel[]
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(edu.wpi.cs.wpisuitetng.Session)
+	 * Get the requirements models from a session */
 	@Override
 	public RequirementModel[] getAll(Session s) throws WPISuiteException {
 		return db.retrieveAll(new RequirementModel(), s.getProject()).toArray(new RequirementModel[0]);
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
-	 * TODO: DOCUMENT THIS
+	 *Updates requirement model
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws WPISuiteException
-	 * @throws NotFoundException
-	 */
+	 * @return RequirementModel
+	 * @throws WPISuiteException * @throws NotFoundException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
+	 * TODO: DOCUMENT THIS */
 	@Override
 	public RequirementModel update(Session s, String content)
 			throws WPISuiteException, NotFoundException {		
@@ -203,13 +201,13 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#save(edu.wpi.cs.wpisuitetng.Session, edu.wpi.cs.wpisuitetng.modules.Model)
-	 * Save a requirements model from a session
+	
 	 *
 	 * @param s
 	 * @param model
-	 * @throws WPISuiteException
-	 */
+	
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#save(edu.wpi.cs.wpisuitetng.Session, edu.wpi.cs.wpisuitetng.modules.Model)
+	 * Save a requirements model from a session */
 	@Override
 	public void save(Session s, RequirementModel model)
 			throws WPISuiteException {
@@ -217,14 +215,15 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
-	 * TODO: DOCUMENT THIS
+	
 	 *
 	 * @param s
 	 * @param id
-	 * @return
-	 * @throws WPISuiteException
-	 */
+	
+	
+	 * @return boolean
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(edu.wpi.cs.wpisuitetng.Session, java.lang.String)
+	 * TODO: DOCUMENT THIS */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
 		availableIds.add(new Integer(id));
@@ -232,12 +231,12 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(edu.wpi.cs.wpisuitetng.Session)
-	 * TODO: DOCUMENT THIS
+	
 	 *
 	 * @param s
-	 * @throws WPISuiteException
-	 */
+	
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(edu.wpi.cs.wpisuitetng.Session)
+	 * TODO: DOCUMENT THIS */
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
 		db.deleteAll(new RequirementModel(), s.getProject());
@@ -247,8 +246,9 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	/**
 	 * get the number of requirement models in the database
 	 *
-	 * @return the number of requirment models in the database
-	 * @throws WPISuiteException
+	
+	
+	 * @return the number of requirment models in the database * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#Count()
 	 */
 	@Override
 	public int Count() throws WPISuiteException {
@@ -258,9 +258,10 @@ public class RequirementModelEntityManager implements EntityManager<RequirementM
 	/**
 	 * get the number of project events in the database
 	 *
-	 * @return the number of project events in the database
-	 * @throws WPISuiteException
-	 */
+	
+	
+	 * @return the number of project events in the database * @throws WPISuiteException 
+	 * @throws WPISuiteException */
 	public int CountEvents() throws WPISuiteException {
 		return db.retrieveAll(new ProjectEvent()).size();
 	}

@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * Entity manager for Notes
  * @author Tim Calvert
  *
+ * @version $Revision: 1.0 $
  */
 
 //TODO Document this class
@@ -61,10 +62,12 @@ public class RequirementNoteEntityManager implements
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws BadRequestException
-	 * @throws ConflictException
-	 * @throws WPISuiteException
+	
+	
+	
+	
+	 * @return RequirementNote
+	 * @throws BadRequestException * @throws ConflictException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(Session, String)
 	 */
 	@Override
 	public RequirementNote makeEntity(Session s, String content)
@@ -85,55 +88,130 @@ public class RequirementNoteEntityManager implements
 	}
 
 	// THE REST OF THESE METHODS ARE NOT IMPLEMENTED
+	/**
+	 * Method getEntity.
+	 * @param s Session
+	 * @param id String
+	 * @return RequirementNote[]
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(Session, String)
+	 */
 	@Override
 	public RequirementNote[] getEntity(Session s, String id)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method getAll.
+	 * @param s Session
+	 * @return RequirementNote[]
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(Session)
+	 */
 	@Override
 	public RequirementNote[] getAll(Session s) throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method update.
+	 * @param s Session
+	 * @param content String
+	 * @return RequirementNote
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(Session, String)
+	 */
 	@Override
 	public RequirementNote update(Session s, String content)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method save.
+	 * @param s Session
+	 * @param model RequirementNote
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public void save(Session s, RequirementNote model) throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method deleteEntity.
+	 * @param s Session
+	 * @param id String
+	 * @return boolean
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(Session, String)
+	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method advancedGet.
+	 * @param s Session
+	 * @param args String[]
+	 * @return String
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[])
+	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method deleteAll.
+	 * @param s Session
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(Session)
+	 */
 	@Override
 	public void deleteAll(Session s) throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method Count.
+	 * @return int
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#Count()
+	 */
 	@Override
 	public int Count() throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method advancedPut.
+	 * @param s Session
+	 * @param args String[]
+	 * @param content String
+	 * @return String
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPut(Session, String[], String)
+	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * Method advancedPost.
+	 * @param s Session
+	 * @param string String
+	 * @param content String
+	 * @return String
+	 * @throws NotImplementedException
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPost(Session, String, String)
+	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)
 			throws NotImplementedException {

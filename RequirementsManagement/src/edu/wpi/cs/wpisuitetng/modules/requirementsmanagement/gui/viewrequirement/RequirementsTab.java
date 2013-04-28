@@ -34,7 +34,8 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.Requirement
 /**
  * This view is responsible for showing the form for creating or viewing a new requirements.
  * @author andrew hurle
- * @contributor William Terry
+
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/ {
@@ -56,6 +57,8 @@ public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/
 
 	/**
 	 * Constructs a new CreateRequirementView where the user can enter the data for a new requirement.
+	 * @param tabController Main tab controller to use
+	 * @param mainView main tab view to use
 	 */
 	public RequirementsTab(MainTabController tabController, MainTabView mainView) {
 		this(tabController, new RequirementModel(), Mode.CREATE, null, mainView);
@@ -69,6 +72,8 @@ public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/
 	 * @param requirement	The Requirement to show.
 	 * @param editMode	The editMode for editing the Requirement
 	 * @param tab		The Tab holding this RequirementView (can be null)
+	 * @param tabController	Main tab controller 
+	 * @param mainView  Main tab view
 	 */
 	public RequirementsTab(MainTabController tabController, RequirementModel requirement, Mode editMode, Tab tab, MainTabView mainView) {
 		containingTab = tab;
@@ -124,8 +129,8 @@ public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/
 	/**
 	 * Returns whether or not input is enabled.
 	 * 
-	 * @return whether or not input is enabled.
-	 */
+	
+	 * @return whether or not input is enabled. */
 	public boolean getInputEnabled() {
 		return inputEnabled;
 	}
@@ -133,8 +138,8 @@ public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/
 	/**
 	 * Returns the main panel with the data fields
 	 * 
-	 * @return the main panel with the data fields
-	 */
+	
+	 * @return the main panel with the data fields */
 	public RequirementsPanel getRequirementPanel() {
 		return mainPanel;
 	}
@@ -143,7 +148,8 @@ public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/
 	 * no longer used
 	 * get the button group
 	 *
-	 * @return the button group
+	
+	 * @param requirement RequirementModel
 	 */
 //	@Override
 //	public ToolbarGroupView getGroup() {
@@ -159,6 +165,10 @@ public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/
 		//buttonGroup.setName("Edit Requirement");
 	}
 	
+	/**
+	 * Method getContainingTab.
+	 * @return Tab
+	 */
 	public Tab getContainingTab(){
 		return containingTab;
 	}
@@ -167,8 +177,8 @@ public class RequirementsTab extends JPanel /*implements IToolbarGroupProvider*/
 	 * Returns the change listener for assignees, used for removing the listener
 	 * from MainTabView
 	 *
-	 * @return the change listener for assignees
-	 */
+	
+	 * @return the change listener for assignees */
 	public AssignedUserTabChangeListener getAssignedUserTabChangeListener() {
 		return assignedUserTabChangeListener;
 	}

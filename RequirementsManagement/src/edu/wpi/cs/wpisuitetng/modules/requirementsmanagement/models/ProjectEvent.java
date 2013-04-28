@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * For example, the addition of a comment or the modification of fields.
  * 
  * @author Jacob Palnick
+ * @version $Revision: 1.0 $
  */
 public class ProjectEvent extends AbstractModel {
 	
@@ -34,6 +35,8 @@ public class ProjectEvent extends AbstractModel {
 	 *
 	 * The types of project events
 	 *
+	 * @author Owner
+	 * @version $Revision: 1.0 $
 	 */
 	public enum ProjectEventType {
 		CREATION,
@@ -58,8 +61,8 @@ public class ProjectEvent extends AbstractModel {
 	//TODO figure out how to tell what model/object was changed....
 	
 	/**
-	 * @return the type
-	 */
+	
+	 * @return the type */
 	public ProjectEventType getType() {
 		return type;
 	}
@@ -77,8 +80,8 @@ public class ProjectEvent extends AbstractModel {
 	 * @param user the user
 	 * @param objectType the ype of object
 	 * @param objectId the object's id
-	 * @return the created project event
-	 */
+	
+	 * @return the created project event */
 	public static ProjectEvent createProjectCreationEvent(User user, ProjectEventObjectType objectType, String objectId) {
 		ProjectEvent tmp = new ProjectEvent(user, objectType, objectId);
 		tmp.setType(ProjectEventType.CREATION);
@@ -90,8 +93,8 @@ public class ProjectEvent extends AbstractModel {
 	 *
 	 * @param objectType the object's type
 	 * @param objectId the object's id
-	 * @return the created project event
-	 */
+	
+	 * @return the created project event */
 	public static ProjectEvent createProjectCreationEvent(ProjectEventObjectType objectType, String objectId) {
 		ProjectEvent tmp = new ProjectEvent(objectType, objectId);
 		tmp.setType(ProjectEventType.CREATION);
@@ -104,8 +107,8 @@ public class ProjectEvent extends AbstractModel {
 	 * @param user the user
 	 * @param objectType the type of object
 	 * @param objectId the object's id
-	 * @return the created project event
-	 */
+	
+	 * @return the created project event */
 	public static ProjectEvent createProjectChangesetEvent(User user, ProjectEventObjectType objectType, String objectId) {
 		ProjectEvent tmp = new ProjectEvent(user, objectType, objectId);
 		tmp.setType(ProjectEventType.CHANGES);
@@ -117,7 +120,8 @@ public class ProjectEvent extends AbstractModel {
 	 *
 	 * @param objectType the object's type
 	 * @param objectId the object's id
-	 * @return
+	
+	 * @return ProjectEvent
 	 */
 	public static ProjectEvent createProjectChangesetEvent(ProjectEventObjectType objectType, String objectId) {
 		ProjectEvent tmp = new ProjectEvent(objectType, objectId);
@@ -163,8 +167,8 @@ public class ProjectEvent extends AbstractModel {
 	}
 
 	/**
-	 * @return the map of field names to changes (Assignee -> (Bob, Joe))
-	 */
+	
+	 * @return the map of field names to changes (Assignee -> (Bob, Joe)) */
 	public Map<String, FieldChange<?>> getChanges() {
 		return changes;
 	}
@@ -177,8 +181,8 @@ public class ProjectEvent extends AbstractModel {
 	}
 
 	/**
-	 * @return the objectType
-	 */
+	
+	 * @return the objectType */
 	public ProjectEventObjectType getObjectType() {
 		return objectType;
 	}
@@ -191,8 +195,8 @@ public class ProjectEvent extends AbstractModel {
 	}
 
 	/**
-	 * @return the objectId
-	 */
+	
+	 * @return the objectId */
 	public String getObjectId() {
 		return objectId;
 	}
@@ -205,8 +209,8 @@ public class ProjectEvent extends AbstractModel {
 	}
 
 	/**
-	 * @return The Date when this event happened
-	 */
+	
+	 * @return The Date when this event happened */
 	public Date getDate() {
 		return date;
 	}
@@ -219,8 +223,8 @@ public class ProjectEvent extends AbstractModel {
 	}
 	
 	/**
-	 * @return The User responsible for this event
-	 */
+	
+	 * @return The User responsible for this event */
 	public User getUser() {
 		return user;
 	}
@@ -233,8 +237,8 @@ public class ProjectEvent extends AbstractModel {
 	}
 	
 	/**
-	 * @return The id of this event
-	 */
+	
+	 * @return The id of this event */
 	public int getId() {
 		return id;
 	}
@@ -258,7 +262,8 @@ public class ProjectEvent extends AbstractModel {
 	/**
 	 * get the JSON string
 	 *
-	 * @return the JSON string
+	
+	 * @return the JSON string * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
 	 */
 	@Override
 	public String toJSON() {
@@ -271,7 +276,8 @@ public class ProjectEvent extends AbstractModel {
 	/**
 	 * the toString() method
 	 *
-	 * @return the JSON string
+	
+	 * @return the JSON string * @see edu.wpi.cs.wpisuitetng.modules.Model#toString()
 	 */
 	public String toString() {
 		return toJSON();
@@ -279,8 +285,8 @@ public class ProjectEvent extends AbstractModel {
 	
 	/**
 	 * @param json Json string to parse containing ProjectEvent
-	 * @return The ProjectEvent given by json
-	 */
+	
+	 * @return The ProjectEvent given by json */
 	public static ProjectEvent fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		addGsonDependencies(builder);
@@ -289,19 +295,27 @@ public class ProjectEvent extends AbstractModel {
 	
 	/**
 	 * @param json Json string to parse containing ProjectEvent array
-	 * @return The ProjectEvent array given by json
-	 */
+	
+	 * @return The ProjectEvent array given by json */
 	public static ProjectEvent[] fromJSONArray(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		addGsonDependencies(builder);
 		return builder.create().fromJson(json, ProjectEvent[].class);
 	}
 
+	/**
+	 * Method save.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
+	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Method delete.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#delete()
+	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
@@ -309,6 +323,12 @@ public class ProjectEvent extends AbstractModel {
 	
 	// this model will only be created server side and then retrieved as part of a ProjectEvent in the future
 	// so I'm not sure if this is necessary
+	/**
+	 * Method identify.
+	 * @param o Object
+	 * @return Boolean
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(Object)
+	 */
 	@Override
 	public Boolean identify(Object o) {
 		// TODO Auto-generated method stub

@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers.CreatePer
  *
  * @author vpatara
  *
+ * @version $Revision: 1.0 $
  */
 public class AddPermissionController implements ActionListener {
 
@@ -43,11 +44,11 @@ public class AddPermissionController implements ActionListener {
 
 	/**
 	 * This will be called when the user clicks an add button
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 * Saves the permissions to the server
+	
 	 *
 	 * @param e the action that called this
-	 */
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * Saves the permissions to the server */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		panel.setAddPermissionStatus("");

@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * @author vpatara
  * @author David
  * @author Tim
+ * @version $Revision: 1.0 $
  */
 public class SplitRequirementModelRequestObserver implements RequestObserver {
 
@@ -46,6 +47,7 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 	 * Indicate a successful response and reports success to the controller
 	 *
 	 * @param iReq a request response containing the split child requirement
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(IRequest)
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
@@ -71,6 +73,7 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 	 * Indicates an error in the response and reports failure to the controller
 	 *
 	 * @param iReq a request response
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(IRequest)
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
@@ -87,6 +90,7 @@ public class SplitRequirementModelRequestObserver implements RequestObserver {
 	 *
 	 * @param iReq a request response
 	 * @param exception the exception
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(IRequest, Exception)
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {

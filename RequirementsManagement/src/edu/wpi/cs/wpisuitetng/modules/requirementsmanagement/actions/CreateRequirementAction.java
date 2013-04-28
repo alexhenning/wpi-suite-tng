@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  * adds the create Requirement tab
  * @author andrew hurle
  * 
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class CreateRequirementAction extends AbstractAction {
@@ -48,6 +49,7 @@ public class CreateRequirementAction extends AbstractAction {
 	 * Add the create requirement tab to the main tab controller
 	 *
 	 * @param e The action event that occured
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

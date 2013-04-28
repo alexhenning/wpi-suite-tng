@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
  * {@link ModelMapper#map(Model, Model, MapCallback)} 
  * @author Chris Casola
  * @author Andrew Hurle
+ * @version $Revision: 1.0 $
  */
 class PermissionEventCallback implements MapCallback {
 	
@@ -54,7 +55,9 @@ class PermissionEventCallback implements MapCallback {
 	 * @param fieldName
 	 * @param sourceValue
 	 * @param destinationValue
-	 * @return
+	
+	 * @return Object
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.entitymanagers.ModelMapper$MapCallback#call(Model, Model, String, Object, Object)
 	 */
 	@Override
 	public Object call(Model source, Model destination, String fieldName,
@@ -81,8 +84,8 @@ class PermissionEventCallback implements MapCallback {
 	 *
 	 * @param a one object
 	 * @param b the other object
-	 * @return if a and b are equal
-	 */
+	
+	 * @return if a and b are equal */
 	private boolean objectsEqual(Object a, Object b) {
 		// Java 7 has Objects.equals... we're on Java 6
 		if(a == b) {

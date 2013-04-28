@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  *
  * @author vpatara
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ViewPermissionAction extends AbstractAction {
@@ -43,6 +44,7 @@ public class ViewPermissionAction extends AbstractAction {
 	 * Add the permissions tab to the main tab controller
 	 *
 	 * @param e the action performed
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

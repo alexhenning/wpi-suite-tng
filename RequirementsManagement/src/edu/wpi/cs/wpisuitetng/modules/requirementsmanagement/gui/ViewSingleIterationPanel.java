@@ -50,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  * @author Josh
  * @author vpatara
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel {
@@ -86,7 +87,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 
 	/**
 	 * Constructor
-	 * @param iterationTab the tab that created this panel
+	 * @param iteration Tab the tab that created this panel
 	 */
 	public ViewSingleIterationPanel(Iteration iteration) {
 		model = iteration;
@@ -102,6 +103,11 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		updateFields();
 	}
 
+	/**
+	 * Method setTab.
+	 * @param tab ScrollableTab
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel#setTab(ScrollableTab)
+	 */
 	@Override
 	public void setTab(ScrollableTab tab) {
 		parent = tab;
@@ -245,8 +251,8 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 * Check if dates overlap
 	 * TODO: IS THIS WHAT WE REALLY WANT THIS TO DO? DO WE WE EVEN USE THIS?
 	 *
-	 * @return if dates overlap
-	 */
+	
+	 * @return if dates overlap */
 	public boolean doDatesOverlap() {
 		return false;
 	}
@@ -255,7 +261,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 * Updates the IterationPanel's model to contain the values of the given Iteration and sets the 
 	 * IterationPanel's editMode to {@link Mode#EDIT}.
 	 * 
-	 * @param iteration	The Iteration which contains the new values for the model.
+	
 	 */
 	public void refreshModel() {
 		updateModel(model, Mode.EDIT);
@@ -298,16 +304,16 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	/**
 	 * Returns a boolean representing whether or not input is enabled for the IterationPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the IterationPanel and its children.
-	 */
+	
+	 * @return	A boolean representing whether or not input is enabled for the IterationPanel and its children. */
 	public boolean getInputEnabled() {
 		return inputEnabled;
 	}
 
 	/**
 	 * Gets the IterationPanel's internal model.
-	 * @return the iteration model
-	 */
+	
+	 * @return the iteration model */
 	public Iteration getModel() {
 		model.setIterationNumber(iterationNumber.getText());
 
@@ -321,12 +327,16 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	/**
 	 * Returns the edit {@link Mode} for this IterationPanel.
 	 * 
-	 * @return	The edit {@link Mode} for this IterationPanel.
-	 */
+	
+	 * @return	The edit {@link Mode} for this IterationPanel. */
 	public Mode getEditMode() {
 		return editMode;
 	}
 
+	/**
+	 * Method setStatus.
+	 * @param string String
+	 */
 	public void setStatus(String string) {
 		result.setText(string);
 	}
@@ -336,8 +346,14 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 * callback class to update the iteration's id
 	 * @author TODO
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateIterationIdCallback implements IterationCallback {
+		/**
+		 * Method callback.
+		 * @param iterationList List<Iteration>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback#callback(List<Iteration>)
+		 */
 		@Override
 		public void callback(List<Iteration> iterationList) {
 			model.setId(iterationList.size()+1);
@@ -376,10 +392,18 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		}
 	}
 
+	/**
+	 * Method setEstimate.
+	 * @param est int
+	 */
 	public void setEstimate(int est) {
 		estimate.setText(est + "");
 	}
 
+	/**
+	 * Method getUpdatedModel.
+	 * @return Iteration
+	 */
 	public Iteration getUpdatedModel() {
 
 		editModel = new Iteration();
@@ -398,8 +422,14 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 * Action to make sure the changes to the iteration are valid, and then update it
 	 * @author James
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class EditIterationAction extends AbstractAction {
+		/**
+		 * Method actionPerformed.
+		 * @param arg0 ActionEvent
+		 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			DB.getAllIterations(new ValidateSingleIterationUpdateCallback());
@@ -410,9 +440,15 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 * Validate the changes to the iteration, if they are all valid update the iteration
 	 * @author James
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class ValidateSingleIterationUpdateCallback implements IterationCallback {
 
+		/**
+		 * Method callback.
+		 * @param iterations List<Iteration>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback#callback(List<Iteration>)
+		 */
 		@Override
 		public void callback(List<Iteration> iterations) {
 			Iteration updateModel = getUpdatedModel();
@@ -501,6 +537,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 *
 	 * @author James
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class SetEstimateFieldCallback implements SingleIterationCallback {
 
@@ -508,6 +545,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		 * callback function to call a callback to calculate and set the estimate field
 		 *
 		 * @param iteration the iteration
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleIterationCallback#callback(Iteration)
 		 */
 		@Override
 		public void callback(Iteration iteration) {
@@ -520,6 +558,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 *
 	 * @author James
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class SetIterationEstimateFieldCallback implements RequirementsCallback {
 
@@ -528,7 +567,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 
 		/**
 		 * Constructor
-		 * @param estimateField the estimate field
+		
 		 * @param iteration the iteration
 		 */
 		SetIterationEstimateFieldCallback(Iteration iteration) {
@@ -539,6 +578,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		 * a callback function to set the estimate field
 		 *
 		 * @param reqs all the requirements
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback#callback(List<RequirementModel>)
 		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {

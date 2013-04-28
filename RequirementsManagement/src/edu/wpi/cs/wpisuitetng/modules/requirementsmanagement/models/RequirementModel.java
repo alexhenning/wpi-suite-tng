@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementE
  * The requirment model
  * @author TODO
  *
+ * @version $Revision: 1.0 $
  */
 public class RequirementModel extends AbstractModel {
 
@@ -106,11 +107,13 @@ public class RequirementModel extends AbstractModel {
 	 * @param estimate an estimate of the time needed to complete
 	 * @param actualEffort  how much effort the requirement takes in practice
 	 * @param creator the user who created the requirement
-	 * @param assignee the user who is assigning the requirement
+	 * @param assignees List of the assignees
+	 * @param subRequirements list of subrequirements 
+	
 	 * @param creationDate the date the requirement was created
 	 * @param lastModifiedDate the date the requirement was last changed (should default to the creation date)
 	 * @param events List of events for this requirement model
-	 * @param subRequirementIDs a list of id numbers for associated sub-requirements
+	
 	 * @param iteration the iteration the requirement is assigned to
 	 * @param type the type of the requirement
 	 */
@@ -169,8 +172,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 * get the requirement's notes
 	 *
-	 * @return an array of the requirement's notes
-	 */
+	
+	 * @return an array of the requirement's notes */
 	public RequirementNote[] getNotes() {
 		ArrayList<RequirementEvent> noteList = new ArrayList<RequirementEvent>();
 		for (RequirementEvent event : events) {
@@ -183,8 +186,8 @@ public class RequirementModel extends AbstractModel {
 	}
 
 	/**
-	 * @return the iteration
-	 */
+	
+	 * @return the iteration */
 	public Iteration getIteration() {
 		return iteration;
 	}
@@ -199,8 +202,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 * get the list of events
 	 *
-	 * @return the list of events
-	 */
+	
+	 * @return the list of events */
 	public List<RequirementEvent> getEvents() {
 		return events;
 	}
@@ -217,8 +220,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 * get the date this was made
 	 *
-	 * @return the date this requirement was made
-	 */
+	
+	 * @return the date this requirement was made */
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -235,8 +238,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 * get the date this was last modified
 	 *
-	 * @return the date this was last modified
-	 */
+	
+	 * @return the date this was last modified */
 	public Date getLastModifiedDate() {
 		return lastModifiedDate;
 	}
@@ -262,8 +265,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 * get the creator
 	 *
-	 * @return the creator
-	 */
+	
+	 * @return the creator */
 	public User getCreator() {
 		return creator;
 	}
@@ -280,8 +283,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 * get this requirement's assignees
 	 *
-	 * @return this requirement's assignees
-	 */
+	
+	 * @return this requirement's assignees */
 	public List<User> getAssignees() {
 		return assignees;
 	}
@@ -289,8 +292,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 * get the release number
 	 *
-	 * @return the realse number
-	 */
+	
+	 * @return the realse number */
 	public ReleaseNumber getReleaseNumber() {
 		return releaseNumber;
 	}
@@ -298,7 +301,7 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 * set the release number
 	 *
-	 * @param the release number
+	 * @param releaseNumber the release number
 	 */
 	public void setReleaseNumber(ReleaseNumber releaseNumber) {
 		this.releaseNumber = releaseNumber;
@@ -307,8 +310,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 *get the id
 	 *
-	 * @return the id
-	 */
+	
+	 * @return the id */
 	public int getId() {
 		return id;
 	}
@@ -325,8 +328,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 *get the status
 	 *
-	 * @return the status
-	 */
+	
+	 * @return the status */
 	public RequirementStatus getStatus() {
 		return status;
 	}
@@ -343,8 +346,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 *get the priority
 	 *
-	 * @return the priority
-	 */
+	
+	 * @return the priority */
 	public RequirementPriority getPriority() {
 		return priority;
 	}
@@ -361,8 +364,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 *get the name
 	 *
-	 * @return the name
-	 */
+	
+	 * @return the name */
 	public String getName() {
 		return name;
 	}
@@ -379,8 +382,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 *get the description
 	 *
-	 * @return the description
-	 */
+	
+	 * @return the description */
 	public String getDescription() {
 		return description;
 	}
@@ -397,8 +400,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 *get the estimate
 	 *
-	 * @return the estimate
-	 */
+	
+	 * @return the estimate */
 	public int getEstimate() {
 		return estimate;
 	}
@@ -415,8 +418,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 *get the actual effort
 	 *
-	 * @return the actual effort
-	 */
+	
+	 * @return the actual effort */
 	public int getActualEffort() {
 		return actualEffort;
 	}
@@ -430,12 +433,20 @@ public class RequirementModel extends AbstractModel {
 		this.actualEffort = actualEffort;
 	}
 
+	/**
+	 * Method save.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
+	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Method delete.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#delete()
+	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
@@ -443,7 +454,8 @@ public class RequirementModel extends AbstractModel {
 
 	/**
 	 * Converts this Requirement to a JSON string
-	 * @return a string in JSON representing this Requirement
+	
+	 * @return a string in JSON representing this Requirement * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
 	 */
 	@Override
 	public String toJSON() {
@@ -459,8 +471,8 @@ public class RequirementModel extends AbstractModel {
 	//TODO finish this code...
 	/**
 	 * @param json Json string to parse containing Requirement
-	 * @return The Requirement given by json
-	 */
+	
+	 * @return The Requirement given by json */
 	public static RequirementModel fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		addGsonDependencies(builder);
@@ -469,8 +481,8 @@ public class RequirementModel extends AbstractModel {
 	
 	/**
 	 * @param json Json string to parse containing Requirement array
-	 * @return The Requirement array given by json
-	 */
+	
+	 * @return The Requirement array given by json */
 	public static RequirementModel[] fromJSONArray(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		addGsonDependencies(builder);
@@ -491,7 +503,9 @@ public class RequirementModel extends AbstractModel {
 	 *not sure if this is still needed otherwise
 	 *
 	 * @param o
-	 * @return
+	
+	 * @return Boolean
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(Object)
 	 */
 	@Override
 	public Boolean identify(Object o) {
@@ -508,7 +522,8 @@ public class RequirementModel extends AbstractModel {
 	/**
 	 *toString() method
 	 *
-	 * @return the JSON string
+	
+	 * @return the JSON string * @see edu.wpi.cs.wpisuitetng.modules.Model#toString()
 	 */
 	@Override
 	public String toString() {
@@ -516,8 +531,8 @@ public class RequirementModel extends AbstractModel {
 	}
 	/**
 	 * 
-	 * @return ArrayList of the sub-requirements
-	 */
+	
+	 * @return ArrayList of the sub-requirements */
 	public List<String> getSubRequirements() {
 		return subRequirements;
 	}
@@ -537,7 +552,7 @@ public class RequirementModel extends AbstractModel {
 	}
 	/**
 	 * Adds a requirement ID to the list of sub-requirements
-	 * @param subreq Requirement to add to list of sub-requirements
+	 * @param subreqID Requirement to add to list of sub-requirements
 	 */
 	public void addSubRequirement(String subreqID){
 		if (!subRequirements.contains(subreqID)) {
@@ -546,8 +561,8 @@ public class RequirementModel extends AbstractModel {
 	}
 	
 	/**
-	 * @return the type
-	 */
+	
+	 * @return the type */
 	public RequirementType getType() {
 		return type;
 	}

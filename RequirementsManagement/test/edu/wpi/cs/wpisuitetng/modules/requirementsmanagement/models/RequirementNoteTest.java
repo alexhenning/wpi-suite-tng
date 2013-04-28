@@ -27,11 +27,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+/**
+ */
 public class RequirementNoteTest {
 	RequirementNote goodRequirementNote;
 	int requirementId;
 	User currentUuser;
 	String body;
+	/**
+	 * Method setUp.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		requirementId = 1;

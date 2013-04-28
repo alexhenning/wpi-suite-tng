@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  * the current user
  *
  * @author vpatara
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class UserToolbarView extends ToolbarGroupView {
@@ -99,7 +100,8 @@ public class UserToolbarView extends ToolbarGroupView {
 	 * Sets current username and permission level and display on the toolbar
 	 *
 	 * @param username The current user's username
-	 * @param level Permission level of the current user
+	
+	 * @param permission String
 	 */
 	private void setUserPermission(String username, String permission) {
 		usernameField.setText(username);

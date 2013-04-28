@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 /**
  * TODO Description
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 
 public class RequirementModelEntityManagerTest {
@@ -46,8 +47,8 @@ public class RequirementModelEntityManagerTest {
 	RequirementModel newRequirement3;
 
 	/**
-	 * @throws Exception
-	 */
+	
+	 * @throws Exception */
 	@Before
 	public void setUp() throws Exception {
 		//initial setup
@@ -70,8 +71,8 @@ public class RequirementModelEntityManagerTest {
 	}
 
 	/**
-	 * @throws Exception
-	 */
+	
+	 * @throws Exception */
 	@After
 	public void tearDown() throws Exception {
 	}
@@ -87,6 +88,10 @@ public class RequirementModelEntityManagerTest {
 
 
 
+	/**
+	 * Method testMakeBadEntity.
+	 * @throws WPISuiteException
+	 */
 	@Test(expected=BadRequestException.class)
 	public void testMakeBadEntity() throws WPISuiteException {
 		newRequirement2 = new RequirementModel();
@@ -95,6 +100,10 @@ public class RequirementModelEntityManagerTest {
 	}
 
 	
+	/**
+	 * Method testGetEntity.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testGetEntity() throws WPISuiteException {
 		RequirementModel[] gotten = manager.getEntity(defaultSession, "1");
@@ -102,6 +111,10 @@ public class RequirementModelEntityManagerTest {
 	}
 	
 	
+	/**
+	 * Method testGetBadId.
+	 * @throws WPISuiteException
+	 */
 	@Test(expected=NotFoundException.class)
 	public void testGetBadId() throws WPISuiteException {
 		manager.getEntity(defaultSession, "-1");
@@ -109,12 +122,20 @@ public class RequirementModelEntityManagerTest {
 	}
 
 	
+	/**
+	 * Method testGetMissingEntity.
+	 * @throws WPISuiteException
+	 */
 	@Test(expected=NotFoundException.class)
 	public void testGetMissingEntity() throws WPISuiteException {
 		manager.getEntity(defaultSession, "2");
 	}
 	
 	
+	/**
+	 * Method testGetAll.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testGetAll() throws WPISuiteException {
 		RequirementModel[] gotten = manager.getAll(defaultSession);
@@ -122,6 +143,10 @@ public class RequirementModelEntityManagerTest {
 		assertSame(existingRequirement, gotten[0]);
 	}
 	
+	/**
+	 * Method testSave.
+	 * @throws WPISuiteException
+	 */
 	@Ignore
 	@Test
 	public void testSave() throws WPISuiteException {
@@ -141,6 +166,12 @@ public class RequirementModelEntityManagerTest {
 
 
 
+	/**
+	 * Method testIDincrementing.
+	 * @throws BadRequestException
+	 * @throws ConflictException
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testIDincrementing() throws BadRequestException, ConflictException, WPISuiteException{
 		assertEquals(1, existingRequirement.getId());
@@ -155,6 +186,12 @@ public class RequirementModelEntityManagerTest {
 	}
 
 
+	/**
+	 * Method testMultipleIDincrementing2.
+	 * @throws BadRequestException
+	 * @throws ConflictException
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testMultipleIDincrementing2() throws BadRequestException, ConflictException, WPISuiteException{
 		newRequirement2 = new RequirementModel();

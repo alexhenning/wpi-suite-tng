@@ -30,6 +30,7 @@ import org.jfree.io.IOUtils;
  * Action for opening a pdf for help.
  *
  *@author TODO
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ShowHelpAction extends AbstractAction{
@@ -45,6 +46,7 @@ public class ShowHelpAction extends AbstractAction{
 	 * The action performed, adds a createIterationTab to the main tab controller
 	 *
 	 * @param e The action event
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

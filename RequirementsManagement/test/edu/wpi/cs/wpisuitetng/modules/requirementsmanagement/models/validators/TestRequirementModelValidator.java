@@ -40,6 +40,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  * Description goes here
  * @author Tim DeFreitas
  *
+ * @version $Revision: 1.0 $
  */
 public class TestRequirementModelValidator {
 	
@@ -64,8 +65,9 @@ public class TestRequirementModelValidator {
 	
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@Before
 	public void setUp() throws Exception {
 		invalidUser = new User("idontexist", "blah", "1234", 99);
@@ -119,18 +121,31 @@ public class TestRequirementModelValidator {
 	}
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@After
 	public void tearDown() throws Exception {
 	}
 
+	/**
+	 * Method testDBState.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testDBState() throws WPISuiteException{
 		assertSame(bob, db.retrieve(User.class,  "username", "bob").get(0));
 		assertSame(existingRequirement, db.retrieve(RequirementModel.class, "id", 1).get(0));
 		assertSame(otherRequirement, db.retrieve(RequirementModel.class, "id", 2).get(0));
 	}
+	/**
+	 * Method checkNumIssues.
+	 * @param num int
+	 * @param session Session
+	 * @param requirement RequirementModel
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNumIssues(int num, Session session, RequirementModel requirement, Mode mode) {
 		List<ValidationIssue> issues;
 		try {
@@ -142,20 +157,48 @@ public class TestRequirementModelValidator {
 		return issues;
 	}
 	
+	/**
+	 * Method checkNoIssues.
+	 * @param session Session
+	 * @param requirement RequirementModel
+	 * @param mode Mode
+	 */
 	public void checkNoIssues(Session session, RequirementModel requirement, Mode mode) {
 		checkNumIssues(0, session, requirement, mode);
 	}
 	
+	/**
+	 * Method checkIssue.
+	 * @param session Session
+	 * @param requirement RequirementModel
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkIssue(Session session, RequirementModel requirement, Mode mode) {
 		return checkNumIssues(1, session, requirement, mode);
 	}
 	
+	/**
+	 * Method checkNonFieldIssue.
+	 * @param session Session
+	 * @param requirement RequirementModel
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNonFieldIssue(Session session, RequirementModel requirement, Mode mode) {
 		List<ValidationIssue> issues = checkIssue(session, requirement, mode);
 		assertFalse(issues.get(0).hasFieldName());
 		return issues;
 	}
 	
+	/**
+	 * Method checkFieldIssue.
+	 * @param session Session
+	 * @param requirement RequirementModel
+	 * @param mode Mode
+	 * @param fieldName String
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkFieldIssue(Session session,  RequirementModel requirement, Mode mode, 
 			String fieldName) {
 		List<ValidationIssue> issues = checkNumIssues(1, session, requirement, mode);

@@ -19,6 +19,7 @@ import javax.swing.table.AbstractTableModel;
  * model for the requirements table
  * @author Josh
  *
+ * @version $Revision: 1.0 $
  */
 
 
@@ -35,7 +36,8 @@ public class ViewIterTable extends AbstractTableModel {
     /**
      * get the number of columns
      *
-     * @return the number of columns
+    
+     * @return the number of columns * @see javax.swing.table.TableModel#getColumnCount()
      */
     public int getColumnCount() {
         return columnNames.length;
@@ -44,7 +46,8 @@ public class ViewIterTable extends AbstractTableModel {
     /**
      * get the number of rows
      *
-     * @return the number of rows
+    
+     * @return the number of rows * @see javax.swing.table.TableModel#getRowCount()
      */
     public int getRowCount() {
         return data.length;
@@ -54,7 +57,8 @@ public class ViewIterTable extends AbstractTableModel {
      * get the name of a specified column
      *
      * @param col the column number
-     * @return the name of the column
+    
+     * @return the name of the column * @see javax.swing.table.TableModel#getColumnName(int)
      */
     public String getColumnName(int col) {
         return columnNames[col];
@@ -65,7 +69,8 @@ public class ViewIterTable extends AbstractTableModel {
      *
      * @param row the row of the cell
      * @param col the column of the cell
-     * @return the object at the cell
+    
+     * @return the object at the cell * @see javax.swing.table.TableModel#getValueAt(int, int)
      */
     public Object getValueAt(int row, int col) {
         return data[row][col];
@@ -75,7 +80,8 @@ public class ViewIterTable extends AbstractTableModel {
      * get the type of class in a column
      *
      * @param c the column number
-     * @return the kind of class in the column
+    
+     * @return the kind of class in the column * @see javax.swing.table.TableModel#getColumnClass(int)
      */
     public Class<?> getColumnClass(int c) {
         return getValueAt(0, c).getClass();
@@ -86,7 +92,8 @@ public class ViewIterTable extends AbstractTableModel {
      *
      * @param row the row of the cell
      * @param col the column of the cell
-     * @return true if the cell is editable, false otherwise
+    
+     * @return true if the cell is editable, false otherwise * @see javax.swing.table.TableModel#isCellEditable(int, int)
      */
     public boolean isCellEditable(int row, int col) {
     	return false;                                          
@@ -98,6 +105,7 @@ public class ViewIterTable extends AbstractTableModel {
      * @param value the value to set the cell
      * @param row the row of the cell
      * @param col the column of the cell
+     * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
      */
     public void setValueAt(Object value, int row, int col) {
         data[row][col] = value;
@@ -116,8 +124,8 @@ public class ViewIterTable extends AbstractTableModel {
     /**
      * Returns the data representation
      *
-     * @return data
-     */
+    
+     * @return data */
     public Object[][] getData() {
     	return data;
     }

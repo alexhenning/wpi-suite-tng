@@ -46,6 +46,7 @@ import edu.wpi.cs.wpisuitetng.network.dummyserver.DummyServer;
 /**
  * @author szolotykh
  *
+ * @version $Revision: 1.0 $
  */
 
 public class RequirementNoteValidatorTest {
@@ -67,6 +68,10 @@ public class RequirementNoteValidatorTest {
 	private NetworkConfiguration config;
 	private static int port = 38512;
 	
+	/**
+	 * Method setUp.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		
@@ -109,10 +114,21 @@ public class RequirementNoteValidatorTest {
 		
 		validator = new RequirementNoteValidator(db);
 	}
+	/**
+	 * Method tearDown.
+	 * @throws Exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 		server.stop();
 	}
+	/**
+	 * Method checkNumIssues.
+	 * @param num int
+	 * @param session Session
+	 * @param comment RequirementNote
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNumIssues(int num, Session session, RequirementNote comment) {
 		List<ValidationIssue> issues;
 		try {
@@ -124,20 +140,44 @@ public class RequirementNoteValidatorTest {
 		return issues;
 	}
 	
+	/**
+	 * Method checkNoIssues.
+	 * @param session Session
+	 * @param comment RequirementNote
+	 */
 	public void checkNoIssues(Session session, RequirementNote comment) {
 		checkNumIssues(0, session, comment);
 	}
 	
+	/**
+	 * Method checkIssue.
+	 * @param session Session
+	 * @param comment RequirementNote
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkIssue(Session session, RequirementNote comment) {
 		return checkNumIssues(1, session, comment);
 	}
 	
+	/**
+	 * Method checkNonFieldIssue.
+	 * @param session Session
+	 * @param comment RequirementNote
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNonFieldIssue(Session session, RequirementNote comment) {
 		List<ValidationIssue> issues = checkIssue(session, comment);
 		assertFalse(issues.get(0).hasFieldName());
 		return issues;
 	}
 	
+	/**
+	 * Method checkFieldIssue.
+	 * @param session Session
+	 * @param comment RequirementNote
+	 * @param fieldName String
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkFieldIssue(Session session, RequirementNote comment, String fieldName) {
 		List<ValidationIssue> issues = checkNumIssues(1, session, comment);
 		assertEquals(fieldName, issues.get(0).getFieldName());

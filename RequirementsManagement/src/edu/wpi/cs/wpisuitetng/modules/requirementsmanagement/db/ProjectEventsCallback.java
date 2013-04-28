@@ -21,13 +21,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
  * Interface that all project event callbacks must inherit in order to use the functions in DB
  * @author TODO
  *
+ * @version $Revision: 1.0 $
  */
 public interface ProjectEventsCallback {
 
 	/**
 	 * Implements an action to be performed on the projectEvents being passed back.
 	 * 
-	 * @param reqs
+	 * @param projectEvents
 	 *            The projectEvents being returned
 	 */
 	void callback(List<ProjectEvent> projectEvents);

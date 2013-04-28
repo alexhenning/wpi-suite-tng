@@ -34,6 +34,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  * @author vpatara
  * @author Tim
+ * @version $Revision: 1.0 $
  */
 public class PermissionEntityManager implements
 		EntityManager<Permissions> {
@@ -61,8 +62,10 @@ public class PermissionEntityManager implements
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return Permissions
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(Session, String)
 	 */
 	@Override
 	public Permissions makeEntity(Session s, String content)
@@ -91,8 +94,10 @@ public class PermissionEntityManager implements
 	 *
 	 * @param s
 	 * @param username
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return Permissions[]
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(Session, String)
 	 */
 	@Override
 	public Permissions[] getEntity(Session s, String username)
@@ -114,7 +119,9 @@ public class PermissionEntityManager implements
 	 * Retrieves all the user permissions from the database
 	 *
 	 * @param s
-	 * @return
+	
+	 * @return Permissions[]
+	 * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(Session)
 	 */
 	@Override
 	public Permissions[] getAll(Session s) {
@@ -126,8 +133,10 @@ public class PermissionEntityManager implements
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return Permissions
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(Session, String)
 	 */
 	@Override
 	public Permissions update(Session s, String content)
@@ -161,8 +170,8 @@ public class PermissionEntityManager implements
 	 *
 	 * @param s
 	 * @param model
-	 * @throws NotImplementedException
-	 */
+	
+	 * @throws NotImplementedException */
 	@Override
 	public void save(Session s, Permissions model) {
 		db.save(model, s.getProject());
@@ -173,8 +182,11 @@ public class PermissionEntityManager implements
 	 *
 	 * @param s
 	 * @param username
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return boolean
+	 * @throws WPISuiteException
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(Session, String)
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String username) throws WPISuiteException {
@@ -185,7 +197,8 @@ public class PermissionEntityManager implements
 	 * Deletes all the user permissions in the database
 	 *
 	 * @param s
-	 * @throws NotImplementedException
+	
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(Session)
 	 */
 	@Override
 	public void deleteAll(Session s) {
@@ -195,8 +208,9 @@ public class PermissionEntityManager implements
 	/**
 	 * Returns the number of existing user-permission pairs
 	 *
-	 * @return the number of existing user-permission pairs
-	 * @throws NotImplementedException
+	
+	
+	 * @return the number of existing user-permission pairs * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#Count()
 	 */
 	@Override
 	public int Count() {
@@ -206,9 +220,10 @@ public class PermissionEntityManager implements
 	/**
 	 * return the number of permissions in the database
 	 *
-	 * @return the number of permissions in the database
-	 * @throws WPISuiteException
-	 */
+	
+	
+	 * @return the number of permissions in the database * @throws WPISuiteException 
+	 * @throws WPISuiteException */
 	public int CountEvents() throws WPISuiteException {
 		return db.retrieveAll(new ProjectEvent()).size();
 	}
@@ -218,8 +233,10 @@ public class PermissionEntityManager implements
 	 *
 	 * @param s
 	 * @param args
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[])
 	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
@@ -233,8 +250,10 @@ public class PermissionEntityManager implements
 	 * @param s
 	 * @param args
 	 * @param content
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPut(Session, String[], String)
 	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
@@ -248,8 +267,10 @@ public class PermissionEntityManager implements
 	 * @param s
 	 * @param string
 	 * @param content
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPost(Session, String, String)
 	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)

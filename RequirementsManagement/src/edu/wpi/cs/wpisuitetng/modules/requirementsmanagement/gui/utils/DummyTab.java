@@ -21,6 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
 /**
  * Holds values given to it, but doesn't actually change the given MainTabView.
  * @author Andrew Hurle
+ * @version $Revision: 1.0 $
  */
 public class DummyTab extends Tab {
 
@@ -53,8 +54,8 @@ public class DummyTab extends Tab {
 	/**
 	 * returns the tabs title
 	 *
-	 * @return the tab's title
-	 */
+	
+	 * @return the tab's title */
 	@Override
 	public String getTitle() {
 		return title;
@@ -73,8 +74,8 @@ public class DummyTab extends Tab {
 	/**
 	 * get the tab's icon
 	 *
-	 * @return the tab's icon
-	 */
+	
+	 * @return the tab's icon */
 	@Override
 	public Icon getIcon() {
 		return icon;
@@ -93,8 +94,8 @@ public class DummyTab extends Tab {
 	/**
 	 * get the tab's tooltip text
 	 *
-	 * @return the tab's tooltip text
-	 */
+	
+	 * @return the tab's tooltip text */
 	@Override
 	public String getToolTipText() {
 		return toolTipText;
@@ -113,8 +114,8 @@ public class DummyTab extends Tab {
 	/**
 	 * get the tab's component
 	 *
-	 * @return the tab's component
-	 */
+	
+	 * @return the tab's component */
 	public Component getComponent() {
 		return component;
 	}

@@ -25,6 +25,7 @@ import org.junit.Test;
  * Tests the close requirement user story from iteration 2
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public class CloseRequirement {
 	
@@ -35,15 +36,17 @@ public class CloseRequirement {
 	
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@Before
 	public void setUp() throws Exception {
 	}
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@After
 	public void tearDown() throws Exception {
 	}

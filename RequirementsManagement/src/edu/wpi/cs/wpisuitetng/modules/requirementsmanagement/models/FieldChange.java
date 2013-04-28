@@ -18,8 +18,10 @@ import java.lang.reflect.ParameterizedType;
  * Model that holds and old and new value for some field.
  * Doesn't implement Model since it will see no use outside of RequirementChangesets.
  *
- * @param <T> the type of the field that was changed
+
  * @author TODO
+ * @version $Revision: 1.0 $
+ * @param <T> 
  */
 public class FieldChange<T> {
 	private final T oldValue;
@@ -51,15 +53,15 @@ public class FieldChange<T> {
 	}
 
 	/**
-	 * @return the oldValue
-	 */
+	
+	 * @return the oldValue */
 	public T getOldValue() {
 		return oldValue;
 	}
 
 	/**
-	 * @return the newValue
-	 */
+	
+	 * @return the newValue */
 	public T getNewValue() {
 		return newValue;
 	}
@@ -67,8 +69,8 @@ public class FieldChange<T> {
 	/**
 	 * sets type if it is null
 	 *
-	 * @return type
-	 */
+	
+	 * @return type */
 	public Class<T> getPersistentClass() {
         if (type == null) {
             type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];

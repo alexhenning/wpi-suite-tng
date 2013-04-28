@@ -31,6 +31,7 @@ import static edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Requi
  *
  * @author vpatara
  * @author Tim
+ * @version $Revision: 1.0 $
  */
 
 public class RequirementModelTest {
@@ -39,8 +40,8 @@ public class RequirementModelTest {
 	private RequirementModel requirement;
 
 	/**
-	 * @throws Exception
-	 */
+	
+	 * @throws Exception */
 	@Before
 	public void setUp() throws Exception {
 		emptyRequirement = new RequirementModel();

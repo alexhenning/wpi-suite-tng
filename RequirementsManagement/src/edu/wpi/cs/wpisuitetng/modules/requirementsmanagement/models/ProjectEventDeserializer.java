@@ -30,8 +30,17 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
  * Responsible for deserializing a RequirementEvent.
  * TODO: DOCUMENT THIS CLASS
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
+	/**
+	 * Method addFieldChange.
+	 * @param fieldName String
+	 * @param fieldClass Class<T>
+	 * @param changes JsonObject
+	 * @param context JsonDeserializationContext
+	 * @param changesMap HashMap<String,FieldChange<?>>
+	 */
 	public static <T> void addFieldChange(String fieldName, Class<T> fieldClass, JsonObject changes, JsonDeserializationContext context, HashMap<String, FieldChange<?>> changesMap) {
 		if (changes.has(fieldName)) {
 			JsonObject titleObj = changes.get(fieldName).getAsJsonObject();
@@ -39,6 +48,15 @@ class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 		}
 	}
 	
+	/**
+	 * Method deserialize.
+	 * @param element JsonElement
+	 * @param type Type
+	 * @param context JsonDeserializationContext
+	 * @return ProjectEvent
+	 * @throws JsonParseException
+	 * @see com.google.gson.JsonDeserializer#deserialize(JsonElement, Type, JsonDeserializationContext)
+	 */
 	@Override
 	public ProjectEvent deserialize(JsonElement element, Type type,
 			JsonDeserializationContext context) throws JsonParseException {

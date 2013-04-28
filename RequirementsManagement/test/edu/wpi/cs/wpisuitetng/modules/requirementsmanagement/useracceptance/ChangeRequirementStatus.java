@@ -25,6 +25,7 @@ import org.junit.Test;
  * Tests the Change requirement's status user story for iteration 2
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public class ChangeRequirementStatus {
 	
@@ -35,15 +36,17 @@ public class ChangeRequirementStatus {
 	//TODO A copmlete requirement can be restored to OPEN or IN_PROGRESS
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@Before
 	public void setUp() throws Exception {
 	}
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@After
 	public void tearDown() throws Exception {
 	}

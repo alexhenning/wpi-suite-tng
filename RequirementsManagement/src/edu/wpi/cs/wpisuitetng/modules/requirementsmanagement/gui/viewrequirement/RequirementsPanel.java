@@ -79,7 +79,8 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * @author Josh
  * @author vpatara
  * @author Christina
- * @contributor William Terry
+
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class RequirementsPanel extends JSplitPane implements KeyListener {
@@ -284,7 +285,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/**
 	 * Adds the components to the panel and places constraints on them
 	 * for the SpringLayout manager.
-	 * @param layout the layout manager
+	
 	 */
 	protected void addComponents() {
 		leftside.setLayout(new GridBagLayout());
@@ -825,6 +826,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	
 	/**
 	 * Sets the transaction log in the history tab
+	 * @param projectEvents List of project events to set history to
 	 */
 	public void setHistory(List<ProjectEvent> projectEvents) {
 		hs.setNotes(projectEvents);
@@ -833,15 +835,16 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/**
 	 * Returns a boolean representing whether or not input is enabled for the RequirementPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the RequirementPanel and its children.
-	 */
+	
+	 * @return	A boolean representing whether or not input is enabled for the RequirementPanel and its children. */
 	public boolean getInputEnabled() {
 		return inputEnabled;
 	}
 
 	/**
 	 * Gets the RequirementPanel's internal model.
-	 * @return
+	
+	 * @return RequirementModel
 	 */
 	public RequirementModel getModel() {
 		model.setName(namefield.getText());
@@ -898,8 +901,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/**
 	 * Returns the parent RequirementView.
 	 * 
-	 * @return the parent RequirementView.
-	 */
+	
+	 * @return the parent RequirementView. */
 	public RequirementsTab getParent() {
 		return parent;
 	}
@@ -907,8 +910,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/**
 	 * Returns the edit {@link Mode} for this RequirementPanel.
 	 * 
-	 * @return	The edit {@link Mode} for this RequirementPanel.
-	 */
+	
+	 * @return	The edit {@link Mode} for this RequirementPanel. */
 	public Mode getEditMode() {
 		return editMode;
 	}
@@ -927,8 +930,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * action to edit the requirement
 	 * @author TODO
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class EditRequirementAction extends AbstractAction {
+		/**
+		 * Method actionPerformed.
+		 * @param arg0 ActionEvent
+		 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if (!validateFields()){
@@ -956,8 +965,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * Callback to update the list of iterations
 	 * @author TODO
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateIterationListCallback implements IterationCallback {
+		/**
+		 * Method callback.
+		 * @param iterationList List<Iteration>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback#callback(List<Iteration>)
+		 */
 		@Override
 		public void callback(List<Iteration> iterationList) {
 			iterations = new Iteration[iterationList.size()+1];
@@ -974,7 +989,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		
 	}
 	
+	/**
+	 */
 	class UpdateReleaseNumberListCallback implements ReleaseNumberCallback {
+		/**
+		 * Method callback.
+		 * @param releaseNumbers List<ReleaseNumber>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCallback#callback(List<ReleaseNumber>)
+		 */
 		@Override
 		public void callback(List<ReleaseNumber> releaseNumbers) {
 			System.out.println("releaseNumbers: "+releaseNumbers.size());
@@ -992,7 +1014,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	
 	/**
 	 * check if the estimate and actual effort fields contain invalid characters
-	 * @return
+	
+	 * @return boolean
 	 */
 	public boolean validateEstimateFields() {
 
@@ -1032,8 +1055,8 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	/**
 	 * Checks to see if the fields are valid
 	 *
-	 * @return if the fields are valid
-	 */
+	
+	 * @return if the fields are valid */
 	public boolean validateFields() {
 
 		if(namefield.getText().length()<1 || namefield.getText().length() > 100) {
@@ -1057,9 +1080,15 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * List the history of the requirement
 	 * @author TODO
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class ListProjectEvents implements ProjectEventsCallback {
 		
+		/**
+		 * Method callback.
+		 * @param projectEvents List<ProjectEvent>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ProjectEventsCallback#callback(List<ProjectEvent>)
+		 */
 		@Override
 		public void callback(List<ProjectEvent> projectEvents) {
 			System.out.println("project event size : " + projectEvents.size());
@@ -1072,12 +1101,14 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * needs to be included
 	 *
 	 * @param e a key event
+	 * @see java.awt.event.KeyListener#keyTyped(KeyEvent)
 	 */
 	public void keyTyped (KeyEvent e) {}
 	/**
 	 * check if key is pressed. Doesn't really do anything now, but needs to be included 
 	 *
 	 * @param e a key event
+	 * @see java.awt.event.KeyListener#keyPressed(KeyEvent)
 	 */
 	public void keyPressed (KeyEvent e) {}
 
@@ -1085,6 +1116,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	 * Check if key is released. If so, validate fields and update buttons
 	 *
 	 * @param e a key event
+	 * @see java.awt.event.KeyListener#keyReleased(KeyEvent)
 	 */
 	public void keyReleased (KeyEvent e) {
 		validateFields();
@@ -1124,6 +1156,10 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 
 	//TODO improve the add child code to minimize network calls.
+	/**
+	 * Method addChild.
+	 * @param childId int
+	 */
 	public void addChild(int childId) {
 		DB.getSingleRequirement(childId + "", new SingleRequirementCallback() {
 			@Override
@@ -1136,18 +1172,33 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	}
 	
 	
+	/**
+	 * Method addChild.
+	 * @param child RequirementModel
+	 */
 	public void addChild(RequirementModel child) {
 		model.getSubRequirements().add(child.getId() + "");
 		DB.updateRequirements(model, new AddChildRequirementCallback(child));
 	}
 	
+	/**
+	 */
 	class AddChildRequirementCallback implements SingleRequirementCallback {
 		private RequirementModel childReq;
 		
+		/**
+		 * Constructor for AddChildRequirementCallback.
+		 * @param childReq RequirementModel
+		 */
 		public AddChildRequirementCallback(RequirementModel childReq) {
 			this.childReq = childReq;
 		}
 		
+		/**
+		 * Method callback.
+		 * @param currentReq RequirementModel
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback#callback(RequirementModel)
+		 */
 		@Override
 		public void callback(RequirementModel currentReq) {
 			boolean added = false;
@@ -1169,23 +1220,42 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		}
 	}
 	
+	/**
+	 * Method removeChild.
+	 * @param child RequirementModel
+	 */
 	public void removeChild(RequirementModel child) {
 		model.getSubRequirements().remove(child.getId() + "");
 		DB.updateRequirements(model, new RemoveChildRequirementCallback(child.getId() + ""));
 	}
 	
+	/**
+	 * Method removeChild.
+	 * @param childId String
+	 */
 	public void removeChild(String childId) {
 		model.getSubRequirements().remove(childId);
 		DB.updateRequirements(model, new RemoveChildRequirementCallback(childId));
 	}
 	
+	/**
+	 */
 	class RemoveChildRequirementCallback implements SingleRequirementCallback {
 		private String childId;
 		
+		/**
+		 * Constructor for RemoveChildRequirementCallback.
+		 * @param childId String
+		 */
 		public RemoveChildRequirementCallback(String childId) {
 			this.childId = childId;
 		}
 		
+		/**
+		 * Method callback.
+		 * @param currentReq RequirementModel
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback#callback(RequirementModel)
+		 */
 		@Override
 		public void callback(RequirementModel currentReq) {
 			boolean removed = true;
@@ -1209,15 +1279,15 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 	
 	/**
 	 * checks to see if the field values are different from the values in the model.
-	 * @return true if the values are different from the values in the model
-	 */
+	
+	 * @return true if the values are different from the values in the model */
 	public boolean valuesHaveChanged() {
 		return hasUnsavedChanges(false);
 	}
 	/**
 	 * adds a user to requirement model using only the user's id
 	 *
-	 * @param childId
+	 * @param username user to add
 	 */
 	public void addUser(String username) {
 System.err.println("adduser reached***************************");
@@ -1246,14 +1316,24 @@ System.err.println("adduser reached***************************");
 	 * 
 	 * @author William Terry
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class AddAssigneeCallback implements SingleRequirementCallback {
 		private User assignee;
 		
+		/**
+		 * Constructor for AddAssigneeCallback.
+		 * @param assignee User
+		 */
 		public AddAssigneeCallback(User assignee) {
 			this.assignee = assignee;
 		}
 		
+		/**
+		 * Method callback.
+		 * @param currentReq RequirementModel
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback#callback(RequirementModel)
+		 */
 		@Override
 		public void callback(RequirementModel currentReq) {
 			boolean added = false;
@@ -1276,7 +1356,7 @@ System.err.println("adduser reached***************************");
 	/**
 	 * removes a user from requirement model using only the user's id
 	 *
-	 * @param childId
+	 * @param username user to remove
 	 */
 	public void remUser(String username) {
 		DB.getSingleUser(username, new SingleUserCallback() {
@@ -1294,14 +1374,24 @@ System.err.println("adduser reached***************************");
 	 * 
 	 * @author William Terry
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class RemAssigneeCallback implements SingleRequirementCallback {
 		private User assigned;
 		
+		/**
+		 * Constructor for RemAssigneeCallback.
+		 * @param assigned User
+		 */
 		public RemAssigneeCallback(User assigned) {
 			this.assigned = assigned;
 		}
 		
+		/**
+		 * Method callback.
+		 * @param currentReq RequirementModel
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback#callback(RequirementModel)
+		 */
 		@Override
 		public void callback(RequirementModel currentReq) {
 			boolean removed = true;
@@ -1325,8 +1415,8 @@ System.err.println("adduser reached***************************");
 	 * Validate the estimate and make the appropriate updates
 	 *
 	 * @param mayIterationBeEnabled
-	 * @return true if the entered estimate is valid
-	 */
+	
+	 * @return true if the entered estimate is valid */
 	private boolean validateEstimate(boolean mayIterationBeEnabled) {
 		int estimate;
 		try {
@@ -1351,8 +1441,8 @@ System.err.println("adduser reached***************************");
 	 * Checks whether a field has changed
 	 *
 	 * @param alsoChecksForNote whether an unsaved note is taken into account
-	 * @return true if at least one field has changed, false otherwise
-	 */
+	
+	 * @return true if at least one field has changed, false otherwise */
 	public boolean hasUnsavedChanges(boolean alsoChecksForNote) {
 		if (!model.getName().equals(namefield.getText())) return true;
 		if (model.getType() != null && !model.getType().equals((RequirementType) type.getSelectedItem())) return true;
@@ -1372,8 +1462,8 @@ System.err.println("adduser reached***************************");
 	/**
 	 * Returns a child requirement split from the current requirement model
 	 *
-	 * @return the split child requirement
-	 */
+	
+	 * @return the split child requirement */
 	public RequirementModel getChildModel() {
 		String childName = model.getName();
 
@@ -1434,15 +1524,27 @@ System.err.println("adduser reached***************************");
 		});
 	}
 	
+	/**
+	 */
 	class CanCloseCallback implements CanCloseRequirementCallback {
 		RequirementModel model;
 		MainTabController tabController;
 
+		/**
+		 * Constructor for CanCloseCallback.
+		 * @param model RequirementModel
+		 * @param tabController MainTabController
+		 */
 		public CanCloseCallback(RequirementModel model, final MainTabController tabController) {
 			this.model = model;
 			this.tabController = tabController;
 		}
 
+		/**
+		 * Method callback.
+		 * @param result boolean
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CanCloseRequirementCallback#callback(boolean)
+		 */
 		@Override
 		public void callback(boolean result) {
 			// TODO Auto-generated method stub

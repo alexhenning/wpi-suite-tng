@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
  *
  * Class for release numbers
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 public class ReleaseNumber extends AbstractModel {
 
@@ -55,8 +56,8 @@ public class ReleaseNumber extends AbstractModel {
 	}
 
 	/**
-	 * @return the id
-	 */
+	
+	 * @return the id */
 	public int getId() {
 		return id;
 	}
@@ -69,8 +70,8 @@ public class ReleaseNumber extends AbstractModel {
 	}
 
 	/**
-	 * @return the releaseNumber
-	 */
+	
+	 * @return the releaseNumber */
 	public String getReleaseNumber() {
 		return releaseNumber;
 	}
@@ -82,12 +83,20 @@ public class ReleaseNumber extends AbstractModel {
 		this.releaseNumber = releaseNumber;
 	}
 	
+	/**
+	 * Method save.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
+	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Method delete.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#delete()
+	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
@@ -95,10 +104,11 @@ public class ReleaseNumber extends AbstractModel {
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
+	
 	 *
-	 * @return
-	 */
+	
+	 * @return String
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON() */
 	@Override
 	public String toJSON() {
 		String json;
@@ -110,7 +120,8 @@ public class ReleaseNumber extends AbstractModel {
 	/**
 	 *toString() method
 	 *
-	 * @return the JSON string
+	
+	 * @return the JSON string * @see edu.wpi.cs.wpisuitetng.modules.Model#toString()
 	 */
 	@Override
 	public String toString() {
@@ -119,8 +130,8 @@ public class ReleaseNumber extends AbstractModel {
 
 	/**
 	 * @param json Json string to parse containing ReleaseNumber
-	 * @return The ReleaseNumber given by json
-	 */
+	
+	 * @return The ReleaseNumber given by json */
 	public static ReleaseNumber fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		return builder.create().fromJson(json, ReleaseNumber.class);
@@ -128,19 +139,20 @@ public class ReleaseNumber extends AbstractModel {
 	
 	/**
 	 * @param json Json string to parse containing ReleaseNumber array
-	 * @return The ReleaseNumber array given by json
-	 */
+	
+	 * @return The ReleaseNumber array given by json */
 	public static ReleaseNumber[] fromJSONArray(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		return builder.create().fromJson(json, ReleaseNumber[].class);
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object)
+	
 	 *
 	 * @param o
-	 * @return
-	 */
+	
+	 * @return Boolean
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object) */
 	@Override
 	public Boolean identify(Object o) {
 		// TODO Auto-generated method stub

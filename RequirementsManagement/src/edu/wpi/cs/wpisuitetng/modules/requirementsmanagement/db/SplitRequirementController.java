@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * @author vpatara
  * @author Tim Calvert
  * @author Tim Defreitas
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class SplitRequirementController extends AbstractAction implements ActionListener {
@@ -53,6 +54,7 @@ public class SplitRequirementController extends AbstractAction implements Action
 	 * requirement to the server
 	 *
 	 * @param e Action that called this
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

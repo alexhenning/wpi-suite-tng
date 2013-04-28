@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * Entity manager for release numbers
  * @author James
  *
+ * @version $Revision: 1.0 $
  */
 public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> {
 
@@ -58,10 +59,12 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws BadRequestException
-	 * @throws ConflictException
-	 * @throws WPISuiteException
+	
+	
+	
+	
+	 * @return ReleaseNumber
+	 * @throws BadRequestException * @throws ConflictException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(Session, String)
 	 */
 	@Override
 	public ReleaseNumber makeEntity(Session s, String content)
@@ -91,9 +94,11 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 *
 	 * @param s
 	 * @param id
-	 * @return
-	 * @throws NotFoundException
-	 * @throws WPISuiteException
+	
+	
+	
+	 * @return ReleaseNumber[]
+	 * @throws NotFoundException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(Session, String)
 	 */
 	@Override
 	public ReleaseNumber[] getEntity(Session s, String id)
@@ -121,8 +126,10 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 * get all release numbers in the database
 	 *
 	 * @param s
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return ReleaseNumber[]
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(Session)
 	 */
 	@Override
 	public ReleaseNumber[] getAll(Session s) throws WPISuiteException {
@@ -134,8 +141,10 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return ReleaseNumber
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(Session, String)
 	 */
 	@Override
 	public ReleaseNumber update(Session s, String content)
@@ -163,8 +172,8 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 *
 	 * @param s
 	 * @param model
-	 * @throws WPISuiteException
-	 */
+	
+	 * @throws WPISuiteException */
 	@Override
 	public void save(Session s, ReleaseNumber model) throws WPISuiteException {
 		db.save(model, s.getProject());
@@ -175,8 +184,10 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 *
 	 * @param s
 	 * @param id
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return boolean
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(Session, String)
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
@@ -188,8 +199,10 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 *
 	 * @param s
 	 * @param args
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[])
 	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
@@ -201,7 +214,8 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 * delete all release numbers
 	 *
 	 * @param s
-	 * @throws WPISuiteException
+	
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(Session)
 	 */
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
@@ -211,8 +225,10 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	/**
 	 * get the number of release numbers
 	 *
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return int
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#Count()
 	 */
 	@Override
 	public int Count() throws WPISuiteException {
@@ -225,8 +241,10 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 * @param s
 	 * @param args
 	 * @param content
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPut(Session, String[], String)
 	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
@@ -240,8 +258,10 @@ public class ReleaseNumberEntityManager implements EntityManager<ReleaseNumber> 
 	 * @param s
 	 * @param string
 	 * @param content
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPost(Session, String, String)
 	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)

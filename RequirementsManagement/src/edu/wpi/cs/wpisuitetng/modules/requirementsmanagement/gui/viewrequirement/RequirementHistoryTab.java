@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
  * Main panel for history viewing
  * @author Josh
  * @author Deniz
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class RequirementHistoryTab extends JPanel {

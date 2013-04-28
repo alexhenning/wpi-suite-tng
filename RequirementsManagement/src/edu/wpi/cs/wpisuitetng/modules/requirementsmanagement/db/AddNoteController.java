@@ -38,6 +38,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * @author Tim
  * @author andrew hurle
  * @author Chris Casola
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class AddNoteController extends AbstractAction implements ActionListener{
@@ -66,6 +67,7 @@ public class AddNoteController extends AbstractAction implements ActionListener{
 	 * Called by pressing add note button
 	 *
 	 * @param e The action performed when pressing add note
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

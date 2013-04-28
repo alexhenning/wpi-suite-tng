@@ -19,13 +19,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumbe
  * Interface that release number callbacks can inherit from
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public interface SingleReleaseNumberCallback {
 
 	/**
 	 * Implements an action to be called on the release number being passed back
 	 *
-	 * @param releaseNumbers Release numbers returned from the database
+	 * @param releaseNumber Release numbers returned from the database
 	 */
 	void callback(ReleaseNumber releaseNumber);
 }

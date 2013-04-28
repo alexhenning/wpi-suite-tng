@@ -45,6 +45,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * @author Josh
  * @author Christina
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class IterationPanel extends JPanel implements ScrollablePanel {
@@ -76,7 +77,7 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 
 	/**
 	 * Constructor
-	 * @param iterationTab the tab that created this panel
+	 * @param iteration the iteration that is created this panel
 	 */
 	public IterationPanel(Iteration iteration){
 		model = iteration;
@@ -97,6 +98,11 @@ public class IterationPanel extends JPanel implements ScrollablePanel {
 		updateFields();
 	}
 
+	/**
+	 * Method setTab.
+	 * @param tab ScrollableTab
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel#setTab(ScrollableTab)
+	 */
 	@Override
 	public void setTab(ScrollableTab tab) {
 		parent = tab;
@@ -194,8 +200,8 @@ endDatePicker.setEnabled(false);
 	 * Check if dates overlap
 	 * TODO: IS THIS WHAT WE REALLY WANT THIS TO DO? DO WE WE EVEN USE THIS?
 	 *
-	 * @return if dates overlap
-	 */
+	
+	 * @return if dates overlap */
 	public boolean doDatesOverlap() {
 		return false;
 	}
@@ -204,7 +210,7 @@ endDatePicker.setEnabled(false);
 	 * Updates the IterationPanel's model to contain the values of the given Iteration and sets the 
 	 * IterationPanel's editMode to {@link Mode#EDIT}.
 	 * 
-	 * @param iteration	The Iteration which contains the new values for the model.
+	
 	 */
 	public void refreshModel() {
 		updateModel(model, Mode.EDIT);
@@ -243,16 +249,16 @@ endDatePicker.setEnabled(false);
 	/**
 	 * Returns a boolean representing whether or not input is enabled for the IterationPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the IterationPanel and its children.
-	 */
+	
+	 * @return	A boolean representing whether or not input is enabled for the IterationPanel and its children. */
 	public boolean getInputEnabled() {
 		return inputEnabled;
 	}
 
 	/**
 	 * Gets the IterationPanel's internal model.
-	 * @return the iteration model
-	 */
+	
+	 * @return the iteration model */
 	public Iteration getModel() {
 		model.setIterationNumber(iterationNumber.getText());
 
@@ -266,8 +272,8 @@ endDatePicker.setEnabled(false);
 	/**
 	 * Returns the parent IterationTab.
 	 * 
-	 * @return the parent IterationTab.
-	 */
+	
+	 * @return the parent IterationTab. */
 	public ScrollableTab getParent() {
 		return parent;
 	}
@@ -275,16 +281,24 @@ endDatePicker.setEnabled(false);
 	/**
 	 * Returns the edit {@link Mode} for this IterationPanel.
 	 * 
-	 * @return	The edit {@link Mode} for this IterationPanel.
-	 */
+	
+	 * @return	The edit {@link Mode} for this IterationPanel. */
 	public Mode getEditMode() {
 		return editMode;
 	}
 
+	/**
+	 * Method setStatus.
+	 * @param string String
+	 */
 	public void setStatus(String string) {
 		result.setText(string);
 	}
 	
+	/**
+	 * Method getThisIterationPanel.
+	 * @return IterationPanel
+	 */
 	public IterationPanel getThisIterationPanel() {
 		return this;
 	}
@@ -294,20 +308,29 @@ endDatePicker.setEnabled(false);
 	 * callback class to update the iteration's id
 	 * @author TODO
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateIterationIdCallback implements IterationCallback {
+		/**
+		 * Method callback.
+		 * @param iterationList List<Iteration>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback#callback(List<Iteration>)
+		 */
 		@Override
 		public void callback(List<Iteration> iterationList) {
 			model.setId(iterationList.size() + 1);
 		}
 	}
 	
+	/**
+	 */
 	class ValidateIterationActionListener implements ActionListener {
 		
 		/**
 		 * Validate the iteration being created, if its valid send it to the DB
 		 *
 		 * @param e action that happened
+		 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -322,11 +345,16 @@ endDatePicker.setEnabled(false);
 	 * Callback class to make sure that the iteration is valid
 	 * @author TODO
 	 *
+	 * @version $Revision: 1.0 $
 	 */
 	class ValidateIterationCallback implements IterationCallback {
 		
 		ActionEvent e;
 		
+		/**
+		 * Constructor for ValidateIterationCallback.
+		 * @param e ActionEvent
+		 */
 		public ValidateIterationCallback(ActionEvent e) {
 			this.e = e;
 		}
@@ -335,6 +363,7 @@ endDatePicker.setEnabled(false);
 		 * Callback function to validate the fields, if they are valid send it to the DB
 		 *
 		 * @param iterationList list of all iterations
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback#callback(List<Iteration>)
 		 */
 		@Override
 		public void callback(List<Iteration> iterationList) {

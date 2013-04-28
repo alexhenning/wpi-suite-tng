@@ -20,13 +20,14 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * An interface for callbacks that return all of the users.
  * 
  * @author William Terry
+ * @version $Revision: 1.0 $
  */
 public interface UsersCallback {
 
 	/**
 	 * Implements an action to be performed on the requirement being passed back.
 	 * 
-	 * @param reqs
+	 * @param users
 	 *            The requirements being returned
 	 */
 	void callback(List<User> users);

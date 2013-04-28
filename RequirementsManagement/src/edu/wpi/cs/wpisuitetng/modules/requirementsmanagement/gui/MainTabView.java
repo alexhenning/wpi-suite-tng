@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.viewrequirement
  * It starts out showing the single Dashboard tab.
  * @author andrew hurle
  * @author Chris Casola
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class MainTabView extends JTabbedPane {

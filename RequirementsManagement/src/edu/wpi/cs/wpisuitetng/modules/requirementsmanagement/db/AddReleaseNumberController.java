@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Release Number to send to the server
  * @author James
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class AddReleaseNumberController extends AbstractAction implements
@@ -50,6 +51,7 @@ public class AddReleaseNumberController extends AbstractAction implements
 	 * This will be called with the add button is pressed
 	 *
 	 * @param e the action performed
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

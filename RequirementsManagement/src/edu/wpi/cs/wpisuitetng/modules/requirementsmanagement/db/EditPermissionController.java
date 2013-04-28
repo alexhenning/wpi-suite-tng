@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  *
  * @author vpatara
  *
+ * @version $Revision: 1.0 $
  */
 public class EditPermissionController implements ActionListener {
 
@@ -43,11 +44,11 @@ public class EditPermissionController implements ActionListener {
 
 	/**
 	 * This will be called when the user clicks an add button
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 * Edit the user permission in the server
+	
 	 *
 	 * @param e the action that called this
-	 */
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * Edit the user permission in the server */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/permissions",  HttpMethod.POST);

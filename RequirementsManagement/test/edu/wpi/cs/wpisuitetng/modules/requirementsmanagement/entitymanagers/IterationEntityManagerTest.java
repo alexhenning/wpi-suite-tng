@@ -36,6 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
  *
  * @author vpatara
  *
+ * @version $Revision: 1.0 $
  */
 public class IterationEntityManagerTest {
 
@@ -58,8 +59,9 @@ public class IterationEntityManagerTest {
 	/**
 	 * Sets up the testing environment for this test set
 	 *
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@Before
 	public void setUp() throws Exception {
 		// Initialize the entity manager
@@ -90,17 +92,26 @@ public class IterationEntityManagerTest {
 	/**
 	 *Description goes here
 	 *
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@After
 	public void tearDown() throws Exception {
 	}
 
+	/**
+	 * Method testInitialCount.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testInitialCount() throws WPISuiteException {
 		assertEquals(2, manager.Count());
 	}
 
+	/**
+	 * Method testInitialGetAll.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testInitialGetAll() throws WPISuiteException {
 		assertEquals(1, manager.getAll(testSession).length);
@@ -109,6 +120,10 @@ public class IterationEntityManagerTest {
 		assertEquals("3", manager.getAll(otherSession)[0].getIterationNumber());
 	}
 
+	/**
+	 * Method testSavingTheSameIteration.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testSavingTheSameIteration() throws WPISuiteException {
 		manager.save(testSession, existingIteration);
@@ -117,6 +132,11 @@ public class IterationEntityManagerTest {
 		assertEquals(2, manager.Count());
 	}
 
+	/**
+	 * Method testSavingNewIterations.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test
 	public void testSavingNewIterations() throws WPISuiteException, ParseException {
 		// New iteration (non-overlapping dates)
@@ -148,6 +168,10 @@ public class IterationEntityManagerTest {
 		assertEquals(2, manager.getAll(otherSession).length);
 	}
 
+	/**
+	 * Method testDeleteAll.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testDeleteAll() throws WPISuiteException {
 		manager.deleteAll(testSession);
@@ -156,6 +180,11 @@ public class IterationEntityManagerTest {
 		assertEquals(0, manager.Count());
 	}
 
+	/**
+	 * Method testDeleteAllAndWithResaving.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test
 	public void testDeleteAllAndWithResaving() throws WPISuiteException, ParseException {
 		manager.deleteAll(otherSession);
@@ -184,6 +213,11 @@ public class IterationEntityManagerTest {
 		assertEquals(0, manager.Count());
 	}
 
+	/**
+	 * Method testGetEntityWithSaving.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test
 	public void testGetEntityWithSaving() throws WPISuiteException, ParseException {
 		// New iteration (non-overlapping dates)
@@ -202,6 +236,11 @@ public class IterationEntityManagerTest {
 		assertEquals(iteration1, manager.getEntity(testSession, "5")[0]);
 	}
 
+	/**
+	 * Method testMakeEntity.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test
 	public void testMakeEntity() throws WPISuiteException, ParseException {
 		// New iteration (non-overlapping dates)
@@ -238,6 +277,11 @@ public class IterationEntityManagerTest {
 		assertEquals("12", manager.getEntity(otherSession, "5")[0].getIterationNumber());
 	}
 
+	/**
+	 * Method testMakeBadEntityWithStartDateAfterEndDate.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test (expected = BadRequestException.class)
 	public void testMakeBadEntityWithStartDateAfterEndDate() throws WPISuiteException, ParseException {
 		// New iteration with an invalid date interval (start after end)
@@ -249,6 +293,11 @@ public class IterationEntityManagerTest {
 		manager.makeEntity(testSession, iteration1.toJSON());
 	}
 
+	/**
+	 * Method testMakeTwoEntitiesWithTheSameNumberInOneProject.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test (expected = BadRequestException.class)
 	public void testMakeTwoEntitiesWithTheSameNumberInOneProject() throws WPISuiteException, ParseException {
 		// New iteration (non-overlapping dates)
@@ -267,6 +316,11 @@ public class IterationEntityManagerTest {
 		manager.makeEntity(testSession, iteration2.toJSON());
 	}
 
+	/**
+	 * Method testMakeEntityForOneProjectDoesNotAffectAnotherProject.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test (expected = NotFoundException.class)
 	public void testMakeEntityForOneProjectDoesNotAffectAnotherProject() throws WPISuiteException, ParseException {
 		// New iteration (non-overlapping dates)
@@ -280,16 +334,29 @@ public class IterationEntityManagerTest {
 		manager.getEntity(otherSession, "3");
 	}
 
+	/**
+	 * Method testGetEntityWithNonNumericIdResultsInNotFoundException.
+	 * @throws WPISuiteException
+	 */
 	@Test (expected = NotFoundException.class)
 	public void testGetEntityWithNonNumericIdResultsInNotFoundException() throws WPISuiteException {
 		manager.getEntity(testSession, "a");
 	}
 
+	/**
+	 * Method testGetEntityWithInvalidIdResultsInNotFoundException.
+	 * @throws WPISuiteException
+	 */
 	@Test (expected = NotFoundException.class)
 	public void testGetEntityWithInvalidIdResultsInNotFoundException() throws WPISuiteException {
 		manager.getEntity(testSession, "-1");
 	}
 
+	/**
+	 * Method testUpdate.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test
 	public void testUpdate() throws WPISuiteException, ParseException {
 		// New iteration (non-overlapping dates)
@@ -340,22 +407,39 @@ public class IterationEntityManagerTest {
 		assertEquals(iteration3.getStartDate(), manager.getEntity(otherSession, "5")[0].getStartDate());
 	}
 
+	/**
+	 * Method testCannotFindDeletedIterations.
+	 * @throws WPISuiteException
+	 */
 	@Test (expected = NotFoundException.class)
 	public void testCannotFindDeletedIterations() throws WPISuiteException {
 		manager.deleteEntity(testSession, "1");
 		manager.getEntity(testSession, "1");
 	}
 
+	/**
+	 * Method testCannotDeleteNonExistingIteration.
+	 * @throws WPISuiteException
+	 */
 	@Test (expected = NotFoundException.class)
 	public void testCannotDeleteNonExistingIteration() throws WPISuiteException {
 		manager.deleteEntity(testSession, "-100");
 	}
 
+	/**
+	 * Method testCannotUpdateNonExistingIteration.
+	 * @throws WPISuiteException
+	 */
 	@Test (expected = BadRequestException.class)
 	public void testCannotUpdateNonExistingIteration() throws WPISuiteException {
 		manager.update(testSession, new Iteration().toJSON());
 	}
 
+	/**
+	 * Method testDeleteEntities.
+	 * @throws WPISuiteException
+	 * @throws ParseException
+	 */
 	@Test
 	public void testDeleteEntities() throws WPISuiteException, ParseException {
 		// New iteration (non-overlapping dates)

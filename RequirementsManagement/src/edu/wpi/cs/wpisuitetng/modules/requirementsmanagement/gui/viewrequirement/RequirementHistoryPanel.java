@@ -36,6 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumbe
  * @author Josh
  * @author Jacob Palnick
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class RequirementHistoryPanel extends JPanel {
@@ -55,9 +56,10 @@ public class RequirementHistoryPanel extends JPanel {
 	/**
 	 * Constructs a panel for a single note
 	 * 
-	 * @param message
+	
 	 * @param author
 	 * @param date
+	 * @param map 
 	 */
 	public RequirementHistoryPanel(Map<String, FieldChange<?>> map, String author, Date date) {
 
@@ -111,8 +113,8 @@ public class RequirementHistoryPanel extends JPanel {
 	/**
 	 * handles converting a filed change object to a properly formated message.
 	 * @param change
-	 * @return the message for the field change
-	 */
+	
+	 * @return the message for the field change */
 	private String getChangeMessage(Entry <String,FieldChange<?>> change) {
 		String out = "";
 		//TODO add any additional special filed changes

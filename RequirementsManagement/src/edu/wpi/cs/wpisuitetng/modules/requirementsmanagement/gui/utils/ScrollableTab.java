@@ -22,10 +22,13 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvide
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
 
 /**
+ *Class for creating and setting scrollable tabs
  *
- * TODO
  * @author Alex Henning
+
  *
+ * @version $Revision: 1.0 $
+ * @param <Panel> 
  */
 @SuppressWarnings("serial")
 public class ScrollableTab<Panel extends JComponent & ScrollablePanel> extends JPanel implements IToolbarGroupProvider {
@@ -74,21 +77,22 @@ public class ScrollableTab<Panel extends JComponent & ScrollablePanel> extends J
 	}
 
 	/**
-	 * @return The main panel that this tab contains
-	 */
+	
+	 * @return The main panel that this tab contains */
 	public Panel getPanel() {
 		return mainPanel;
 	}
 	
 	/**
-	 * @return The main tab controller.
-	 */
+	
+	 * @return The main tab controller. */
 	public MainTabController getTabController() {
 		return tabController;
 	}
 
 	/**
-	 * @return The toolbar
+	
+	 * @return The toolbar * @see edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider#getGroup()
 	 */
 	@Override
 	public ToolbarGroupView getGroup() {
@@ -97,6 +101,7 @@ public class ScrollableTab<Panel extends JComponent & ScrollablePanel> extends J
 
 	/**
 	 * Set toolbar group
+	 * @param toolbar The toolbar to be set to
 	 */
 	public void setGroup(ToolbarGroupView toolbar) {
 		this.toolbar = toolbar;

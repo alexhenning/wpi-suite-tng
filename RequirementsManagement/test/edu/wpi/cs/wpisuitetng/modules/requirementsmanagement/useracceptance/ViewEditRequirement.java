@@ -25,6 +25,7 @@ import org.junit.Test;
  * This class tests the view/edit requirement user story for iteration 2
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public class ViewEditRequirement {
 
@@ -37,15 +38,17 @@ public class ViewEditRequirement {
 	//
 	
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@Before
 	public void setUp() throws Exception {
 	}
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@After
 	public void tearDown() throws Exception {
 	}

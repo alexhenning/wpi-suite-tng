@@ -51,6 +51,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * @author Andrew Hurle
  * @author Josh Morse
  * @author Jacob Palnick
+ * @version $Revision: 1.0 $
  */
 public class MainTabController {
 	
@@ -72,14 +73,25 @@ public class MainTabController {
 		});
 	}
 	
+	/**
+	 */
 	class RequirementTabChangeListener implements ChangeListener {
 
 		private RequirementsTab tab;
 		
+		/**
+		 * Constructor for RequirementTabChangeListener.
+		 * @param view RequirementsTab
+		 */
 		public RequirementTabChangeListener(final RequirementsTab view) {
 			tab = view;
 		}
 
+		/**
+		 * Method stateChanged.
+		 * @param e ChangeEvent
+		 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
+		 */
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			if (MainTabController.this.mainView.getSelectedComponent() instanceof RequirementsTab) {
@@ -107,8 +119,8 @@ public class MainTabController {
 	 * @param icon			The icon for the tab.
 	 * @param component		The component that will be displayed inside the tab.
 	 * @param tip			The tooltip to display when the cursor hovers over the tab title.
-	 * @return				The created Tab
-	 */
+	
+	 * @return				The created Tab */
 	public Tab addTab(String title, Icon icon, Component component, String tip) {
 		mainView.addTab(title, icon, component, tip);
 		int index = mainView.getTabCount() - 1;
@@ -117,8 +129,8 @@ public class MainTabController {
 	}
 	
 	/**
-	 * @return Same as addTab(null, null, null, null)
-	 */
+	
+	 * @return Same as addTab(null, null, null, null) */
 	public Tab addTab() {
 		return addTab(null, null, null, null);
 	}
@@ -127,6 +139,7 @@ public class MainTabController {
 	 * Adds a tab that displays the given requirement in the given mode
 	 * @param requirement The requirement to display
 	 * @param mode The Mode to use
+	 * @return Tab
 	 */
 	private Tab addRequirementTab(RequirementModel requirement, Mode mode) {
 		Tab tab = addTab();
@@ -141,8 +154,8 @@ public class MainTabController {
 	/**
 	 * create a tab for adding an iteration
 	 *
-	 * @return the tab created
-	 */
+	
+	 * @return the tab created */
 	public Tab addCreateIterationTab() {
 		Iteration iteration = new Iteration();
 		Tab tab = addTab();
@@ -153,6 +166,10 @@ public class MainTabController {
 		return tab;
 	}
 	
+	/**
+	 * Method addCreateReleaseNumberTab.
+	 * @return Tab
+	 */
 	public Tab addCreateReleaseNumberTab() {
 		// If the tab is already opened, switch to that tab.
 		for (int i = 0; i < mainView.getTabCount(); i++) {
@@ -176,9 +193,10 @@ public class MainTabController {
 	
 	/**
 	 * Adds a tab that displays the given iteration in the given mode
-	 * @param requirement The requirement to display
-	 * @param mode The Mode to use
-	 */
+	 * @param iteration The iteration to display
+	 * @param title The title to use
+	
+	 * @return tab with added iteration */
 	public Tab addIterationTab(Iteration iteration, String title) {
 		if (iteration == null) {
 			for (int i=0; i<mainView.getTabCount(); i++) {
@@ -210,8 +228,8 @@ public class MainTabController {
 	/**
 	 * create a tab for editing permissions
 	 *
-	 * @return the tab created
-	 */
+	
+	 * @return the tab created */
 	public Tab addPermissionTab() {
 		// If the tab is already opened, switch to that tab.
 		for (int i = 0; i < mainView.getTabCount(); i++) {
@@ -237,8 +255,8 @@ public class MainTabController {
 	/**
 	 * Adds a tab that displays the given requirement
 	 * @param requirement the requirement to display
-	 * @return The created Tab 
-	 */
+	
+	 * @return The created Tab  */
 	public Tab addEditRequirementTab(RequirementModel requirement) {
 		for (int i=0; i<mainView.getTabCount(); i++) {
 			if (("Requirement #"+(requirement.getId())).equals(mainView.getTitleAt(i))) {
@@ -251,8 +269,8 @@ public class MainTabController {
 	
 	/**
 	 * Adds a tab that allows the user to create a new requirement
-	 * @return The created Tab
-	 */
+	
+	 * @return The created Tab */
 	public Tab addCreateRequirementTab() {
 		return addRequirementTab(new RequirementModel(), Mode.CREATE);
 	}
@@ -325,8 +343,8 @@ public class MainTabController {
 	/**
 	 * add a tab that lists all the requirements
 	 *
-	 * @return the created tab
-	 */
+	
+	 * @return the created tab */
 	public Tab addListRequirementsTab() {
 		if(listReqsView != null) {
 			for (int i=0; i<mainView.getTabCount(); i++) {
@@ -386,8 +404,8 @@ public class MainTabController {
 	/**
 	 * add a tab that views iterations
 	 *
-	 * @return the created tab
-	 */
+	
+	 * @return the created tab */
 
 	public Tab addViewIterationTab() {
 		// If the tab is already opened, switch to that tab.
@@ -442,8 +460,8 @@ public class MainTabController {
 	/**
 	 * Getter for mainView for access in JanewayModule
 	 *
-	 * @return mainView
-	 */
+	
+	 * @return mainView */
 	public MainTabView getMainView() {
 		return mainView;
 	}

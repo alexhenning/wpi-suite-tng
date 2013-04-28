@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  *
  * @author vpatara
  *
+ * @version $Revision: 1.0 $
  */
 public class CurrentUserPermissionManagerTest {
 
@@ -91,6 +92,10 @@ public class CurrentUserPermissionManagerTest {
 		});
 	}
 
+	/**
+	 * Method testAddCallbackBeforeUsernameReady.
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void testAddCallbackBeforeUsernameReady() throws InterruptedException {
 		calledBack = false;
@@ -126,6 +131,10 @@ public class CurrentUserPermissionManagerTest {
 		assertEquals(directProfile.getPermissionLevel(), calledBackProfile.getPermissionLevel());
 	}
 
+	/**
+	 * Method testAddCallbackRightAfterUsernameReady.
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void testAddCallbackRightAfterUsernameReady() throws InterruptedException {
 		calledBack = false;
@@ -161,6 +170,10 @@ public class CurrentUserPermissionManagerTest {
 		assertEquals(directProfile.getPermissionLevel(), calledBackProfile.getPermissionLevel());
 	}
 
+	/**
+	 * Method testAddCallbackSomeTimeAfterUsernameReady.
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void testAddCallbackSomeTimeAfterUsernameReady() throws InterruptedException {
 		calledBack = false;
@@ -201,6 +214,10 @@ public class CurrentUserPermissionManagerTest {
 		assertEquals(directProfile.getPermissionLevel(), calledBackProfile.getPermissionLevel());
 	}
 
+	/**
+	 * Method testAddMultipleCallbacks.
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void testAddMultipleCallbacks() throws InterruptedException {
 		calledBack1 = false;

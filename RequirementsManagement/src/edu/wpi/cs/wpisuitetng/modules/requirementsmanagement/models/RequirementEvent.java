@@ -23,12 +23,15 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  * Implementations of this class represent some kind of event in a Requirement.
  * For example, the addition of a comment or the modification of fields.
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 public abstract class RequirementEvent extends AbstractModel {
 	
 	/**
 	 *
 	 * the kinds of events
+	 * @author Owner
+	 * @version $Revision: 1.0 $
 	 */
 	public enum EventType {
 		NOTE,
@@ -46,8 +49,8 @@ public abstract class RequirementEvent extends AbstractModel {
 	protected EventType type;
 	
 	/**
-	 * @return The Date when this event happened
-	 */
+	
+	 * @return The Date when this event happened */
 	public Date getDate() {
 		return date;
 	}
@@ -60,8 +63,8 @@ public abstract class RequirementEvent extends AbstractModel {
 	}
 	
 	/**
-	 * @return The User responsible for this event
-	 */
+	
+	 * @return The User responsible for this event */
 	public User getUser() {
 		return user;
 	}
@@ -76,8 +79,8 @@ public abstract class RequirementEvent extends AbstractModel {
 	/**
 	 *get the type of event
 	 *
-	 * @return the events type
-	 */
+	
+	 * @return the events type */
 	public EventType getEventType() {
 		return type;
 	}
@@ -91,11 +94,19 @@ public abstract class RequirementEvent extends AbstractModel {
 		builder.registerTypeAdapter(RequirementEvent.class, new RequirementEventDeserializer());
 	}
 	
+	/**
+	 * Method save.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
+	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * Method delete.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#delete()
+	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
@@ -106,7 +117,9 @@ public abstract class RequirementEvent extends AbstractModel {
 	 * so I'm not sure if this is necessary
 	 *
 	 * @param o
-	 * @return
+	
+	 * @return Boolean
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(Object)
 	 */
 	@Override
 	public Boolean identify(Object o) {

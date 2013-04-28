@@ -24,11 +24,16 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * Request observer to monitor response for retrieving release numbers
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public class RetrieveAllReleaseNumbersObserver implements RequestObserver {
 	
 	private ReleaseNumberCallback callback;
 	
+	/**
+	 * Constructor for RetrieveAllReleaseNumbersObserver.
+	 * @param callback ReleaseNumberCallback
+	 */
 	public RetrieveAllReleaseNumbersObserver(ReleaseNumberCallback callback) {
 		this.callback = callback;
 	}
@@ -37,6 +42,7 @@ public class RetrieveAllReleaseNumbersObserver implements RequestObserver {
 	 * Successful request
 	 *
 	 * @param iReq Request returned from db
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(IRequest)
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
@@ -49,6 +55,7 @@ public class RetrieveAllReleaseNumbersObserver implements RequestObserver {
 	 * Error in request
 	 *
 	 * @param iReq Request returned from db
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(IRequest)
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
@@ -60,6 +67,7 @@ public class RetrieveAllReleaseNumbersObserver implements RequestObserver {
 	 *
 	 * @param iReq Request returned from db
 	 * @param exception Exception throw by db
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(IRequest, Exception)
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {

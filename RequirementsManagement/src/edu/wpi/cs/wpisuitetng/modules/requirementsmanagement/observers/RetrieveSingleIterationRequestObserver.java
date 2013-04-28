@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * @author Tim
  * @author Jacob Palnick
  *
+ * @version $Revision: 1.0 $
  */
 public class RetrieveSingleIterationRequestObserver implements RequestObserver {
 	
@@ -42,6 +43,7 @@ public class RetrieveSingleIterationRequestObserver implements RequestObserver {
 	 * Successful request
 	 *
 	 * @param iReq Request returned from db
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(IRequest)
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
@@ -54,6 +56,7 @@ public class RetrieveSingleIterationRequestObserver implements RequestObserver {
 	 * Error on return
 	 *
 	 * @param iReq
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(IRequest)
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
@@ -65,6 +68,7 @@ public class RetrieveSingleIterationRequestObserver implements RequestObserver {
 	 *
 	 * @param iReq
 	 * @param exception
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(IRequest, Exception)
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {

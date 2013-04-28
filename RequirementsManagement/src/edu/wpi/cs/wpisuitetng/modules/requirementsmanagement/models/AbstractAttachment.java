@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  * Abstract class for attachments
  * @author TODO
  *
+ * @version $Revision: 1.0 $
  */
 public abstract class AbstractAttachment extends AbstractModel {
 
@@ -33,12 +34,20 @@ public abstract class AbstractAttachment extends AbstractModel {
 		//TODO if needed, this is where (de)serializers are added.
 	}
 
+	/**
+	 * Method save.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
+	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Method delete.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#delete()
+	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
@@ -46,7 +55,8 @@ public abstract class AbstractAttachment extends AbstractModel {
 	}
 
 	/**
-	 * @return String representation of this attachment
+	
+	 * @return String representation of this attachment * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
 	 */
 	@Override
 	public String toJSON() {
@@ -56,6 +66,12 @@ public abstract class AbstractAttachment extends AbstractModel {
 		return json;
 	}
 
+	/**
+	 * Method identify.
+	 * @param o Object
+	 * @return Boolean
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(Object)
+	 */
 	@Override
 	public Boolean identify(Object o) {
 		// TODO Auto-generated method stub

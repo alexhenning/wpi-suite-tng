@@ -21,15 +21,25 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Scrollabl
 /**
  * Updates the requirements list within the view single iteration panel
  * @author Haley
+ * @version $Revision: 1.0 $
  */
 
 public class UpdateViewIterationReqList implements ChangeListener {
 	ScrollableTab<ViewSingleIterationPanel> attentiveTab;
 	
+	/**
+	 * Constructor for UpdateViewIterationReqList.
+	 * @param attentiveTab ScrollableTab<ViewSingleIterationPanel>
+	 */
 	public UpdateViewIterationReqList(ScrollableTab<ViewSingleIterationPanel> attentiveTab){
 		this.attentiveTab = attentiveTab;
 	}
 	
+	/**
+	 * Method stateChanged.
+	 * @param e ChangeEvent
+	 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){

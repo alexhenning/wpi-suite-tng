@@ -21,6 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumbe
  * Interface that release number callbacks can inherit from
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public interface ReleaseNumberCallback {
 

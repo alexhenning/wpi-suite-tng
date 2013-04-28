@@ -29,6 +29,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
  * Test cases for the iteration model
  *
  * @author Sergey
+ * @version $Revision: 1.0 $
  */
 public class IterationTest {
 	Iteration goodIteration;
@@ -38,6 +39,10 @@ public class IterationTest {
 	Date endDate;
 	String iterationNumber;
 	Project testProject;
+	/**
+	 * Method setUp.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 
@@ -82,6 +87,11 @@ public class IterationTest {
 		assertEquals(newDate("04/10/13 23:59:59"), goodIteration.getEndDate());
 	}
 
+	/**
+	 * Method newDate.
+	 * @param strDate String
+	 * @return Date
+	 */
 	Date newDate(String strDate){
 		Date newDate;
 		try{

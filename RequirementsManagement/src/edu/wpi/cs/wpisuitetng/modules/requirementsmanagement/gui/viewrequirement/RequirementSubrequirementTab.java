@@ -49,6 +49,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  * @author Josh
  * @author Deniz
  * @author Jacob Palnick
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class RequirementSubrequirementTab extends JPanel {
@@ -117,7 +118,7 @@ public class RequirementSubrequirementTab extends JPanel {
 	/**
 	 * Adds the components to the panel and places constraints on them
 	 * for the SpringLayout manager.
-	 * @param layout the layout manager
+	
 	 */
 	protected void addComponents() {
 		SpringLayout layout = new SpringLayout();
@@ -302,6 +303,10 @@ public class RequirementSubrequirementTab extends JPanel {
 		removeChildButton.setEnabled(selectedId != null && !selectedId.equals(""));
 	}
 	
+	/**
+	 * Method setEnabled.
+	 * @param enabled boolean
+	 */
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
@@ -323,6 +328,10 @@ public class RequirementSubrequirementTab extends JPanel {
 		update(parent.model);
 	}
 	
+	/**
+	 * Method update.
+	 * @param model RequirementModel
+	 */
 	public void update(RequirementModel model) {
 		subrequirements = model.getSubRequirements();
 		String selectedSubId = getSelectedSubId();
@@ -339,6 +348,10 @@ public class RequirementSubrequirementTab extends JPanel {
 		DB.getAllRequirements(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
 	}
 	
+	/**
+	 * Method getSelectedSubId.
+	 * @return String
+	 */
 	private String getSelectedSubId() {
 		int selectedRow = subrequirementsTable.getSelectedRow();
 		if (selectedRow >= 0 && selectedRow < subrequirementsTable.getRowCount()) {
@@ -348,6 +361,10 @@ public class RequirementSubrequirementTab extends JPanel {
 		}
 	}
 	
+	/**
+	 * Method getSelectedPosId.
+	 * @return String
+	 */
 	private String getSelectedPosId() {
 		int selectedRow = possibleSubrequirementsTable.getSelectedRow();
 		if (selectedRow >= 0 && selectedRow < possibleSubrequirementsTable.getRowCount()) {
@@ -362,12 +379,18 @@ public class RequirementSubrequirementTab extends JPanel {
 	 * Callback to populate the table with all the requirements
 	 * @author Josh
 	 * @author Jacob Palnick
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateTablesCallback implements RequirementsCallback {
 		
 		String selectedSub;
 		String selectedPos;
 		
+		/**
+		 * Constructor for UpdateTablesCallback.
+		 * @param selectedSub String
+		 * @param selectedPos String
+		 */
 		public UpdateTablesCallback(String selectedSub, String selectedPos) {
 			this.selectedSub = selectedSub;
 			this.selectedPos = selectedPos;
@@ -377,6 +400,7 @@ public class RequirementSubrequirementTab extends JPanel {
 		 * Callback function to populate the tables with all the requirements
 		 *
 		 * @param reqs a list of all requirements
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback#callback(List<RequirementModel>)
 		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {

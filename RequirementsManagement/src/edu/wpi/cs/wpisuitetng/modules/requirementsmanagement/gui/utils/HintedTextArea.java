@@ -27,6 +27,7 @@ import javax.swing.JTextArea;
  *
  * @author William Terry
  * @author vpatara
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class HintedTextArea extends JTextArea {
@@ -78,8 +79,8 @@ public class HintedTextArea extends JTextArea {
 	/**
 	 * Determines whether the hinted text area is empty or contains the hint
 	 *
-	 * @return true if empty, false otherwise
-	 */
+	
+	 * @return true if empty, false otherwise */
 	public boolean isEmpty() {
 		return getText().length() == 0 || getText().equals(hint);
 	}

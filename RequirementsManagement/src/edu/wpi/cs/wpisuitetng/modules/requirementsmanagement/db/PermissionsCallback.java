@@ -19,12 +19,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  * An interface for callbacks that return permissions profiles.
  *
  * @author vpatara
+ * @version $Revision: 1.0 $
  */
 public interface PermissionsCallback {
 	/**
 	 * Implements an action to be performed on the permissions profile being passed back.
 	 *
-	 * @param req The requirement being returned
+	 * @param profiles The requirement being returned
 	 */
 	void callback(List<Permissions> profiles);
 }

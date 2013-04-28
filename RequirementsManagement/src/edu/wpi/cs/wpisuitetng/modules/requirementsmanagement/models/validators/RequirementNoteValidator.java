@@ -26,6 +26,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 /**
  * Responsible for validating a comment model.
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 public class RequirementNoteValidator {
 
@@ -49,9 +50,10 @@ public class RequirementNoteValidator {
 	 * 
 	 * @param session The session to validate against
 	 * @param comment The RequirementComment model to validate
-	 * @return A list of ValidationIssues (possibly empty)
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return A list of ValidationIssues (possibly empty) 
+	 * @throws WPISuiteException  */
 	public List<ValidationIssue> validate(Session session, RequirementNote comment) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
 		if(comment == null) {
@@ -86,8 +88,8 @@ public class RequirementNoteValidator {
 	}
 	
 	/**
-	 * @return The last existing requirement note the validator fetched
-	 */
+	
+	 * @return The last existing requirement note the validator fetched */
 	public RequirementModel getLastExistingRequirement() {
 		return lastExistingRequirement;
 	}

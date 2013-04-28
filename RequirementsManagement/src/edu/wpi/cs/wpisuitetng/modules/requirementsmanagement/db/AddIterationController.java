@@ -33,6 +33,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * @author Jacob Palnick
  * @author Tim Defreitas
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class AddIterationController extends AbstractAction implements ActionListener {
@@ -51,10 +52,10 @@ public class AddIterationController extends AbstractAction implements ActionList
 	
 	/**
 	 * This will be called when the user clicks an add button
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	
 	 *
 	 * @param e the action performed
-	 */
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent) */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final Request request = Network.getInstance().makeRequest("requirementsmanagement/iteration",  HttpMethod.PUT);

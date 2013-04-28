@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
  * NOT REALLY SURE WHAT THIS IS
  * @author TODO
  *
+ * @version $Revision: 1.0 $
  */
 public class Task extends AbstractModel {
 	
@@ -37,19 +38,28 @@ public class Task extends AbstractModel {
 		//TODO if needed, this is where (de)serializers are added.
 	}
 
+	/**
+	 * Method save.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#save()
+	 */
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * Method delete.
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#delete()
+	 */
 	@Override
 	public void delete() {
 		// TODO Auto-generated method stub
 
 	}
 	/**
-	 * @return String representation of this task
+	
+	 * @return String representation of this task * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
 	 */
 	@Override
 	public String toJSON() {
@@ -59,6 +69,12 @@ public class Task extends AbstractModel {
 		return json;
 	}
 
+	/**
+	 * Method identify.
+	 * @param o Object
+	 * @return Boolean
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(Object)
+	 */
 	@Override
 	public Boolean identify(Object o) {
 		// TODO Auto-generated method stub

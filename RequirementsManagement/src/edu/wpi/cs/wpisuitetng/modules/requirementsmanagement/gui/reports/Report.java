@@ -20,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * A combination of a data provider to plot and a report type to generate.
  * 
  * @author alex
+ * @version $Revision: 1.0 $
  */
 public class Report {
 
@@ -37,7 +38,8 @@ public class Report {
 	
 	/**
 	 * A type to indicate how the report should display.
-	 */
+	
+	 * @return Returns the type of report */
 	public ReportType getType() {
 		return type;
 	}
@@ -47,14 +49,15 @@ public class Report {
 	 * map.
 	 * 
 	 * @param model List of requirements.
-	 * @return some data to chart with a name and thecorresponding value
-	 */
+	
+	 * @return some data to chart with a name and thecorresponding value */
 	public Map<Object, Integer> extractData(List<RequirementModel> model) {
 		return dataProvider.extractData(model);
 	}
 
 	/**
 	 * The name of the report.
+	 * @return String
 	 */
 	@Override public String toString() {
 		return type.toString() + " of " + dataProvider.getName();

@@ -35,6 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  * Note that Data could be something used client-side (e.g. a wrapper around a local cache of
  * Users so you can check assignee usernames as-you-type).
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 public class RequirementModelValidator {
 
@@ -54,8 +55,8 @@ public class RequirementModelValidator {
 	}
 	
 	/**
-	 * @return the data
-	 */
+	
+	 * @return the data */
 	public Data getData() {
 		return data;
 	}
@@ -73,9 +74,9 @@ public class RequirementModelValidator {
 	 * @param username the username of the User
 	 * @param issues list of errors to add to if user doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The User with the given username, or null if they don't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The User with the given username, or null if they don't exist * @throws WPISuiteException  */
 	User getExistingUser(String username, List<ValidationIssue> issues, String fieldName) throws WPISuiteException {
 		final List<Model> existingUsers = data.retrieve(User.class, "username", username);
 		if(existingUsers.size() > 0 && existingUsers.get(0) != null) {
@@ -91,9 +92,9 @@ public class RequirementModelValidator {
 	 * 
 	 * @param project the project this ReleaseNumber belongs to
 	 * @param issues list of errors to add to if ReleaseNumber doesn't exist
-	 * @return all ReleaseNumbers in the project
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return all ReleaseNumbers in the project * @throws WPISuiteException  */
 	ReleaseNumber[] getAllExistingReleaseNumbers(Project project, List<ValidationIssue> issues)
 			throws WPISuiteException {
 		ReleaseNumber sample = new ReleaseNumber();
@@ -108,9 +109,9 @@ public class RequirementModelValidator {
 	 * @param project the project this ReleaseNumber belongs to
 	 * @param issues list of errors to add to if ReleaseNumber doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The ReleaseNumber with the given id, or null if it doesn't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The ReleaseNumber with the given id, or null if it doesn't exist * @throws WPISuiteException  */
 	ReleaseNumber getExistingReleaseNumber(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
 		List<Model> oldReleases = data.retrieve(ReleaseNumber.class, "id", id, project);
@@ -127,9 +128,9 @@ public class RequirementModelValidator {
 	 * 
 	 * @param project the project this Iterations belongs to
 	 * @param issues list of errors to add to if Iterations doesn't exist
-	 * @return all Iterations in the project
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return all Iterations in the project * @throws WPISuiteException  */
 	Iteration[] getAllExistingIterations(Project project, List<ValidationIssue> issues)
 			throws WPISuiteException {
 		Iteration sample = new Iteration();
@@ -144,9 +145,9 @@ public class RequirementModelValidator {
 	 * @param project the project this Iteration belongs to
 	 * @param issues list of errors to add to if Iteration doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The Iteration with the given id, or null if it doesn't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The Iteration with the given id, or null if it doesn't exist * @throws WPISuiteException  */
 	Iteration getExistingIteration(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
 		List<Model> oldIterations = data.retrieve(Iteration.class, "id", id, project);
@@ -165,9 +166,9 @@ public class RequirementModelValidator {
 	 * @param project the project this requirement belongs to
 	 * @param issues list of errors to add to if requirement doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The Requirement with the given id, or null if it doesn't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The Requirement with the given id, or null if it doesn't exist * @throws WPISuiteException  */
 	RequirementModel getExistingRequirement(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
 		List<Model> oldRequirements = data.retrieve(RequirementModel.class, "id", id, project);
@@ -188,9 +189,10 @@ public class RequirementModelValidator {
 	 * @param session The session to validate against
 	 * @param requirement The requirement model to validate
 	 * @param mode The mode to validate for
-	 * @return A list of ValidationIssues (possibly empty)
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return A list of ValidationIssues (possibly empty)  
+	 * @throws WPISuiteException  */
 	public List<ValidationIssue> validate(Session session, RequirementModel requirement, Mode mode) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
 		if(requirement == null) {
@@ -329,8 +331,8 @@ public class RequirementModelValidator {
 	}
 
 	/**
-	 * @return The last existing Requirement the validator fetched if in edit mode
-	 */
+	
+	 * @return The last existing Requirement the validator fetched if in edit mode */
 	public RequirementModel getLastExistingRequirement() {
 		return lastExistingRequirement;
 	}

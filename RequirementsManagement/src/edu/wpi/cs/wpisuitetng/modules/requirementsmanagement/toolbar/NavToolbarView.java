@@ -39,6 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  *
  * @author Andrew Hurle
  * @author Chis Casola
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class NavToolbarView extends ToolbarGroupView {
@@ -121,12 +122,23 @@ public class NavToolbarView extends ToolbarGroupView {
 		});
 	}
 
+	/**
+	 */
 	class ShowReportsAction extends AbstractAction {
 		MainTabController tabController;
+		/**
+		 * Constructor for ShowReportsAction.
+		 * @param tabController MainTabController
+		 */
 		public ShowReportsAction(MainTabController tabController){
 			super("Show Reports");
 			this.tabController = tabController;
 		}
+		/**
+		 * Method actionPerformed.
+		 * @param arg0 ActionEvent
+		 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
+		 */
 		@Override public void actionPerformed(ActionEvent arg0) {
 			tabController.addShowReportsTab();
 		}

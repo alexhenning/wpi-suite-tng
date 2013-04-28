@@ -15,17 +15,23 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.reports;
 /**
  * A type to indicate how the report should display.
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 public enum ReportType {
 	PIE_CHART("Pie Chart"), BAR_CHART("Bar Chart");
 	
 	private String name;
+	/**
+	 * Constructor for ReportType.
+	 * @param name String
+	 */
 	private ReportType(String name) {
 		this.name = name;
 	}
 	
 	/**
 	 * Convert the data to a string.
+	 * @return String
 	 */
 	@Override public String toString() {
 		return name;

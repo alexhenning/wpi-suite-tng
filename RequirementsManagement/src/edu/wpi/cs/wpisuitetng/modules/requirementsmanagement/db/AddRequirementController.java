@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Requirement to send to the server
  * @author Tim Calvert
  * @author Tim Defreitas
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class AddRequirementController extends AbstractAction implements ActionListener {
@@ -49,11 +50,11 @@ public class AddRequirementController extends AbstractAction implements ActionLi
 
 	/**
 	 * This will be called when the user clicks an add button
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 * sends the requirement to the server
+	
 	 *
 	 * @param e Action that called this
-	 */
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * sends the requirement to the server */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(panel.validateFields()){

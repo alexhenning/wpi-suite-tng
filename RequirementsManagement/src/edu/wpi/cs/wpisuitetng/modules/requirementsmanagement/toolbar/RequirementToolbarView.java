@@ -44,6 +44,7 @@ import edu.wpi.cs.wpisuitetng.network.models.HttpMethod;
  * Always has a group of global commands (Create Requirement, Create Iteration, Search, List Requirements).
  * @author Andrew Hurle
  * @author Chris Casola
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class RequirementToolbarView extends ToolbarGroupView {
@@ -61,6 +62,7 @@ public class RequirementToolbarView extends ToolbarGroupView {
 	 * Constructor
 	 * Create a ToolbarView.
 	 * @param tabController The MainTabController this view should open tabs with
+	 * @param tab Requirements tab this view should open
 	 */
 	public RequirementToolbarView(final MainTabController tabController, final RequirementsTab tab) {
 		super("Requirements");
@@ -173,15 +175,27 @@ public class RequirementToolbarView extends ToolbarGroupView {
 		}
 	}
 	
+	/**
+	 */
 	class CanCloseCallback implements CanCloseRequirementCallback {
 		RequirementModel model;
 		MainTabController tabController;
 
+		/**
+		 * Constructor for CanCloseCallback.
+		 * @param model RequirementModel
+		 * @param tabController MainTabController
+		 */
 		public CanCloseCallback(RequirementModel model, final MainTabController tabController) {
 			this.model = model;
 			this.tabController = tabController;
 		}
 
+		/**
+		 * Method callback.
+		 * @param result boolean
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.CanCloseRequirementCallback#callback(boolean)
+		 */
 		@Override
 		public void callback(boolean result) {
 			// TODO Auto-generated method stub

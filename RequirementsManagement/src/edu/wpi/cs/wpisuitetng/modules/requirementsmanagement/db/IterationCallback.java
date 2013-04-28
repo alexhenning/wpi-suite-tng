@@ -21,13 +21,14 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Iteration;
  * Interface that all iteration callbacks must inherit in order to use the functions in DB
  * @author TODO
  *
+ * @version $Revision: 1.0 $
  */
 public interface IterationCallback {
 
 	/**
 	 * Implements an action to be performed on the iteration being passed back.
 	 * 
-	 * @param reqs
+	 * @param iterations
 	 *            The iterations being returned
 	 */
 	void callback(List<Iteration> iterations);

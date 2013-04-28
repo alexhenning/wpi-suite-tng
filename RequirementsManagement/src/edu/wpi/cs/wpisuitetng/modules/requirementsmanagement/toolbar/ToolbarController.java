@@ -32,6 +32,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  * is an instance of IToolbarGroupProvider.
  * If the current tab has no associated toolbar group, no additional group is shown in the toolbar.
  * @author Andrew Hurle
+ * @version $Revision: 1.0 $
  */
 public class ToolbarController extends DefaultToolbarController implements ChangeListener {
 
@@ -70,6 +71,7 @@ public class ToolbarController extends DefaultToolbarController implements Chang
 	 * TODO: document this better
 	 *
 	 * @param e an action that changed the state
+	 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
 	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {

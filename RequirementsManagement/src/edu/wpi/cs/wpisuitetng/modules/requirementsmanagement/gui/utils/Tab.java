@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
  * A wrapper class for MainTabView that can be given to components within that view
  * in order to allow them to easily change their titles and icons.
  * @author Andrew Hurle
+ * @version $Revision: 1.0 $
  */
 public class Tab {
 
@@ -44,8 +45,8 @@ public class Tab {
 	/**
 	 * get the tab's index
 	 *
-	 * @return the tab's index
-	 */
+	
+	 * @return the tab's index */
 	private int getIndex() {
 		return view.indexOfTabComponent(tabComponent);
 	}
@@ -53,8 +54,8 @@ public class Tab {
 	/**
 	 * get the tab's title
 	 *
-	 * @return the tab's title
-	 */
+	
+	 * @return the tab's title */
 	public String getTitle() {
 		return view.getTitleAt(getIndex());
 	}
@@ -70,8 +71,8 @@ public class Tab {
 	/**
 	 * get the tab's icon
 	 *
-	 * @return the tab's icon
-	 */
+	
+	 * @return the tab's icon */
 	public Icon getIcon() {
 		return view.getIconAt(getIndex());
 	}
@@ -86,8 +87,8 @@ public class Tab {
 	/**
 	 * get the tab's tooltiptext
 	 * 
-	 * @return the tab's tooltiptext
-	 */
+	
+	 * @return the tab's tooltiptext */
 	public String getToolTipText() {
 		return view.getToolTipTextAt(getIndex());
 	}
@@ -102,8 +103,8 @@ public class Tab {
 	/**
 	 * get the tab's component
 	 *
-	 * @return the tab's component
-	 */
+	
+	 * @return the tab's component */
 	public Component getComponent() {
 		return view.getComponentAt(getIndex());
 	}

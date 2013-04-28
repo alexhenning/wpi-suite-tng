@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * to the server to create a release number.
  * @author James
  *
+ * @version $Revision: 1.0 $
  */
 public class CreateReleaseNumberRequestObserver implements RequestObserver {
 	
@@ -42,6 +43,7 @@ public class CreateReleaseNumberRequestObserver implements RequestObserver {
 	 * Indicate a successful response
 	 *
 	 * @param iReq a request
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(IRequest)
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
@@ -60,6 +62,7 @@ public class CreateReleaseNumberRequestObserver implements RequestObserver {
 	 * indicate an error in the response
 	 *
 	 * @param iReq a request
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(IRequest)
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
@@ -73,6 +76,7 @@ public class CreateReleaseNumberRequestObserver implements RequestObserver {
 	 *
 	 * @param iReq a request
 	 * @param exception the exception
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(IRequest, Exception)
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {

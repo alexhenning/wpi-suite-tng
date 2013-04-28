@@ -49,6 +49,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  * @author William Terry
  * @author vpatara
  * @author josh
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class PermissionsPanel extends JPanel implements ScrollablePanel {
@@ -84,7 +85,7 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 
 	/**
 	 * constructor
-	 * @param permissionsTab the tab that created this
+	
 	 */
 	public PermissionsPanel(){
 		newModel = null;
@@ -100,6 +101,11 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 		updateFields();
 	}
 
+	/**
+	 * Method setTab.
+	 * @param tab ScrollableTab
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel#setTab(ScrollableTab)
+	 */
 	@Override
 	public void setTab(ScrollableTab tab) {
 		parent = tab;
@@ -353,7 +359,7 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 	 * Updates the PermissionsPanel's model to contain the values of the given Permission and sets the 
 	 * PermissionsPanel's editMode to {@link Mode#EDIT}.
 	 * 
-	 * @param permission The Permission which contains the new values for the model.
+	
 	 */
 	public void refreshModel() {
 		updateModel(editModel);
@@ -364,7 +370,7 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 	 * Updates the PermissionsPanel's model to contain the values of the given Permission.
 	 *
 	 * @param permission The Permissions which contains the new values for the model.
-	 * @param mode The new editMode.
+	
 	 */
 	protected void updateModel(Permissions permission) {
 		editModel = permission;
@@ -382,15 +388,16 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 	/**
 	 * Returns a boolean representing whether or not input is enabled for the PermissionsPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the PermissionsPanel and its children.
-	 */
+	
+	 * @return	A boolean representing whether or not input is enabled for the PermissionsPanel and its children. */
 	public boolean getInputEnabled() {
 		return inputEnabled;
 	}
 
 	/**
 	 * Gets the PermissionsPanel's (new) internal model.
-	 * @return
+	
+	 * @return Permissions
 	 */
 	public Permissions getNewModel() {
 
@@ -402,7 +409,8 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 
 	/**
 	 * Gets the PermissionsPanel's (existing) internal model.
-	 * @return
+	
+	 * @return Permissions
 	 */
 	public Permissions getUpdatedModel() {
 		// editModel should not be null at this point
@@ -413,8 +421,8 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 	}
 	
 	/**
-	 * @return the current table model
-	 */
+	
+	 * @return the current table model */
 	public ViewPermissionsTable getTable(){
 		return tableModel;
 	}
@@ -439,14 +447,17 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 	/**
 	 *
 	 * Callback class to update the permissions table
-	 * @author 
+	
 	 *
+	 * @author Owner
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateTableCallback implements PermissionsCallback {
 		/**
 		 * callback to update the permissions table
 		 *
 		 * @param profiles list of permissions
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.PermissionsCallback#callback(List<Permissions>)
 		 */
 		@Override
 		public void callback(List<Permissions> profiles) {

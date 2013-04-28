@@ -40,11 +40,19 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  * TODO Description
  * @author dbozgoren
  * @author vpatara
+ * @version $Revision: 1.0 $
  */
 
 public class guiTest1 {
+	/**
+	 */
 	class MockObserver implements RequestObserver {
 
+		/**
+		 * Method responseSuccess.
+		 * @param iReq IRequest
+		 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(IRequest)
+		 */
 		@Override
 		public void responseSuccess(IRequest iReq) {
 			synchronized (this) {
@@ -52,12 +60,23 @@ public class guiTest1 {
 			}
 		}
 
+		/**
+		 * Method responseError.
+		 * @param iReq IRequest
+		 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(IRequest)
+		 */
 		@Override
 		public void responseError(IRequest iReq) {
 			// TODO Auto-generated method stub
 
 		}
 
+		/**
+		 * Method fail.
+		 * @param iReq IRequest
+		 * @param exception Exception
+		 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(IRequest, Exception)
+		 */
 		@Override
 		public void fail(IRequest iReq, Exception exception) {
 			// TODO Auto-generated method stub
@@ -146,6 +165,10 @@ public class guiTest1 {
 		Tab tab1 = new Tab(MainTabView1, tabPane);
 	}
 
+	/**
+	 * Method testCreateMainTabController.
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void testCreateMainTabController() throws InterruptedException {
 		// Sets the username to be "tester"

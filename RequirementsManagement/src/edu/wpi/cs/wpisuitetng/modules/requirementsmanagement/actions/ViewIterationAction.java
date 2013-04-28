@@ -22,6 +22,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
 /**
  * Action to bring up the list requirement tab
  * @author Josh
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ViewIterationAction extends AbstractAction {
@@ -42,6 +43,7 @@ public class ViewIterationAction extends AbstractAction {
 	 * Add the list requirement tab to the main tab controller
 	 *
 	 * @param arg0 the action that happened
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

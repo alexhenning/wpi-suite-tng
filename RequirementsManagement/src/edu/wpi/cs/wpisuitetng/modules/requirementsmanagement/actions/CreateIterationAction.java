@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  *
  * @author TODO
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class CreateIterationAction extends AbstractAction{
@@ -48,6 +49,7 @@ public class CreateIterationAction extends AbstractAction{
 	 * The action performed, adds a createIterationTab to the main tab controller
 	 *
 	 * @param e The action event
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

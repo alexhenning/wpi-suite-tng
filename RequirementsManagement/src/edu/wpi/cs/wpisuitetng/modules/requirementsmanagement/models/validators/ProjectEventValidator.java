@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
  * Validator for project events
  * @author jpalnick
  *
+ * @version $Revision: 1.0 $
  */
 public class ProjectEventValidator {
 
@@ -47,8 +48,8 @@ public class ProjectEventValidator {
 	}
 	
 	/**
-	 * @return the data
-	 */
+	
+	 * @return the data */
 	public Data getData() {
 		return data;
 	}
@@ -66,9 +67,9 @@ public class ProjectEventValidator {
 	 * @param username the username of the User
 	 * @param issues list of errors to add to if user doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The User with the given username, or null if they don't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The User with the given username, or null if they don't exist * @throws WPISuiteException  */
 	User getExistingUser(String username, List<ValidationIssue> issues, String fieldName) throws WPISuiteException {
 		final List<Model> existingUsers = data.retrieve(User.class, "username", username);
 		if(existingUsers.size() > 0 && existingUsers.get(0) != null) {
@@ -83,9 +84,9 @@ public class ProjectEventValidator {
 	 * Return all ProjectEvents of the specified project.
 	 * 
 	 * @param project the project these ProjectEvents belong to
-	 * @return all ProjectEvents in the project
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return all ProjectEvents in the project * @throws WPISuiteException  */
 	ProjectEvent[] getAllExistingProjectEvents(Project project)
 			throws WPISuiteException {
 		ProjectEvent sample = new ProjectEvent();
@@ -100,9 +101,10 @@ public class ProjectEventValidator {
 	 * @param session The session to validate against
 	 * @param projectEvent The ProjectEvent model to validate
 	 * @param mode The mode to validate for
-	 * @return A list of ValidationIssues (possibly empty)
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return A list of ValidationIssues (possibly empty) 
+	 * @throws WPISuiteException  */
 	public List<ValidationIssue> validate(Session session, ProjectEvent projectEvent, Mode mode) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
 		if(projectEvent == null) {

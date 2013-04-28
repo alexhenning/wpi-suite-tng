@@ -39,6 +39,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  * @author Sergey
  * @author Josh
  * @author Christina
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class NoteMainPanel extends JPanel implements KeyListener {
@@ -83,7 +84,7 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 	/**
 	 * Adds the components to the panel and places constraints on them
 	 * for the SpringLayout manager.
-	 * @param layout the layout manager
+	
 	 */
 	protected void addComponents() {
 		setLayout(new BorderLayout());
@@ -178,6 +179,7 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 	 * Invoked when a key has been typed, though it does nothing
 	 *
 	 * @param e key stroke event
+	 * @see java.awt.event.KeyListener#keyTyped(KeyEvent)
 	 */
 	public void keyTyped (KeyEvent e) {}
 
@@ -185,6 +187,7 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 	 * Invoked when a key has been pressed, though it does nothing
 	 *
 	 * @param e key stroke event
+	 * @see java.awt.event.KeyListener#keyPressed(KeyEvent)
 	 */
 	public void keyPressed (KeyEvent e) {}
 
@@ -192,6 +195,7 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 	 * Invoked when a key has been released. Enables the add button accordingly
 	 *
 	 * @param e key stroke event
+	 * @see java.awt.event.KeyListener#keyReleased(KeyEvent)
 	 */
 	public void keyReleased (KeyEvent e) {
 		addButton.setEnabled(!isTextAreaEmpty());
@@ -201,9 +205,9 @@ public class NoteMainPanel extends JPanel implements KeyListener {
 	 * Determines whether the hinted text area is empty (or contains the hinted
 	 * "New note")
 	 *
+	
 	 * @return true if the text area is empty or contains "New note"; false,
-	 *         otherwise
-	 */
+	 *         otherwise */
 	public boolean isTextAreaEmpty() {
 		return ta.isEmpty();
 	}

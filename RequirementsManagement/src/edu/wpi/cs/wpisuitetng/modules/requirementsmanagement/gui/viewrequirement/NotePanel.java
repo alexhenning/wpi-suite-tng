@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementN
  * @author vpatara
  * @author Sergey
  * @author Josh
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class NotePanel extends JPanel {
@@ -66,6 +67,7 @@ public class NotePanel extends JPanel {
 
 	/**
 	 * Calls first constructor given a note
+	 * @param note Requirement note 
 	 */
 	public NotePanel(RequirementNote note) {
 		this(note.getBody(), note.getUser().getName(), note.getDate());

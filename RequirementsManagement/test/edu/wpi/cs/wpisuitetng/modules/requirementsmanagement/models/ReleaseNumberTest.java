@@ -28,6 +28,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 /**
  * @author Sergey Zolotykh (szolotykh)
  *
+ * @version $Revision: 1.0 $
  */
 public class ReleaseNumberTest {
 	ReleaseNumber goodReleaseNumber;
@@ -35,6 +36,10 @@ public class ReleaseNumberTest {
 	String releaseNumber = "First";
 	Project testProject;
 	
+	/**
+	 * Method setUp.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		testProject = new Project("TestProject", "1");

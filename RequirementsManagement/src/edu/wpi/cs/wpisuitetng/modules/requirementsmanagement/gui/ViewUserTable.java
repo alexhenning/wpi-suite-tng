@@ -21,6 +21,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLe
  * The model for the permissions table
  * @author William
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ViewUserTable extends AbstractTableModel {
@@ -35,7 +36,8 @@ public class ViewUserTable extends AbstractTableModel {
 	/**
 	 * get the number of columns
 	 *
-	 * @return the number of columns
+	
+	 * @return the number of columns * @see javax.swing.table.TableModel#getColumnCount()
 	 */
 	public int getColumnCount() {
 		return columnNames.length;
@@ -44,7 +46,8 @@ public class ViewUserTable extends AbstractTableModel {
 	/**
 	 * get the number of rows
 	 *
-	 * @return the number of rows
+	
+	 * @return the number of rows * @see javax.swing.table.TableModel#getRowCount()
 	 */
 	public int getRowCount() {
 		return data.length;
@@ -54,7 +57,8 @@ public class ViewUserTable extends AbstractTableModel {
 	 * get the specified column's name
 	 *
 	 * @param col the column number
-	 * @return the name of the column
+	
+	 * @return the name of the column * @see javax.swing.table.TableModel#getColumnName(int)
 	 */
 	public String getColumnName(int col) {
 		return columnNames[col];
@@ -65,7 +69,8 @@ public class ViewUserTable extends AbstractTableModel {
 	 *
 	 * @param row the row that the cell is in
 	 * @param col the column that the cell is in
-	 * @return the object at the specified cell
+	
+	 * @return the object at the specified cell * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
 	public Object getValueAt(int row, int col) {
 		return data[row][col];
@@ -75,7 +80,8 @@ public class ViewUserTable extends AbstractTableModel {
 	 * get the kind of class specified in the colum
 	 *
 	 * @param c the column number
-	 * @return the kind of class in that colum
+	
+	 * @return the kind of class in that colum * @see javax.swing.table.TableModel#getColumnClass(int)
 	 */
 	public Class<?> getColumnClass(int c) {
 		if (c == 3) return PermissionLevel.class;
@@ -87,7 +93,8 @@ public class ViewUserTable extends AbstractTableModel {
 	 *
 	 * @param row the row of the cell
 	 * @param col the column of the cell
-	 * @return will return false since this table is not editable
+	
+	 * @return will return false since this table is not editable * @see javax.swing.table.TableModel#isCellEditable(int, int)
 	 */
 	public boolean isCellEditable(int row, int col) {
 		return false; //Cells should not be editable in table, should be able to double click and open edit tab
@@ -99,6 +106,7 @@ public class ViewUserTable extends AbstractTableModel {
 	 * @param value the value to set the cell to
 	 * @param row the row of the cell
 	 * @param col the column of the cell
+	 * @see javax.swing.table.TableModel#setValueAt(Object, int, int)
 	 */
 	public void setValueAt(Object value, int row, int col) {
 		data[row][col] = value;

@@ -18,6 +18,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * An interface for callbacks that return a single requirement.
  * 
  * @author alex
+ * @version $Revision: 1.0 $
  */
 public interface SingleRequirementCallback {
 

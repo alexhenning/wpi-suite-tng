@@ -24,6 +24,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  * 
  * @author TODO
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ListRequirementsAction extends AbstractAction {
@@ -44,6 +45,7 @@ public class ListRequirementsAction extends AbstractAction {
 	 * Add the list requirement tab to the main tab controller
 	 *
 	 * @param arg0 the action that happened
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

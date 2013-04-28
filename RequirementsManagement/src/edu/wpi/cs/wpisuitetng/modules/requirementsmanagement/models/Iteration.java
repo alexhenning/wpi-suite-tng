@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
  * The iteration model
  * @author jpalnick
  *
+ * @version $Revision: 1.0 $
  */
 public class Iteration extends AbstractModel {
 	
@@ -75,7 +76,8 @@ public class Iteration extends AbstractModel {
 	 * since the time is defaulted to 12:00:00 A.M. (or the beginning of the day)
 	 *
 	 * @param date Date to have its time set
-	 */
+	
+	 * @return Returns the date */
 	public Date setTimeToEndOfDay(Date date) {
 		if (date != null) {
 			Calendar cal = Calendar.getInstance();
@@ -89,8 +91,8 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * @return the id
-	 */
+	
+	 * @return the id */
 	public int getId() {
 		return id;
 	}
@@ -103,8 +105,8 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * @return the startDate
-	 */
+	
+	 * @return the startDate */
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -117,8 +119,8 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * @return the endDate
-	 */
+	
+	 * @return the endDate */
 	public Date getEndDate() {
 		return endDate;
 	}
@@ -131,8 +133,8 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * @return the iterationNumber
-	 */
+	
+	 * @return the iterationNumber */
 	public String getIterationNumber() {
 		return iterationNumber;
 	}
@@ -165,10 +167,11 @@ public class Iteration extends AbstractModel {
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
+	
 	 *
-	 * @return
-	 */
+	
+	 * @return String
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON() */
 	@Override
 	public String toJSON() {
 		String json;
@@ -180,7 +183,8 @@ public class Iteration extends AbstractModel {
 	/**
 	 * The toSting method, returns the iteration's name, or iterationNumber
 	 *
-	 * @return the iteration's name
+	
+	 * @return the iteration's name * @see edu.wpi.cs.wpisuitetng.modules.Model#toString()
 	 */
 	@Override
 	public String toString() {
@@ -189,8 +193,8 @@ public class Iteration extends AbstractModel {
 
 	/**
 	 * @param json Json string to parse containing Iteration
-	 * @return The Iteration given by json
-	 */
+	
+	 * @return The Iteration given by json */
 	public static Iteration fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		return builder.create().fromJson(json, Iteration.class);
@@ -198,19 +202,20 @@ public class Iteration extends AbstractModel {
 	
 	/**
 	 * @param json Json string to parse containing Iteration array
-	 * @return The Iteration array given by json
-	 */
+	
+	 * @return The Iteration array given by json */
 	public static Iteration[] fromJSONArray(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		return builder.create().fromJson(json, Iteration[].class);
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object)
+	
 	 *
 	 * @param o
-	 * @return
-	 */
+	
+	 * @return Boolean
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object) */
 	@Override
 	public Boolean identify(Object o) {
 		// TODO Auto-generated method stub

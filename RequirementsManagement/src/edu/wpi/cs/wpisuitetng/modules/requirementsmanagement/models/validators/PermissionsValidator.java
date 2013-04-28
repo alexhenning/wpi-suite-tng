@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  * @author William Terry
  * @author vpatara
  *
+ * @version $Revision: 1.0 $
  */
 public class PermissionsValidator {
 	/** the database */
@@ -47,8 +48,8 @@ public class PermissionsValidator {
 	}
 	
 	/**
-	 * @return the data
-	 */
+	
+	 * @return the data */
 	public Data getData() {
 		return data;
 	}
@@ -66,9 +67,9 @@ public class PermissionsValidator {
 	 * @param username the username of the User
 	 * @param issues list of errors to add to if user doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The User with the given username, or null if they don't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The User with the given username, or null if they don't exist * @throws WPISuiteException  */
 	User getExistingUser(String username, List<ValidationIssue> issues, String fieldName) throws WPISuiteException {
 		final List<Model> existingUsers = data.retrieve(User.class, "username", username);
 		
@@ -86,9 +87,9 @@ public class PermissionsValidator {
 	 * Return all Users in the db.
 	 * 
 	 * @param issues list of errors to add to if user doesn't exist
-	 * @return all Permissions in the project
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return all Permissions in the project * @throws WPISuiteException  */
 	User[] getAllExistingUsers(List<ValidationIssue> issues)
 			throws WPISuiteException {
 		User sample = new User(null, null, null, 0);
@@ -103,9 +104,9 @@ public class PermissionsValidator {
 	 * @param project the project this permission belongs to
 	 * @param issues list of errors to add to if permission doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return an existing permission, or null if not found
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return an existing permission, or null if not found * @throws WPISuiteException  */
 	Permissions getExistingPermissions(String username, Project project,
 			List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
@@ -122,9 +123,9 @@ public class PermissionsValidator {
 	 * Return all Permissions of the specified project.
 	 * 
 	 * @param project the project this Permission belongs to
-	 * @return all Permissions in the project
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return all Permissions in the project * @throws WPISuiteException  */
 	Permissions[] getAllExistingPermissions(Project project)
 			throws WPISuiteException {
 		Permissions sample = new Permissions();
@@ -138,9 +139,10 @@ public class PermissionsValidator {
 	 * @param session The session to validate against
 	 * @param permissions The permission model to validate
 	 * @param mode The mode to validate for
-	 * @return A list of ValidationIssues (possibly empty)
-	 * @throws WPISuiteException
-	 */
+	
+	
+	 * @return A list of ValidationIssues (possibly empty) 
+	 * @throws WPISuiteException */
 	public List<ValidationIssue> validate(Session session,
 			Permissions permissions, Mode mode) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
@@ -210,8 +212,8 @@ public class PermissionsValidator {
 	}
 
 	/**
-	 * @return The last existing Permissions the validator fetched if in edit mode
-	 */
+	
+	 * @return The last existing Permissions the validator fetched if in edit mode */
 	public Permissions getLastExistingPermissions() {
 		return lastExistingPermissions;
 	}

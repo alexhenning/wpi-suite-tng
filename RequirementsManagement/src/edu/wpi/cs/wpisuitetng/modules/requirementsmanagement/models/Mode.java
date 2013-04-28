@@ -15,6 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 /**
  * @author jpalnick
  *
+ * @version $Revision: 1.0 $
  */
 public enum Mode {
 	CREATE,

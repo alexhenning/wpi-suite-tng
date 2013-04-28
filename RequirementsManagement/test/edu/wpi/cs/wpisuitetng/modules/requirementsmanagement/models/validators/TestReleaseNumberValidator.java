@@ -37,6 +37,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.*;
  * Description goes here
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public class TestReleaseNumberValidator {
 	
@@ -61,8 +62,9 @@ public class TestReleaseNumberValidator {
 	
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@Before
 	public void setUp() throws Exception {
 		
@@ -88,12 +90,17 @@ public class TestReleaseNumberValidator {
 	}
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@After
 	public void tearDown() throws Exception {
 	}
 
+	/**
+	 * Method testDBState.
+	 * @throws WPISuiteException
+	 */
 	@Test
 	public void testDBState() throws WPISuiteException{
 		assertSame(bob, db.retrieve(User.class, "username", "bob").get(0));
@@ -102,6 +109,14 @@ public class TestReleaseNumberValidator {
 	}
 	
 	
+	/**
+	 * Method checkNumIssues.
+	 * @param num int
+	 * @param session Session
+	 * @param releasenum ReleaseNumber
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNumIssues(int num, Session session, ReleaseNumber releasenum, Mode mode){
 		List<ValidationIssue> issues;
 		try{
@@ -114,16 +129,36 @@ public class TestReleaseNumberValidator {
 	}
 	
 	//Asserts that there are no issues
+	/**
+	 * Method checkNoIssues.
+	 * @param session Session
+	 * @param releasenum ReleaseNumber
+	 * @param mode Mode
+	 */
 	public void checkNoIssues(Session session, ReleaseNumber releasenum, Mode mode){
 		checkNumIssues(0, session, releasenum, mode);
 	}
 	
 	//Asserts that there is one issue 
+	/**
+	 * Method checkIssue.
+	 * @param session Session
+	 * @param releasenum ReleaseNumber
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkIssue(Session session, ReleaseNumber releasenum, Mode mode){
 		return checkNumIssues(1, session, releasenum, mode);
 	}
 	
 	//Asserts that there is a non-field validation issue
+	/**
+	 * Method checkNonFieldIssue.
+	 * @param session Session
+	 * @param releasenum ReleaseNumber
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNonFieldIssue(Session session, ReleaseNumber releasenum, Mode mode) {
 		List<ValidationIssue> issues = checkIssue(session, releasenum, mode);
 		assertFalse(issues.get(0).hasFieldName());
@@ -131,6 +166,14 @@ public class TestReleaseNumberValidator {
 	}
 	
 	//Asserts that there is a validation issue with a field for the given Release Number
+	/**
+	 * Method checkFieldIssue.
+	 * @param session Session
+	 * @param releasenum ReleaseNumber
+	 * @param mode Mode
+	 * @param fieldName String
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkFieldIssue(Session session, ReleaseNumber releasenum, Mode mode, 
 			String fieldName) {
 		List<ValidationIssue> issues = checkNumIssues(1, session, releasenum, mode);

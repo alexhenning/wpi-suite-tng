@@ -31,6 +31,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  * Entity manager for project events (history logs)
  *
  * @author Tim
+ * @version $Revision: 1.0 $
  */
 public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	/** the database */
@@ -52,10 +53,12 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws BadRequestException
-	 * @throws ConflictException
-	 * @throws WPISuiteException
+	
+	
+	
+	
+	 * @return ProjectEvent
+	 * @throws BadRequestException * @throws ConflictException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#makeEntity(Session, String)
 	 */
 	@Override
 	public ProjectEvent makeEntity(Session s, String content) throws BadRequestException,
@@ -84,9 +87,11 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 *
 	 * @param s
 	 * @param id
-	 * @return
-	 * @throws NotFoundException
-	 * @throws WPISuiteException
+	
+	
+	
+	 * @return ProjectEvent[]
+	 * @throws NotFoundException * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getEntity(Session, String)
 	 */
 	@Override
 	public ProjectEvent[] getEntity(Session s, String id) throws NotFoundException,
@@ -114,8 +119,10 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 * Retrieves all ProjectEvents in the database
 	 *
 	 * @param s
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return ProjectEvent[]
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#getAll(Session)
 	 */
 	@Override
 	public ProjectEvent[] getAll(Session s) throws WPISuiteException {
@@ -127,8 +134,10 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 *
 	 * @param s
 	 * @param content
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return ProjectEvent
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#update(Session, String)
 	 */
 	@Override
 	public ProjectEvent update(Session s, String content) throws WPISuiteException {
@@ -142,8 +151,8 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 *
 	 * @param s
 	 * @param model
-	 * @throws WPISuiteException
-	 */
+	
+	 * @throws WPISuiteException */
 	@Override
 	public void save(Session s, ProjectEvent model) throws WPISuiteException {
 		db.save(model, s.getProject());
@@ -156,8 +165,10 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 *
 	 * @param s
 	 * @param id
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return boolean
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteEntity(Session, String)
 	 */
 	@Override
 	public boolean deleteEntity(Session s, String id) throws WPISuiteException {
@@ -168,7 +179,8 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 * Deletes all ProjectEvents in the db
 	 *
 	 * @param s
-	 * @throws WPISuiteException
+	
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#deleteAll(Session)
 	 */
 	@Override
 	public void deleteAll(Session s) throws WPISuiteException {
@@ -178,8 +190,10 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	/**
 	 * Returns the number of ProjectEvents in the db
 	 *
-	 * @return
-	 * @throws WPISuiteException
+	
+	
+	 * @return int
+	 * @throws WPISuiteException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#Count()
 	 */
 	@Override
 	public int Count() throws WPISuiteException {
@@ -191,8 +205,10 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 *
 	 * @param s
 	 * @param args
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedGet(Session, String[])
 	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
@@ -207,8 +223,10 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 * @param s
 	 * @param args
 	 * @param content
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPut(Session, String[], String)
 	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
@@ -222,8 +240,10 @@ public class ProjectEventEntityManager implements EntityManager<ProjectEvent> {
 	 * @param s
 	 * @param string
 	 * @param content
-	 * @return
-	 * @throws NotImplementedException
+	
+	
+	 * @return String
+	 * @throws NotImplementedException * @see edu.wpi.cs.wpisuitetng.modules.EntityManager#advancedPost(Session, String, String)
 	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)

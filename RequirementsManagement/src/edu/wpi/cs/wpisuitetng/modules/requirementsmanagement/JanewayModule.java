@@ -35,6 +35,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.toolbar.UserToolbar
  * 
  * @author Joshua Morse
  *
+ * @version $Revision: 1.0 $
  */
 public class JanewayModule implements IJanewayModule {
 
@@ -86,7 +87,8 @@ public class JanewayModule implements IJanewayModule {
 	/**
 	 * returns the name of the tab
 	 *
-	 * @return RequirementsManagment, the name of the tab
+	
+	 * @return RequirementsManagment, the name of the tab * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getName()
 	 */
 	@Override
 	public String getName() {
@@ -96,7 +98,8 @@ public class JanewayModule implements IJanewayModule {
 	/**
 	 * Return a list of tabs in this tab
 	 *
-	 * @return a list of the tabs in this tab
+	
+	 * @return a list of the tabs in this tab * @see edu.wpi.cs.wpisuitetng.janeway.modules.IJanewayModule#getTabs()
 	 */
 	@Override
 	public List<JanewayTabModel> getTabs() {

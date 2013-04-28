@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabCo
  * Action for adding the create release number tab
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class CreateReleaseNumberAction extends AbstractAction {
@@ -44,6 +45,7 @@ public class CreateReleaseNumberAction extends AbstractAction {
 	 * The action performed, adds a createReleaseNumberTab to the main tab controller
 	 *
 	 * @param e The action event
+	 * @see java.awt.event.ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {

@@ -20,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  * An interface for callbacks that return a single permissions profile.
  * 
  * @author William Terry
+ * @version $Revision: 1.0 $
  */
 public interface SinglePermissionCallback {
 	/**

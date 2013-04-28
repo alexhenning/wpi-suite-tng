@@ -16,6 +16,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
  * TODO Document this class
  * the types of project event objects
  *@author TODO
+ * @version $Revision: 1.0 $
  */
 public enum ProjectEventObjectType {
 	REQUIREMENT ("requirementmodel", "id"),
@@ -24,10 +25,23 @@ public enum ProjectEventObjectType {
 
 	private final String modelName;
     private final String idFieldName;
+    /**
+     * Constructor for ProjectEventObjectType.
+     * @param modelName String
+     * @param idFieldName String
+     */
     ProjectEventObjectType(String modelName, String idFieldName) {
         this.idFieldName = idFieldName;
         this.modelName = modelName;
     }
+    /**
+     * Method modelName.
+     * @return String
+     */
     public String modelName() { return modelName; }
+    /**
+     * Method idFieldName.
+     * @return String
+     */
     public String idFieldName() { return idFieldName; }
 }

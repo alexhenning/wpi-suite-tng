@@ -56,6 +56,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
  * @author Jacob Palnick
  * @author William Terry
  * @author cynthia
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class AssignUserToRequirementTab extends JPanel {
@@ -106,7 +107,7 @@ public class AssignUserToRequirementTab extends JPanel {
 	/**
 	 * Adds the components to the panel and places constraints on them
 	 * for the SpringLayout manager.
-	 * @param layout the layout manager
+	
 	 */
 	protected void addComponents() {
 		SpringLayout layout = new SpringLayout();
@@ -255,6 +256,10 @@ public class AssignUserToRequirementTab extends JPanel {
 		}
 	}
 	
+	/**
+	 * Method setEnabled.
+	 * @param enabled boolean
+	 */
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
@@ -274,6 +279,10 @@ public class AssignUserToRequirementTab extends JPanel {
 		update(parent.model);
 	}
 	
+	/**
+	 * Method update.
+	 * @param model RequirementModel
+	 */
 	public void update(RequirementModel model) {
 		assignees = model.getAssignees();
 		String selectedSubId = getSelectedSubId();
@@ -289,12 +298,21 @@ public class AssignUserToRequirementTab extends JPanel {
 		DB.getAllUsers(new UpdateTablesCallback(selectedSubId, selectedPossibleId));
 	}
 
+	/**
+	 * Method addChangeListenerTo.
+	 * @param mainView MainTabView
+	 * @return AssignedUserTabChangeListener
+	 */
 	public AssignedUserTabChangeListener addChangeListenerTo (MainTabView mainView) {
 		AssignedUserTabChangeListener l = new AssignedUserTabChangeListener(this.parent.parent);
 		mainView.addChangeListener(l);
 		return l;
 	}
 
+	/**
+	 * Method getSelectedSubId.
+	 * @return String
+	 */
 	private String getSelectedSubId() {
 		selectedRow = assignedUserTable.getSelectedRow();
 		if (selectedRow >= 0 && selectedRow < assignedUserTable.getRowCount()) {
@@ -304,6 +322,10 @@ public class AssignUserToRequirementTab extends JPanel {
 		}
 	}
 	
+	/**
+	 * Method getSelectedPosId.
+	 * @return String
+	 */
 	private String getSelectedPosId() {
 		selectedRow = possibleUserTable.getSelectedRow();
 		if (selectedRow >= 0 && selectedRow < possibleUserTable.getRowCount()) {
@@ -320,12 +342,18 @@ public class AssignUserToRequirementTab extends JPanel {
 	 * @author Jacob Palnick
 	 * @author William Terry
 	 * @author David Modica
+	 * @version $Revision: 1.0 $
 	 */
 	class UpdateTablesCallback implements UsersCallback {
 		
 		String selectedSub;
 		String selectedPos;
 		
+		/**
+		 * Constructor for UpdateTablesCallback.
+		 * @param selectedSub String
+		 * @param selectedPos String
+		 */
 		public UpdateTablesCallback(String selectedSub, String selectedPos) {
 			this.selectedSub = selectedSub;
 			this.selectedPos = selectedPos;
@@ -336,6 +364,7 @@ public class AssignUserToRequirementTab extends JPanel {
 		 * Callback function to populate the tables with all the requirements
 		 *
 		 * @param users a list of all requirements
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.UsersCallback#callback(List<User>)
 		 */
 		@Override
 		public void callback(List<User> users) {
@@ -429,34 +458,61 @@ public class AssignUserToRequirementTab extends JPanel {
 		
 	}
 	
+	/**
+	 */
 	class PermissionLevelRetrievalCallback implements SinglePermissionCallback {
 		ViewUserTable table;
 		int row;
 
+		/**
+		 * Constructor for PermissionLevelRetrievalCallback.
+		 * @param table ViewUserTable
+		 * @param row int
+		 */
 		PermissionLevelRetrievalCallback(ViewUserTable table, int row){
 			this.table = table;
 			this.row = row;
 		}
 		
+		/**
+		 * Method callback.
+		 * @param profile Permissions
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback#callback(Permissions)
+		 */
 		@Override
 		public void callback(Permissions profile) {
 			String permissionLevel = profile.getPermissionLevel().toString();
 			table.setValueAt(permissionLevel, row, 3);
 		}
 
+		/**
+		 * Method failure.
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback#failure()
+		 */
 		@Override
 		public void failure() {
 			// TODO: show an error message
 		}
 	}
 	
+	/**
+	 */
 	class AssignedUserTabChangeListener implements ChangeListener{
 		RequirementsTab attentiveTab;
 		
+		/**
+		 * Constructor for AssignedUserTabChangeListener.
+		 * @param parent RequirementsTab
+		 */
 		public AssignedUserTabChangeListener(RequirementsTab parent){
 			this.attentiveTab = parent;
 		}
 
+		/**
+		 * Method stateChanged.
+		 * @param e ChangeEvent
+		 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
+		 */
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){

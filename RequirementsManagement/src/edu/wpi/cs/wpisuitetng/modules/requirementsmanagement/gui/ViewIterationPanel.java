@@ -45,6 +45,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * @author William Terry
  * @author vpatara
  * @author jlmegin
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ViewIterationPanel extends JPanel implements ScrollablePanel {
@@ -68,7 +69,7 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 
 	/**
 	 * constructor
-	 * @param permissionsTab the tab that created this
+	
 	 */
 	public ViewIterationPanel() {
 		tableModel = new ViewIterTable();
@@ -83,6 +84,11 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 		
 	}
 
+	/**
+	 * Method setTab.
+	 * @param tab ScrollableTab
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel#setTab(ScrollableTab)
+	 */
 	@Override
 	public void setTab(ScrollableTab tab) {
 		parent = tab;
@@ -154,17 +160,21 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	/**
 	 * Returns a boolean representing whether or not input is enabled for the ViewIterationPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the ViewIterationPanel and its children.
-	 */
+	
+	 * @return	A boolean representing whether or not input is enabled for the ViewIterationPanel and its children. */
 	public boolean getInputEnabled() {
 		return inputEnabled;
 	}
 	
+	/**
+	 */
 	class UpdateTableCallback implements IterationCallback {
 		/**
 		 * Callback function to populate the table with all the requirements
 		 *
-		 * @param reqs a list of all requirements
+		
+		 * @param iterations List<Iteration>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.IterationCallback#callback(List<Iteration>)
 		 */
 		@Override
 		public void callback(List<Iteration> iterations) {
@@ -172,6 +182,8 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 		}
 	}
 	
+	/**
+	 */
 	class UpdateIterationTableCallback implements RequirementsCallback {
 		
 		/** the iteration to be put into the table */
@@ -179,12 +191,17 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 
 		/**
 		 * Constructor
-		 * @param iteration the iteration
+		 * @param iterations the iteration
 		 */
 		public UpdateIterationTableCallback(List<Iteration> iterations) {
 			this.iterations = iterations;
 		}
 
+		/**
+		 * Method callback.
+		 * @param reqs List<RequirementModel>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.RequirementsCallback#callback(List<RequirementModel>)
+		 */
 		@Override
 		public void callback(List<RequirementModel> reqs) {
 
@@ -257,8 +274,8 @@ public class ViewIterationPanel extends JPanel implements ScrollablePanel {
 	/**
 	 * the table model
 	 *
-	 * @return the table model
-	 */
+	
+	 * @return the table model */
 	public ViewIterTable getTable(){
 		return tableModel;
 	}

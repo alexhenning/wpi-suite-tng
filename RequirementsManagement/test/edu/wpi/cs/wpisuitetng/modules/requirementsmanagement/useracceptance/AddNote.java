@@ -25,6 +25,7 @@ import org.junit.Test;
  * Tests the add note to a requirement user story for iteration 2
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public class AddNote {
 	
@@ -33,15 +34,17 @@ public class AddNote {
 	
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@Before
 	public void setUp() throws Exception {
 	}
 
 	/**
-	 * @throws java.lang.Exception
-	 */
+	
+	 * @throws Exception
+	 * @throws java.lang.Exception */
 	@After
 	public void tearDown() throws Exception {
 	}

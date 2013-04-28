@@ -20,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.modules.AbstractModel;
 /**
  * @author William Terry
  * @author vpatara
+ * @version $Revision: 1.0 $
  */
 public class Permissions extends AbstractModel {
 	
@@ -51,9 +52,9 @@ public class Permissions extends AbstractModel {
 	/**
 	 * returns the permissions currently granted this user
 	 *
-	 * @param user
-	 * @return PermissionLevel
-	 */
+	
+	
+	 * @return PermissionLevel */
 	public PermissionLevel getPermissionLevel(){
 		return permissionLevel;
 	}
@@ -61,7 +62,7 @@ public class Permissions extends AbstractModel {
 	/**
 	 * Change the permissions level for this user
 	 *
-	 * @param user
+	
 	 * @param newLevel
 	 */
 	public void setPermissionLevel(PermissionLevel newLevel) {
@@ -71,8 +72,8 @@ public class Permissions extends AbstractModel {
 	/**
 	 * Gets username from the model
 	 *
-	 * @return model's username
-	 */
+	
+	 * @return model's username */
 	public String getUsername() {
 		return username;
 	}
@@ -107,10 +108,10 @@ public class Permissions extends AbstractModel {
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON()
+	
 	 *
-	 * @return the string from JSON
-	 */
+	
+	 * @return the string from JSON * @see edu.wpi.cs.wpisuitetng.modules.Model#toJSON() */
 	@Override
 	public String toJSON() {
 		String json;
@@ -122,7 +123,8 @@ public class Permissions extends AbstractModel {
 	/**
 	 * toSting method
 	 *
-	 * @return the JSON string
+	
+	 * @return the JSON string * @see edu.wpi.cs.wpisuitetng.modules.Model#toString()
 	 */
 	@Override
 	public String toString() {
@@ -131,24 +133,30 @@ public class Permissions extends AbstractModel {
 
 	/**
 	 * @param json Json string to parse containing Permissions
-	 * @return The permissions given by json
-	 */
+	
+	 * @return The permissions given by json */
 	public static Permissions fromJSON(String json) {
 		GsonBuilder builder = new GsonBuilder();
 		return builder.create().fromJson(json, Permissions.class);
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object)
+	
 	 *
 	 * @param o
-	 * @return
-	 */
+	
+	 * @return Boolean
+	 * @see edu.wpi.cs.wpisuitetng.modules.Model#identify(java.lang.Object) */
 	@Override
 	public Boolean identify(Object o) {
 		return (o.getClass() == this.getClass());
 	}
 
+	/**
+	 * Method fromJSONArray.
+	 * @param body String
+	 * @return Permissions[]
+	 */
 	public static Permissions[] fromJSONArray(String body) {
 		GsonBuilder builder = new GsonBuilder();
 		return builder.create().fromJson(body, Permissions[].class);

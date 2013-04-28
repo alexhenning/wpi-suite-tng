@@ -25,6 +25,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  *
  * @author vpatara
  *
+ * @version $Revision: 1.0 $
  */
 public class CurrentUserPermissionManager {
 
@@ -71,8 +72,8 @@ public class CurrentUserPermissionManager {
 	 * when the profile for the user doesn't exist in the database yet.
 	 *
 	 * @param username new user whose permission to be added
-	 * @return new permissions model for the given user's username
-	 */
+	
+	 * @return new permissions model for the given user's username */
 	public synchronized Permissions addNewPermissionForNewUser(String username) {
 		// Don't add profiles that have been added recently
 		if(addedUsernameProfiles.containsKey(username)) {
@@ -99,8 +100,8 @@ public class CurrentUserPermissionManager {
 	/**
 	 * Returns the singleton instance of this class
 	 *
-	 * @return the singleton instance
-	 */
+	
+	 * @return the singleton instance */
 	public static CurrentUserPermissionManager getInstance() {
 		return instance;
 	}
@@ -207,8 +208,8 @@ public class CurrentUserPermissionManager {
 	 * Returns the permission model of the current user, but it is not
 	 * guaranteed to be non null. This is a non-blocking version.
 	 *
-	 * @return the current user-permission profile
-	 */
+	
+	 * @return the current user-permission profile */
 	public Permissions getCurrentProfile() {
 		return currentProfile;
 	}
@@ -217,8 +218,8 @@ public class CurrentUserPermissionManager {
 	 * Returns the current user, but it is not guaranteed to be valid. This is a
 	 * non-blocking version.
 	 *
-	 * @return the current user
-	 */
+	
+	 * @return the current user */
 	public User getCurrentUser() {
 		return currentUser;
 	}

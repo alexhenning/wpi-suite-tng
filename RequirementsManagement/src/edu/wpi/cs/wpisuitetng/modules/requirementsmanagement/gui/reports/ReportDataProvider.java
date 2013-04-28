@@ -21,11 +21,12 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
  * corresponding value.
  * 
  * @author alex
+ * @version $Revision: 1.0 $
  */
 public interface ReportDataProvider {
 	/**
-	 * @return The name of this data provider
-	 */
+	
+	 * @return The name of this data provider */
 	String getName();
 	
 	/**
@@ -33,7 +34,7 @@ public interface ReportDataProvider {
 	 * map.
 	 * 
 	 * @param model List of requirements.
-	 * @return some data to chart with a name and thecorresponding value
-	 */
+	
+	 * @return some data to chart with a name and thecorresponding value */
 	Map<Object, Integer> extractData(List<RequirementModel> model);
 }

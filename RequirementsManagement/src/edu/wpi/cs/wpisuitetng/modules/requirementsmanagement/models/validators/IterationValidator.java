@@ -30,6 +30,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
  * validator for iterations
  * @author jpalnick
  *
+ * @version $Revision: 1.0 $
  */
 public class IterationValidator {
 
@@ -49,8 +50,8 @@ public class IterationValidator {
 	}
 	
 	/**
-	 * @return the data
-	 */
+	
+	 * @return the data */
 	public Data getData() {
 		return data;
 	}
@@ -68,9 +69,9 @@ public class IterationValidator {
 	 * @param username the username of the User
 	 * @param issues list of errors to add to if user doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The User with the given username, or null if they don't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The User with the given username, or null if they don't exist * @throws WPISuiteException  */
 	User getExistingUser(String username, List<ValidationIssue> issues, String fieldName) throws WPISuiteException {
 		final List<Model> existingUsers = data.retrieve(User.class, "username", username);
 		if(existingUsers.size() > 0 && existingUsers.get(0) != null) {
@@ -86,9 +87,9 @@ public class IterationValidator {
 	 * 
 	 * @param project the project this Iteration belongs to
 	 * @param issues list of errors to add to if iteration doesn't exist
-	 * @return all Iterations in the project
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return all Iterations in the project * @throws WPISuiteException  */
 	Iteration[] getAllExistingIterations(Project project, List<ValidationIssue> issues)
 			throws WPISuiteException {
 		Iteration sample = new Iteration();
@@ -103,9 +104,9 @@ public class IterationValidator {
 	 * @param project the project this Iteration belongs to
 	 * @param issues list of errors to add to if iteration doesn't exist
 	 * @param fieldName name of field to use in error if necessary
-	 * @return The Iteration with the given id, or null if it doesn't exist
-	 * @throws WPISuiteException 
-	 */
+	
+	
+	 * @return The Iteration with the given id, or null if it doesn't exist * @throws WPISuiteException  */
 	Iteration getExistingIteration(int id, Project project, List<ValidationIssue> issues, String fieldName)
 			throws WPISuiteException {
 		List<Model> oldIterations = data.retrieve(Iteration.class, "id", id, project);
@@ -124,9 +125,10 @@ public class IterationValidator {
 	 * @param session The session to validate against
 	 * @param iteration The iteration model to validate
 	 * @param mode The mode to validate for
+	
+	
 	 * @return A list of ValidationIssues (possibly empty)
-	 * @throws WPISuiteException 
-	 */
+	 *  @throws WPISuiteException  */
 	public List<ValidationIssue> validate(Session session, Iteration iteration, Mode mode) throws WPISuiteException {
 		List<ValidationIssue> issues = new ArrayList<ValidationIssue>();
 		if(iteration == null) {
@@ -231,6 +233,12 @@ public class IterationValidator {
 		}
 		return issues;
 	}
+	/**
+	 * Method checkForOverlap.
+	 * @param iteration1 Iteration
+	 * @param iteration2 Iteration
+	 * @param issues List<ValidationIssue>
+	 */
 	public void checkForOverlap(Iteration iteration1, Iteration iteration2, List<ValidationIssue> issues) {
 		if(iteration1 != null && iteration1.getId() != iteration2.getId()) {
 			Calendar it1Start = Calendar.getInstance();
@@ -280,8 +288,8 @@ public class IterationValidator {
 	}
 
 	/**
-	 * @return The last existing Iteration the validator fetched if in edit mode
-	 */
+	
+	 * @return The last existing Iteration the validator fetched if in edit mode */
 	public Iteration getLastExistingIteration() {
 		return lastExistingIteration;
 	}

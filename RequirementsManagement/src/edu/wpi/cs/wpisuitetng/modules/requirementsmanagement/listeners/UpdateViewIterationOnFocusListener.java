@@ -21,15 +21,25 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.Scrollabl
 /**
  * TODO Description
  * @author TODO
+ * @version $Revision: 1.0 $
  */
 
 public class UpdateViewIterationOnFocusListener implements ChangeListener {
 	ScrollableTab<ViewIterationPanel> attentiveTab;
 	
+	/**
+	 * Constructor for UpdateViewIterationOnFocusListener.
+	 * @param attentiveTab ScrollableTab<ViewIterationPanel>
+	 */
 	public UpdateViewIterationOnFocusListener(ScrollableTab<ViewIterationPanel> attentiveTab){
 		this.attentiveTab = attentiveTab;
 	}
 	
+	/**
+	 * Method stateChanged.
+	 * @param e ChangeEvent
+	 * @see javax.swing.event.ChangeListener#stateChanged(ChangeEvent)
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){

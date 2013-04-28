@@ -23,6 +23,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
 /**
  * @author William Terry
  *
+ * @version $Revision: 1.0 $
  */
 public class RetrieveSinglePermissionRequestObserver implements
 		RequestObserver {
@@ -42,6 +43,7 @@ public class RetrieveSinglePermissionRequestObserver implements
 	 * Successful request
 	 *
 	 * @param iReq Request returned from db
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(IRequest)
 	 */
 	@Override
 	public void responseSuccess(IRequest iReq) {
@@ -62,6 +64,7 @@ public class RetrieveSinglePermissionRequestObserver implements
 	 * Error on return
 	 *
 	 * @param iReq
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(IRequest)
 	 */
 	@Override
 	public void responseError(IRequest iReq) {
@@ -89,6 +92,7 @@ public class RetrieveSinglePermissionRequestObserver implements
 	 *
 	 * @param iReq
 	 * @param exception
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(IRequest, Exception)
 	 */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {

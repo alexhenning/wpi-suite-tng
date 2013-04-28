@@ -50,6 +50,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumbe
  *
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyListener {
@@ -79,7 +80,7 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	JPanel displayPanel;
 	
 	/**
-	 * @param releaseTab
+	 * @param rn release number
 	 */
 	public ReleaseNumberPanel(ReleaseNumber rn) {
 		model = rn;
@@ -93,6 +94,11 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 		updateFields();
 	}
 
+	/**
+	 * Method setTab.
+	 * @param tab ScrollableTab
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel#setTab(ScrollableTab)
+	 */
 	@Override
 	public void setTab(ScrollableTab tab) {
 		parent = tab;
@@ -255,8 +261,8 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	/**
 	 * Validates the fields
 	 *
-	 * @return if the fields are valid
-	 */
+	
+	 * @return if the fields are valid */
 	public boolean validateFields() {
 		boolean noErrors = true;
 		String status = "";
@@ -360,6 +366,10 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 		}
 	}
 	
+	/**
+	 * Method getModel.
+	 * @return ReleaseNumber
+	 */
 	public ReleaseNumber getModel() {
 		model.setReleaseNumber(numberField.getText());
 		return model;
@@ -368,8 +378,8 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	/**
 	 * Returns the edit {@link Mode} for this ReleaseNumberPanel.
 	 * 
-	 * @return	The edit {@link Mode} for this ReleaseNumberPanel.
-	 */
+	
+	 * @return	The edit {@link Mode} for this ReleaseNumberPanel. */
 	public Mode getEditMode() {
 		return editMode;
 	}
@@ -387,6 +397,7 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	 * Retrieves all the release numbers from the data base and
 	 * populates the combo box with them
 	 *
+	 *@param rn Release number
 	 */
 	public void updateReleaseNumbers(ReleaseNumber rn) {
 		DB.getAllReleaseNumbers(new UpdateReleaseNumbersInComboBoxCallback(rn));
@@ -413,9 +424,9 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	}
 	
 	/**
-	 *
 	 * Updates a release number to the values currently displayed
 	 *
+	 *@param e Action Event
 	 */
 	public void UpdateReleaseNumber(ActionEvent e) {
 		if(validateFields() && // no errors and the user actually changed something
@@ -438,6 +449,7 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	 * checked for input from keyboard and set the submit button accordingly
 	 *
 	 * @param e a key event
+	 * @see java.awt.event.KeyListener#keyTyped(KeyEvent)
 	 */
 	public void keyTyped ( KeyEvent e ){  
 		enableSubmitButton();
@@ -448,6 +460,7 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	 * check if key is released and set the submit button accordingly
 	 *
 	 * @param e a key event
+	 * @see java.awt.event.KeyListener#keyReleased(KeyEvent)
 	 */
 	public void keyReleased ( KeyEvent e ){  
 		enableSubmitButton();
@@ -457,20 +470,32 @@ public class ReleaseNumberPanel extends JPanel implements ScrollablePanel, KeyLi
 	 * Doesn't really do anything
 	 *
 	 * @param e a key event
+	 * @see java.awt.event.KeyListener#keyPressed(KeyEvent)
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
 	}
 	
+	/**
+	 */
 	class UpdateReleaseNumbersInComboBoxCallback implements ReleaseNumberCallback {
 
 		ReleaseNumber rn;
 		
+		/**
+		 * Constructor for UpdateReleaseNumbersInComboBoxCallback.
+		 * @param rn ReleaseNumber
+		 */
 		public UpdateReleaseNumbersInComboBoxCallback(ReleaseNumber rn) {
 			this.rn = rn;
 		}
 
+		/**
+		 * Method callback.
+		 * @param releaseNumbers List<ReleaseNumber>
+		 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.ReleaseNumberCallback#callback(List<ReleaseNumber>)
+		 */
 		@Override
 		public void callback(List<ReleaseNumber> releaseNumbers) {
 			updateComboBoxWithReleaseNumbers(releaseNumbers);

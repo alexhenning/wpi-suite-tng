@@ -36,6 +36,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 /**
  * @author Sergey Zolotykh (szolotykh)(milk3dfx)
  *
+ * @version $Revision: 1.0 $
  */
 public class IterationValidatorTest {
 	private IterationValidator validator;
@@ -55,6 +56,10 @@ public class IterationValidatorTest {
 
 	Data db;
 	
+	/**
+	 * Method setUp.
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		// Dates
@@ -77,10 +82,19 @@ public class IterationValidatorTest {
 		validator = new IterationValidator(db);
 	}
 	
+	/**
+	 * Method tearDown.
+	 * @throws Exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 	}
 	
+	/**
+	 * Method newDate.
+	 * @param day int
+	 * @return Date
+	 */
 	public Date newDate(int day){
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
@@ -88,6 +102,14 @@ public class IterationValidatorTest {
 		return calendar.getTime();
 	}
 
+	/**
+	 * Method checkNumIssues.
+	 * @param num int
+	 * @param session Session
+	 * @param iteration Iteration
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNumIssues(int num, Session session, Iteration iteration, Mode mode) {
 		List<ValidationIssue> issues;
 		try {
@@ -99,20 +121,48 @@ public class IterationValidatorTest {
 		return issues;
 	}
 	
+	/**
+	 * Method checkNoIssues.
+	 * @param session Session
+	 * @param iteration Iteration
+	 * @param mode Mode
+	 */
 	public void checkNoIssues(Session session, Iteration iteration, Mode mode) {
 		checkNumIssues(0, session, iteration, mode);
 	}
 	
+	/**
+	 * Method checkIssue.
+	 * @param session Session
+	 * @param iteration Iteration
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkIssue(Session session, Iteration iteration, Mode mode) {
 		return checkNumIssues(1, session, iteration, mode);
 	}
 	
+	/**
+	 * Method checkNonFieldIssue.
+	 * @param session Session
+	 * @param iteration Iteration
+	 * @param mode Mode
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkNonFieldIssue(Session session, Iteration iteration, Mode mode) {
 		List<ValidationIssue> issues = checkIssue(session, iteration, mode);
 		assertFalse(issues.get(0).hasFieldName());
 		return issues;
 	}
 	
+	/**
+	 * Method checkFieldIssue.
+	 * @param session Session
+	 * @param iteration Iteration
+	 * @param mode Mode
+	 * @param fieldName String
+	 * @return List<ValidationIssue>
+	 */
 	public List<ValidationIssue> checkFieldIssue(Session session, Iteration iteration, Mode mode, String fieldName) {
 		List<ValidationIssue> issues = checkNumIssues(1, session, iteration, mode);
 		assertEquals(fieldName, issues.get(0).getFieldName());

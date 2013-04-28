@@ -16,6 +16,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
  * The types of requirements
  * @author jpalnick
  *
+ * @version $Revision: 1.0 $
  */
 public enum RequirementType {
 	NONE,

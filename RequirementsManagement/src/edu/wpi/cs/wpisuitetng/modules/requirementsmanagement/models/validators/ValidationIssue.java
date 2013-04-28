@@ -15,6 +15,7 @@ package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators;
 /**
  * Represents an error in model validation. 
  * @author Andrew Hurle
+ * @version $Revision: 1.0 $
  */
 public class ValidationIssue {
 	
@@ -43,22 +44,22 @@ public class ValidationIssue {
 	}
 
 	/**
-	 * @return the message associated with this error
-	 */
+	
+	 * @return the message associated with this error */
 	public String getMessage() {
 		return message;
 	}
 
 	/**
-	 * @return the fieldName causing this error
-	 */
+	
+	 * @return the fieldName causing this error */
 	public String getFieldName() {
 		return fieldName;
 	}
 	
 	/**
-	 * @return true if this error has a fieldName
-	 */
+	
+	 * @return true if this error has a fieldName */
 	public boolean hasFieldName() {
 		return fieldName != null;
 	}

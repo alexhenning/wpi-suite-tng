@@ -51,6 +51,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 /**
  * The view for viewing reports.
  * @author alex henning
+ * @version $Revision: 1.0 $
  */
 @SuppressWarnings("serial")
 public class ReportsPanel extends JPanel implements ScrollablePanel {
@@ -79,7 +80,7 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 
 	/**
 	 * Constructor
-	 * @param iterationTab the tab that created this panel
+	
 	 */
 	public ReportsPanel() {
 		model = new LinkedList<RequirementModel>();
@@ -125,6 +126,11 @@ public class ReportsPanel extends JPanel implements ScrollablePanel {
 		refresh();
 	}
 
+	/**
+	 * Method setTab.
+	 * @param tab ScrollableTab
+	 * @see edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel#setTab(ScrollableTab)
+	 */
 	@Override
 	public void setTab(@SuppressWarnings("rawtypes") ScrollableTab tab) {
 		parent = tab;

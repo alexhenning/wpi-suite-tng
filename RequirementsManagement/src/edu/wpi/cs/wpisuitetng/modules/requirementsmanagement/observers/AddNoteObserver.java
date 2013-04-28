@@ -20,6 +20,7 @@ import edu.wpi.cs.wpisuitetng.network.models.IRequest;
  * Handles responses from the server to save a note
  * @author Tim
  *
+ * @version $Revision: 1.0 $
  */
 public class AddNoteObserver implements RequestObserver {
 	
@@ -35,31 +36,31 @@ public class AddNoteObserver implements RequestObserver {
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi.cs.wpisuitetng.network.models.IRequest)
+	
 	 *
 	 * @param iReq Request received from the server
-	 */
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseSuccess(edu.wpi.cs.wpisuitetng.network.models.IRequest) */
 	@Override
 	public void responseSuccess(IRequest iReq) {
 		controller.receivedAddConfirmation(iReq.getResponse());
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.cs.wpisuitetng.network.models.IRequest)
+	
 	 *
 	 * @param iReq Request received from the server
-	 */
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#responseError(edu.wpi.cs.wpisuitetng.network.models.IRequest) */
 	@Override
 	public void responseError(IRequest iReq) {
 		controller.receivedAddFailure(iReq.getResponse());
 	}
 
 	/**
-	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng.network.models.IRequest, java.lang.Exception)
+	
 	 *
 	 * @param iReq Request received from the server
 	 * @param exception Exception indicating error
-	 */
+	 * @see edu.wpi.cs.wpisuitetng.network.RequestObserver#fail(edu.wpi.cs.wpisuitetng.network.models.IRequest, java.lang.Exception) */
 	@Override
 	public void fail(IRequest iReq, Exception exception) {
 		controller.receivedAddFailure(iReq.getResponse());
