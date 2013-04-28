@@ -452,7 +452,7 @@ public class ListRequirementsPanel extends JPanel implements ScrollablePanel {
 							}
 						}
 						// update status according to iteration if necessary, otherwise use the user selected data
-						if(req.getIteration() != null && (req.getStatus() != RequirementStatus.COMPLETE || req.getStatus() != RequirementStatus.DELETED)) {
+						if(req.getIteration() != null && (req.getStatus() != RequirementStatus.COMPLETE && req.getStatus() != RequirementStatus.DELETED)) {
 							req.setStatus(RequirementStatus.IN_PROGRESS);
 						} else if(req.getIteration() == null && req.getStatus() == RequirementStatus.IN_PROGRESS) {
 							req.setStatus(RequirementStatus.OPEN);
