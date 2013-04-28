@@ -359,7 +359,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				}
 			}
 		});
-		
+		deleteButton.setText("Delete");
 		// cancel button
 		cancelButton = new JButton("Cancel");
 		cancelButton.setAction(new AbstractAction() {
@@ -368,7 +368,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				tabController.closeCurrentTab();
 			}
 		});
-		
+		cancelButton.setText("Cancel");
 		closeButton = new JButton("Complete!");
 		closeButton.setAction(new AbstractAction() {
 			@Override
