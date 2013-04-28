@@ -75,9 +75,9 @@ public class MainTabView extends JTabbedPane {
 				System.out.println("Deleting requirement tab");
 				if (((RequirementsTab) getComponentAt(index)).getRequirementPanel().hasUnsavedChanges(true)) {
 					int input = JOptionPane.showConfirmDialog(this,
-															"Do you want to lose these changes?", 
-															"Unsaved Changes", 
-															JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+							"Do you want to discard unsaved changes?",
+							"Unsaved Changes", JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE);
 					System.out.println("Input to close: "+input);
 					if (input == JOptionPane.NO_OPTION) return;  
 				}
