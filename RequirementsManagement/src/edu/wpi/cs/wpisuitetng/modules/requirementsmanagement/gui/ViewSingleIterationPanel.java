@@ -280,7 +280,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 	 */
 	protected void updateModel(Iteration iteration, Mode mode) {
 		editMode = mode;
-		editModel = iteration;
+		model = editModel = iteration;
 		updateFields();	
 	}
 	
@@ -293,6 +293,26 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 		updateIterReqs();
 		updateName();
 		updateDates();
+		updateTabLabel();
+	}
+
+	/**
+	 * Refreshes the tab title (Edit Iteration "...") and resizes it properly
+	 */
+	public void updateTabLabel() {
+		if(parent != null && parent.getParent() != null) {
+			MainTabView view = (MainTabView) parent.getParent();
+			try {
+				for(int i = 0; i < view.getComponentCount(); i++) {
+					if(view.getComponentAt(i) == parent) {
+						view.setTitleAt(i, "Edit Iteration \"" + model.getIterationNumber() + "\"");
+						view.getTabComponentAt(i).revalidate();
+						view.getTabComponentAt(i).repaint();
+						return;
+					}
+				}
+			} catch (Exception e) {}
+		}
 	}
 
 	/**
@@ -415,7 +435,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 
 		@Override
 		public void callback(List<Iteration> iterations) {
-			Iteration updateModel = getUpdatedModel();
+			final Iteration updateModel = getUpdatedModel();
 			boolean isValid = true;
 			if(updateModel.getIterationNumber() == null || updateModel.getIterationNumber().length() == 0) {
 				setStatus("An iteration must have a name");
@@ -486,6 +506,7 @@ public class ViewSingleIterationPanel extends JPanel implements ScrollablePanel 
 							Calendar currentTime = Calendar.getInstance();
 							SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
 							setStatus("Iteration updated (" + sdf.format(currentTime.getTime()) + ")");
+							updateModel(updateModel);
 						}
 						
 					});
