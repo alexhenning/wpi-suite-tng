@@ -1467,23 +1467,41 @@ System.err.println("adduser reached***************************");
 				});
 			} else {
 				//TODO what to do if false...
-				
 				boolean closeSub = false;
-				//TODO ask user if they want to close the sub requirements
-				int input = JOptionPane.showConfirmDialog(parent,
-						"Do you want to lose these changes?", 
-						"Unsaved Changes", 
-						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-System.out.println("Input to close: "+input);
-closeSub = (input == JOptionPane.YES_OPTION);
+
+				if (model.getStatus() == RequirementStatus.COMPLETE) {
+					// Attempt to reopen the requirement and update the panel
+					model.setStatus(RequirementStatus.OPEN);
+					DB.updateRequirements(model, new SingleRequirementCallback() {
+						@Override
+						public void callback(RequirementModel req) {
+							parent.getRequirementPanel().updateModel(req);
+						}
+					});
+				} else {
+					// Attempt to close the requirement and its sub-requirements
+					String title = "Close This Requirement";
+					String message = "This requirement has at least one open sub-requirement.\n"
+							+ "Do you want to close this requirement and all of its sub-requirements?";
+
+					int input = JOptionPane.showConfirmDialog(parent, message, title,
+							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+					System.out.println("Input to close: " + input);
+					closeSub = (input == JOptionPane.YES_OPTION);
+				}
+
 				if(closeSub) {
 					final Request request = Network.getInstance().makeRequest("Advanced/requirementsmanagement/requirementmodel/closeSub/"+model.getId(),  HttpMethod.GET);
 					request.addObserver(new CloseSubRequirementModelRequestObserver(new CloseSubRequirementsCallback() {
-						
+
 						@Override
 						public void callback(boolean result) {
-							// TODO Auto-generated method stub
-							
+							if (result) {
+								tabController.closeCurrentTab();
+								tabController.addListRequirementsTab();
+							} else {
+								parent.getRequirementPanel().refreshModel();
+							}
 						}
 					}));
 					request.send();
