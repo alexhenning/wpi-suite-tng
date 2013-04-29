@@ -35,7 +35,8 @@ public class UpdateViewIterationReqList implements ChangeListener {
 		if(((JTabbedPane) e.getSource()).getSelectedComponent() == null){
 			//TODO: find a way to remove this listener if tab has been closed
 		} else if( ((JTabbedPane) e.getSource()).getSelectedComponent().equals(attentiveTab) ){
-			attentiveTab.getPanel().updateFields();
+			attentiveTab.getPanel().updateIterReqs();
+			attentiveTab.getPanel().updateEstimate();
 		}
 	}
 }

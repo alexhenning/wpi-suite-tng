@@ -136,7 +136,8 @@ public class PermissionsPanel extends JPanel implements ScrollablePanel {
 		addStatus = new JTextField("");
 		addStatus.setOpaque(false);
 		addStatus.setEditable(false);
-		
+		addStatus.setFocusable(false);
+
 		submitButton = new JButton("Submit");
 		
 		PermissionLevel[] levels = PermissionLevel.values();
