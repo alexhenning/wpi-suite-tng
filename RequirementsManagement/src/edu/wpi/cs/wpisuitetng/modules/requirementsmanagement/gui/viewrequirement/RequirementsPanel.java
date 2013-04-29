@@ -334,7 +334,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		splitButton.addActionListener(new SplitRequirementController(this));
 		
 		deleteButton = new JButton("Delete");
-		deleteButton.setAction(new AbstractAction() {
+		deleteButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				RequirementModel model = parent.getRequirementPanel().getModel();
@@ -362,7 +362,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		
 		// cancel button
 		cancelButton = new JButton("Cancel");
-		cancelButton.setAction(new AbstractAction() {
+		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				tabController.closeCurrentTab();
@@ -370,7 +370,7 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 		});
 		
 		closeButton = new JButton("Complete!");
-		closeButton.setAction(new AbstractAction() {
+		closeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				RequirementModel model = parent.getRequirementPanel().getModel();
@@ -397,7 +397,6 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 				}
 			}
 		});
-		closeButton.setText("Complete!");
 
 		// Supplement Pane (i.e., notes, history, attachments)
 		nt = new NoteMainPanel(this);
