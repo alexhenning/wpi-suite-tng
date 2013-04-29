@@ -539,9 +539,9 @@ public class RequirementsPanel extends JSplitPane implements KeyListener {
 			c.gridy = 10;
 			c.gridx = 1;
 			c.weightx = 1;
-			leftside.add(cancelButton, c);
-			c.gridy = 11;
 			leftside.add(resetButton, c);
+			c.gridy = 11;
+			leftside.add(cancelButton, c);
 			c.gridy = 10;
 			c.gridx = 2;
 			c.weightx = 0.5;
