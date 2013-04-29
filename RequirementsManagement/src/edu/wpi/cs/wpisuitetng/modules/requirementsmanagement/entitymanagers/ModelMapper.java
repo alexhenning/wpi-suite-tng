@@ -23,9 +23,12 @@ import edu.wpi.cs.wpisuitetng.modules.Model;
 
 /**
  * Responsible for copying properties from one Model to another.
+ * 
+ * @author Andrew Hurle
  */
 public class ModelMapper {
 
+	/** Fields that should not be copied/updated */
 	private final Set<String> blacklist = new HashSet<String>();
 	private final MapCallback defaultMapCallback = new MapCallback() {
 		@Override

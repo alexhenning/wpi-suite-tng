@@ -25,10 +25,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementM
 
 /**
  * Responsible for validating a comment model.
+ * @author TODO
  */
 public class RequirementNoteValidator {
 
+	/** last existing requirement model */
 	private RequirementModel lastExistingRequirement;
+	/** requirement model validator */
 	private RequirementModelValidator requirementValidator;
 	
 	/**
@@ -70,7 +73,7 @@ public class RequirementNoteValidator {
 		}
 		
 		lastExistingRequirement = requirementValidator.getExistingRequirement(comment.getRequirementId(), session.getProject(),
-				issues, "defectId");
+				issues, "defectId");  
 		
 		String body = comment.getBody();
 		if(body == null || body.length() < 1 || body.length() > 10000) {
@@ -83,7 +86,7 @@ public class RequirementNoteValidator {
 	}
 	
 	/**
-	 * @return The last existing defect the validator fetched
+	 * @return The last existing requirement note the validator fetched
 	 */
 	public RequirementModel getLastExistingRequirement() {
 		return lastExistingRequirement;

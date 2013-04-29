@@ -7,13 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    
+ *    Tim Calvert
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
 import javax.swing.JOptionPane;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -27,6 +27,7 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  */
 public class RetrieveSingleRequirementRequestObserver implements RequestObserver {
 	
+	/** Callback paired with this */
 	private SingleRequirementCallback callback;
 	
 	/**

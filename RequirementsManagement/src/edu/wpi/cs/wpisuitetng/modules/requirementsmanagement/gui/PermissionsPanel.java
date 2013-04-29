@@ -11,6 +11,7 @@
  *    vpatara
  *    Josh
  ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui;
 
 import java.awt.BorderLayout;
@@ -31,11 +32,13 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import edu.wpi.cs.wpisuitetng.janeway.gui.widgets.JPlaceholderTextField;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.AddPermissionController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.DB;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.EditPermissionController;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.PermissionsCallback;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SinglePermissionCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.AddPermissionController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.DB;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.EditPermissionController;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.PermissionsCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SinglePermissionCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollablePanel;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.ScrollableTab;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.PermissionLevel;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
@@ -44,32 +47,46 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Permissions;
  * GUI for a project manager to manage user permissions 
  *
  * @author William Terry
- *
+ * @author vpatara
+ * @author josh
  */
 @SuppressWarnings("serial")
-public class PermissionsPanel extends JPanel {
+public class PermissionsPanel extends JPanel implements ScrollablePanel {
+	/** a permissions model */
 	Permissions newModel;
+	/** a permissions model */
 	Permissions editModel;
 	
-	PermissionsTab parent;
-//	private GridBagLayout panelLayout;
+	/** the tab that made this */
+	ScrollableTab parent;
+	/** labels */
 	JLabel lbl1, lbl2, lbl3, lblname, lblusername, lblprofile, lblpermissions, lblID;
 	JPlaceholderTextField usernameTextArea;
+	/** a text field */
 	JTextField addStatus;
+	/** the buttons */
 	JButton submitButton, updateButton;
+	/** the dropdown menus */
 	JComboBox permissionSelectNew, permissionSelectExisting;
+	/** the panel for the profiles */
 	JPanel profilePanel;
+	/** a scroll pane */
 	JScrollPane tablePane;
+	/** the table for the profiles */
 	JTable profileTable;
+	/** the model for the table */
 	ViewPermissionsTable tableModel;
-//	String sName, sUsername, sID;
+	/** the top panel */
 	JPanel topPanel;
 
 	/** A flag indicating if input is enabled on the form */
 	protected boolean inputEnabled;
 
-	public PermissionsPanel(PermissionsTab permissionsTab){
-		this.parent = permissionsTab;
+	/**
+	 * constructor
+	 * @param permissionsTab the tab that created this
+	 */
+	public PermissionsPanel(){
 		newModel = null;
 		editModel = null;
 		
@@ -79,10 +96,19 @@ public class PermissionsPanel extends JPanel {
 		// Add all components to this panel
 		addComponents();
 		
-		// Populate the form with the contents of the Iteration model and update the TextUpdateListeners.
+		// Populate the form with the contents of the permissions model and update the TextUpdateListeners.
 		updateFields();
 	}
 
+	@Override
+	public void setTab(ScrollableTab tab) {
+		parent = tab;
+	}
+
+	/**
+	 *add the components to the view
+	 *
+	 */
 	private void addComponents() {
 		setLayout(new BorderLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -94,7 +120,7 @@ public class PermissionsPanel extends JPanel {
 		lblname = new JLabel("Name: ");
 		lblusername = new JLabel("Username: ");
 		
-		usernameTextArea =  new JPlaceholderTextField("Username", 20);//new HintedTextArea(1, 20, "Username");
+		usernameTextArea =  new JPlaceholderTextField("Username", 20);
 		usernameTextArea.addMouseListener(new MouseListener() {
 			@Override public void mousePressed(MouseEvent arg0) {}
 			@Override public void mouseReleased(MouseEvent arg0) {}
@@ -110,7 +136,8 @@ public class PermissionsPanel extends JPanel {
 		addStatus = new JTextField("");
 		addStatus.setOpaque(false);
 		addStatus.setEditable(false);
-		
+		addStatus.setFocusable(false);
+
 		submitButton = new JButton("Submit");
 		
 		PermissionLevel[] levels = PermissionLevel.values();
@@ -172,6 +199,10 @@ public class PermissionsPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * create the profile panel
+	 *
+	 */
 	private void instantiateProfilePanel() {
 		lblprofile = new JLabel("Selected Profile");
 		lblname = new JLabel("Name: ");
@@ -214,18 +245,22 @@ public class PermissionsPanel extends JPanel {
 		
 	}
 
+	/**
+	 *update the labels for the profiles
+	 *
+	 */
 	public void updateProfileLabels() {
 		System.out.println("update profile labels");
 		
 		if(editModel != null) {
 			
 			// Update fields and enable elements
-//			lblname.setText("Name: " + model.);
 			lblusername.setText("Username: " + editModel.getUsername());
-//			lblID.setText("ID: " + model.);
 			permissionSelectExisting.setSelectedIndex(editModel.getPermissionLevel().ordinal());
-			permissionSelectExisting.setEnabled(true);
-			updateButton.setEnabled(true);
+			if(!editModel.getUsername().equals("admin")) {
+				permissionSelectExisting.setEnabled(true);
+				updateButton.setEnabled(true);
+			}
 			
 		} else {
 			
@@ -240,6 +275,10 @@ public class PermissionsPanel extends JPanel {
 		profilePanel.repaint();
 	}
 
+	/**
+	 *create the table
+	 *
+	 */
 	private void instantiateTable() {
 		
 		tableModel = new ViewPermissionsTable();
@@ -259,6 +298,11 @@ public class PermissionsPanel extends JPanel {
 						public void callback(Permissions profile) {
 							updateModel(profile);
 						}
+						@Override
+						public void failure() {
+							// TODO: may have to remove "Add"
+							setAddPermissionStatus("Error while retrieving the permission object");
+						}
                 	});
                 }
 			}
@@ -269,12 +313,20 @@ public class PermissionsPanel extends JPanel {
 		});
 	}
 
+	/**
+	 *populate the table with permissions
+	 *
+	 */
 	public void updateAllPermissionsList() {
 		DB.getAllPermissions(new UpdateTableCallback());
 	}
 	
+	/**
+	 * close the tab
+	 *
+	 */
 	public void close() {
-		parent.tabController.closeCurrentTab();
+		parent.getTabController().closeCurrentTab();
 	}
 	
 	/**
@@ -329,9 +381,9 @@ public class PermissionsPanel extends JPanel {
 	}
 
 	/**
-	 * Returns a boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * Returns a boolean representing whether or not input is enabled for the PermissionsPanel and its children.
 	 * 
-	 * @return	A boolean representing whether or not input is enabled for the DefectPanel and its children.
+	 * @return	A boolean representing whether or not input is enabled for the PermissionsPanel and its children.
 	 */
 	public boolean getInputEnabled() {
 		return inputEnabled;
@@ -354,7 +406,6 @@ public class PermissionsPanel extends JPanel {
 	 * @return
 	 */
 	public Permissions getUpdatedModel() {
-
 		// editModel should not be null at this point
 		PermissionLevel permissionLevel = PermissionLevel.values()[permissionSelectExisting.getSelectedIndex()];
 		editModel.setPermissionLevel(permissionLevel);
@@ -366,7 +417,7 @@ public class PermissionsPanel extends JPanel {
 	 * @return the current table model
 	 */
 	public ViewPermissionsTable getTable(){
-		return this.tableModel;
+		return tableModel;
 	}
 	
 	/**
@@ -386,7 +437,18 @@ public class PermissionsPanel extends JPanel {
 		updateModel(null);
 	}
 	
+	/**
+	 *
+	 * Callback class to update the permissions table
+	 * @author 
+	 *
+	 */
 	class UpdateTableCallback implements PermissionsCallback {
+		/**
+		 * callback to update the permissions table
+		 *
+		 * @param profiles list of permissions
+		 */
 		@Override
 		public void callback(List<Permissions> profiles) {
 			System.out.println("profile count : " + profiles.size());
@@ -407,22 +469,4 @@ public class PermissionsPanel extends JPanel {
 			}
 		}
 	}
-	
-//	public static void main(String[] args){
-//		 javax.swing.SwingUtilities.invokeLater(new Runnable() {
-//	            public void run() {
-//	            	JFrame frame = new JFrame("ComboBoxDemo");
-//	                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	         
-//	                //Create and set up the content pane.
-//	                JComponent newContentPane = new PermissionsPanel(null);
-//	                newContentPane.setOpaque(true); //content panes must be opaque
-//	                frame.setContentPane(newContentPane);
-//	         
-//	                //Display the window.
-//	                frame.pack();
-//	                frame.setVisible(true);
-//	            }
-//	        });
-//	}
 }

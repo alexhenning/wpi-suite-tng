@@ -7,12 +7,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *    //TODO
+ *    Jacob Palnick
  ******************************************************************************/
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 /**
+ * The types of requirements
  * @author jpalnick
  *
  */

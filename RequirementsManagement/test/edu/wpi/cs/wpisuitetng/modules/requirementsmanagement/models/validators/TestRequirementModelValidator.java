@@ -27,7 +27,6 @@ import edu.wpi.cs.wpisuitetng.database.Data;
 import edu.wpi.cs.wpisuitetng.exceptions.WPISuiteException;
 import edu.wpi.cs.wpisuitetng.modules.core.models.Project;
 import edu.wpi.cs.wpisuitetng.modules.core.models.User;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.MockData;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
@@ -39,7 +38,7 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
 /**
  *
  * Description goes here
- * @author Tim
+ * @author Tim DeFreitas
  *
  */
 public class TestRequirementModelValidator {
@@ -87,7 +86,7 @@ public class TestRequirementModelValidator {
 		
 		otherProject = new Project("other", "2");
 		
-		testProject = new Project("test","1");
+		testProject = new Project("test", "1");
 		mockSsid = "abcde";
 		defaultSession = new Session(bob, testProject, mockSsid);
 		

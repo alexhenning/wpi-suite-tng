@@ -13,7 +13,7 @@
  ******************************************************************************/
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.observers;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.controllers.SingleRequirementCallback;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.db.SingleRequirementCallback;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementModel;
 import edu.wpi.cs.wpisuitetng.network.RequestObserver;
 import edu.wpi.cs.wpisuitetng.network.models.IRequest;
@@ -24,10 +24,12 @@ import edu.wpi.cs.wpisuitetng.network.models.ResponseModel;
  * to edit a requirement.
  * 
  * @author David
+ * @author Tim Calvert
  *
  */
 public class EditRequirementModelRequestObserver implements RequestObserver {
 
+	/** Callback paired with this */
 	private SingleRequirementCallback callback;
 	
 	/**

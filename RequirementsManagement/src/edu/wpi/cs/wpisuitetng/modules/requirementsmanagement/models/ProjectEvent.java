@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Jacob Palnick
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import java.util.Date;
@@ -18,17 +30,29 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
  */
 public class ProjectEvent extends AbstractModel {
 	
+	/**
+	 *
+	 * The types of project events
+	 *
+	 */
 	public enum ProjectEventType {
 		CREATION,
 		CHANGES
 	};
 
+	/** id number */
 	protected int id;
+	/** date of event */
 	protected Date date = new Date();
+	/** user */
 	protected User user = new User("", "", "", -1);
+	/** changes made */
 	protected Map<String, FieldChange<?>> changes;
+	/** type of object */
 	protected ProjectEventObjectType objectType;
+	/** object's id */
 	protected String objectId;
+	/** type of project event */
 	protected ProjectEventType type;
 	
 	//TODO figure out how to tell what model/object was changed....
@@ -47,24 +71,54 @@ public class ProjectEvent extends AbstractModel {
 		this.type = type;
 	}
 
+	/**
+	 *create a project event of type creation
+	 *
+	 * @param user the user
+	 * @param objectType the ype of object
+	 * @param objectId the object's id
+	 * @return the created project event
+	 */
 	public static ProjectEvent createProjectCreationEvent(User user, ProjectEventObjectType objectType, String objectId) {
 		ProjectEvent tmp = new ProjectEvent(user, objectType, objectId);
 		tmp.setType(ProjectEventType.CREATION);
 		return tmp;
 	}
 	
+	/**
+	 * create a project event of type creation
+	 *
+	 * @param objectType the object's type
+	 * @param objectId the object's id
+	 * @return the created project event
+	 */
 	public static ProjectEvent createProjectCreationEvent(ProjectEventObjectType objectType, String objectId) {
 		ProjectEvent tmp = new ProjectEvent(objectType, objectId);
 		tmp.setType(ProjectEventType.CREATION);
 		return tmp;
 	}
 	
+	/**
+	 * create a project event of type changes
+	 *
+	 * @param user the user
+	 * @param objectType the type of object
+	 * @param objectId the object's id
+	 * @return the created project event
+	 */
 	public static ProjectEvent createProjectChangesetEvent(User user, ProjectEventObjectType objectType, String objectId) {
 		ProjectEvent tmp = new ProjectEvent(user, objectType, objectId);
 		tmp.setType(ProjectEventType.CHANGES);
 		return tmp;
 	}
 	
+	/**
+	 * create a project event of type changed
+	 *
+	 * @param objectType the object's type
+	 * @param objectId the object's id
+	 * @return
+	 */
 	public static ProjectEvent createProjectChangesetEvent(ProjectEventObjectType objectType, String objectId) {
 		ProjectEvent tmp = new ProjectEvent(objectType, objectId);
 		tmp.setType(ProjectEventType.CHANGES);
@@ -81,7 +135,7 @@ public class ProjectEvent extends AbstractModel {
 	 */
 	protected ProjectEvent(User user, ProjectEventObjectType objectType, String objectId) {
 		this();
-		this.changes = new HashMap<String, FieldChange<?>>();
+		changes = new HashMap<String, FieldChange<?>>();
 		this.user = user;
 		this.objectId = objectId;
 		this.objectType = objectType;
@@ -96,7 +150,7 @@ public class ProjectEvent extends AbstractModel {
 	 */
 	protected ProjectEvent(ProjectEventObjectType objectType, String objectId) {
 		this();
-		this.changes = new HashMap<String, FieldChange<?>>();
+		changes = new HashMap<String, FieldChange<?>>();
 		this.objectId = objectId;
 		this.objectType = objectType;
 	}
@@ -201,6 +255,11 @@ public class ProjectEvent extends AbstractModel {
 		builder.registerTypeAdapter(ProjectEvent.class, new ProjectEventDeserializer());
 	}
 	
+	/**
+	 * get the JSON string
+	 *
+	 * @return the JSON string
+	 */
 	@Override
 	public String toJSON() {
 		String json;
@@ -209,13 +268,12 @@ public class ProjectEvent extends AbstractModel {
 		return json;
 	}
 
+	/**
+	 * the toString() method
+	 *
+	 * @return the JSON string
+	 */
 	public String toString() {
-//		System.out.println("id: "+id);
-//		System.out.println("date: "+date);
-//		System.out.println("user: "+user);
-//		System.out.println("changes: "+changes);
-//		System.out.println("changedObjectClass: "+changedObjectClass);
-//		System.out.println("objectId: "+objectId);
 		return toJSON();
 	}
 	

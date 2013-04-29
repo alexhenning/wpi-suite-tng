@@ -21,22 +21,25 @@ import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarContro
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.DefaultToolbarView;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.IToolbarGroupProvider;
 import edu.wpi.cs.wpisuitetng.janeway.gui.container.toolbar.ToolbarGroupView;
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabController;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.MainTabView;
+import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.gui.utils.MainTabController;
 
 
 /**
- * Controller for the defect tracker toolbar.
+ * Controller for the Requirements Management toolbar.
  * Keeps track of the displayed tab in a MainTabController and displays the
  * group of controls provided by the displayed components' getGroup method, if it
  * is an instance of IToolbarGroupProvider.
  * If the current tab has no associated toolbar group, no additional group is shown in the toolbar.
+ * @author Andrew Hurle
  */
 public class ToolbarController extends DefaultToolbarController implements ChangeListener {
 
+	/** which groups to show on the toolbar */
 	private ToolbarGroupView relevantTabGroup;
 	
 	/**
+	 * Constructor
 	 * Control the given DefaultToolbarView based on the state of the tabs in tabController.
 	 * @param toolbarView The toolbar to add/remove groups from
 	 * @param tabController The MainTabController to listen to for changes
@@ -46,6 +49,11 @@ public class ToolbarController extends DefaultToolbarController implements Chang
 		tabController.addChangeListener(this);
 	}
 
+	/**
+	 * set the toolbar based on what is being viewed
+	 *
+	 * @param group the toolbar group that should be viewed
+	 */
 	private void setRelevantTabGroup(ToolbarGroupView group) {
 		// keep track of only one toolbar group for the active tab
 		if(relevantTabGroup != null) {
@@ -57,6 +65,12 @@ public class ToolbarController extends DefaultToolbarController implements Chang
 		}
 	}
 	
+	/**
+	 * react to the state being changed
+	 * TODO: document this better
+	 *
+	 * @param e an action that changed the state
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		// TODO: there has to be a cleaner way to do this

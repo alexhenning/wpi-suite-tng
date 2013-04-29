@@ -12,6 +12,12 @@
 		<fileset dir="${core-lib}">
 			<include name="gson-*.jar"/>
 		</fileset>
+		<fileset dir="../Janeway/swingx">
+			<include name="swingx*.jar"/>
+		</fileset>
+		<fileset dir="../Janeway/jfreechart/lib">
+			<include name="*.jar"/>
+		</fileset>
 		<pathelement path="build"/>
 	</path>
 
@@ -19,9 +25,15 @@
 		<path refid="classpath"/>
 		<pathelement path="build-test"/>
 		<pathelement path="${junit-jar}"/>
+		<fileset dir="../Network/Libraries">
+			<include name="simple-*.jar"/>
+		</fileset>
 	</path>
 
 	<target name="compile-base">
+	  <pathconvert property="classpathProp" refid="classpath"/>
+
+	  <echo>Classpath is ${classpathProp}</echo>
 		<mkdir dir="build"/>
 		<javac srcdir="src" destdir="build" includeJavaRuntime="yes" debug="true" target="1.6"
 				debuglevel="lines,vars,source">
@@ -35,6 +47,7 @@
 		<jar destfile="${janeway-jar-dest}">
 			<fileset dir="build"/>
 			<fileset file="manifest.txt"/>
+			<fileset dir="resources" includes="**"/>
 		</jar>
 	</target>
 

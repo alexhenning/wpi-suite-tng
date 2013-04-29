@@ -12,6 +12,11 @@
 
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
+/**
+ *
+ *the kinds of requirement status
+ * @author TODO
+ */
 public enum RequirementStatus {
 	NEW,
 	OPEN,

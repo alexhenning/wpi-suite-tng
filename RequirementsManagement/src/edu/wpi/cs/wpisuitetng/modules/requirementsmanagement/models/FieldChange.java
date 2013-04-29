@@ -19,6 +19,7 @@ import java.lang.reflect.ParameterizedType;
  * Doesn't implement Model since it will see no use outside of RequirementChangesets.
  *
  * @param <T> the type of the field that was changed
+ * @author TODO
  */
 public class FieldChange<T> {
 	private final T oldValue;
@@ -63,9 +64,14 @@ public class FieldChange<T> {
 		return newValue;
 	}
 	
+	/**
+	 * sets type if it is null
+	 *
+	 * @return type
+	 */
 	public Class<T> getPersistentClass() {
         if (type == null) {
-            this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         }
         return type;
     }

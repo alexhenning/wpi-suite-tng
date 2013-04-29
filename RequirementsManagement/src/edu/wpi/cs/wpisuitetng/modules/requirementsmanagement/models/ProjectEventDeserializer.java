@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 -- WPI Suite
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    
+ ******************************************************************************/
+
 package edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models;
 
 import java.lang.reflect.Type;
@@ -16,49 +28,16 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ProjectEvent
 
 /**
  * Responsible for deserializing a RequirementEvent.
+ * TODO: DOCUMENT THIS CLASS
+ * @author TODO
  */
 class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 	public static <T> void addFieldChange(String fieldName, Class<T> fieldClass, JsonObject changes, JsonDeserializationContext context, HashMap<String, FieldChange<?>> changesMap) {
 		if (changes.has(fieldName)) {
 			JsonObject titleObj = changes.get(fieldName).getAsJsonObject();
-//			T oldValue;
-//			T newValue;
-//			try {
-//				oldValue = fieldClass.newInstance();
-//				newValue = fieldClass.newInstance();
-//				oldValue = context.deserialize(titleObj.get("oldValue"), fieldClass);
-//				newValue = context.deserialize(titleObj.get("newValue"), fieldClass);
-				changesMap.put(fieldName, new FieldChange<T>(fieldClass.cast(context.deserialize(titleObj.get("oldValue"), fieldClass)), fieldClass.cast(context.deserialize(titleObj.get("newValue"), fieldClass))));
-//			} catch (InstantiationException e) {
-//				e.printStackTrace();
-//			} catch (IllegalAccessException e) {
-//				e.printStackTrace();
-//			}
+			changesMap.put(fieldName, new FieldChange<T>(fieldClass.cast(context.deserialize(titleObj.get("oldValue"), fieldClass)), fieldClass.cast(context.deserialize(titleObj.get("newValue"), fieldClass))));
 		}
 	}
-	
-//	addFieldChange(fieldName, fieldClass, changes, context, changesMap);
-
-	//	private static final String[] RequirementFieldNames = {"status", "priority", "name", "description", "estimate", "actualEffort", "assignees", "iteration", "type"};
-//	private static final Class<?>[] RequirementFieldClasses = {RequirementStatus.class, RequirementPriority.class, String.class, String.class, Integer.class, Integer.class, List.class, Iteration.class, RequirementType.class};
-//		private int id;
-//		private ReleaseNumber releaseNumber;
-//		private RequirementStatus status;
-//		private RequirementPriority priority;
-//		private String name;
-//		private String description;
-//		private int estimate;
-//		private int actualEffort;
-//		private Date creationDate;
-//		private Date lastModifiedDate;
-//		private List<RequirementEvent> events;
-//		private User creator;
-//		private List<User> assignees;
-//		private Iteration iteration;
-//		private RequirementType type;
-//
-//		//TODO Validation Classes for Database retrieval
-//		private List<RequirementModel> subRequirements;
 	
 	@Override
 	public ProjectEvent deserialize(JsonElement element, Type type,
@@ -102,12 +81,9 @@ class ProjectEventDeserializer implements JsonDeserializer<ProjectEvent> {
 						addFieldChange("estimate", Integer.class, changes, context, changesMap);
 						addFieldChange("actualEffort", Integer.class, changes, context, changesMap);
 						addFieldChange("iteration", Iteration.class, changes, context, changesMap);
-//						if (changes.has("tags")) {
-//						JsonObject tagsObj = changes.get("tags").getAsJsonObject();
-//						Tag[] oldTags = context.deserialize(tagsObj.get("oldValue"), Tag[].class);
-//						Tag[] newTags = context.deserialize(tagsObj.get("newValue"), Tag[].class);
-//						changesMap.put("tags", new FieldChange<Set<Tag>>(new HashSet<Tag>(new ArrayList<Tag>(Arrays.asList(oldTags))), new HashSet<Tag>(new ArrayList<Tag>(Arrays.asList(newTags)))));
-//					}
+						addFieldChange("type", RequirementType.class, changes, context, changesMap);
+						addFieldChange("subRequirements", String[].class, changes, context, changesMap);
+						addFieldChange("releaseNumber", ReleaseNumber.class, changes, context, changesMap);
 					}
 					retVal.setChanges(changesMap);
 					retVal.setDate((Date)(context.deserialize(changeSet.get("date"), Date.class)));

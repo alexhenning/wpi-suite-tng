@@ -32,11 +32,15 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.V
  *
  * Entity manager for Iterations
  * @author Tim
+ * @author Tim D
  *
  */
 public class IterationEntityManager implements EntityManager<Iteration> {
+	/** the database */
 	private final Data db;
+	/** an iteration validator */
 	private final IterationValidator validator;
+	/** model mapper for copying properties */
 	private final ModelMapper updateMapper;
 	
 	/**
@@ -95,7 +99,12 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 	public Iteration[] getEntity(Session s, String id) throws NotFoundException,
 			WPISuiteException {
 
-		final int intId = Integer.parseInt(id);
+		int intId;
+		try {
+			intId = Integer.parseInt(id);
+		} catch (NumberFormatException e) {
+			throw new NotFoundException("Cannot parse the id [" + id + "]");
+		}
 		if(intId < 1) {
 			throw new NotFoundException();
 		}
@@ -200,18 +209,44 @@ public class IterationEntityManager implements EntityManager<Iteration> {
 		return db.retrieveAll(new Iteration()).size();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedGet(Session s, String[] args)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param args
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedPut(Session s, String[] args, String content)
 			throws NotImplementedException {
 		throw new NotImplementedException();
 	}
 
+	/**
+	 * This is not implemented
+	 *
+	 * @param s
+	 * @param string
+	 * @param content
+	 * @return
+	 * @throws NotImplementedException
+	 */
 	@Override
 	public String advancedPost(Session s, String string, String content)
 			throws NotImplementedException {

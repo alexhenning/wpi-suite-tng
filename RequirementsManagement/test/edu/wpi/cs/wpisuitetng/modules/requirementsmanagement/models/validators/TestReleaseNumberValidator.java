@@ -30,7 +30,6 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 
-import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.validators.ValidationIssue;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.mockdata.*;
 
 /**
@@ -75,8 +74,8 @@ public class TestReleaseNumberValidator {
 		mockSsid = "ABCD";
 		defaultSession = new Session(bob, testProject, mockSsid);
 		
-		existingReleaseNum = new ReleaseNumber(1, 1, testProject);
-		goodNewReleaseNum = new ReleaseNumber(2, 34, testProject);
+		existingReleaseNum = new ReleaseNumber(1, "1", testProject);
+		goodNewReleaseNum = new ReleaseNumber(2, "34", testProject);
 		
 		db = new MockData(new HashSet<Object>());
 		db.save(bob);
@@ -148,7 +147,6 @@ public class TestReleaseNumberValidator {
 	@Test
 	public void testGoodNewReleaseNumber(){
 		//TODO Fix validation issue of checking whether a new id is in the db
-		//checkNoIssues(defaultSession, goodNewReleaseNum, Mode.CREATE);
 		assertSame(2, goodNewReleaseNum.getId());
 		assertSame(testProject, goodNewReleaseNum.getProject());
 	}

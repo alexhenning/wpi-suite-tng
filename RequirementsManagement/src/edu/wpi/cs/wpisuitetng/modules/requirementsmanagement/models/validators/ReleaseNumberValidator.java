@@ -24,8 +24,16 @@ import edu.wpi.cs.wpisuitetng.modules.core.models.User;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.Mode;
 import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.ReleaseNumber;
 
+/**
+ *
+ * Validator for Release Numbers
+ * @author TODO
+ *
+ */
 public class ReleaseNumberValidator {
+	/** the database */
 	private Data data;
+	/** the last existing release number */
 	private ReleaseNumber lastExistingReleaseNumber;
 	
 	/**
@@ -75,7 +83,7 @@ public class ReleaseNumberValidator {
 	 * Return all ReleaseNumbers of the specified project.
 	 * 
 	 * @param project the project this ReleaseNumber belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if release number doesn't exist
 	 * @return all ReleaseNumbers in the project
 	 * @throws WPISuiteException 
 	 */
@@ -89,9 +97,9 @@ public class ReleaseNumberValidator {
 	/**
 	 * Return the ReleaseNumber with the given id if it already exists in the database.
 	 * 
-	 * @param id the id of the ReleaseNumber
+	 * @param string the id of the ReleaseNumber
 	 * @param project the project this ReleaseNumber belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if release number doesn't exist
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The ReleaseNumber with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
@@ -112,7 +120,7 @@ public class ReleaseNumberValidator {
 	 * from the Data given in the constructor.
 	 * 
 	 * @param session The session to validate against
-	 * @param defect The defect model to validate
+	 * @param ReleaseNumber The release number model to validate
 	 * @param mode The mode to validate for
 	 * @return A list of ValidationIssues (possibly empty)
 	 * @throws WPISuiteException 
@@ -124,19 +132,20 @@ public class ReleaseNumberValidator {
 			return issues;
 		}
 		
-		//check if the id is unique
-		if(mode == Mode.CREATE) {
-			if(getExistingReleaseNumber(releaseNumber.getId(), session.getProject(), issues, "id") != null) {
-				issues.add(new ValidationIssue("Unable to create an ReleaseNumber with the provided id ("+releaseNumber.getId()+") since there is already an ReleaseNumber with that id"));
-//				return issues;
+		ReleaseNumber[] allReleaseNumbers = getAllExistingReleaseNumbers(session.getProject(), issues);
+		
+		if(mode == Mode.CREATE) { // make sure there are none with the same release numbers when creating
+			for(ReleaseNumber rn : allReleaseNumbers) {
+				if(rn.getId() == releaseNumber.getId()) {
+					issues.add(new ValidationIssue("Unable to create an ReleaseNumber with the provided id ("+releaseNumber.getId()+") since there is already an ReleaseNumber with that id"));
+				}
 			}
 		}
-
-		//check if the iterationNumber is unique for the project
-		if(mode == Mode.CREATE) {
-			if(getExistingReleaseNumber(releaseNumber.getReleaseNumber(), session.getProject(), issues, "releaseNumber") != null) {
+		
+		// regardless of mode, no release numbers should have the same number
+		for(ReleaseNumber rn : allReleaseNumbers) {
+			if(rn.getReleaseNumber().equals(releaseNumber.getReleaseNumber())) {
 				issues.add(new ValidationIssue("Unable to create an ReleaseNumber with the provided releaseNumber ("+releaseNumber.getReleaseNumber()+") since there is already an ReleaseNumber with that releaseNumber"));
-//				return issues;
 			}
 		}
 
@@ -145,83 +154,6 @@ public class ReleaseNumberValidator {
 			oldReleaseNumber = getExistingReleaseNumber(releaseNumber.getId(), session.getProject(), issues, "id");
 		}
 		lastExistingReleaseNumber = oldReleaseNumber;
-		
-//		// make sure Name and description size are within constraints
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
-//		if(requirement.getDescription() == null) {
-//			// empty descriptions are okay
-//			requirement.setDescription("");
-//		} else if(requirement.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
-		
-//		// make sure the creator and assignee exist and aren't duplicated
-//		if(mode == Mode.EDIT) {
-//			if(oldRequirement != null) {
-//				requirement.setCreator(oldRequirement.getCreator());
-//			}
-//		} else if(requirement.getCreator() == null) {
-//			issues.add(new ValidationIssue("Required", "creator"));
-//		} else {
-//			User creator = getExistingUser(requirement.getCreator().getUsername(), issues, "creator");
-//			if(creator != null) {
-//				if(!creator.getUsername().equals(session.getUsername())) {
-//					issues.add(new ValidationIssue("Must match currently logged in user", "creator"));
-//				} else {
-//					requirement.setCreator(creator);
-//				}
-//			}
-//		}
-//		
-//		if(requirement.getAssignee() != null) { // requirements can be missing an assignee
-//			User assignee = getExistingUser(requirement.getAssignee().getUsername(), issues, "assignee");
-//			if(assignee != null) {
-//				requirement.setAssignee(assignee);
-//			}
-//		}
-		
-//		// make sure start/endDates are not null
-//		if(requirement.getName() == null || requirement.getName().length() > 150
-//				|| requirement.getName().length() < 5) {
-//			issues.add(new ValidationIssue("Required, must be 5-150 characters", "name"));
-//		}
-//		if(requirement.getDescription() == null) {
-//			// empty descriptions are okay
-//			requirement.setDescription("");
-//		} else if(requirement.getDescription().length() > 5000) {
-//			issues.add(new ValidationIssue("Cannot be greater than 5000 characters", "description"));
-//		}
-
-		
-//		// make sure we're not being spoofed with some weird dates
-//		final Date now = new Date();
-//		if(oldIteration != null) {
-//			iteration.setStartDate(oldIteration.getStartDate());
-//			iteration.setEndDate(oldIteration.getEndDate());
-//		} else {
-//			iteration.setStartDate(now);
-//			iteration.setEndDate(now);
-//		}
-
-
-//		// make sure we're not being spoofed with some weird date
-//		final Date now = new Date();
-//		if(oldRequirement != null) {
-//			requirement.setCreationDate(oldRequirement.getCreationDate());
-//		} else {
-//			requirement.setCreationDate(now);
-//		}
-//		requirement.setLastModifiedDate((Date)now.clone());
-		
-//		if(oldRequirement != null) {
-//			requirement.setEvents(oldRequirement.getEvents());
-//		} else {
-//			// new defects should never have any events
-//			requirement.setEvents(new ArrayList<RequirementEvent>());
-//		}
 		
 		return issues;
 	}

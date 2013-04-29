@@ -34,10 +34,13 @@ import edu.wpi.cs.wpisuitetng.modules.requirementsmanagement.models.RequirementS
  * 
  * Note that Data could be something used client-side (e.g. a wrapper around a local cache of
  * Users so you can check assignee usernames as-you-type).
+ * @author TODO
  */
 public class RequirementModelValidator {
 
+	/** the database */
 	private Data data;
+	/** last existing requirement model */
 	private RequirementModel lastExistingRequirement;
 	
 	/**
@@ -160,7 +163,7 @@ public class RequirementModelValidator {
 	 * 
 	 * @param id the id of the Requirement
 	 * @param project the project this requirement belongs to
-	 * @param issues list of errors to add to if defect doesn't exist
+	 * @param issues list of errors to add to if requirement doesn't exist
 	 * @param fieldName name of field to use in error if necessary
 	 * @return The Requirement with the given id, or null if it doesn't exist
 	 * @throws WPISuiteException 
@@ -221,8 +224,6 @@ public class RequirementModelValidator {
 		}
 		if(requirement.getDescription() == null || requirement.getDescription().length() <= 0) {
 			// empty descriptions are okay
-			//requirement.setDescription("");
-		//} else if(requirement.getDescription().length() > 5000  {
 			issues.add(new ValidationIssue("description Cannot be empty", "description"));
 		}
 		
@@ -262,7 +263,7 @@ public class RequirementModelValidator {
 			boolean isExistingReleaseNumber = false;
 			for(ReleaseNumber existingReleaseNumber : existingReleaseNumbers) {
 				//TODO change to .equals()
-				if(requirement.getReleaseNumber().getReleaseNumber() == existingReleaseNumber.getReleaseNumber()) {
+				if(requirement.getReleaseNumber().getReleaseNumber().equals(existingReleaseNumber.getReleaseNumber())) {
 					isExistingReleaseNumber = true;
 				}
 			}
@@ -303,16 +304,26 @@ public class RequirementModelValidator {
 		if(oldRequirement != null) {
 			requirement.setEvents(oldRequirement.getEvents());
 		} else {
-			// new defects should never have any events
+			// new requirements should never have any events
 			requirement.setEvents(new ArrayList<RequirementEvent>());
 		}
-		
-		// Check if the iteration is still in progress
+
+		// Check if the iteration is still in progress but allow updating a
+		// requirement that has already been scheduled to a finished iteration
 		if(requirement.getIteration() != null) {
-			if(now.after(requirement.getIteration().getEndDate()) && now != requirement.getIteration().getEndDate()) {
+			if(mode == Mode.CREATE && !now.before(requirement.getIteration().getEndDate())) {
 				issues.add(new ValidationIssue("iteration must not be over", "iteration"));
 			}
 		}
+		
+		ArrayList<String> subRequirements = new ArrayList<String>();
+		for(String subRequirement : requirement.getSubRequirements()) {
+			RequirementModel tmp = getExistingRequirement(new Integer(subRequirement), session.getProject(), issues, "id");
+			if (tmp != null) {
+				subRequirements.add(subRequirement);
+			}
+		}
+		requirement.setSubRequirements(subRequirements);
 		
 		return issues;
 	}
